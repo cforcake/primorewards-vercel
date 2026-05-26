@@ -46,23 +46,18 @@ footer{text-align:center;padding:2rem;font-size:12px;color:var(--ink-l);border-t
   <a href="/" class="nav-logo">Primo<span>.</span></a>
   <a href="/" class="nav-back">← Back to home</a>
 </nav>
-
 <main>
   <h1>Privacy Policy</h1>
   <p class="subtitle">We respect your privacy and are committed to protecting your personal data. This policy explains how Primo Rewards collects, uses, and safeguards information under India's Digital Personal Data Protection Act 2023 (DPDP Act).</p>
-
   <div class="meta">
     <div class="meta-item"><strong>Effective date:</strong> 1 June 2026</div>
     <div class="meta-item"><strong>Last updated:</strong> 26 May 2026</div>
     <div class="meta-item"><strong>Governing law:</strong> India (DPDP Act 2023)</div>
   </div>
-
   <h2>1. Who We Are</h2>
   <p>Primo Rewards is a digital loyalty rewards platform for local businesses in India, operated by Primo Rewards (the "Company", "we", "us", or "our"). Our platform allows business owners ("Merchants") to offer a branded loyalty card to their end customers ("Customers").</p>
   <p>For the purposes of the DPDP Act 2023, Primo Rewards is the <strong>Data Fiduciary</strong> — we determine the purpose and means of processing your personal data.</p>
-
   <h2>2. What Data We Collect</h2>
-
   <h3>2.1 From Merchants (shop owners who enroll)</h3>
   <ul>
     <li><strong>Identity data:</strong> Full name, business name</li>
@@ -70,7 +65,6 @@ footer{text-align:center;padding:2rem;font-size:12px;color:var(--ink-l);border-t
     <li><strong>Business data:</strong> Chosen loyalty plan, reward rule configuration, shop slug</li>
     <li><strong>Payment data:</strong> Payment transaction ID (via Razorpay — we do not store card numbers or bank details)</li>
   </ul>
-
   <h3>2.2 From Customers (end users of a shop's loyalty card)</h3>
   <ul>
     <li><strong>Identity data:</strong> First name</li>
@@ -78,14 +72,12 @@ footer{text-align:center;padding:2rem;font-size:12px;color:var(--ink-l);border-t
     <li><strong>Activity data:</strong> Stamp history, redemption history, date enrolled</li>
     <li><strong>Optional data:</strong> Birthday (used only for optional birthday rewards)</li>
   </ul>
-
   <h3>2.3 Automatically collected data</h3>
   <ul>
     <li>Browser type and version (via standard HTTP headers)</li>
     <li>Page visit timestamps</li>
     <li>We do <strong>not</strong> use cookies for tracking. We do not use Google Analytics or any third-party analytics tracker.</li>
   </ul>
-
   <h2>3. Why We Collect This Data (Purpose Limitation)</h2>
   <p>We collect personal data only for the following specific, lawful purposes:</p>
   <ul>
@@ -95,9 +87,7 @@ footer{text-align:center;padding:2rem;font-size:12px;color:var(--ink-l);border-t
     <li><strong>WhatsApp notifications:</strong> Only when a Customer provides their full mobile number and explicitly consents to WhatsApp messages from their shop</li>
     <li><strong>Security and fraud prevention:</strong> Detecting bot submissions and protecting against misuse</li>
   </ul>
-
   <div class="highlight">We do not sell, rent, or share your personal data with third parties for marketing purposes. We never have and never will.</div>
-
   <h2>4. Legal Basis for Processing (DPDP Act 2023)</h2>
   <p>Under the DPDP Act 2023, we process your personal data on the following lawful bases:</p>
   <ul>
@@ -105,61 +95,44 @@ footer{text-align:center;padding:2rem;font-size:12px;color:var(--ink-l);border-t
     <li><strong>Contract:</strong> Processing necessary to deliver the service you have signed up for.</li>
     <li><strong>Legitimate interests:</strong> Security monitoring, abuse prevention, and platform integrity.</li>
   </ul>
-
   <h2>5. Data Storage and Security</h2>
   <p>All personal data is stored in <strong>Supabase</strong> (hosted on AWS ap-southeast-2, Sydney), a SOC 2 Type II certified infrastructure provider. Data is encrypted at rest and in transit (TLS 1.3).</p>
   <p>We enforce Row Level Security (RLS) on our database — each shop can only access its own customers' data; no cross-shop data access is possible at the database level.</p>
   <p>Payment processing is handled exclusively by <strong>Razorpay</strong> (PCI DSS Level 1 certified). We never store full card numbers, CVV, or bank account details on our systems.</p>
-  <p>Access to production data is restricted to authorised personnel only. All administrative actions are logged in an immutable audit log.</p>
-
   <h2>6. Data Sharing</h2>
-  <p>We share your data only with the following sub-processors, and only to the extent required to deliver our service:</p>
   <ul>
     <li><strong>Supabase Inc.</strong> — database and serverless functions hosting</li>
     <li><strong>Razorpay Software Pvt. Ltd.</strong> — payment processing (Merchants only)</li>
     <li><strong>Resend Inc.</strong> — transactional email delivery</li>
     <li><strong>Vercel Inc.</strong> — website hosting and CDN</li>
   </ul>
-  <p>All sub-processors are contractually bound to process data only as directed by us, maintain appropriate security standards, and not use your data for their own purposes.</p>
-
   <h2>7. Data Retention</h2>
   <ul>
     <li><strong>Active Merchant accounts:</strong> Data retained for the duration of the subscription</li>
     <li><strong>After cancellation:</strong> All data retained for <strong>90 days</strong> to allow reactivation, then permanently deleted</li>
     <li><strong>Customer loyalty data:</strong> Retained as long as the Merchant's shop is active; deleted within 30 days of shop deletion</li>
     <li><strong>Payment records:</strong> Retained for <strong>7 years</strong> as required by Indian financial regulations (GST compliance)</li>
-    <li><strong>Enrollment records:</strong> Pending enrollments purged after 30 days if payment not completed</li>
   </ul>
-
   <h2>8. Your Rights Under DPDP Act 2023</h2>
-  <p>Under the Digital Personal Data Protection Act 2023, you have the following rights:</p>
   <ul>
     <li><strong>Right to access:</strong> Request a copy of the personal data we hold about you</li>
     <li><strong>Right to correction:</strong> Request correction of inaccurate or incomplete personal data</li>
     <li><strong>Right to erasure:</strong> Request deletion of your personal data (subject to our legal retention obligations)</li>
     <li><strong>Right to grievance redressal:</strong> Raise a complaint with our Grievance Officer (see Section 11)</li>
-    <li><strong>Right to withdraw consent:</strong> Withdraw consent at any time (this will not affect lawfulness of processing before withdrawal)</li>
-    <li><strong>Right to nominate:</strong> Nominate another individual to exercise rights on your behalf in the event of incapacity or death</li>
+    <li><strong>Right to withdraw consent:</strong> Withdraw consent at any time</li>
   </ul>
-  <p>To exercise any right, email us at <a href="mailto:privacy@primorewards.in">privacy@primorewards.in</a>. We will respond within <strong>30 days</strong>.</p>
-
   <h2>9. Children's Data</h2>
-  <p>Our service is intended for business owners and their adult customers. We do not knowingly collect personal data from individuals under the age of 18. If you believe a child has provided us with personal data, please contact us immediately and we will delete it.</p>
-
+  <p>Our service is intended for business owners and their adult customers. We do not knowingly collect personal data from individuals under the age of 18.</p>
   <h2>10. Changes to This Policy</h2>
-  <p>We may update this Privacy Policy from time to time. Material changes will be communicated to Merchants via email at least 14 days before they take effect. The "Last updated" date at the top of this page reflects the most recent revision. Continued use of our service after changes take effect constitutes acceptance.</p>
-
+  <p>We may update this Privacy Policy from time to time. Material changes will be communicated to Merchants via email at least 14 days before they take effect.</p>
   <h2>11. Grievance Officer</h2>
-  <p>As required by the DPDP Act 2023, we have designated a Grievance Officer to handle complaints and queries regarding your personal data:</p>
   <div class="contact-box">
     <h3>Grievance Officer — Primo Rewards</h3>
     <p><strong>Name:</strong> Primo Rewards Privacy Team</p>
     <p><strong>Email:</strong> <a href="mailto:privacy@primorewards.in">privacy@primorewards.in</a></p>
     <p><strong>Response time:</strong> Within 30 days of receipt</p>
-    <p style="margin-top:.75rem;font-size:13px;color:rgba(253,250,245,.45)">If you are not satisfied with our response, you may approach the Data Protection Board of India once it is constituted under the DPDP Act 2023.</p>
   </div>
 </main>
-
 <footer>
   <a href="/">Primo Rewards</a> &nbsp;·&nbsp; <a href="/terms">Terms of Service</a> &nbsp;·&nbsp; <a href="/privacy">Privacy Policy</a>
   <br><br>© 2026 Primo Rewards. All rights reserved.
