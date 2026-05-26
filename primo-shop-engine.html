@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loyalty Rewards — Primo</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23C9A84C'/><text x='50%25' y='60%25' font-size='18' text-anchor='middle' fill='white'>♛</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#FDFAF5;--cream-d:#F5EEE3;--beige:#EDE3D4;--beige-m:#D9CBBA;
+  --gold:#A8832A;--gold-b:#C9A84C;--gold-p:#FDF4E3;--gold-br:#D4B86A;
+  --em:#1B5E42;--em-l:#2D8A5E;
+  --ink:#1A1007;--ink-m:#4A3A25;--ink-l:#7A6A52;
+  --white:#fff;--red:#C0392B;
+  --fd:'Cormorant Garamond',Georgia,serif;
+  --fb:'DM Sans',sans-serif;
+  --eo:cubic-bezier(.16,1,.3,1);
+  --eb:cubic-bezier(.34,1.56,.64,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--fb);background:var(--cream);color:var(--ink);-webkit-font-smoothing:antialiased;min-height:100vh}
+.page{max-width:420px;margin:0 auto;padding:1.5rem 1.25rem 4rem;position:relative}
+
+/* ── HEADER ── */
+.shop-header{text-align:center;padding:1.5rem 0 1.25rem;border-bottom:1px solid var(--beige);margin-bottom:1.5rem}
+.shop-emoji{font-size:38px;margin-bottom:.4rem;display:block}
+.shop-name{font-family:var(--fd);font-size:26px;font-weight:600;color:var(--ink);margin-bottom:.2rem}
+.shop-tagline{font-size:13px;color:var(--ink-l)}
+.primo-badge{display:inline-flex;align-items:center;gap:5px;background:var(--gold-p);border:1px solid var(--gold-br);border-radius:99px;padding:3px 10px;font-size:10.5px;color:var(--gold);margin-top:.65rem}
+
+/* ── SCREENS ── */
+.screen{display:none}
+.screen.active{display:block}
+
+/* ── LOGIN SCREEN ── */
+.login-card{background:var(--white);border-radius:22px;padding:1.75rem;box-shadow:0 12px 40px rgba(26,16,7,.08),0 2px 8px rgba(26,16,7,.04)}
+.lc-title{font-family:var(--fd);font-size:22px;font-weight:500;color:var(--ink);margin-bottom:.35rem}
+.lc-sub{font-size:13px;color:var(--ink-l);margin-bottom:1.5rem;line-height:1.55}
+.fg{margin-bottom:.85rem}
+.fl{display:block;font-size:12px;font-weight:500;color:var(--ink-l);margin-bottom:5px;letter-spacing:.03em}
+.fi{width:100%;background:var(--cream);border:1.5px solid var(--beige-m);border-radius:11px;padding:11px 13px;font-size:15px;color:var(--ink);outline:none;transition:border-color .2s,box-shadow .2s;font-family:var(--fb);-webkit-appearance:none}
+.fi::placeholder{color:rgba(26,16,7,.25)}
+.fi:focus{border-color:var(--gold-br);box-shadow:0 0 0 3px rgba(212,184,106,.18)}
+.fi-error{border-color:rgba(192,57,43,.6)!important;animation:shake .28s var(--eb)}
+@keyframes shake{0%,100%{transform:translateX(0)}30%{transform:translateX(-5px)}70%{transform:translateX(5px)}}
+.btn-primary{width:100%;background:linear-gradient(135deg,var(--gold-b),var(--gold));color:#fff;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:500;cursor:pointer;font-family:var(--fb);transition:box-shadow .25s,transform .2s;box-shadow:0 4px 16px rgba(168,131,42,.3);display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-primary:hover{box-shadow:0 8px 28px rgba(168,131,42,.42);transform:translateY(-1px)}
+.btn-primary:disabled{opacity:.6;transform:none;cursor:not-allowed}
+.divider{display:flex;align-items:center;gap:10px;margin:1.1rem 0;color:var(--ink-l);font-size:12px}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--beige)}
+.btn-secondary{width:100%;background:transparent;border:1.5px solid var(--beige-m);border-radius:12px;padding:12px;font-size:14px;font-weight:500;color:var(--ink-m);cursor:pointer;font-family:var(--fb);transition:all .2s}
+.btn-secondary:hover{border-color:var(--gold-br);background:var(--gold-p);color:var(--ink)}
+.login-note{font-size:11.5px;color:var(--ink-l);text-align:center;margin-top:.75rem;line-height:1.55}
+
+/* ── REGISTER SCREEN ── */
+/* reuses login-card, fg, fl, fi, btn-primary */
+
+/* ── CARD SCREEN ── */
+.loyalty-card{background:var(--white);border-radius:22px;padding:1.5rem;box-shadow:0 12px 40px rgba(26,16,7,.1),0 2px 8px rgba(26,16,7,.05);margin-bottom:1rem;position:relative}
+.card-greeting{font-size:13px;color:var(--ink-l);margin-bottom:.25rem}
+.card-name{font-family:var(--fd);font-size:22px;font-weight:600;color:var(--ink);margin-bottom:1.25rem;display:flex;align-items:center;gap:8px}
+.member-badge{font-size:11px;background:var(--gold-p);border:1px solid var(--gold-br);border-radius:99px;padding:2px 9px;color:var(--gold);font-family:var(--fb);font-weight:500}
+
+/* Medallion grid */
+.mgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:7px;margin-bottom:14px}
+.medal{aspect-ratio:1;border-radius:50%;position:relative;display:flex;align-items:center;justify-content:center}
+.m-track{position:absolute;inset:0;border-radius:50%;border:1.5px dashed rgba(168,131,42,.28);background:rgba(253,244,227,.5);display:flex;align-items:center;justify-content:center}
+.m-num{font-size:9px;color:rgba(168,131,42,.4);font-family:var(--fd);font-weight:500}
+.m-coin{position:absolute;inset:0;border-radius:50%;opacity:0;transform:scale(1.4);pointer-events:none;transition:opacity .35s var(--eo),transform .35s var(--eo)}
+.medal.filled .m-coin{opacity:1;transform:scale(1);background:radial-gradient(circle at 38% 32%,#EDD97A,#C9A84C 42%,#A8832A 72%,#7A5C18);box-shadow:inset 0 3px 8px rgba(255,255,255,.45),inset 0 -3px 8px rgba(60,30,0,.3),0 4px 14px rgba(168,131,42,.42)}
+.medal.filled .m-coin::after{content:'♛';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:9px;color:rgba(255,255,255,.72)}
+.medal.filled::before{content:'';position:absolute;inset:-3px;border-radius:50%;border:1.5px solid rgba(212,184,106,.5);pointer-events:none}
+/* Reward slot */
+.medal.rs .m-track{border:1.5px solid var(--gold-br);background:var(--gold-p);border-style:solid}
+.medal.rs .m-num{font-size:15px;color:var(--gold-b)}
+.medal.rs.filled .m-track{display:none}
+.medal.rs.filled .m-coin{opacity:1;transform:scale(1);background:linear-gradient(135deg,var(--em-l),var(--em));box-shadow:inset 0 2px 6px rgba(255,255,255,.2),0 6px 20px rgba(27,94,66,.45)}
+.medal.rs.filled .m-coin::after{content:'✓';font-size:17px;font-weight:700;color:#fff}
+.medal.rs.filled::before{border-color:rgba(45,138,94,.5);animation:rwdPulse 1.4s ease-in-out infinite}
+@keyframes rwdPulse{0%,100%{opacity:.6;transform:scale(1)}50%{opacity:1;transform:scale(1.05)}}
+
+/* Progress bar */
+.prog-wrap{background:var(--cream-d);border-radius:9px;padding:9px 11px}
+.prog-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.prog-label{font-size:11px;color:var(--ink-l)}
+.prog-count{font-family:var(--fd);font-size:14px;font-weight:600;color:var(--ink)}
+.prog-bar{height:4px;background:var(--beige);border-radius:99px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--gold-b),var(--gold));border-radius:99px;transition:width .5s var(--eo)}
+
+/* Reward banner */
+.reward-banner{background:linear-gradient(135deg,rgba(27,94,66,.07),rgba(45,138,94,.12));border:1.5px solid rgba(45,138,94,.35);border-radius:16px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:.9rem;animation:bannerIn .5s var(--eo) both}
+@keyframes bannerIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.rwd-left{display:flex;align-items:center;gap:10px}
+.rwd-ico{font-size:26px}
+.rwd-text strong{display:block;font-size:13.5px;font-weight:600;color:var(--em)}
+.rwd-text span{font-size:11.5px;color:var(--ink-l)}
+.btn-redeem{background:linear-gradient(135deg,var(--em-l),var(--em));color:#fff;border:none;border-radius:99px;padding:9px 18px;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--fb);box-shadow:0 3px 12px rgba(27,94,66,.35);transition:all .2s;white-space:nowrap}
+.btn-redeem:hover{box-shadow:0 6px 20px rgba(27,94,66,.45);transform:translateY(-1px)}
+
+/* Card actions */
+.card-actions{display:flex;gap:10px;margin-top:.75rem}
+.btn-action{flex:1;background:var(--white);border:1.5px solid var(--beige-m);border-radius:12px;padding:10px;font-size:12.5px;font-weight:500;color:var(--ink-m);cursor:pointer;font-family:var(--fb);transition:all .2s;text-align:center}
+.btn-action:hover{border-color:var(--gold-br);background:var(--gold-p);color:var(--ink)}
+.btn-action.danger{color:var(--red);border-color:rgba(192,57,43,.25)}
+.btn-action.danger:hover{background:rgba(192,57,43,.05);border-color:rgba(192,57,43,.4)}
+
+/* Stamp history */
+.history-card{background:var(--white);border-radius:16px;padding:1.25rem;box-shadow:0 4px 16px rgba(26,16,7,.05);margin-top:.9rem}
+.history-title{font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-l);margin-bottom:.75rem}
+.history-list{display:flex;flex-direction:column;gap:7px}
+.history-item{display:flex;align-items:center;justify-content:space-between;font-size:13px;color:var(--ink-m);padding:6px 0;border-bottom:1px solid var(--beige)}
+.history-item:last-child{border-bottom:none}
+.history-stamp{display:flex;align-items:center;gap:6px}
+.history-stamp::before{content:'♛';font-size:11px;color:var(--gold-b)}
+.history-date{font-size:11px;color:var(--ink-l)}
+.history-empty{font-size:13px;color:var(--ink-l);text-align:center;padding:.5rem 0}
+
+/* ── REDEEM SUCCESS SCREEN ── */
+.redeem-card{background:var(--white);border-radius:22px;padding:2rem;box-shadow:0 12px 40px rgba(26,16,7,.1);text-align:center}
+.redeem-ico{font-size:56px;margin-bottom:.75rem;display:block}
+.redeem-title{font-family:var(--fd);font-size:28px;font-weight:600;color:var(--em);margin-bottom:.5rem}
+.redeem-sub{font-size:14px;color:var(--ink-l);line-height:1.65;margin-bottom:1.5rem}
+.redeem-code{font-size:11px;font-family:monospace;background:var(--cream-d);border:1px solid var(--beige-m);border-radius:8px;padding:8px 16px;color:var(--ink-m);display:inline-block;margin-bottom:1.5rem;letter-spacing:.06em}
+.btn-done{width:100%;background:var(--cream-d);border:1.5px solid var(--beige-m);border-radius:12px;padding:13px;font-size:14px;font-weight:500;color:var(--ink-m);cursor:pointer;font-family:var(--fb);transition:all .2s}
+.btn-done:hover{background:var(--beige);border-color:var(--beige-m)}
+
+/* ── STATE: loading / error / shop-not-found ── */
+.state-box{text-align:center;padding:3rem 1rem}
+.state-ico{font-size:42px;margin-bottom:.75rem}
+.state-title{font-family:var(--fd);font-size:24px;font-weight:500;color:var(--ink);margin-bottom:.5rem}
+.state-msg{font-size:14px;color:var(--ink-l);line-height:1.65}
+.spinner{width:36px;height:36px;border:3px solid var(--beige);border-top-color:var(--gold-b);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 1rem}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── TOAST ── */
+.toast-wrap{position:fixed;bottom:1.25rem;left:50%;transform:translateX(-50%);z-index:9999;display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none;width:calc(100% - 2.5rem);max-width:380px}
+.toast{background:var(--ink);color:rgba(253,250,245,.9);border-radius:12px;padding:12px 18px;font-size:13px;font-weight:500;text-align:center;opacity:0;transform:translateY(10px);pointer-events:all;transition:opacity .3s var(--eo),transform .3s var(--eo);box-shadow:0 8px 28px rgba(26,16,7,.18)}
+.toast.show{opacity:1;transform:translateY(0)}
+.toast.hiding{opacity:0;transform:translateY(10px)}
+.toast.success{background:var(--em)}
+.toast.error{background:var(--red)}
+
+/* ── BOTTOM BRAND ── */
+.bottom-brand{text-align:center;margin-top:2.5rem;font-size:11.5px;color:var(--ink-l)}
+.bottom-brand a{color:var(--gold);text-decoration:none;font-weight:500}
+</style>
+</head>
+<body>
+
+<div class="page">
+  <!-- Dynamic shop header — filled by JS -->
+  <div class="shop-header" id="shopHeader">
+    <div class="spinner" id="headerSpinner"></div>
+  </div>
+
+  <!-- Loading state -->
+  <div class="screen active" id="screenLoading">
+    <div class="state-box">
+      <div class="spinner"></div>
+      <div class="state-msg">Loading your loyalty card…</div>
+    </div>
+  </div>
+
+  <!-- Shop not found -->
+  <div class="screen" id="screenNotFound">
+    <div class="state-box">
+      <div class="state-ico">🔍</div>
+      <div class="state-title">Shop Not Found</div>
+      <div class="state-msg">This loyalty card link doesn't match any active shop. Check with your shop owner for the correct link.</div>
+    </div>
+  </div>
+
+  <!-- Login screen -->
+  <div class="screen" id="screenLogin">
+    <div class="login-card">
+      <div class="lc-title">Welcome back!</div>
+      <div class="lc-sub">Enter your name and last 4 digits of your mobile to see your stamps.</div>
+      <div class="fg">
+        <label class="fl" for="lName">First Name</label>
+        <input type="text" class="fi" id="lName" placeholder="Priya" autocomplete="given-name" inputmode="text">
+      </div>
+      <div class="fg">
+        <label class="fl" for="lPhone">Last 4 digits of mobile</label>
+        <input type="tel" class="fi" id="lPhone" placeholder="4210" maxlength="4" inputmode="numeric" pattern="[0-9]{4}">
+      </div>
+      <button class="btn-primary" id="btnLogin">View My Card →</button>
+      <div class="divider">or</div>
+      <button class="btn-secondary" id="btnGoRegister">First time here? Join the loyalty program</button>
+      <div class="login-note">Your card is private — only you can see your stamps.</div>
+    </div>
+  </div>
+
+  <!-- Register screen -->
+  <div class="screen" id="screenRegister">
+    <div class="login-card">
+      <div class="lc-title">Join the loyalty program</div>
+      <div class="lc-sub">Earn gold medallion stamps on every purchase. Hit the goal and your reward unlocks automatically.</div>
+      <div class="fg">
+        <label class="fl" for="rName">First Name *</label>
+        <input type="text" class="fi" id="rName" placeholder="Priya" autocomplete="given-name" required>
+      </div>
+      <div class="fg">
+        <label class="fl" for="rPhone">Mobile Number *</label>
+        <input type="tel" class="fi" id="rPhone" placeholder="+91 98765 43210" autocomplete="tel" inputmode="tel" required>
+      </div>
+      <button class="btn-primary" id="btnRegister">Join &amp; See My Card →</button>
+      <div class="divider">or</div>
+      <button class="btn-secondary" id="btnGoLogin">Already a member? Log in</button>
+      <div class="login-note">We only use your name and last 4 digits to identify your card. No spam.</div>
+    </div>
+  </div>
+
+  <!-- Card screen -->
+  <div class="screen" id="screenCard">
+    <div class="loyalty-card" id="loyaltyCard">
+      <div class="card-greeting">Your loyalty card</div>
+      <div class="card-name" id="cardName">— <span class="member-badge">Member</span></div>
+      <div class="mgrid" id="medalGrid" role="list" aria-label="Loyalty stamp grid"></div>
+      <div class="prog-wrap">
+        <div class="prog-row">
+          <span class="prog-label" id="progLabel">Progress toward reward</span>
+          <span class="prog-count" id="progCount">0 / 11</span>
+        </div>
+        <div class="prog-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="11" id="progBar">
+          <div class="prog-fill" id="progFill" style="width:0%"></div>
+        </div>
+      </div>
+      <!-- Reward banner — shown when card is full -->
+      <div class="reward-banner" id="rewardBanner" style="display:none">
+        <div class="rwd-left">
+          <div class="rwd-ico" id="rewardIco">🎁</div>
+          <div class="rwd-text">
+            <strong id="rewardTitle">Reward Unlocked!</strong>
+            <span>Show this to the shop owner to redeem</span>
+          </div>
+        </div>
+        <button class="btn-redeem" id="btnRedeem">Redeem</button>
+      </div>
+    </div>
+
+    <!-- Stamp history -->
+    <div class="history-card">
+      <div class="history-title">Stamp history (this cycle)</div>
+      <div class="history-list" id="historyList">
+        <div class="history-empty">No stamps yet — make your first purchase!</div>
+      </div>
+    </div>
+
+    <div class="card-actions">
+      <button class="btn-action" id="btnShare">📤 Share</button>
+      <button class="btn-action danger" id="btnLogout">Log out</button>
+    </div>
+  </div>
+
+  <!-- Redeem success screen -->
+  <div class="screen" id="screenRedeem">
+    <div class="redeem-card">
+      <span class="redeem-ico">🎉</span>
+      <div class="redeem-title" id="redeemTitle">Reward Redeemed!</div>
+      <div class="redeem-sub">Show this screen to the shop owner. Your card has been reset — start earning again right away.</div>
+      <div class="redeem-code" id="redeemCode">REF-000000</div>
+      <button class="btn-done" id="btnDone">Back to my card</button>
+    </div>
+  </div>
+
+  <div class="bottom-brand">Powered by <a href="https://primorewards.in" target="_blank" rel="noopener">Primo Rewards</a></div>
+</div>
+
+<!-- Toast container -->
+<div class="toast-wrap" id="toastWrap" aria-live="polite"></div>
+
+<script>
+/* ═══════════════════════════════════════════
+   PRIMO SHOP ENGINE — customer loyalty card
+   ═══════════════════════════════════════════ */
+
+const CONFIG = {
+  SUPABASE_URL:  'https://plewiwrexjszcqqjwiks.supabase.co',
+  SUPABASE_ANON: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBsZXdpd3JleGpzemNxcWp3aWtzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3MDkxOTgsImV4cCI6MjA5NTI4NTE5OH0.UhQcVdZZw74X-HBrGVto35dyZ_V67WfkjGFepRzNlMQ',
+  EDGE_BASE:     'https://plewiwrexjszcqqjwiks.supabase.co/functions/v1',
+};
+
+// ── UTILS ───────────────────────────────────
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById(id);
+  if (el) el.classList.add('active');
+}
+
+function toast(msg, type = 'info', duration = 4000) {
+  const wrap = document.getElementById('toastWrap');
+  const t = document.createElement('div');
+  t.className = 'toast ' + type;
+  t.textContent = msg;
+  wrap.appendChild(t);
+  requestAnimationFrame(() => requestAnimationFrame(() => t.classList.add('show')));
+  setTimeout(() => {
+    t.classList.add('hiding');
+    setTimeout(() => t.remove(), 320);
+  }, duration);
+}
+
+function setBtn(id, text, disabled = false) {
+  const btn = document.getElementById(id);
+  if (!btn) return;
+  btn.textContent = text;
+  btn.disabled = disabled;
+}
+
+async function apiFetch(path, opts = {}) {
+  const res = await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/${path}`, {
+    headers: {
+      'Content-Type': 'application/json',
+      'apikey': CONFIG.SUPABASE_ANON,
+      'Authorization': 'Bearer ' + CONFIG.SUPABASE_ANON,
+      'Prefer': 'return=representation',
+      ...opts.headers,
+    },
+    ...opts,
+  });
+  const text = await res.text();
+  if (!res.ok) throw new Error(text || res.status);
+  return text ? JSON.parse(text) : null;
+}
+
+async function edgeFetch(fn, body) {
+  const res = await fetch(`${CONFIG.EDGE_BASE}/${fn}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'apikey': CONFIG.SUPABASE_ANON },
+    body: JSON.stringify(body),
+  });
+  const text = await res.text();
+  if (!res.ok) throw new Error(text || res.status);
+  return text ? JSON.parse(text) : null;
+}
+
+// ── STATE ───────────────────────────────────
+let shop = null;        // shop record from public_shop_card
+let customer = null;    // customer record
+let stamps = [];        // current cycle stamps
+let session = null;     // { customerId, shopId }
+
+// ── SLUG DETECTION ──────────────────────────
+function getSlug() {
+  // URL pattern: /slug-reward or ?slug=xxx
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('slug')) return params.get('slug');
+  const path = window.location.pathname.replace(/^\//, '').replace(/-reward$/, '');
+  return path || null;
+}
+
+// ── LOAD SHOP ───────────────────────────────
+async function loadShop() {
+  const slug = getSlug();
+  if (!slug) { show('screenNotFound'); return; }
+
+  try {
+    const data = await apiFetch(`public_shop_card?slug=eq.${encodeURIComponent(slug)}&select=*`);
+    if (!data || data.length === 0) { show('screenNotFound'); renderHeader(null); return; }
+    shop = data[0];
+    renderHeader(shop);
+    // Check session
+    const saved = sessionStorage.getItem('primo_session');
+    if (saved) {
+      try {
+        session = JSON.parse(saved);
+        await loadCard();
+        return;
+      } catch { sessionStorage.removeItem('primo_session'); }
+    }
+    show('screenLogin');
+  } catch (err) {
+    console.error(err);
+    show('screenNotFound');
+  }
+}
+
+function renderHeader(s) {
+  const hdr = document.getElementById('shopHeader');
+  document.getElementById('headerSpinner')?.remove();
+  if (!s) { hdr.innerHTML = '<div class="state-msg">Shop not found</div>'; return; }
+  hdr.innerHTML = `
+    <span class="shop-emoji">${s.product_emoji || '🎁'}</span>
+    <div class="shop-name">${esc(s.shop_name)}</div>
+    <div class="shop-tagline">${s.city ? esc(s.city) + ' · ' : ''}Loyalty Rewards</div>
+    <div class="primo-badge">♛ Powered by Primo</div>
+  `;
+  document.title = `${s.shop_name} — Loyalty Card`;
+}
+
+// ── LOAD CARD ───────────────────────────────
+async function loadCard() {
+  show('screenLoading');
+  try {
+    const data = await edgeFetch('customer-card', {
+      shop_id: session.shopId,
+      customer_id: session.customerId,
+    });
+    customer = data.customer;
+    stamps   = data.stamps || [];
+    renderCard();
+    show('screenCard');
+  } catch (err) {
+    console.error(err);
+    toast('Could not load your card. Please log in again.', 'error');
+    sessionStorage.removeItem('primo_session');
+    show('screenLogin');
+  }
+}
+
+// ── RENDER CARD ──────────────────────────────
+function renderCard() {
+  if (!customer || !shop) return;
+  const rule = shop.reward_rule || { buy: 11, get: 1 };
+  const EARN = rule.buy || 11;
+  const TOTAL = EARN + 1;
+  const count = stamps.length;
+  const full = count >= EARN;
+
+  // Name
+  document.getElementById('cardName').innerHTML =
+    `${esc(customer.first_name)} <span class="member-badge">Member</span>`;
+
+  // Medals
+  const grid = document.getElementById('medalGrid');
+  grid.innerHTML = '';
+  for (let i = 0; i < TOTAL; i++) {
+    const isR = i === TOTAL - 1;
+    const filled = isR ? full : i < count;
+    const div = document.createElement('div');
+    div.className = 'medal' + (isR ? ' rs' : '') + (filled ? ' filled' : '');
+    div.setAttribute('role', 'listitem');
+    div.setAttribute('aria-label', isR ? 'Reward slot' : `Stamp ${i + 1}${filled ? ' — earned' : ''}`);
+    const track = document.createElement('div'); track.className = 'm-track';
+    const num = document.createElement('span'); num.className = 'm-num';
+    num.textContent = isR ? (shop.product_emoji || '🎁') : (i + 1);
+    track.appendChild(num); div.appendChild(track);
+    const coin = document.createElement('div'); coin.className = 'm-coin'; div.appendChild(coin);
+    grid.appendChild(div);
+  }
+
+  // Progress
+  const pct = Math.min(count / EARN * 100, 100);
+  document.getElementById('progFill').style.width = pct + '%';
+  document.getElementById('progCount').textContent = Math.min(count, EARN) + ' / ' + EARN;
+  document.getElementById('progLabel').textContent = `Progress toward free ${shop.product_name || 'reward'}`;
+  const bar = document.getElementById('progBar');
+  bar.setAttribute('aria-valuenow', Math.min(count, EARN));
+  bar.setAttribute('aria-valuemax', EARN);
+
+  // Reward banner
+  const banner = document.getElementById('rewardBanner');
+  if (full) {
+    banner.style.display = 'flex';
+    document.getElementById('rewardIco').textContent = shop.product_emoji || '🎁';
+    document.getElementById('rewardTitle').textContent = `Free ${shop.product_name || 'Reward'} Unlocked!`;
+  } else {
+    banner.style.display = 'none';
+  }
+
+  // History
+  renderHistory(stamps, EARN);
+}
+
+function renderHistory(stampList, earn) {
+  const list = document.getElementById('historyList');
+  if (!stampList.length) {
+    list.innerHTML = '<div class="history-empty">No stamps yet — make your first purchase!</div>';
+    return;
+  }
+  const cycle = stampList.filter((_, i) => i < earn);
+  list.innerHTML = cycle.slice().reverse().slice(0, 8).map((s, i) => {
+    const d = new Date(s.stamped_at);
+    const dateStr = d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
+    const timeStr = d.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+    return `<div class="history-item"><span class="history-stamp">Stamp #${cycle.length - i}</span><span class="history-date">${dateStr}, ${timeStr}</span></div>`;
+  }).join('');
+}
+
+// ── LOGIN ────────────────────────────────────
+async function handleLogin() {
+  const name  = document.getElementById('lName').value.trim();
+  const phone = document.getElementById('lPhone').value.trim();
+
+  let ok = true;
+  if (name.length < 2)     { document.getElementById('lName').classList.add('fi-error'); ok = false; }
+  if (!/^\d{4}$/.test(phone)) { document.getElementById('lPhone').classList.add('fi-error'); ok = false; }
+  if (!ok) { toast('Please fill in your name and last 4 digits', 'error'); return; }
+
+  setBtn('btnLogin', 'Checking…', true);
+  try {
+    const data = await edgeFetch('customer-lookup', {
+      shop_id: shop.id,
+      first_name: name,
+      phone_last4: phone,
+    });
+    if (!data || !data.customer) {
+      toast('Card not found — are you new here? Join below.', 'error', 5000);
+      setBtn('btnLogin', 'View My Card →', false);
+      return;
+    }
+    session = { customerId: data.customer.id, shopId: shop.id };
+    sessionStorage.setItem('primo_session', JSON.stringify(session));
+    customer = data.customer;
+    stamps   = data.stamps || [];
+    renderCard();
+    show('screenCard');
+  } catch (err) {
+    console.error(err);
+    toast('Something went wrong. Please try again.', 'error');
+    setBtn('btnLogin', 'View My Card →', false);
+  }
+}
+
+// ── REGISTER ────────────────────────────────
+async function handleRegister() {
+  const name  = document.getElementById('rName').value.trim();
+  const phone = document.getElementById('rPhone').value.trim();
+
+  let ok = true;
+  if (name.length < 2) { document.getElementById('rName').classList.add('fi-error'); ok = false; }
+  const cleaned = phone.replace(/[\s\-]/g, '');
+  const validPhone = /^(\+91)?[6-9]\d{9}$/.test(cleaned);
+  if (!validPhone) { document.getElementById('rPhone').classList.add('fi-error'); ok = false; }
+  if (!ok) { toast('Please enter a valid name and mobile number', 'error'); return; }
+
+  setBtn('btnRegister', 'Joining…', true);
+  const last4 = cleaned.replace(/^\+91/, '').slice(-4);
+  try {
+    const data = await edgeFetch('customer-lookup', {
+      shop_id: shop.id,
+      first_name: name,
+      phone_last4: last4,
+      full_phone: cleaned,
+      create_if_missing: true,
+    });
+    session = { customerId: data.customer.id, shopId: shop.id };
+    sessionStorage.setItem('primo_session', JSON.stringify(session));
+    customer = data.customer;
+    stamps   = data.stamps || [];
+    renderCard();
+    show('screenCard');
+    toast(`Welcome, ${name}! Start earning your stamps 🎉`, 'success', 5000);
+  } catch (err) {
+    console.error(err);
+    toast('Could not create your card. Please try again.', 'error');
+    setBtn('btnRegister', 'Join & See My Card →', false);
+  }
+}
+
+// ── REDEEM ───────────────────────────────────
+async function handleRedeem() {
+  if (!confirm('Ready to redeem? The shop owner must be present. Your card will reset.')) return;
+  setBtn('btnRedeem', 'Processing…', true);
+  try {
+    const data = await edgeFetch('customer-card', {
+      shop_id: session.shopId,
+      customer_id: session.customerId,
+      action: 'redeem',
+    });
+    const refId = 'REF-' + Date.now().toString(36).toUpperCase().slice(-6);
+    document.getElementById('redeemTitle').textContent = `Free ${shop.product_name || 'Reward'} Redeemed!`;
+    document.getElementById('redeemCode').textContent = data?.redemption_id
+      ? 'REF-' + data.redemption_id.slice(-8).toUpperCase()
+      : refId;
+    show('screenRedeem');
+    // Reset local state
+    stamps = [];
+  } catch (err) {
+    console.error(err);
+    toast('Redemption failed. Please show this screen to the shop owner and try again.', 'error', 8000);
+    setBtn('btnRedeem', 'Redeem', false);
+  }
+}
+
+// ── SHARE ─────────────────────────────────── 
+async function handleShare() {
+  const url = window.location.href;
+  const text = `I'm earning loyalty stamps at ${shop?.shop_name || 'this shop'} — join me! ${url}`;
+  if (navigator.share) {
+    try { await navigator.share({ title: shop?.shop_name, text, url }); } catch {}
+  } else {
+    await navigator.clipboard.writeText(url);
+    toast('Link copied to clipboard!', 'success');
+  }
+}
+
+// ── CLEAR ERROR on input ─────────────────────
+['lName','lPhone','rName','rPhone'].forEach(id => {
+  document.getElementById(id)?.addEventListener('input', function() {
+    this.classList.remove('fi-error');
+  });
+});
+
+// ── WIRE BUTTONS ─────────────────────────────
+document.getElementById('btnLogin').addEventListener('click', handleLogin);
+document.getElementById('btnGoRegister').addEventListener('click', () => show('screenRegister'));
+document.getElementById('btnRegister').addEventListener('click', handleRegister);
+document.getElementById('btnGoLogin').addEventListener('click', () => show('screenLogin'));
+document.getElementById('btnRedeem').addEventListener('click', handleRedeem);
+document.getElementById('btnShare').addEventListener('click', handleShare);
+document.getElementById('btnLogout').addEventListener('click', () => {
+  sessionStorage.removeItem('primo_session');
+  session = null; customer = null; stamps = [];
+  show('screenLogin');
+  toast('Logged out', 'info', 2000);
+});
+document.getElementById('btnDone').addEventListener('click', async () => {
+  await loadCard();
+});
+
+// ── ENTER key on login fields ────────────────
+document.getElementById('lPhone').addEventListener('keydown', e => { if (e.key === 'Enter') handleLogin(); });
+document.getElementById('rPhone').addEventListener('keydown', e => { if (e.key === 'Enter') handleRegister(); });
+
+// ── XSS escape ───────────────────────────────
+function esc(str) {
+  return String(str || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#x27;'}[c]));
+}
+
+// ── BOOT ─────────────────────────────────────
+loadShop();
+</script>
+</body>
+</html>

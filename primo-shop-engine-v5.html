@@ -1,0 +1,1818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#FDFAF5">
+<meta name="robots" content="noindex, nofollow">
+<title>Primo Rewards — Loyalty Card</title>
+<meta name="description" content="Your digital loyalty card. Earn gold medallion stamps on every visit and unlock free rewards.">
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+<meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()">
+<!-- CVE-11: CSP — tightened per audit. Remove 'unsafe-inline' after scripts move to external .js files -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com https://cdn.jsdelivr.net 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; connect-src 'self' https://*.supabase.co; img-src 'self' data: https:; object-src 'none'; base-uri 'self'; form-action 'self'">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap"></noscript>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23C9A84C'/><text x='50%25' y='62%25' font-size='18' text-anchor='middle' fill='white'>&#9819;</text></svg>">
+
+<style>
+/* ══════════════════════════════════════════════════════
+   DESIGN TOKENS — exact match to primo-rewards-v4.html
+══════════════════════════════════════════════════════ */
+:root {
+  --cream:#FDFAF5; --cream-d:#F5EEE3; --beige:#EDE3D4; --beige-m:#D9CBBA;
+  --gold:#A8832A;  --gold-b:#C9A84C;  --gold-p:#FDF4E3; --gold-br:#D4B86A;
+  --em:#1B5E42;    --em-l:#2D8A5E;
+  --ink:#1A1007;   --ink-m:#4A3A25;  --ink-l:#7A6A52;  --ink-f:#A89880;
+  --white:#FFFFFF;
+  --fd:'Cormorant Garamond', Georgia, serif;
+  --fb:'DM Sans', sans-serif;
+  --eo:cubic-bezier(.16,1,.3,1);
+  --eb:cubic-bezier(.34,1.56,.64,1);
+  --es:cubic-bezier(.34,1.4,.64,1);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  font-family: var(--fb);
+  background: var(--cream);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  min-height: 100%;
+}
+button { font-family: var(--fb); cursor: pointer; border: none; outline: none; }
+a { text-decoration: none; color: inherit; }
+input { font-family: var(--fb); }
+
+/* Grain overlay — pointer-events:none */
+body::after {
+  content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 9990;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: .022;
+}
+
+/* ══════════════════════════════════════════════════════
+   SCREEN SYSTEM
+══════════════════════════════════════════════════════ */
+.screen { display: none; min-height: 100vh; flex-direction: column; }
+.screen.active { display: flex; animation: screenIn .45s var(--eo) both; }
+@keyframes screenIn { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:none; } }
+
+/* ══════════════════════════════════════════════════════
+   SCREEN: LOADING
+══════════════════════════════════════════════════════ */
+#s-load { align-items: center; justify-content: center; background: var(--cream); }
+.load-wrap { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 1.25rem; }
+.load-coin {
+  width: 78px; height: 78px; border-radius: 50%;
+  background: radial-gradient(circle at 38% 32%, #EDD97A, #C9A84C 42%, #A8832A 72%, #7A5C18);
+  box-shadow: inset 0 4px 10px rgba(255,255,255,.45), inset 0 -4px 10px rgba(60,30,0,.3),
+    0 10px 40px rgba(168,131,42,.45);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 30px; color: rgba(255,255,255,.75); font-family: var(--fd);
+  animation: coinPulse 1.8s ease-in-out infinite;
+}
+@keyframes coinPulse {
+  0%,100% { transform: scale(1); box-shadow: inset 0 4px 10px rgba(255,255,255,.45), 0 10px 40px rgba(168,131,42,.45); }
+  50%      { transform: scale(1.07); box-shadow: inset 0 4px 10px rgba(255,255,255,.45), 0 18px 56px rgba(168,131,42,.65); }
+}
+.load-text { font-size: 14px; color: var(--ink-l); animation: fadeOsc 1.8s ease-in-out infinite; }
+@keyframes fadeOsc { 0%,100%{opacity:.4} 50%{opacity:1} }
+
+/* ══════════════════════════════════════════════════════
+   SCREEN: ERROR
+══════════════════════════════════════════════════════ */
+#s-err { align-items: center; justify-content: center; padding: 2rem; background: var(--cream); }
+.err-wrap { text-align: center; max-width: 360px; display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+.err-ico { font-size: 58px; }
+.err-t { font-family: var(--fd); font-size: 32px; font-weight: 500; color: var(--ink); }
+.err-s { font-size: 15px; line-height: 1.72; color: var(--ink-l); }
+.err-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 24px; border-radius: 99px;
+  border: 1.5px solid var(--gold-br); background: transparent;
+  color: var(--gold); font-size: 14px; font-weight: 500;
+  transition: background .2s, transform .2s; margin-top: .5rem;
+}
+.err-btn:hover { background: var(--gold-p); transform: translateY(-1px); }
+
+/* ══════════════════════════════════════════════════════
+   SCREEN: LOGIN
+══════════════════════════════════════════════════════ */
+#s-login { align-items: center; background: var(--cream); overflow-y: auto; }
+.login-wrap {
+  width: 100%; max-width: 430px; margin: 0 auto;
+  padding: 0 1.25rem 3rem;
+  display: flex; flex-direction: column; align-items: center;
+}
+
+/* Dark hero banner at top */
+.login-hero {
+  width: 100%;
+  background: var(--ink);
+  border-radius: 0 0 30px 30px;
+  padding: 3.5rem 2rem 2.25rem;
+  text-align: center;
+  margin-bottom: 1.75rem;
+  position: relative; overflow: hidden;
+}
+.login-hero::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse at 50% 10%, rgba(201,168,76,.22), transparent 68%);
+}
+.login-hero::after {
+  content: ''; position: absolute;
+  bottom: -1px; left: 0; right: 0; height: 60px;
+  background: linear-gradient(to bottom, transparent, var(--cream));
+  pointer-events: none;
+}
+.lh-coin {
+  width: 70px; height: 70px; border-radius: 50%;
+  background: radial-gradient(circle at 38% 32%, #EDD97A, #C9A84C 42%, #A8832A 72%, #7A5C18);
+  box-shadow: inset 0 4px 10px rgba(255,255,255,.4), 0 12px 42px rgba(168,131,42,.65);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px; color: rgba(255,255,255,.75); font-family: var(--fd);
+  margin: 0 auto 1.1rem;
+  position: relative; z-index: 1;
+}
+.lh-shop {
+  font-family: var(--fd); font-size: 27px; font-weight: 600;
+  color: var(--cream); margin-bottom: .3rem;
+  position: relative; z-index: 1;
+}
+.lh-tag {
+  font-size: 12.5px; letter-spacing: .08em;
+  color: rgba(253,250,245,.4);
+  position: relative; z-index: 1;
+}
+.lh-rule {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(201,168,76,.15); border: 1px solid rgba(201,168,76,.28);
+  border-radius: 99px; padding: 5px 13px;
+  font-size: 12px; color: var(--gold-b);
+  margin-top: .85rem;
+  position: relative; z-index: 1;
+}
+.lh-rule i { font-size: 11px; }
+
+/* Form card */
+.login-card {
+  width: 100%;
+  background: var(--white);
+  border-radius: 22px; padding: 1.75rem 1.5rem;
+  box-shadow: 0 16px 50px rgba(26,16,7,.09), 0 2px 8px rgba(26,16,7,.04),
+    inset 0 1px 0 rgba(255,255,255,.9);
+  margin-bottom: 1.5rem;
+}
+.login-h { font-family: var(--fd); font-size: 25px; font-weight: 500; color: var(--ink); margin-bottom: .3rem; }
+.login-sub { font-size: 14px; color: var(--ink-l); line-height: 1.65; margin-bottom: 1.4rem; }
+.lf-g { margin-bottom: 1rem; }
+.lf-l {
+  display: block; font-size: 11.5px; font-weight: 500;
+  color: var(--ink-m); letter-spacing: .06em;
+  text-transform: uppercase; margin-bottom: .4rem;
+}
+.lf-i {
+  width: 100%; padding: 12px 14px;
+  border: 1.5px solid var(--beige); border-radius: 12px;
+  font-family: var(--fb); font-size: 15px; color: var(--ink);
+  background: var(--cream); transition: border-color .2s, box-shadow .2s; outline: none;
+  -webkit-appearance: none;
+}
+.lf-i:focus { border-color: var(--gold-b); box-shadow: 0 0 0 3px rgba(201,168,76,.13); }
+.lf-i::placeholder { color: var(--ink-f); }
+.lf-i.err { border-color: #e74c3c; box-shadow: 0 0 0 3px rgba(231,76,60,.1); }
+.lf-err {
+  min-height: 20px; font-size: 13px; color: #c0392b;
+  display: flex; align-items: center; gap: 5px;
+  margin-bottom: .7rem;
+}
+.lf-btn {
+  width: 100%; display: flex; align-items: center; justify-content: center; gap: 9px;
+  padding: 13.5px 24px; border-radius: 99px;
+  background: linear-gradient(135deg, var(--gold-b), var(--gold));
+  color: #fff; font-size: 15px; font-weight: 600;
+  box-shadow: 0 4px 18px rgba(168,131,42,.35);
+  transition: box-shadow .25s, transform .2s, opacity .2s;
+  margin-bottom: .85rem;
+}
+.lf-btn:hover:not(:disabled) { box-shadow: 0 8px 32px rgba(168,131,42,.48); transform: translateY(-1px); }
+.lf-btn:disabled { opacity: .6; cursor: not-allowed; }
+.lf-btn i { font-size: 17px; transition: transform .2s; }
+.lf-btn:hover:not(:disabled) i { transform: translateX(3px); }
+.lf-note { font-size: 12px; color: var(--ink-f); text-align: center; line-height: 1.55; }
+
+/* Primo footer */
+.login-primo { display: flex; align-items: center; gap: 7px; font-size: 12.5px; color: var(--ink-f); }
+.lp-brand { font-family: var(--fd); font-size: 15px; font-weight: 600; color: var(--ink-m); }
+.lp-brand span { color: var(--gold-b); }
+
+/* ══════════════════════════════════════════════════════
+   SCREEN: CARD — full redesign (C for Cake-inspired layout)
+══════════════════════════════════════════════════════ */
+#s-card { flex-direction: column; background: var(--cream-d); min-height: 100dvh; }
+
+/* ── Sticky header ── */
+.card-hdr {
+  position: sticky; top: 0; z-index: 50;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: .8rem 1.25rem;
+  background: rgba(253,250,245,.96);
+  backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--beige);
+  gap: 8px;
+}
+.chdr-l { flex: 1; min-width: 0; }
+.chdr-shop { font-family: var(--fd); font-size: 19px; font-weight: 600; color: var(--ink); line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.chdr-loyalty-tag { font-size: 10px; letter-spacing: .12em; color: var(--ink-f); text-transform: uppercase; margin-top: 2px; }
+.chdr-r { display: flex; align-items: center; gap: 7px; flex-shrink: 0; }
+
+/* ● LIVE — glowing emerald pill */
+.live-badge {
+  display: flex; align-items: center; gap: 5px;
+  background: linear-gradient(135deg, rgba(45,138,94,.13), rgba(27,94,66,.07));
+  border: 1px solid rgba(45,138,94,.32);
+  border-radius: 99px; padding: 5px 11px;
+  font-size: 10.5px; font-weight: 700; letter-spacing: .1em;
+  color: var(--em); text-transform: uppercase;
+  box-shadow: 0 1px 8px rgba(27,94,66,.1);
+}
+.live-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--em-l); box-shadow: 0 0 8px var(--em-l);
+  animation: livePulse 2s ease-in-out infinite;
+}
+@keyframes livePulse { 0%,100%{opacity:1;box-shadow:0 0 8px var(--em-l)} 50%{opacity:.3;box-shadow:0 0 2px var(--em-l)} }
+
+/* ↻ Refresh — gold-tinted labelled pill */
+.hdr-refresh {
+  display: flex; align-items: center; gap: 5px;
+  padding: 5px 13px; border-radius: 99px;
+  background: var(--gold-p); border: 1.5px solid var(--gold-br);
+  font-family: var(--fb); font-size: 12px; font-weight: 600; color: var(--gold);
+  transition: background .2s, box-shadow .2s, transform .15s;
+  white-space: nowrap;
+}
+.hdr-refresh i { font-size: 14px; }
+.hdr-refresh:hover { background: #f0e0a8; box-shadow: 0 2px 12px rgba(168,131,42,.25); transform: translateY(-1px); }
+.hdr-refresh.spinning i { animation: spin360 .5s var(--eo); }
+@keyframes spin360 { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+
+/* ● Customer — dark ink pill, gold dot, Cormorant label */
+.role-pill {
+  display: flex; align-items: center; gap: 6px;
+  padding: 6px 14px 6px 10px; border-radius: 99px;
+  background: var(--ink); border: none;
+  font-family: var(--fd); font-size: 14px; font-weight: 500; color: var(--cream);
+  letter-spacing: .01em;
+  box-shadow: 0 2px 10px rgba(26,16,7,.25);
+  transition: background .2s, box-shadow .2s, transform .15s;
+}
+.role-pill:hover { background: var(--ink-m); box-shadow: 0 4px 18px rgba(26,16,7,.32); transform: translateY(-1px); }
+.rp-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gold-b); box-shadow: 0 0 6px rgba(201,168,76,.7); flex-shrink: 0; }
+
+/* ── Signed-in row — gold-accent premium strip ── */
+.signin-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: .7rem 1.25rem .7rem 1.1rem;
+  background: linear-gradient(90deg, var(--gold-p) 0%, var(--cream) 100%);
+  border-bottom: 1px solid rgba(212,184,106,.4);
+  border-left: 3px solid var(--gold-b);
+}
+.sir-lbl {
+  font-size: 9.5px; font-weight: 700; letter-spacing: .15em;
+  color: var(--gold); text-transform: uppercase; margin-bottom: 2px;
+}
+.sir-name {
+  font-family: var(--fd); font-size: 19px; font-weight: 500;
+  color: var(--ink); line-height: 1.1;
+}
+
+/* Sign out — gold-outlined pill with arrow */
+.sir-out {
+  display: flex; align-items: center; gap: 6px;
+  font-family: var(--fb); font-size: 12.5px; font-weight: 600; color: var(--gold);
+  background: transparent; padding: 6px 15px;
+  border: 1.5px solid var(--gold-br); border-radius: 99px;
+  letter-spacing: .01em;
+  transition: all .22s var(--eo);
+}
+.sir-out i { font-size: 14px; }
+.sir-out:hover {
+  background: linear-gradient(135deg, var(--gold-b), var(--gold));
+  color: #fff; border-color: transparent;
+  box-shadow: 0 4px 14px rgba(168,131,42,.38);
+  transform: translateY(-1px);
+}
+
+/* ── Tab panels ── */
+.card-scroll { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+.tab-panel { display: none; padding: 1.1rem 1.1rem 1.5rem; max-width: 480px; margin: 0 auto; }
+.tab-panel.active { display: block; animation: screenIn .3s var(--eo) both; }
+
+
+/* ── Welcome section ── */
+.welcome-sec { margin-bottom: 1rem; }
+.ws-lbl { font-size: 10px; letter-spacing: .12em; color: var(--ink-f); text-transform: uppercase; margin-bottom: 3px; }
+.ws-name { font-family: var(--fd); font-size: 36px; font-weight: 500; color: var(--ink); line-height: 1.05; margin-bottom: .9rem; }
+.top-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+.ts-box {
+  background: var(--white); border-radius: 14px; padding: 14px 10px; text-align: center;
+  box-shadow: 0 2px 8px rgba(26,16,7,.05);
+}
+.ts-val { font-family: var(--fd); font-size: 26px; font-weight: 500; color: var(--ink); line-height: 1; margin-bottom: 4px; }
+.ts-lbl { font-size: 9.5px; letter-spacing: .06em; color: var(--ink-f); text-transform: uppercase; }
+
+/* ── Loyalty card (physical card feel) ── */
+.loyalty-card {
+  width: 100%; background: var(--white); border-radius: 20px;
+  padding: 20px 18px 16px; margin-bottom: 1rem;
+  box-shadow: 0 16px 48px rgba(26,16,7,.1), 0 3px 10px rgba(26,16,7,.05),
+    inset 0 1px 0 rgba(255,255,255,.9);
+  position: relative;
+}
+.rwd-badge {
+  position: absolute; top: -12px; right: 14px; z-index: 5;
+  background: linear-gradient(135deg, var(--em-l), var(--em));
+  color: #fff; font-size: 12px; font-weight: 600;
+  padding: 4px 11px; border-radius: 99px;
+  display: flex; align-items: center; gap: 5px;
+  box-shadow: 0 4px 14px rgba(27,94,66,.42);
+  opacity: 0; transform: translateY(6px) scale(.9);
+  transition: opacity .4s var(--es), transform .4s var(--es);
+  pointer-events: none; white-space: nowrap;
+}
+.rwd-badge.show { opacity: 1; transform: translateY(0) scale(1); }
+.rwd-badge .rc { font-family: var(--fd); font-size: 14px; font-weight: 600; }
+.lc-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+.lc-shop-nm { font-family: var(--fd); font-size: 17px; font-weight: 600; color: var(--ink); }
+.lc-sub { font-size: 10px; letter-spacing: .06em; color: var(--ink-f); text-transform: uppercase; margin-top: 2px; }
+.lc-member-r { text-align: right; }
+.lc-mem-lbl { font-size: 9px; letter-spacing: .1em; color: var(--ink-f); text-transform: uppercase; margin-bottom: 2px; }
+.lc-mem-name { font-family: var(--fd); font-size: 16px; font-weight: 600; color: var(--ink); }
+
+/* Medal grid — unchanged tokens from v4 */
+.medal-grid { display: grid; grid-template-columns: repeat(6,1fr); gap: 6px; margin-bottom: 14px; }
+.medal { aspect-ratio: 1; border-radius: 50%; position: relative; display: flex; align-items: center; justify-content: center; }
+.m-track {
+  position: absolute; inset: 0; border-radius: 50%;
+  border: 1.5px dashed rgba(168,131,42,.3); background: rgba(253,244,227,.5);
+  display: flex; align-items: center; justify-content: center;
+}
+.m-num { font-size: 8px; color: rgba(168,131,42,.35); font-family: var(--fd); font-weight: 500; }
+.m-coin { position: absolute; inset: 0; border-radius: 50%; opacity: 0; transform: scale(1.5); pointer-events: none; }
+.medal.filled .m-coin {
+  opacity: 1; transform: scale(1);
+  background: radial-gradient(circle at 38% 32%, #EDD97A, #C9A84C 42%, #A8832A 72%, #7A5C18);
+  box-shadow: inset 0 3px 8px rgba(255,255,255,.45), inset 0 -3px 8px rgba(60,30,0,.3), 0 4px 12px rgba(168,131,42,.45);
+  animation: coinIn .5s var(--es) both;
+}
+@keyframes coinIn { 0%{transform:scale(1.7);opacity:0;filter:blur(5px)} 55%{transform:scale(.88);filter:blur(0)} 80%{transform:scale(1.04)} 100%{transform:scale(1);opacity:1} }
+.medal.filled::before { content:''; position:absolute; inset:-3px; border-radius:50%; border:1.5px solid rgba(212,184,106,.55); animation:rfi .3s .3s var(--eo) both; }
+@keyframes rfi { from{opacity:0;transform:scale(.8)} to{opacity:1;transform:scale(1)} }
+.m-coin::after { content:'♛'; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:9px; color:rgba(255,255,255,.72); text-shadow:0 1px 2px rgba(0,0,0,.2); }
+.medal.rs .m-track { border:1.5px solid var(--gold-br); background:var(--gold-p); border-style:solid; }
+.medal.rs .m-num { font-size:14px; color:var(--gold-b); }
+.medal.rs.filled .m-track { display:none; }
+.medal.rs.filled .m-coin { background:linear-gradient(135deg,var(--em-l),var(--em)); box-shadow:inset 0 2px 6px rgba(255,255,255,.25),0 6px 20px rgba(27,94,66,.5); }
+.medal.rs.filled .m-coin::after { content:'✓'; font-size:16px; font-weight:700; color:#fff; text-shadow:none; }
+.medal.rs.filled::before { border-color:rgba(45,138,94,.6); inset:-4px; animation:rwdP 1.4s ease-in-out infinite; }
+@keyframes rwdP { 0%,100%{opacity:.7;transform:scale(1)} 50%{opacity:1;transform:scale(1.04)} }
+.lc-prog { background: var(--cream-d); border-radius: 8px; padding: 8px 10px; }
+.lc-pr { display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--ink-l); margin-bottom: 6px; }
+.lc-pc { font-family: var(--fd); font-size: 13px; font-weight: 600; color: var(--ink); }
+.lc-bar { height: 4px; background: var(--beige); border-radius: 99px; overflow: hidden; }
+.lc-bf { height: 100%; background: linear-gradient(90deg, var(--gold-b), var(--gold)); border-radius: 99px; transition: width .6s var(--eo); }
+
+/* ── Redeem banner ── */
+.rd-banner {
+  width: 100%;
+  background: linear-gradient(135deg, rgba(27,94,66,.06), rgba(45,138,94,.1));
+  border: 1.5px solid rgba(45,138,94,.35); border-radius: 16px;
+  padding: 13px 15px; margin-bottom: 1rem;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  opacity: 0; transform: translateY(10px);
+  transition: opacity .5s var(--es), transform .5s var(--es); pointer-events: none;
+}
+.rd-banner.show { opacity: 1; transform: translateY(0); pointer-events: all; }
+.rd-left { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
+.rd-ico { font-size: 26px; animation: bounce 1.2s ease-in-out infinite; flex-shrink: 0; }
+@keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-5px)} }
+.rd-text strong { display: block; font-size: 13px; font-weight: 600; color: var(--em); margin-bottom: 2px; }
+.rd-text span { font-size: 11.5px; color: var(--ink-l); }
+.rd-btn {
+  background: linear-gradient(135deg, var(--em-l), var(--em)); color: #fff;
+  border-radius: 99px; padding: 8px 16px; font-size: 13px; font-weight: 600;
+  box-shadow: 0 3px 10px rgba(27,94,66,.35); transition: all .2s; white-space: nowrap; flex-shrink: 0;
+}
+.rd-btn:hover { box-shadow: 0 7px 22px rgba(27,94,66,.48); transform: translateY(-1px); }
+
+/* ── Share section ── */
+.share-sec {
+  background: var(--white); border-radius: 18px; padding: 16px;
+  box-shadow: 0 2px 10px rgba(26,16,7,.06); margin-bottom: 1rem;
+}
+.ss-hdr { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+.ss-ico { font-size: 20px; }
+.ss-t { font-size: 15px; font-weight: 600; color: var(--ink); }
+.ss-s { font-size: 12.5px; color: var(--ink-f); margin-bottom: 14px; }
+.share-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.sg-btn {
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+  padding: 11px 10px; border-radius: 12px;
+  font-size: 13.5px; font-weight: 600;
+  transition: opacity .2s, transform .15s;
+  white-space: nowrap;
+}
+.sg-btn:hover { opacity: .88; transform: translateY(-1px); }
+.sg-btn:active { transform: scale(.97); }
+.sg-btn i { font-size: 16px; }
+.sg-download { background: var(--gold-b); color: #fff; }
+.sg-whatsapp { background: #25D366; color: #fff; }
+.sg-copy     { background: var(--cream-d); color: var(--ink-m); border: 1.5px solid var(--beige-m); }
+.sg-qr       { background: var(--cream-d); color: var(--ink-m); border: 1.5px solid var(--beige-m); }
+
+/* ── Rewards tab ── */
+.rewards-empty { text-align: center; padding: 3rem 1rem; }
+.re-ico { font-size: 48px; display: block; margin-bottom: .75rem; }
+.re-t { font-family: var(--fd); font-size: 22px; font-weight: 500; color: var(--ink); margin-bottom: .4rem; }
+.re-s { font-size: 14px; color: var(--ink-f); line-height: 1.65; }
+.reward-card {
+  background: var(--white); border-radius: 16px; padding: 14px 16px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 8px rgba(26,16,7,.05);
+  display: flex; align-items: center; gap: 13px;
+  animation: fadeUp .4s var(--eo) both;
+}
+.rc-ico {
+  width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--em-l), var(--em));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  box-shadow: 0 4px 12px rgba(27,94,66,.3);
+}
+.rc-body { flex: 1; min-width: 0; }
+.rc-t { font-size: 14px; font-weight: 600; color: var(--ink); }
+.rc-s { font-size: 12px; color: var(--ink-f); margin-top: 2px; }
+.rc-cycle {
+  font-family: var(--fd); font-size: 22px; font-weight: 500;
+  color: var(--em); flex-shrink: 0;
+}
+
+/* ── History tab ── */
+.hist-wrap { }
+.history-sec { width: 100%; }
+.hist-hdr { display: flex; justify-content: space-between; align-items: center; margin-bottom: .85rem; padding-top: .25rem; }
+.hist-t { font-family: var(--fd); font-size: 20px; font-weight: 500; color: var(--ink); }
+.hist-c { font-size: 11.5px; color: var(--ink-f); }
+.hist-list { display: flex; flex-direction: column; }
+.hist-item { display: flex; align-items: center; gap: 13px; padding: .8rem 0; border-bottom: 1px solid var(--beige); animation: fadeUp .4s var(--eo) both; }
+.hist-item:last-child { border-bottom: none; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
+.hist-ico { width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.hist-ico.stamp { background: radial-gradient(circle at 38% 32%, #EDD97A, #C9A84C 42%, #A8832A 72%, #7A5C18); box-shadow: inset 0 2px 5px rgba(255,255,255,.4), 0 3px 8px rgba(168,131,42,.35); font-size: 11px; color: rgba(255,255,255,.75); font-family: var(--fd); }
+.hist-ico.redeem { background: linear-gradient(135deg, var(--em-l), var(--em)); box-shadow: 0 3px 8px rgba(27,94,66,.3); font-size: 14px; color: #fff; }
+.hist-body { flex: 1; min-width: 0; }
+.hist-label { font-size: 13.5px; font-weight: 500; color: var(--ink); }
+.hist-date { font-size: 11.5px; color: var(--ink-f); margin-top: 2px; }
+.hist-empty { text-align: center; padding: 2.5rem 1rem; font-size: 14px; color: var(--ink-f); line-height: 1.7; }
+.hist-empty-ico { font-size: 42px; display: block; margin-bottom: .75rem; }
+
+/* ── Bottom tab bar — gold pill group ── */
+.tab-bar {
+  position: sticky; bottom: 0; z-index: 50;
+  padding: .55rem 1rem calc(.55rem + env(safe-area-inset-bottom, 0px));
+  background: rgba(253,250,245,.97);
+  backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+  border-top: 1px solid var(--beige);
+}
+/* Pill container */
+.tab-group {
+  display: flex; gap: 3px;
+  background: var(--cream-d);
+  border: 1px solid var(--beige);
+  border-radius: 99px; padding: 4px;
+  box-shadow: inset 0 1px 4px rgba(26,16,7,.07);
+}
+.tb-item {
+  flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 2px; padding: 8px 6px;
+  border-radius: 99px; background: transparent;
+  color: var(--ink-l);
+  font-family: var(--fb); font-size: 10px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase;
+  transition: color .25s var(--eo), background .25s var(--eo), box-shadow .25s;
+}
+.tb-item i { font-size: 18px; transition: transform .25s var(--es); }
+/* Active state — gold gradient fill */
+.tb-item.active {
+  background: linear-gradient(135deg, var(--gold-b), var(--gold));
+  color: #fff;
+  box-shadow: 0 3px 14px rgba(168,131,42,.38), inset 0 1px 0 rgba(255,255,255,.18);
+}
+.tb-item.active i { transform: scale(1.1); }
+.tb-item:hover:not(.active) { color: var(--gold); background: rgba(201,168,76,.08); }
+
+/* ── QR Modal ── */
+.qr-modal {
+  position: fixed; inset: 0; z-index: 220;
+  background: rgba(26,16,7,.45); backdrop-filter: blur(8px);
+  display: flex; align-items: flex-end; justify-content: center;
+  padding: 0 1rem 1.5rem;
+  opacity: 0; pointer-events: none; transition: opacity .3s;
+}
+.qr-modal.show { opacity: 1; pointer-events: all; }
+.qr-sheet {
+  width: 100%; max-width: 340px;
+  background: var(--white); border-radius: 24px; padding: 1.75rem 1.5rem;
+  text-align: center;
+  transform: translateY(40px); transition: transform .4s var(--es);
+}
+.qr-modal.show .qr-sheet { transform: translateY(0); }
+.qr-handle { width: 36px; height: 4px; border-radius: 99px; background: var(--beige-m); margin: 0 auto 1.25rem; }
+.qr-t { font-family: var(--fd); font-size: 22px; font-weight: 500; color: var(--ink); margin-bottom: .3rem; }
+.qr-s { font-size: 13px; color: var(--ink-l); margin-bottom: 1.25rem; line-height: 1.5; }
+.qr-img-wrap {
+  background: var(--cream); border: 1.5px solid var(--beige); border-radius: 14px;
+  padding: 14px; display: inline-block; margin-bottom: 1.1rem;
+}
+#qrImg { display: block; width: 180px; height: 180px; }
+.qr-url { font-size: 12px; color: var(--gold); font-family: monospace; word-break: break-all; margin-bottom: 1.1rem; }
+.qr-close {
+  width: 100%; padding: 12px; border-radius: 99px;
+  background: var(--cream-d); border: 1.5px solid var(--beige-m);
+  color: var(--ink-m); font-size: 14px; font-weight: 500;
+}
+
+
+/* ══════════════════════════════════════════════════════
+   REDEEM CONFIRMATION MODAL (bottom sheet)
+══════════════════════════════════════════════════════ */
+.modal-ov {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(26,16,7,.42); backdrop-filter: blur(6px);
+  display: flex; align-items: flex-end; justify-content: center;
+  padding: 0 1rem 1.5rem;
+  opacity: 0; pointer-events: none;
+  transition: opacity .3s;
+}
+.modal-ov.show { opacity: 1; pointer-events: all; }
+.modal-sheet {
+  width: 100%; max-width: 440px;
+  background: var(--white); border-radius: 24px;
+  padding: 1.75rem 1.5rem;
+  transform: translateY(50px); transition: transform .4s var(--es);
+}
+.modal-ov.show .modal-sheet { transform: translateY(0); }
+.modal-handle { width: 36px; height: 4px; border-radius: 99px; background: var(--beige-m); margin: 0 auto 1.4rem; }
+.modal-t { font-family: var(--fd); font-size: 26px; font-weight: 500; color: var(--ink); margin-bottom: .35rem; }
+.modal-s { font-size: 14px; color: var(--ink-l); line-height: 1.65; margin-bottom: 1.4rem; }
+.modal-prize {
+  background: linear-gradient(135deg, rgba(27,94,66,.05), rgba(45,138,94,.09));
+  border: 1.5px solid rgba(45,138,94,.28); border-radius: 14px;
+  padding: 1.1rem; text-align: center; margin-bottom: 1.25rem;
+}
+.modal-emo { font-size: 42px; display: block; margin-bottom: .45rem; }
+.modal-prize-t { font-family: var(--fd); font-size: 20px; font-weight: 500; color: var(--em); }
+.modal-btns { display: flex; gap: 8px; }
+.modal-cancel {
+  flex: 1; padding: 12px; border-radius: 99px;
+  border: 1.5px solid var(--beige-m); background: transparent;
+  color: var(--ink-l); font-size: 14px; font-weight: 500;
+  transition: background .2s;
+}
+.modal-cancel:hover { background: var(--cream-d); }
+.modal-confirm {
+  flex: 2; padding: 12px; border-radius: 99px;
+  background: linear-gradient(135deg, var(--em-l), var(--em));
+  color: #fff; font-size: 14px; font-weight: 600;
+  box-shadow: 0 4px 14px rgba(27,94,66,.32);
+  transition: box-shadow .2s, transform .2s;
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+}
+.modal-confirm:hover:not(:disabled) { box-shadow: 0 8px 26px rgba(27,94,66,.48); transform: translateY(-1px); }
+.modal-confirm:disabled { opacity: .65; cursor: not-allowed; transform: none; }
+
+/* ══════════════════════════════════════════════════════
+   TOAST
+══════════════════════════════════════════════════════ */
+.primo-toast {
+  position: fixed; bottom: 5.5rem; left: 50%;
+  transform: translateX(-50%) translateY(16px);
+  background: var(--ink); color: var(--cream);
+  font-size: 13.5px; font-weight: 500;
+  padding: 10px 20px; border-radius: 99px;
+  z-index: 300; pointer-events: none;
+  opacity: 0; transition: opacity .3s, transform .3s;
+  white-space: nowrap; max-width: calc(100vw - 3rem);
+  text-align: center;
+}
+.primo-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* Auto-refresh progress line */
+.refresh-line {
+  position: fixed; top: 0; left: 0; right: 0; height: 2px; z-index: 999;
+  background: linear-gradient(90deg, var(--gold-b), var(--gold));
+  transform: scaleX(0); transform-origin: left;
+  pointer-events: none; opacity: 0;
+  transition: opacity .2s;
+}
+.refresh-line.active {
+  opacity: 1;
+  animation: rfProg 1.2s var(--eo) forwards;
+}
+@keyframes rfProg { from{transform:scaleX(0)} to{transform:scaleX(1)} }
+
+/* Welcome banner (new customer) */
+.welcome-banner {
+  width: 100%; border-radius: 14px; padding: 12px 16px;
+  background: var(--gold-p); border: 1px solid var(--gold-br);
+  display: flex; align-items: center; gap: 11px;
+  animation: fadeUp .5s var(--es) both;
+}
+.wb-ico { font-size: 22px; flex-shrink: 0; }
+.wb-text strong { display: block; font-size: 13px; font-weight: 600; color: var(--gold); }
+.wb-text span { font-size: 12px; color: var(--ink-l); }
+
+/* ── SHOW TO STAFF MODAL (replaces direct redeem INSERT — audit CVE-6) ── */
+.sts-ov {
+  position: fixed; inset: 0; z-index: 210;
+  background: var(--em); /* full emerald takeover */
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 2rem 1.5rem;
+  opacity: 0; pointer-events: none;
+  transition: opacity .4s var(--es);
+}
+.sts-ov.show { opacity: 1; pointer-events: all; }
+.sts-inner { width: 100%; max-width: 380px; text-align: center; }
+.sts-badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: rgba(255,255,255,.15); border: 1.5px solid rgba(255,255,255,.3);
+  border-radius: 99px; padding: 6px 14px;
+  font-size: 11.5px; font-weight: 700; letter-spacing: .1em;
+  color: rgba(255,255,255,.9); text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+.sts-card {
+  background: var(--white); border-radius: 22px;
+  padding: 2rem 1.5rem; margin-bottom: 1.25rem;
+  box-shadow: 0 20px 60px rgba(0,0,0,.25);
+}
+.sts-emoji { font-size: 52px; display: block; margin-bottom: .75rem; }
+.sts-reward {
+  font-family: var(--fd); font-size: 26px; font-weight: 600;
+  color: var(--em); margin-bottom: .3rem;
+}
+.sts-sub { font-size: 13.5px; color: var(--ink-l); margin-bottom: 1.25rem; }
+.sts-code-lbl { font-size: 11px; color: var(--ink-f); letter-spacing: .08em; text-transform: uppercase; margin-bottom: .4rem; }
+.sts-code {
+  font-family: 'Courier New', monospace; font-size: 28px; font-weight: 700;
+  color: var(--em); letter-spacing: .18em;
+  background: linear-gradient(135deg, rgba(27,94,66,.06), rgba(45,138,94,.1));
+  border: 1.5px solid rgba(45,138,94,.3); border-radius: 12px;
+  padding: 10px 16px; display: inline-block;
+}
+.sts-name { font-size: 14px; color: var(--ink-m); margin-top: 1rem; font-weight: 500; }
+.sts-inst {
+  color: rgba(255,255,255,.75); font-size: 13.5px; line-height: 1.65;
+  margin-bottom: 1.5rem;
+}
+.sts-inst strong { color: #fff; }
+.sts-close {
+  background: rgba(255,255,255,.15); border: 1.5px solid rgba(255,255,255,.25);
+  color: #fff; border-radius: 99px;
+  padding: 11px 28px; font-size: 14px; font-weight: 600;
+  transition: background .2s;
+}
+.sts-close:hover { background: rgba(255,255,255,.25); }
+.sts-screen-on {
+  font-size: 11.5px; color: rgba(255,255,255,.45);
+  margin-top: .75rem; display: flex; align-items: center; justify-content: center; gap: 5px;
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════ SCREEN: LOADING ══════════ -->
+<div id="s-load" class="screen active" role="status" aria-label="Loading loyalty card">
+  <div class="load-wrap">
+    <div class="load-coin" aria-hidden="true">♛</div>
+    <div class="load-text">Loading your rewards card…</div>
+  </div>
+</div>
+
+<!-- ══════════ SCREEN: ERROR ══════════ -->
+<div id="s-err" class="screen" role="main">
+  <div class="err-wrap">
+    <div class="err-ico" aria-hidden="true">🔍</div>
+    <h1 class="err-t" id="errTitle">Shop Not Found</h1>
+    <p class="err-s" id="errMsg">This rewards link doesn't match any active shop. Check with your shop for the correct link.</p>
+    <a href="https://primorewards.app" class="err-btn">
+      <i class="ti ti-external-link" aria-hidden="true"></i> About Primo Rewards
+    </a>
+  </div>
+</div>
+
+<!-- ══════════ SCREEN: LOGIN ══════════ -->
+<div id="s-login" class="screen" role="main">
+  <div class="login-wrap">
+
+    <!-- Shop hero -->
+    <div class="login-hero">
+      <div class="lh-coin" id="lhCoin" aria-hidden="true">♛</div>
+      <div class="lh-shop" id="lhShop">Your Shop</div>
+      <div class="lh-tag">Loyalty Rewards</div>
+      <div class="lh-rule" id="lhRule">
+        <i class="ti ti-star-filled" aria-hidden="true"></i>
+        <span id="lhRuleText">Buy 11 get 1 free</span>
+      </div>
+    </div>
+
+    <!-- Form card -->
+    <div class="login-card">
+      <h2 class="login-h">View your card.</h2>
+      <p class="login-sub">Enter your first name and last 4 digits of your mobile number.</p>
+
+      <div class="lf-g">
+        <label class="lf-l" for="inName">First Name</label>
+        <input class="lf-i" id="inName" type="text"
+          placeholder="Priya" autocomplete="given-name"
+          inputmode="text" maxlength="60" spellcheck="false">
+      </div>
+      <div class="lf-g">
+        <label class="lf-l" for="inPhone">Last 4 Digits of Mobile</label>
+        <input class="lf-i" id="inPhone" type="tel"
+          placeholder="4 3 2 1" inputmode="numeric"
+          maxlength="4" pattern="[0-9]{4}" autocomplete="off">
+      </div>
+
+      <div class="lf-err" id="loginErr" role="alert" aria-live="polite"></div>
+
+      <button class="lf-btn" id="loginBtn" type="button">
+        <span id="loginBtnTxt">View My Card</span>
+        <i class="ti ti-arrow-right" aria-hidden="true"></i>
+      </button>
+
+      <div class="lf-note">New here? We'll enroll you automatically ✨</div>
+    </div>
+
+    <!-- Primo footer -->
+    <div class="login-primo">
+      <span>Powered by</span>
+      <span class="lp-brand">Primo<span>.</span></span>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════ SCREEN: CARD ══════════ -->
+<div id="s-card" class="screen" role="main">
+
+  <!-- Sticky header -->
+  <header class="card-hdr">
+    <div class="chdr-l">
+      <div class="chdr-shop" id="cardShopName">—</div>
+      <div class="chdr-loyalty-tag">Loyalty Rewards</div>
+    </div>
+    <div class="chdr-r">
+      <div class="live-badge"><span class="live-dot"></span>LIVE</div>
+      <button class="hdr-refresh" id="refreshBtn" aria-label="Refresh card">
+        <i class="ti ti-refresh" aria-hidden="true"></i>
+        Refresh
+      </button>
+      <button class="role-pill" id="signOutBtn" aria-label="Sign out">
+        <span class="rp-dot"></span>
+        Customer
+      </button>
+    </div>
+  </header>
+
+  <!-- Signed-in row -->
+  <div class="signin-row">
+    <div>
+      <div class="sir-lbl">Signed in as</div>
+      <div class="sir-name" id="sirName">—</div>
+    </div>
+    <button class="sir-out" id="signOutBtn2">
+      <i class="ti ti-logout" aria-hidden="true"></i> Sign out
+    </button>
+  </div>
+
+  <!-- Scrollable tab panels -->
+  <div class="card-scroll">
+
+    <!-- ── TAB: MY CARD ── -->
+    <div class="tab-panel active" id="tab-mycard">
+
+      <!-- Welcome -->
+      <div class="welcome-sec">
+        <div class="ws-lbl">Welcome back</div>
+        <div class="ws-name" id="welcomeName">—</div>
+        <div class="top-stats">
+          <div class="ts-box">
+            <div class="ts-val" id="tsStamps">0</div>
+            <div class="ts-lbl">Purchases</div>
+          </div>
+          <div class="ts-box">
+            <div class="ts-val" id="tsRewards">0</div>
+            <div class="ts-lbl">Free <span id="tsProduct">Items</span></div>
+          </div>
+          <div class="ts-box">
+            <div class="ts-val" id="tsToGo">0</div>
+            <div class="ts-lbl">To Go</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Loyalty Card -->
+      <div class="loyalty-card" id="loyaltyCard">
+        <div class="rwd-badge" id="rwdBadge">
+          <span class="rc">1×</span>&nbsp;Free&nbsp;<span id="rwdProduct">Item</span>&nbsp;Ready!
+        </div>
+        <!-- Interior rendered by JS -->
+      </div>
+
+      <!-- Redeem banner -->
+      <div class="rd-banner" id="redeemBanner" role="region" aria-label="Reward ready to redeem">
+        <div class="rd-left">
+          <div class="rd-ico" id="redeemIco" aria-hidden="true">🎁</div>
+          <div class="rd-text">
+            <strong>Your free <span id="redeemProd">item</span> is waiting!</strong>
+            <span>Show this screen to staff &amp; tap Redeem</span>
+          </div>
+        </div>
+        <button class="rd-btn" id="redeemBtn">Redeem</button>
+      </div>
+
+      <!-- Share section -->
+      <div class="share-sec">
+        <div class="ss-hdr">
+          <span class="ss-ico">📤</span>
+          <span class="ss-t">Share your card</span>
+        </div>
+        <div class="ss-s">Show your progress or share on WhatsApp</div>
+        <div class="share-grid">
+          <button class="sg-btn sg-download" id="downloadCardBtn">
+            <i class="ti ti-download" aria-hidden="true"></i> Download card
+          </button>
+          <button class="sg-btn sg-whatsapp" id="whatsappBtn">
+            <i class="ti ti-brand-whatsapp" aria-hidden="true"></i> WhatsApp
+          </button>
+          <button class="sg-btn sg-copy" id="copyStatusBtn">
+            <i class="ti ti-clipboard-copy" aria-hidden="true"></i> Copy status
+          </button>
+          <button class="sg-btn sg-qr" id="qrCodeBtn">
+            <i class="ti ti-qrcode" aria-hidden="true"></i> QR code
+          </button>
+        </div>
+      </div>
+
+    </div><!-- /tab-mycard -->
+
+    <!-- ── TAB: REWARDS ── -->
+    <div class="tab-panel" id="tab-rewards">
+      <div id="rewardsList">
+        <div class="rewards-empty">
+          <span class="re-ico" aria-hidden="true">🏆</span>
+          <div class="re-t">No rewards yet</div>
+          <div class="re-s">Complete your first stamp cycle to earn a free reward. You're on your way!</div>
+        </div>
+      </div>
+    </div><!-- /tab-rewards -->
+
+    <!-- ── TAB: HISTORY ── -->
+    <div class="tab-panel" id="tab-history">
+      <div class="history-sec">
+        <div class="hist-hdr">
+          <div class="hist-t">Visit History</div>
+          <div class="hist-c" id="histCount"></div>
+        </div>
+        <div class="hist-list" id="histList">
+          <div class="hist-empty">
+            <span class="hist-empty-ico" aria-hidden="true">☕</span>
+            Make your first visit to start earning stamps!
+          </div>
+        </div>
+      </div>
+    </div><!-- /tab-history -->
+
+  </div><!-- /card-scroll -->
+
+  <!-- Bottom tab bar -->
+  <nav class="tab-bar" aria-label="Card sections">
+    <div class="tab-group">
+      <button class="tb-item active" data-tab="mycard" aria-label="My Card">
+        <i class="ti ti-credit-card" aria-hidden="true"></i>
+        <span>My Card</span>
+      </button>
+      <button class="tb-item" data-tab="rewards" aria-label="Rewards">
+        <i class="ti ti-gift" aria-hidden="true"></i>
+        <span>Rewards</span>
+      </button>
+      <button class="tb-item" data-tab="history" aria-label="History">
+        <i class="ti ti-history" aria-hidden="true"></i>
+        <span>History</span>
+      </button>
+    </div>
+  </nav>
+
+</div>
+
+<!-- ══════════ QR CODE MODAL ══════════ -->
+<div class="qr-modal" id="qrModal" role="dialog" aria-modal="true" aria-labelledby="qrTitle">
+  <div class="qr-sheet">
+    <div class="qr-handle" aria-hidden="true"></div>
+    <div class="qr-t" id="qrTitle">Scan to Join</div>
+    <div class="qr-s" id="qrSub">Share this QR code so others can join your shop's loyalty program.</div>
+    <div class="qr-img-wrap">
+      <img id="qrImg" src="" alt="QR code for shop reward link" width="180" height="180">
+    </div>
+    <div class="qr-url" id="qrUrl">primorewards.app/shop-reward</div>
+    <button class="qr-close" id="qrClose">Close</button>
+  </div>
+</div>
+
+<!-- ══════════ SHOW TO STAFF OVERLAY (CVE-6 fix — no direct anon redemption INSERT) ══════════ -->
+<!-- Customer shows this full-screen card to merchant. Merchant confirms via Phase 3 dashboard. -->
+<div class="sts-ov" id="stsOverlay" role="dialog" aria-modal="true" aria-label="Show reward to staff">
+  <div class="sts-inner">
+    <div class="sts-badge">
+      <i class="ti ti-gift" aria-hidden="true"></i> Reward Ready to Redeem
+    </div>
+    <div class="sts-card">
+      <span class="sts-emoji" id="stsEmoji" aria-hidden="true">🎁</span>
+      <div class="sts-reward">1× Free <span id="stsProd">Item</span></div>
+      <div class="sts-sub" id="stsShop">Shop Name</div>
+      <div class="sts-code-lbl">Show this code to staff</div>
+      <div class="sts-code" id="stsCode" aria-label="Confirmation code">——</div>
+      <div class="sts-name" id="stsName">Customer</div>
+    </div>
+    <p class="sts-inst">
+      <strong>Show this screen to staff.</strong><br>
+      They'll confirm your reward on their device. Your card resets automatically once confirmed.
+    </p>
+    <button class="sts-close" id="stsClose">Close</button>
+    <div class="sts-screen-on" id="stsWakeLockNote">
+      <i class="ti ti-sun" aria-hidden="true"></i> Screen kept on
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ REDEEM MODAL ══════════ -->
+<div class="modal-ov" id="redeemModal"
+  role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-sheet">
+    <div class="modal-handle" aria-hidden="true"></div>
+    <h2 class="modal-t" id="modalTitle">Redeem Reward</h2>
+    <p class="modal-s">Show this to a staff member and confirm together. Your card will reset for the next cycle.</p>
+    <div class="modal-prize">
+      <span class="modal-emo" id="modalEmoji" aria-hidden="true">🎁</span>
+      <div class="modal-prize-t">1× Free <span id="modalProd">Item</span></div>
+    </div>
+    <div class="modal-btns">
+      <button class="modal-cancel" id="modalCancel">Cancel</button>
+      <button class="modal-confirm" id="modalConfirm">
+        <i class="ti ti-check" aria-hidden="true"></i>
+        <span id="modalConfirmTxt">Confirm Redemption</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ TOAST ══════════ -->
+<div class="primo-toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- Auto-refresh progress line -->
+<div class="refresh-line" id="refreshLine" aria-hidden="true"></div>
+
+<script>
+/* ════════════════════════════════════════════════════════════════════
+   PRIMO SHOP ENGINE — Phase 2
+   File  : primo-shop-engine-v1.html
+   URL   : primorewards.app/[slug]-reward
+   Reads : shops, customers, stamps, redemptions  (Supabase REST)
+   Writes: customers (enroll), redemptions (redeem)
+════════════════════════════════════════════════════════════════════ */
+
+/* ── 1. CONFIG — fill these before going live ── */
+const PRIMO_CONFIG = {
+  SUPABASE_URL:      'https://plewiwrexjszcqqjwiks.supabase.co',
+  SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBsZXdpd3JleGpzemNxcWp3aWtzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3MDkxOTgsImV4cCI6MjA5NTI4NTE5OH0.UhQcVdZZw74X-HBrGVto35dyZ_V67WfkjGFepRzNlMQ',
+  FUNCTIONS_URL:     'https://plewiwrexjszcqqjwiks.supabase.co/functions/v1',
+  // ─────────────────────────────────────────────────────────────────────
+  // FUNCTIONS_URL powers the secure routes (audit CVE-4, CVE-6, CVE-10):
+  //   customer-lookup  → find/enroll without exposing PII via anon SELECT
+  //   customer-card    → read stamps+redemptions via service role (anon can't)
+  //   redeem-request   → flag reward as pending; merchant confirms via Phase 3
+  // When FUNCTIONS_URL is placeholder, the file falls back to direct REST
+  // calls so dev/testing works — REST fallback produces console warnings.
+  // ─────────────────────────────────────────────────────────────────────
+};
+
+/* ── 2. STATE ── */
+let shop          = null;
+let customer      = null;
+let cycleStamps   = [];   // stamps in current cycle only
+let allStamps     = [];   // all stamps (for history + count)
+let redemptions   = [];   // all redemptions for this customer
+let currentCycle  = 1;
+let isNewCustomer = false;
+let autoTimer     = null;
+let wakeLock      = null; // Screen Wake Lock API ref
+
+// CVE-9: client-side login rate limiting (5 attempts / 30s cooldown)
+const loginAttempts = { count: 0, lockedUntil: 0 };
+
+/* ── 3. UTILITIES ── */
+function sanitize(str) {
+  return String(str).replace(/[<>"'&]/g, c =>
+    ({ '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;', '&':'&amp;' }[c])
+  );
+}
+
+function parseSlug() {
+  // URL: /sweetlayers-reward  → slug = sweetlayers
+  // URL: /sweet-layers-reward → slug = sweet-layers
+  // Strict: strip anything not alphanumeric/hyphen, max 80 chars
+  const sanitizeSlug = raw => raw.toLowerCase().replace(/[^a-z0-9-]/g, '').substring(0, 80) || null;
+  const match = window.location.pathname.match(/^\/(.+)-reward\/?$/i);
+  if (match) return sanitizeSlug(match[1]);
+  const param = new URLSearchParams(window.location.search).get('slug');
+  if (param) return sanitizeSlug(param.trim());
+  return null;
+}
+
+function relativeDate(iso) {
+  const diff = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
+  if (diff < 60)     return 'just now';
+  if (diff < 3600)   return Math.floor(diff / 60) + 'm ago';
+  if (diff < 86400)  return Math.floor(diff / 3600) + 'h ago';
+  if (diff < 604800) return Math.floor(diff / 86400) + 'd ago';
+  return new Date(iso).toLocaleDateString('en-IN', { day:'numeric', month:'short' });
+}
+
+function toast(msg, ms = 2800) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), ms);
+}
+
+/* ── 4. SCREEN SWITCHER ── */
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById(id);
+  if (el) el.classList.add('active');
+}
+
+function showError(type) {
+  const map = {
+    invalid:  { t: 'Invalid Link',     m: "This doesn't look like a valid Primo rewards link. Make sure you're using the link shared by your shop." },
+    notfound: { t: 'Shop Not Found',   m: "This rewards link doesn't match any active shop. Check with your shop for the correct link." },
+    inactive: { t: 'Shop Inactive',    m: "This shop's loyalty program is currently paused. Please check back later." },
+    network:  { t: 'Connection Error', m: "Couldn't reach the server. Check your internet connection and try again." },
+  };
+  const info = map[type] || map.notfound;
+  document.getElementById('errTitle').textContent = info.t;
+  document.getElementById('errMsg').textContent   = info.m;
+  showScreen('s-err');
+}
+
+/* ── 5. SUPABASE REST HELPER ── */
+async function sb(endpoint, opts = {}) {
+  const res = await fetch(`${PRIMO_CONFIG.SUPABASE_URL}/rest/v1${endpoint}`, {
+    method: opts.method || 'GET',
+    headers: {
+      'apikey':        PRIMO_CONFIG.SUPABASE_ANON_KEY,
+      'Authorization': `Bearer ${PRIMO_CONFIG.SUPABASE_ANON_KEY}`,
+      'Content-Type':  'application/json',
+      'Prefer':        opts.method === 'POST' ? 'return=representation' : '',
+      ...(opts.headers || {}),
+    },
+    body: opts.body ? JSON.stringify(opts.body) : undefined,
+  });
+  if (!res.ok) throw new Error(`Supabase ${res.status}: ${await res.text()}`);
+  if (res.status === 204) return null;
+  return res.json();
+}
+
+/* ── 6. DATA FETCHING ── */
+
+// CVE-5 fix: query the public_shop_card VIEW (excludes admin_password,
+// owner_phone, owner_email per audit Section 9 revised RLS).
+// Falls back to /shops if view doesn't exist yet (column grants still protect sensitive fields).
+async function fetchShop(slug) {
+  try {
+    const rows = await sb(`/public_shop_card?slug=eq.${encodeURIComponent(slug)}&limit=1`);
+    return rows?.length ? rows[0] : null;
+  } catch {
+    // View not yet created — fall back to shops table (column-level grants should still apply)
+    console.warn('[Primo] public_shop_card view not found — falling back to shops table. Apply audit Section 9 SQL.');
+    const rows = await sb(`/shops?slug=eq.${encodeURIComponent(slug)}&select=id,shop_name,slug,city,status,reward_rule,product_name,product_emoji&limit=1`);
+    return rows?.length ? rows[0] : null;
+  }
+}
+
+// Edge Function caller — routes sensitive ops server-side (CVE-4, CVE-6, CVE-10)
+function edgeConfigured() {
+  return PRIMO_CONFIG.FUNCTIONS_URL && PRIMO_CONFIG.FUNCTIONS_URL !== 'YOUR_SUPABASE_FUNCTIONS_URL';
+}
+async function callEdge(fnName, body) {
+  const res = await fetch(`${PRIMO_CONFIG.FUNCTIONS_URL}/${fnName}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type':  'application/json',
+      'apikey':        PRIMO_CONFIG.SUPABASE_ANON_KEY,
+      'Authorization': `Bearer ${PRIMO_CONFIG.SUPABASE_ANON_KEY}`,
+    },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) throw new Error(`Edge fn ${fnName}: ${res.status} ${await res.text()}`);
+  return res.json();
+}
+
+async function loadCardData() {
+  const cid = customer.id, sid = shop.id;
+
+  if (edgeConfigured()) {
+    // ── Secure path: Edge Function reads stamps+redemptions via service role ──
+    // (anon key cannot SELECT from stamps/redemptions after audit Section 9 RLS applied)
+    // Deploy: supabase/functions/customer-card/index.ts
+    const data = await callEdge('customer-card', { customer_id: cid, shop_id: sid });
+    redemptions  = data.redemptions  || [];
+    cycleStamps  = data.cycleStamps  || [];
+    allStamps    = data.allStamps    || [];
+    currentCycle = data.currentCycle || (redemptions.length + 1);
+  } else {
+    // ── Fallback: direct REST (works only before audit Section 9 RLS is applied) ──
+    console.warn('[Primo] Edge Function not configured — using direct REST. Stamps/redemptions will fail after audit RLS is applied.');
+    redemptions = await sb(
+      `/redemptions?customer_id=eq.${cid}&shop_id=eq.${sid}&order=redeemed_at.desc`
+    ) || [];
+    currentCycle = redemptions.length + 1;
+    cycleStamps  = await sb(
+      `/stamps?customer_id=eq.${cid}&shop_id=eq.${sid}&cycle_number=eq.${currentCycle}&order=stamped_at.asc`
+    ) || [];
+    allStamps    = await sb(
+      `/stamps?customer_id=eq.${cid}&shop_id=eq.${sid}&order=stamped_at.desc&limit=20`
+    ) || [];
+  }
+}
+
+/* ── 7. RENDER LOGIN ── */
+function renderLogin() {
+  const buy   = shop.reward_rule?.buy || 11;
+  const get   = shop.reward_rule?.get || 1;
+  const emoji = shop.product_emoji || '🎁';
+
+  document.getElementById('lhShop').textContent    = shop.shop_name;
+  document.getElementById('lhRuleText').textContent = `Buy ${buy} get ${get} free ${emoji}`;
+  document.title = `${shop.shop_name} Rewards — Primo`;
+
+  // If shop is inactive, block login
+  if (shop.status !== 'active') {
+    showError('inactive');
+    return;
+  }
+  showScreen('s-login');
+  document.getElementById('inName').focus();
+}
+
+/* ── 8. HANDLE LOGIN / ENROLL ── */
+async function handleLogin() {
+  const errEl = document.getElementById('loginErr');
+  const btn   = document.getElementById('loginBtn');
+  const txtEl = document.getElementById('loginBtnTxt');
+  errEl.textContent = '';
+  document.getElementById('inName').classList.remove('err');
+  document.getElementById('inPhone').classList.remove('err');
+
+  // CVE-9: client-side rate limiting (5 attempts per 30s window)
+  const now = Date.now();
+  if (now < loginAttempts.lockedUntil) {
+    const secs = Math.ceil((loginAttempts.lockedUntil - now) / 1000);
+    errEl.textContent = `⚠ Too many attempts. Try again in ${secs}s.`;
+    return;
+  }
+
+  // Sanitize: letters, spaces, hyphens only for firstName (no injection vectors)
+  const rawName  = document.getElementById('inName').value.trim();
+  const rawPhone = document.getElementById('inPhone').value.replace(/\D/g, '');
+  const firstName = rawName.replace(/[^a-zA-Z\s\-'.]/g, '').substring(0, 60).trim();
+  const phone4    = rawPhone.substring(0, 4);
+
+  if (!firstName || firstName.length < 2) {
+    document.getElementById('inName').classList.add('err');
+    errEl.textContent = '⚠ Enter your first name (at least 2 characters, letters only).';
+    document.getElementById('inName').focus();
+    return;
+  }
+  if (!/^\d{4}$/.test(phone4)) {
+    document.getElementById('inPhone').classList.add('err');
+    errEl.textContent = '⚠ Enter exactly 4 digits of your mobile number.';
+    document.getElementById('inPhone').focus();
+    return;
+  }
+
+  btn.disabled = true;
+  txtEl.textContent = 'Checking…';
+
+  try {
+    if (edgeConfigured()) {
+      // ── Secure path: Edge Function does lookup without exposing PII (CVE-10) ──
+      // Deploy: supabase/functions/customer-lookup/index.ts
+      // Returns: { customer, isNew } — never exposes other customers' data
+      const result = await callEdge('customer-lookup', {
+        shop_id:    shop.id,
+        first_name: firstName,
+        phone_last4: phone4,
+      });
+      customer      = result.customer;
+      isNewCustomer = result.isNew || false;
+      if (!customer?.id) throw new Error('Lookup failed — no customer returned');
+
+    } else {
+      // ── Fallback: direct REST (works only before audit Section 9 RLS applied) ──
+      console.warn('[Primo] Edge Function not configured — customer lookup via direct REST. CVE-10 mitigated only after applying audit RLS + Edge Functions.');
+      const found = await sb(
+        `/customers?shop_id=eq.${shop.id}&first_name=eq.${encodeURIComponent(firstName)}&phone_last4=eq.${phone4}&limit=1`
+      );
+      if (found?.length) {
+        customer      = found[0];
+        isNewCustomer = false;
+      } else {
+        const enrolled = await sb('/customers', {
+          method: 'POST',
+          body: { shop_id: shop.id, first_name: firstName, phone_last4: phone4 },
+        });
+        customer      = Array.isArray(enrolled) ? enrolled[0] : enrolled;
+        isNewCustomer = true;
+        if (!customer?.id) throw new Error('Enrollment failed — no ID returned');
+      }
+    }
+
+    // Reset rate limit on success
+    loginAttempts.count = 0;
+
+    await loadCardData();
+    renderCard();
+    showScreen('s-card');
+    startAutoRefresh();
+
+  } catch (e) {
+    console.error('Login error:', e);
+    // Increment rate limit counter
+    loginAttempts.count++;
+    if (loginAttempts.count >= 5) {
+      loginAttempts.lockedUntil = Date.now() + 30000;
+      loginAttempts.count = 0;
+      errEl.textContent = '⚠ Too many attempts. Please wait 30 seconds and try again.';
+    } else {
+      errEl.textContent = '⚠ Something went wrong. Please check your details and try again.';
+    }
+  } finally {
+    btn.disabled      = false;
+    txtEl.textContent = 'View My Card';
+  }
+}
+
+/* ── 9. RENDER CARD ── */
+function renderCard() {
+  const buy    = shop.reward_rule?.buy  || 11;
+  const get    = shop.reward_rule?.get  || 1;
+  const emoji  = shop.product_emoji     || '🎁';
+  const prod   = shop.product_name      || 'item';
+  const count  = cycleStamps.length;
+  const ready  = count >= buy;
+  const pct    = Math.min((count / buy) * 100, 100);
+  const left   = Math.max(buy - count, 0);
+
+  // ── Header ──
+  document.getElementById('cardShopName').textContent  = shop.shop_name;
+
+  // ── Signed-in row ──
+  document.getElementById('sirName').textContent = customer.first_name;
+
+  // ── Welcome section ──
+  document.getElementById('welcomeName').textContent = customer.first_name;
+  document.getElementById('tsStamps').textContent    = allStamps.length;
+  document.getElementById('tsRewards').textContent   = redemptions.length;
+  document.getElementById('tsToGo').textContent      = left;
+  const tsP = document.getElementById('tsProduct');
+  if (tsP) tsP.textContent = prod + 's';
+
+  // ── Product labels ──
+  ['rwdProduct','redeemProd','modalProd'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = prod;
+  });
+  const rdIco = document.getElementById('redeemIco');
+  if (rdIco) rdIco.textContent = emoji;
+  const mEmo = document.getElementById('modalEmoji');
+  if (mEmo) mEmo.textContent = emoji;
+
+  // ── Loyalty card interior ──
+  const card = document.getElementById('loyaltyCard');
+  card.innerHTML = `
+    <div class="rwd-badge ${ready ? 'show' : ''}" id="rwdBadge">
+      <span class="rc">1×</span>&nbsp;Free&nbsp;<span>${sanitize(prod)}</span>&nbsp;Ready!
+    </div>
+    <div class="lc-top">
+      <div>
+        <div class="lc-shop-nm">${sanitize(shop.shop_name)}</div>
+        <div class="lc-sub">Loyalty Card</div>
+      </div>
+      <div class="lc-member-r">
+        <div class="lc-mem-lbl">Member</div>
+        <div class="lc-mem-name">${sanitize(customer.first_name)}</div>
+      </div>
+    </div>
+    <div class="medal-grid" id="medalGrid" role="list" aria-label="Stamp card"></div>
+    <div class="lc-prog">
+      <div class="lc-pr">
+        <span>${count} of ${buy} stamps</span>
+        <span class="lc-pc">${ready ? '🎉 Reward ready!' : `${left} more to free ${prod}`}</span>
+      </div>
+      <div class="lc-bar" role="progressbar" aria-valuenow="${count}" aria-valuemin="0" aria-valuemax="${buy}">
+        <div class="lc-bf" style="width:${pct}%"></div>
+      </div>
+    </div>
+  `;
+  buildMedals(count, buy, get);
+
+  // ── Redeem banner ──
+  document.getElementById('redeemBanner').classList.toggle('show', ready);
+
+  // ── Welcome banner (new enrollments only) ──
+  const wb = document.getElementById('welcomeBanner');
+  if (wb) wb.style.display = isNewCustomer ? 'flex' : 'none';
+
+  // ── Render current tab content ──
+  renderHistory(prod, emoji);
+}
+
+/* ── 10. BUILD MEDALLIONS ── */
+function buildMedals(count, buy, get) {
+  const grid  = document.getElementById('medalGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
+
+  const total = buy + get;
+
+  // Smart column count
+  const cols = total <= 5 ? total : total <= 8 ? 4 : total <= 9 ? 3 : 6;
+  grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+
+  for (let i = 0; i < total; i++) {
+    const isReward = i >= buy;
+    const filled   = isReward ? count >= buy : i < count;
+
+    const m = document.createElement('div');
+    m.className = 'medal' + (isReward ? ' rs' : '') + (filled ? ' filled' : '');
+    m.setAttribute('role', 'listitem');
+    m.setAttribute('aria-label', isReward
+      ? (filled ? 'Reward earned!' : 'Free reward slot')
+      : `Stamp ${i+1}${i < count ? ' — earned' : ''}`
+    );
+
+    const track = document.createElement('div');
+    track.className = 'm-track';
+
+    const num = document.createElement('span');
+    num.className = 'm-num';
+    num.textContent = isReward ? '🎁' : (i + 1);
+    track.appendChild(num);
+    m.appendChild(track);
+
+    const coin = document.createElement('div');
+    coin.className = 'm-coin';
+    // Stagger animation for each coin
+    if (filled && !isReward) {
+      coin.style.animationDelay = (i * 0.045) + 's';
+    }
+    m.appendChild(coin);
+    grid.appendChild(m);
+  }
+}
+
+/* ── 11. RENDER HISTORY ── */
+function renderHistory(prod, emoji) {
+  const list   = document.getElementById('histList');
+  const countEl = document.getElementById('histCount');
+  if (!list) return;
+
+  // Merge stamps + redemptions into one timeline
+  const events = [
+    ...allStamps.map(s   => ({ type:'stamp',  time: s.stamped_at,   cycle: s.cycle_number })),
+    ...redemptions.map(r => ({ type:'redeem', time: r.redeemed_at,  cycle: r.cycle_number })),
+  ].sort((a, b) => new Date(b.time) - new Date(a.time)).slice(0, 14);
+
+  if (countEl) countEl.textContent = events.length ? `${events.length} events` : '';
+
+  if (!events.length) {
+    list.innerHTML = `
+      <div class="hist-empty">
+        <span class="hist-empty-ico" aria-hidden="true">${emoji}</span>
+        No visits yet — make your first visit and earn your first stamp!
+      </div>`;
+    return;
+  }
+
+  list.innerHTML = events.map((ev, i) => {
+    const isR = ev.type === 'redeem';
+    return `
+      <div class="hist-item" style="animation-delay:${i * 0.05}s">
+        <div class="hist-ico ${isR ? 'redeem' : 'stamp'}" aria-hidden="true">
+          ${isR ? '✓' : '♛'}
+        </div>
+        <div class="hist-body">
+          <div class="hist-label">
+            ${isR
+              ? `Redeemed 1× free ${sanitize(prod)} ${emoji}`
+              : `Earned a stamp ${emoji}`
+            }
+          </div>
+          <div class="hist-date">${relativeDate(ev.time)} &middot; Cycle ${ev.cycle}</div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+/* ── 11b. TAB SWITCHING ── */
+let currentTab = 'mycard';
+function switchTab(name) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tb-item').forEach(b => b.classList.remove('active'));
+  const panel = document.getElementById('tab-' + name);
+  const btn   = document.querySelector(`[data-tab="${name}"]`);
+  if (panel) panel.classList.add('active');
+  if (btn)   btn.classList.add('active');
+  currentTab = name;
+  document.querySelector('.card-scroll')?.scrollTo({ top: 0, behavior: 'smooth' });
+  if (name === 'rewards') renderRewardsTab();
+  if (name === 'history') renderHistory(shop?.product_name || 'item', shop?.product_emoji || '🎁');
+}
+
+/* ── 11c. REWARDS TAB ── */
+function renderRewardsTab() {
+  const list  = document.getElementById('rewardsList');
+  const prod  = shop?.product_name  || 'item';
+  const emoji = shop?.product_emoji || '🎁';
+  if (!list) return;
+  if (!redemptions.length) {
+    const buy = shop?.reward_rule?.buy || 11;
+    list.innerHTML = `<div class="rewards-empty"><span class="re-ico">${emoji}</span><div class="re-t">No rewards yet</div><div class="re-s">Earn ${buy} stamps to unlock your first free ${prod}. Keep going!</div></div>`;
+    return;
+  }
+  list.innerHTML = redemptions.map((r, i) => `
+    <div class="reward-card" style="animation-delay:${i * 0.06}s">
+      <div class="rc-ico">${emoji}</div>
+      <div class="rc-body">
+        <div class="rc-t">1× Free ${sanitize(prod)} redeemed</div>
+        <div class="rc-s">${relativeDate(r.redeemed_at)} &middot; Cycle ${r.cycle_number}</div>
+      </div>
+      <div class="rc-cycle">#${r.cycle_number}</div>
+    </div>`).join('');
+}
+
+/* ── 11d. SHARE FUNCTIONS ── */
+function shareWhatsApp() {
+  const buy   = shop.reward_rule?.buy || 11;
+  const count = cycleStamps.length;
+  const prod  = shop.product_name || 'item';
+  const url   = window.location.href;
+  const bar   = '●'.repeat(count) + '○'.repeat(Math.max(0, buy - count));
+  const text  = `🏅 ${shop.shop_name} Loyalty Card\n\n${bar}\n${count}/${buy} stamps — ${Math.max(0, buy-count)} more for a free ${prod} ${shop.product_emoji || '🎁'}\n\nJoin here 👇\n${url}`;
+  window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
+}
+
+function copyStatus() {
+  const buy   = shop.reward_rule?.buy || 11;
+  const count = cycleStamps.length;
+  const prod  = shop.product_name || 'item';
+  const bar   = '●'.repeat(count) + '○'.repeat(Math.max(0, buy - count));
+  const text  = `${shop.shop_name} Loyalty Card\n${bar}\n${count}/${buy} stamps — ${Math.max(0,buy-count)} more for a free ${prod} ${shop.product_emoji||'🎁'}`;
+  navigator.clipboard?.writeText(text).then(() => toast('Status copied! ✓')).catch(() => toast('⚠ Could not copy'));
+}
+
+function showQR() {
+  const url   = `https://primorewards.app/${shop.slug}-reward`;
+  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(url)}&bgcolor=FDFAF5&color=1A1007&margin=4`;
+  document.getElementById('qrImg').src          = qrUrl;
+  document.getElementById('qrUrl').textContent  = url;
+  document.getElementById('qrSub').textContent  = `Scan to open ${shop.shop_name}'s loyalty card`;
+  document.getElementById('qrModal').classList.add('show');
+}
+function closeQR() { document.getElementById('qrModal').classList.remove('show'); }
+
+/* ── 11e. DOWNLOAD CARD (Canvas API) ── */
+function downloadCard() {
+  const buy   = shop.reward_rule?.buy || 11;
+  const get   = shop.reward_rule?.get || 1;
+  const count = cycleStamps.length;
+  const prod  = shop.product_name  || 'item';
+  const emoji = shop.product_emoji || '🎁';
+  const total = buy + get;
+  const W = 800, H = 480;
+  const canvas = document.createElement('canvas');
+  canvas.width = W; canvas.height = H;
+  const ctx = canvas.getContext('2d');
+
+  // Helpers
+  const rr = (x, y, w, h, r) => { ctx.beginPath(); ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.quadraticCurveTo(x+w,y,x+w,y+r); ctx.lineTo(x+w,y+h-r); ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h); ctx.lineTo(x+r,y+h); ctx.quadraticCurveTo(x,y+h,x,y+h-r); ctx.lineTo(x,y+r); ctx.quadraticCurveTo(x,y,x+r,y); ctx.closePath(); };
+
+  // Background
+  ctx.fillStyle = '#FDFAF5'; rr(0,0,W,H,20); ctx.fill();
+  // Gold stripe
+  const gTop = ctx.createLinearGradient(0,0,W,0); gTop.addColorStop(0,'#C9A84C'); gTop.addColorStop(1,'#A8832A');
+  ctx.fillStyle = gTop; ctx.fillRect(0,0,W,7);
+
+  // Shop name + label
+  ctx.fillStyle='#1A1007'; ctx.font='600 30px Georgia,serif'; ctx.fillText(shop.shop_name,40,58);
+  ctx.fillStyle='#7A6A52'; ctx.font='12px sans-serif'; ctx.fillText('LOYALTY CARD',40,80);
+  // Member
+  ctx.textAlign='right'; ctx.fillStyle='#A89880'; ctx.font='11px sans-serif'; ctx.fillText('MEMBER',W-40,54);
+  ctx.fillStyle='#1A1007'; ctx.font='600 20px Georgia,serif'; ctx.fillText(customer.first_name,W-40,78);
+  ctx.textAlign='left';
+
+  // Medal grid
+  const cols=Math.min(6,total), r2=Math.floor((W-80)/cols/2)-4, gridY=105;
+  for(let i=0;i<total;i++){
+    const col=i%cols, row=Math.floor(i/cols);
+    const cx=40+col*((W-80)/cols)+(W-80)/cols/2, cy=gridY+row*(r2*2+14)+r2;
+    const isR=i>=buy, filled=isR?count>=buy:i<count;
+    if(filled&&!isR){
+      const cg=ctx.createRadialGradient(cx-r2*.2,cy-r2*.25,0,cx,cy,r2); cg.addColorStop(0,'#EDD97A'); cg.addColorStop(.42,'#C9A84C'); cg.addColorStop(.72,'#A8832A'); cg.addColorStop(1,'#7A5C18');
+      ctx.fillStyle=cg; ctx.beginPath(); ctx.arc(cx,cy,r2,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle='rgba(255,255,255,.72)'; ctx.font=`${r2*.7}px serif`; ctx.textAlign='center'; ctx.fillText('♛',cx,cy+r2*.26);
+    } else if(filled&&isR){
+      const eg=ctx.createLinearGradient(cx-r2,cy-r2,cx+r2,cy+r2); eg.addColorStop(0,'#2D8A5E'); eg.addColorStop(1,'#1B5E42');
+      ctx.fillStyle=eg; ctx.beginPath(); ctx.arc(cx,cy,r2,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle='#fff'; ctx.font=`bold ${r2*.75}px sans-serif`; ctx.textAlign='center'; ctx.fillText('✓',cx,cy+r2*.3);
+    } else {
+      ctx.strokeStyle=isR?'#D4B86A':'rgba(168,131,42,.3)'; ctx.lineWidth=isR?2:1.5; ctx.setLineDash(isR?[]:[4,4]);
+      ctx.beginPath(); ctx.arc(cx,cy,r2,0,Math.PI*2); ctx.stroke(); ctx.setLineDash([]);
+    }
+    ctx.textAlign='left';
+  }
+
+  // Progress bar
+  const barY=H-90, barW=W-80, pct=Math.min(count/buy,1);
+  ctx.fillStyle='#EDE3D4'; rr(40,barY,barW,6,3); ctx.fill();
+  if(pct>0){ const gb=ctx.createLinearGradient(40,0,40+barW,0); gb.addColorStop(0,'#C9A84C'); gb.addColorStop(1,'#A8832A'); ctx.fillStyle=gb; rr(40,barY,barW*pct,6,3); ctx.fill(); }
+  ctx.fillStyle='#7A6A52'; ctx.font='14px sans-serif'; ctx.fillText(`${count} of ${buy} stamps`,40,barY-10);
+  ctx.textAlign='right'; ctx.fillStyle=count>=buy?'#1B5E42':'#7A6A52';
+  ctx.fillText(count>=buy?`${emoji} Reward ready!`:`${buy-count} more for free ${prod}`,W-40,barY-10); ctx.textAlign='left';
+
+  // Footer
+  ctx.fillStyle='#A89880'; ctx.font='12px sans-serif'; ctx.fillText('Powered by Primo Rewards · primorewards.app',40,H-25);
+
+  const link=document.createElement('a'); link.download=`${shop.slug||'loyalty'}-card.png`; link.href=canvas.toDataURL('image/png'); link.click();
+  toast('Card downloaded ✓');
+}
+
+/* ── 12. HANDLE REDEEM — "Show to Staff" flow (CVE-6 fix) ── */
+// Redemption INSERT is now merchant-only (Phase 3 dashboard, authenticated Edge Function).
+// Customer shows this overlay to staff → merchant confirms → card auto-refreshes.
+function openRedeemModal() {
+  const prod  = shop.product_name  || 'item';
+  const emoji = shop.product_emoji || '🎁';
+
+  // Generate a visual confirmation code: first 3 of customer ID + timestamp-based suffix
+  // This is display-only — merchant verifies visually, not cryptographically
+  const idPart   = (customer.id || 'XXX').replace(/-/g, '').substring(0, 3).toUpperCase();
+  const timePart = Date.now().toString(36).slice(-3).toUpperCase();
+  const code     = `${idPart}-${timePart}`;
+
+  document.getElementById('stsEmoji').textContent = emoji;
+  document.getElementById('stsProd').textContent  = prod;
+  document.getElementById('stsShop').textContent  = shop.shop_name;
+  document.getElementById('stsCode').textContent  = code;
+  document.getElementById('stsName').textContent  = `${customer.first_name}'s Card`;
+
+  document.getElementById('stsOverlay').classList.add('show');
+  acquireWakeLock();
+}
+
+async function acquireWakeLock() {
+  // Wake Lock API — prevents screen sleep while customer shows merchant
+  try {
+    if ('wakeLock' in navigator) {
+      wakeLock = await navigator.wakeLock.request('screen');
+      document.getElementById('stsWakeLockNote').style.opacity = '1';
+    } else {
+      document.getElementById('stsWakeLockNote').style.display = 'none';
+    }
+  } catch { /* Wake Lock denied — not critical */ }
+}
+
+function releaseWakeLock() {
+  try { wakeLock?.release(); wakeLock = null; } catch { /* ignore */ }
+}
+
+function closeShowToStaff() {
+  document.getElementById('stsOverlay').classList.remove('show');
+  releaseWakeLock();
+  // Trigger a refresh in case merchant already confirmed from their dashboard
+  silentRefresh();
+}
+
+async function confirmRedeem() {
+  const btn = document.getElementById('modalConfirm');
+  const txt = document.getElementById('modalConfirmTxt');
+  btn.disabled = true;
+  txt.textContent = 'Processing…';
+  try {
+    await sb('/redemptions', {
+      method: 'POST',
+      body: { customer_id: customer.id, shop_id: shop.id, cycle_number: currentCycle },
+    });
+    closeModal();
+    isNewCustomer = false;
+    toast(`🎉 Redeemed! Enjoy your free ${shop.product_name || 'item'}.`, 3500);
+    await loadCardData();
+    renderCard();
+  } catch (e) {
+    console.error('Redeem error:', e);
+    toast('⚠ Could not redeem — please ask staff to confirm.', 3000);
+  } finally {
+    btn.disabled    = false;
+    txt.textContent = 'Confirm Redemption';
+  }
+}
+
+function closeModal() {
+  document.getElementById('redeemModal').classList.remove('show');
+}
+
+/* ── 13. HANDLE SHARE ── */
+async function handleShare() {
+  const url  = window.location.href;
+  const text = `I earn loyalty stamps at ${shop.shop_name}! Join the rewards program 🎁`;
+  if (navigator.share) {
+    try {
+      await navigator.share({ title: `${shop.shop_name} Rewards`, text, url });
+      return;
+    } catch (e) {
+      if (e.name === 'AbortError') return; // user dismissed
+    }
+  }
+  // Fallback: copy link
+  try {
+    await navigator.clipboard.writeText(url);
+    toast('Link copied to clipboard ✓');
+  } catch {
+    // Last resort
+    const ta = Object.assign(document.createElement('textarea'),
+      { value: url, style: 'position:fixed;opacity:0' });
+    document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    toast('Link copied!');
+  }
+}
+
+/* ── 14. AUTO-REFRESH (every 30s while card is open) ── */
+function startAutoRefresh() {
+  if (autoTimer) clearInterval(autoTimer);
+  autoTimer = setInterval(silentRefresh, 30000);
+}
+
+async function silentRefresh() {
+  if (!customer || !shop) return;
+  const bar = document.getElementById('refreshLine');
+  if (bar) {
+    bar.classList.remove('active');
+    void bar.offsetWidth; // reflow to restart animation
+    bar.classList.add('active');
+    setTimeout(() => bar.classList.remove('active'), 1400);
+  }
+  try {
+    await loadCardData();
+    renderCard();
+  } catch {/* silent */ }
+}
+
+async function manualRefresh() {
+  const btn = document.getElementById('refreshBtn');
+  if (btn) btn.classList.add('spinning');
+  setTimeout(() => btn?.classList.remove('spinning'), 600);
+  await silentRefresh();
+  toast('Card refreshed ✓');
+}
+
+/* ── 15. SIGN OUT ── */
+function signOut() {
+  if (autoTimer) clearInterval(autoTimer);
+  customer = null; cycleStamps = []; allStamps = [];
+  redemptions = []; currentCycle = 1; isNewCustomer = false;
+  document.getElementById('inName').value  = '';
+  document.getElementById('inPhone').value = '';
+  document.getElementById('loginErr').textContent = '';
+  showScreen('s-login');
+  toast('Signed out');
+}
+
+/* ── 16. WIRE EVENTS ── */
+function wireEvents() {
+  // Login
+  document.getElementById('loginBtn').addEventListener('click', handleLogin);
+  document.getElementById('inName').addEventListener('keydown', e => {
+    if (e.key === 'Enter') document.getElementById('inPhone').focus();
+  });
+  document.getElementById('inPhone').addEventListener('keydown', e => {
+    if (e.key === 'Enter') handleLogin();
+  });
+  document.getElementById('inPhone').addEventListener('input', function() {
+    this.value = this.value.replace(/\D/g, '').substring(0, 4);
+  });
+
+  // Card header — sign out via role pill or signed-in row
+  document.getElementById('signOutBtn').addEventListener('click', signOut);
+  document.getElementById('signOutBtn2').addEventListener('click', signOut);
+  // Refresh (small icon in header)
+  document.getElementById('refreshBtn').addEventListener('click', manualRefresh);
+
+  // Reward
+  document.getElementById('redeemBtn').addEventListener('click', openRedeemModal);
+
+  // Share section buttons
+  document.getElementById('downloadCardBtn').addEventListener('click', downloadCard);
+  document.getElementById('whatsappBtn').addEventListener('click', shareWhatsApp);
+  document.getElementById('copyStatusBtn').addEventListener('click', copyStatus);
+  document.getElementById('qrCodeBtn').addEventListener('click', showQR);
+
+  // QR modal
+  document.getElementById('qrClose').addEventListener('click', closeQR);
+  document.getElementById('qrModal').addEventListener('click', e => {
+    if (e.target.id === 'qrModal') closeQR();
+  });
+
+  // Show-to-staff overlay close
+  document.getElementById('stsClose').addEventListener('click', closeShowToStaff);
+
+  // Legacy confirm modal (dev mode only)
+  document.getElementById('modalConfirm').addEventListener('click', confirmRedeem);
+  document.getElementById('modalCancel').addEventListener('click', closeModal);
+  document.getElementById('redeemModal').addEventListener('click', e => {
+    if (e.target.id === 'redeemModal') closeModal();
+  });
+
+  // Bottom tab bar
+  document.querySelectorAll('.tb-item').forEach(btn => {
+    btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+  });
+}
+
+/* ── 17. INIT ── */
+async function init() {
+  const slug = parseSlug();
+
+  if (!slug) { showError('invalid'); return; }
+
+  try {
+    const fetched = await fetchShop(slug);
+    if (!fetched) { showError('notfound'); return; }
+    shop = fetched;
+    renderLogin();
+  } catch (e) {
+    console.error('Init error:', e);
+    showError('network');
+  }
+}
+
+/* ── 18. BOOT ── */
+document.addEventListener('DOMContentLoaded', () => {
+  wireEvents();
+  init();
+});
+
+/* ── 19. PAGE VISIBILITY — pause refresh when tab hidden ── */
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    if (autoTimer) clearInterval(autoTimer);
+  } else if (customer) {
+    silentRefresh();
+    startAutoRefresh();
+  }
+});
+
+/*
+ * ══════════════════════════════════════════════════════════════
+ * PHASE 2 SCHEMA NOTE:
+ * Add this missing RLS policy to Supabase before going live:
+ *   CREATE POLICY "Read redemptions" ON redemptions FOR SELECT USING (true);
+ * ══════════════════════════════════════════════════════════════
+ */
+
+
+</script>
+
+
+</body>
+</html>

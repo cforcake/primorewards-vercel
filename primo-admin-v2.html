@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#1A1007">
+<meta name="robots" content="noindex, nofollow">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Primo Admin</title>
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta http-equiv="X-Frame-Options" content="DENY">
+<meta http-equiv="X-XSS-Protection" content="1; mode=block">
+<meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+<meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://*.supabase.co; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap"></noscript>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%231A1007'/><text x='50%25' y='62%25' font-size='18' text-anchor='middle' fill='%23C9A84C'>&#9819;</text></svg>">
+<style>
+:root {
+  --cream:#FDFAF5;--cream-d:#F5EEE3;--beige:#EDE3D4;--beige-m:#D9CBBA;
+  --gold:#A8832A;--gold-b:#C9A84C;--gold-p:#FDF4E3;--gold-br:#D4B86A;
+  --em:#1B5E42;--em-l:#2D8A5E;
+  --wa:#25D366;
+  --ink:#1A1007;--ink-m:#4A3A25;--ink-l:#7A6A52;--ink-f:#A89880;
+  --white:#FFFFFF;
+  --fd:'Cormorant Garamond',Georgia,serif;
+  --fb:'DM Sans',sans-serif;
+  --eo:cubic-bezier(.16,1,.3,1);
+  --safe-b:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{height:100%;-webkit-tap-highlight-color:transparent}
+body{font-family:var(--fb);background:var(--ink);color:var(--cream);-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100%}
+button{font-family:var(--fb);cursor:pointer;border:none;outline:none;-webkit-tap-highlight-color:transparent}
+a{text-decoration:none;color:inherit}
+input,select{font-family:var(--fb);border-radius:0;-webkit-appearance:none}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");opacity:.025}
+.screen{display:none;min-height:100vh;min-height:100dvh;flex-direction:column}
+.screen.active{display:flex;animation:screenIn .45s var(--eo) both}
+@keyframes screenIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+#s-load{align-items:center;justify-content:center;background:var(--ink)}
+.load-wrap{text-align:center;display:flex;flex-direction:column;align-items:center;gap:1.2rem}
+.load-coin{width:72px;height:72px;border-radius:50%;background:radial-gradient(circle at 38% 32%,#EDD97A,#C9A84C 42%,#A8832A 72%,#7A5C18);box-shadow:inset 0 4px 10px rgba(255,255,255,.45),inset 0 -4px 10px rgba(60,30,0,.3),0 10px 40px rgba(168,131,42,.45);display:flex;align-items:center;justify-content:center;font-size:28px;color:rgba(255,255,255,.75);font-family:var(--fd);animation:coinPulse 1.8s ease-in-out infinite}
+@keyframes coinPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+.load-text{font-size:14px;color:var(--ink-f);animation:fadeOsc 1.8s ease-in-out infinite}
+.load-sub{font-size:12px;color:rgba(168,152,128,.4);margin-top:-.3rem}
+@keyframes fadeOsc{0%,100%{opacity:.35}50%{opacity:1}}
+#s-err{align-items:center;justify-content:center;padding:2rem;background:var(--ink)}
+.err-wrap{text-align:center;max-width:340px;display:flex;flex-direction:column;align-items:center;gap:1rem}
+.err-ico{font-size:52px}.err-t{font-family:var(--fd);font-size:28px;font-weight:500;color:var(--cream)}
+.err-s{font-size:15px;line-height:1.72;color:var(--ink-f)}
+.err-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:99px;border:1.5px solid rgba(201,168,76,.35);background:transparent;color:var(--gold-b);font-size:13.5px;font-weight:500;margin-top:.3rem}
+.err-btn:active{background:rgba(201,168,76,.08)}
+#s-login{align-items:center;background:var(--ink);overflow-y:auto}
+.login-wrap{width:100%;max-width:420px;margin:0 auto;padding:0 1.1rem 3rem;display:flex;flex-direction:column;align-items:center}
+.login-hero{width:100%;padding:3.5rem 1.5rem 2.5rem;text-align:center;margin-bottom:1.5rem;position:relative;overflow:hidden}
+.login-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(201,168,76,.16),transparent 65%);pointer-events:none}
+.lh-coin{width:68px;height:68px;border-radius:50%;background:radial-gradient(circle at 38% 32%,#EDD97A,#C9A84C 42%,#A8832A 72%,#7A5C18);box-shadow:inset 0 3px 8px rgba(255,255,255,.4),0 10px 36px rgba(168,131,42,.6);display:flex;align-items:center;justify-content:center;font-size:26px;color:rgba(255,255,255,.75);font-family:var(--fd);margin:0 auto 1rem;position:relative;z-index:1}
+.lh-title{font-family:var(--fd);font-size:28px;font-weight:600;color:var(--cream);position:relative;z-index:1;margin-bottom:.25rem}
+.lh-tag{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(253,250,245,.3);position:relative;z-index:1}
+.lh-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.2);border-radius:99px;padding:4px 12px;font-size:11px;color:var(--gold-b);margin-top:.75rem;position:relative;z-index:1}
+.login-card{width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(201,168,76,.13);border-radius:20px;padding:1.5rem 1.25rem;margin-bottom:1rem}
+.login-h{font-family:var(--fd);font-size:22px;font-weight:500;color:var(--cream);margin-bottom:.2rem}
+.login-sub{font-size:13px;color:var(--ink-f);line-height:1.65;margin-bottom:1.2rem}
+.lf-g{margin-bottom:.9rem}
+.lf-l{display:block;font-size:11px;font-weight:500;color:rgba(253,250,245,.42);letter-spacing:.07em;text-transform:uppercase;margin-bottom:.35rem}
+.lf-i{width:100%;padding:11px 13px;border:1.5px solid rgba(201,168,76,.17);border-radius:12px;font-size:15px;color:var(--cream);background:rgba(255,255,255,.05);transition:border-color .2s,box-shadow .2s;outline:none}
+.lf-i:focus{border-color:var(--gold-b);box-shadow:0 0 0 3px rgba(201,168,76,.1)}
+.lf-i::placeholder{color:rgba(168,152,128,.38)}
+.lf-i.shake{animation:shake .35s ease}
+@keyframes shake{0%,100%{transform:none}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.lf-err{min-height:18px;font-size:12.5px;color:#e87c7c;display:flex;align-items:center;gap:4px;margin-bottom:.5rem}
+.lf-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:13px 22px;border-radius:99px;background:linear-gradient(135deg,var(--gold-b),var(--gold));color:#fff;font-size:15px;font-weight:600;box-shadow:0 4px 20px rgba(168,131,42,.35);transition:box-shadow .2s,opacity .2s}
+.lf-btn:active:not(:disabled){box-shadow:0 2px 8px rgba(168,131,42,.2)}
+.lf-btn:disabled{opacity:.42;cursor:not-allowed}
+.lockout-banner{display:none;background:rgba(192,57,43,.14);border:1px solid rgba(248,113,113,.2);border-radius:12px;padding:.7rem 1rem;font-size:13px;color:#F87171;line-height:1.55;margin-bottom:.75rem;text-align:center}
+.lockout-banner.show{display:block}
+.attempts-note{min-height:16px;font-size:11.5px;color:rgba(168,152,128,.5);text-align:center;margin-top:.4rem}
+.login-note{font-size:11.5px;color:rgba(168,152,128,.45);text-align:center;line-height:1.6}
+#s-dash{background:var(--ink);min-height:100vh;min-height:100dvh;flex-direction:column}
+.dash-hdr{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:.65rem .9rem;background:var(--ink);border-bottom:1px solid rgba(201,168,76,.13)}
+.dash-hdr::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),var(--gold-b),var(--gold),transparent)}
+.dhdr-left{display:flex;align-items:center;gap:.6rem}
+.dhdr-coin{width:32px;height:32px;border-radius:50%;flex-shrink:0;background:radial-gradient(circle at 38% 32%,#EDD97A,#C9A84C 42%,#A8832A 72%,#7A5C18);box-shadow:inset 0 2px 5px rgba(255,255,255,.4),0 3px 10px rgba(168,131,42,.5);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:13px;color:rgba(255,255,255,.8)}
+.dhdr-name{font-family:var(--fd);font-size:15px;font-weight:600;color:var(--cream);line-height:1.1}
+.dhdr-tag{font-size:10px;letter-spacing:.07em;color:var(--gold-b);opacity:.62;text-transform:uppercase}
+.dhdr-right{display:flex;align-items:center;gap:.4rem}
+.dhdr-btn{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.05);border:1px solid rgba(201,168,76,.12);display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--ink-f);transition:background .2s}
+.dhdr-btn:active{background:rgba(201,168,76,.1)}
+.dhdr-btn.spinning{animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.session-dot{width:7px;height:7px;border-radius:50%;background:#4ADE80;flex-shrink:0;box-shadow:0 0 5px rgba(74,222,128,.5)}
+.stats-row{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:rgba(201,168,76,.1);border-bottom:1px solid rgba(201,168,76,.1);flex-shrink:0}
+.stat-cell{background:var(--ink);padding:.85rem .9rem}
+.stat-v{font-family:var(--fd);font-size:26px;font-weight:600;color:var(--cream);line-height:1}
+.stat-v.gold{color:var(--gold-b)}.stat-v.green{color:#4ADE80}.stat-v.amber{color:#FCD34D}.stat-v.red{color:#F87171}
+.stat-l{font-size:11px;color:var(--ink-f);margin-top:.15rem}
+.mrr-banner{background:linear-gradient(135deg,rgba(168,131,42,.15),rgba(201,168,76,.05));border-bottom:1px solid rgba(201,168,76,.13);padding:.75rem .9rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.mrr-label{font-size:10px;text-transform:uppercase;letter-spacing:.09em;color:var(--ink-f)}
+.mrr-amount{font-family:var(--fd);font-size:22px;font-weight:600;color:var(--gold-b);line-height:1.1}
+.mrr-sub{font-size:10px;color:rgba(168,152,128,.45);margin-top:.1rem}
+.mrr-pills{display:flex;gap:.4rem;flex-wrap:wrap;justify-content:flex-end}
+.mrr-pill{display:flex;flex-direction:column;align-items:center;background:rgba(255,255,255,.04);border:1px solid rgba(201,168,76,.12);border-radius:10px;padding:.3rem .5rem;min-width:42px}
+.mrr-pill-v{font-size:13px;font-weight:600;color:var(--cream);font-family:var(--fd)}
+.mrr-pill-l{font-size:9px;color:var(--ink-f)}
+.tab-bar{display:flex;background:var(--ink);border-bottom:1px solid rgba(201,168,76,.1);flex-shrink:0;position:sticky;top:53px;z-index:40;overflow-x:auto}
+.tab-bar::-webkit-scrollbar{display:none}
+.tab-btn{flex-shrink:0;padding:.65rem .8rem;font-size:12.5px;font-weight:500;color:var(--ink-f);background:none;border:none;border-bottom:2px solid transparent;transition:color .2s,border-color .2s;white-space:nowrap}
+.tab-btn.active{color:var(--gold-b);border-bottom-color:var(--gold-b)}
+.tab-btn:active{background:rgba(255,255,255,.03)}
+.tab-content{display:none;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.tab-content.active{display:block;animation:fadeUp .28s var(--eo)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.filter-bar{padding:.75rem .9rem;background:rgba(255,255,255,.02);border-bottom:1px solid rgba(255,255,255,.05);display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
+.filter-search{flex:1;min-width:130px;position:relative}
+.fi-ico{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--ink-f);pointer-events:none}
+.filter-input{width:100%;padding:8px 10px 8px 30px;border:1.5px solid rgba(201,168,76,.12);border-radius:10px;font-size:13.5px;color:var(--cream);background:rgba(255,255,255,.05);outline:none;transition:border-color .2s}
+.filter-input:focus{border-color:rgba(201,168,76,.32)}
+.filter-input::placeholder{color:rgba(168,152,128,.38)}
+.filter-select{padding:8px 10px;border:1.5px solid rgba(201,168,76,.12);border-radius:10px;font-size:12px;color:var(--cream);background:rgba(26,16,7,.97);outline:none;flex-shrink:0}
+.filter-select option{background:var(--ink)}
+.shops-list{padding:.6rem .75rem;display:flex;flex-direction:column;gap:.55rem;padding-bottom:calc(1.5rem + var(--safe-b))}
+.shop-card{background:rgba(255,255,255,.04);border:1px solid rgba(201,168,76,.1);border-radius:16px;overflow:hidden;transition:border-color .18s}
+.shop-card:active{border-color:rgba(201,168,76,.26)}
+.sc-top{padding:.8rem .85rem .65rem;display:flex;align-items:flex-start;gap:.7rem}
+.sc-avatar{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,rgba(201,168,76,.14),rgba(168,131,42,.07));border:1px solid rgba(201,168,76,.16);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.sc-info{flex:1;min-width:0}
+.sc-name{font-family:var(--fd);font-size:16.5px;font-weight:600;color:var(--cream);line-height:1.2;margin-bottom:.22rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sc-meta{display:flex;align-items:center;gap:.35rem;flex-wrap:wrap}
+.sc-city{font-size:11.5px;color:var(--ink-f)}
+.sc-dot{font-size:9px;color:rgba(168,152,128,.3)}
+.status-badge{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:600;letter-spacing:.05em;padding:2px 7px;border-radius:99px;text-transform:uppercase}
+.status-badge.active{background:rgba(27,94,66,.28);color:#4ADE80;border:1px solid rgba(74,222,128,.17)}
+.status-badge.pending{background:rgba(183,121,31,.2);color:#FCD34D;border:1px solid rgba(252,211,77,.17)}
+.status-badge.suspended{background:rgba(192,57,43,.17);color:#F87171;border:1px solid rgba(248,113,113,.17)}
+.plan-badge{display:inline-flex;align-items:center;font-size:10px;font-weight:600;letter-spacing:.05em;padding:2px 7px;border-radius:99px;text-transform:uppercase;background:rgba(201,168,76,.08);color:var(--gold-b);border:1px solid rgba(201,168,76,.16)}
+.sc-stats{padding:.5rem .85rem .6rem;display:flex;gap:.3rem;border-top:1px solid rgba(255,255,255,.05)}
+.sc-stat{flex:1;text-align:center}
+.sc-sv{font-family:var(--fd);font-size:15px;font-weight:600;color:var(--cream)}
+.sc-sl{font-size:10px;color:var(--ink-f)}
+.sc-actions{padding:.5rem .85rem .75rem;display:flex;gap:.5rem;border-top:1px solid rgba(255,255,255,.05)}
+.sc-btn{flex:1;padding:7px 10px;border-radius:10px;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:5px;transition:opacity .18s}
+.sc-btn:active{opacity:.65}.sc-btn:disabled{opacity:.35;cursor:not-allowed}
+.sc-btn-view{background:rgba(201,168,76,.1);color:var(--gold-b);border:1px solid rgba(201,168,76,.17)}
+.sc-btn-activate{background:rgba(27,94,66,.2);color:#4ADE80;border:1px solid rgba(74,222,128,.15)}
+.sc-btn-suspend{background:rgba(192,57,43,.13);color:#F87171;border:1px solid rgba(248,113,113,.13)}
+.empty-state{text-align:center;padding:3rem 1.5rem;display:flex;flex-direction:column;align-items:center;gap:.75rem}
+.empty-ico{font-size:48px;opacity:.35}.empty-t{font-family:var(--fd);font-size:20px;color:rgba(253,250,245,.42)}
+.empty-s{font-size:13px;color:var(--ink-f);line-height:1.6}
+.activity-list{padding:.6rem .75rem;display:flex;flex-direction:column;padding-bottom:calc(1.5rem + var(--safe-b))}
+.day-label{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--ink-f);padding:.8rem .1rem .35rem;border-bottom:1px solid rgba(255,255,255,.06);margin-bottom:.35rem}
+.act-item{display:flex;gap:.75rem;padding:.55rem .1rem;border-bottom:1px solid rgba(255,255,255,.04)}
+.act-ico{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;margin-top:2px}
+.act-ico.signup{background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.17)}
+.act-ico.activate{background:rgba(27,94,66,.2);border:1px solid rgba(74,222,128,.15)}
+.act-ico.payment{background:rgba(37,211,102,.09);border:1px solid rgba(37,211,102,.17)}
+.act-ico.suspend{background:rgba(192,57,43,.13);border:1px solid rgba(248,113,113,.13)}
+.act-ico.reinstate{background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.17)}
+.act-body{flex:1;min-width:0}
+.act-t{font-size:13.5px;color:var(--cream);line-height:1.35}
+.act-t strong{font-weight:600;color:var(--gold-b)}
+.act-meta{font-size:11px;color:var(--ink-f);margin-top:.15rem;display:flex;gap:.35rem;flex-wrap:wrap}
+.rev-wrap{padding:.75rem;padding-bottom:calc(1.5rem + var(--safe-b));display:flex;flex-direction:column;gap:.75rem}
+.rev-h{font-family:var(--fd);font-size:18px;color:var(--cream);margin-bottom:.15rem}
+.rev-sub{font-size:12px;color:var(--ink-f);line-height:1.5;margin-bottom:.6rem}
+.rev-plan-cards{display:flex;flex-direction:column;gap:.5rem}
+.rpc{background:rgba(255,255,255,.04);border:1px solid rgba(201,168,76,.1);border-radius:14px;padding:.85rem;display:flex;align-items:center;gap:.75rem}
+.rpc-bar-wrap{flex:1}
+.rpc-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.4rem}
+.rpc-name{font-size:13px;font-weight:600;color:var(--cream)}
+.rpc-amount{font-family:var(--fd);font-size:16px;color:var(--gold-b)}
+.rpc-bar-bg{height:5px;background:rgba(255,255,255,.07);border-radius:99px;overflow:hidden}
+.rpc-bar-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--gold),var(--gold-b));transition:width .65s var(--eo)}
+.rpc-meta{font-size:11px;color:var(--ink-f);margin-top:.28rem}
+.rpc-count{width:40px;text-align:right;flex-shrink:0}
+.rpc-count-v{font-family:var(--fd);font-size:20px;font-weight:600;color:var(--cream)}
+.rpc-count-l{font-size:10px;color:var(--ink-f)}
+.rev-total{background:linear-gradient(135deg,rgba(168,131,42,.15),rgba(201,168,76,.05));border:1px solid rgba(201,168,76,.2);border-radius:16px;padding:1rem;display:flex;align-items:center;justify-content:space-between}
+.rtc-label{font-size:10px;text-transform:uppercase;letter-spacing:.09em;color:var(--ink-f);margin-bottom:.2rem}
+.rtc-value{font-family:var(--fd);font-size:30px;font-weight:600;color:var(--gold-b)}
+.rtc-right{text-align:right}
+.rtc-arr-label{font-size:10px;color:var(--ink-f)}
+.rtc-arr-v{font-family:var(--fd);font-size:18px;color:rgba(201,168,76,.62);margin-top:.1rem}
+.ef-banner{background:rgba(183,121,31,.1);border:1px solid rgba(252,211,77,.16);border-radius:10px;padding:.6rem .85rem;font-size:12px;color:#FCD34D;line-height:1.55;display:flex;gap:.5rem;align-items:flex-start}
+.ef-banner-ico{flex-shrink:0}
+.pay-log{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:14px;overflow:hidden}
+.pay-log-hdr{padding:.65rem .85rem;border-bottom:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between}
+.pay-log-title{font-size:13px;font-weight:600;color:var(--cream)}
+.pay-log-sub{font-size:11px;color:var(--ink-f)}
+.pay-row{display:flex;align-items:center;gap:.6rem;padding:.6rem .85rem;border-bottom:1px solid rgba(255,255,255,.04)}
+.pay-row:last-child{border-bottom:none}
+.pay-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.pay-dot.paid{background:#4ADE80}.pay-dot.pending{background:#FCD34D}.pay-dot.failed{background:#F87171}
+.pay-info{flex:1;min-width:0}
+.pay-shop{font-size:13px;color:var(--cream);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pay-plan{font-size:11px;color:var(--ink-f)}
+.pay-amount{font-family:var(--fd);font-size:14px;color:var(--gold-b);font-weight:600;flex-shrink:0}
+.pay-date{font-size:10.5px;color:var(--ink-f);flex-shrink:0}
+.audit-list{padding:.6rem .75rem;display:flex;flex-direction:column;gap:.45rem;padding-bottom:calc(1.5rem + var(--safe-b))}
+.audit-row{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:.7rem .85rem;display:flex;align-items:flex-start;gap:.65rem}
+.audit-badge{flex-shrink:0;width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;margin-top:1px}
+.audit-badge.activate,.audit-badge.reinstate{background:rgba(27,94,66,.2);border:1px solid rgba(74,222,128,.14)}
+.audit-badge.suspend{background:rgba(192,57,43,.13);border:1px solid rgba(248,113,113,.13)}
+.audit-body{flex:1;min-width:0}
+.audit-action{font-size:13px;color:var(--cream);line-height:1.3}
+.audit-action strong{color:var(--gold-b)}
+.audit-detail{font-size:11px;color:var(--ink-f);margin-top:.2rem;display:flex;gap:.4rem;flex-wrap:wrap}
+.audit-ip{font-family:monospace;font-size:10.5px;color:rgba(168,152,128,.4)}
+.audit-time{font-size:11px;color:rgba(168,152,128,.4);flex-shrink:0;white-space:nowrap}
+.overlay{position:fixed;inset:0;background:rgba(10,6,2,.7);z-index:100;opacity:0;pointer-events:none;transition:opacity .28s}
+.overlay.open{opacity:1;pointer-events:all}
+.sheet{position:fixed;bottom:0;left:0;right:0;z-index:101;background:#1E1309;border-top:1px solid rgba(201,168,76,.17);border-radius:22px 22px 0 0;padding:0 0 calc(1.5rem + var(--safe-b));max-height:92vh;overflow-y:auto;transform:translateY(100%);transition:transform .38s var(--eo);-webkit-overflow-scrolling:touch}
+.sheet.open{transform:none}
+.sheet-handle{width:34px;height:4px;border-radius:99px;background:rgba(255,255,255,.15);margin:10px auto 0}
+.sheet-hdr{padding:.85rem 1rem .5rem;display:flex;align-items:flex-start;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.06)}
+.sheet-title{font-family:var(--fd);font-size:21px;font-weight:600;color:var(--cream)}
+.sheet-sub{font-size:12.5px;color:var(--ink-f);margin-top:.15rem}
+.sheet-close{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--ink-f);flex-shrink:0;margin-top:.1rem}
+.sheet-close:active{background:rgba(255,255,255,.12)}
+.sheet-body{padding:.85rem 1rem}
+.dsec{margin-bottom:1.1rem}
+.dsec-title{font-size:10px;text-transform:uppercase;letter-spacing:.09em;color:var(--ink-f);margin-bottom:.45rem;padding-bottom:.3rem;border-bottom:1px solid rgba(255,255,255,.06)}
+.drow{display:flex;align-items:flex-start;justify-content:space-between;gap:.5rem;padding:.3rem 0;font-size:13px;border-bottom:1px solid rgba(255,255,255,.04)}
+.drow:last-child{border-bottom:none}
+.dl{color:var(--ink-f);flex-shrink:0;width:88px}
+.dv{color:var(--cream);text-align:right;word-break:break-all;flex:1}
+.dv a{color:var(--gold-b)}
+.dstats{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem}
+.dstat{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:.65rem .5rem;text-align:center}
+.dstat-v{font-family:var(--fd);font-size:22px;font-weight:600;color:var(--cream)}
+.dstat-l{font-size:10px;color:var(--ink-f);margin-top:.1rem}
+.d-actions{display:flex;gap:.6rem;margin-top:1.1rem}
+.da-btn{flex:1;padding:11px 10px;border-radius:12px;font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:6px;transition:opacity .18s}
+.da-btn:active{opacity:.65}.da-btn:disabled{opacity:.35;cursor:not-allowed}
+.da-act{background:rgba(27,94,66,.26);color:#4ADE80;border:1px solid rgba(74,222,128,.17)}
+.da-sus{background:rgba(192,57,43,.17);color:#F87171;border:1px solid rgba(248,113,113,.17)}
+.da-wa{background:rgba(37,211,102,.09);color:#25D366;border:1px solid rgba(37,211,102,.17)}
+.confirm-sheet .sheet-body{text-align:center;padding:1.25rem}
+.conf-ico{font-size:44px;margin-bottom:.75rem}
+.conf-t{font-family:var(--fd);font-size:22px;font-weight:600;color:var(--cream);margin-bottom:.45rem}
+.conf-s{font-size:13.5px;color:var(--ink-f);line-height:1.65;margin-bottom:1.25rem}
+.conf-actions{display:flex;gap:.6rem}
+.conf-cancel{flex:1;padding:11px;border-radius:12px;border:1px solid rgba(255,255,255,.1);color:var(--ink-f);background:transparent;font-size:14px;font-weight:500}
+.conf-cancel:active{background:rgba(255,255,255,.05)}
+.conf-ok{flex:1;padding:11px;border-radius:12px;font-size:14px;font-weight:600;transition:opacity .18s}
+.conf-ok:active{opacity:.7}.conf-ok:disabled{opacity:.38;cursor:not-allowed}
+.conf-ok.suspend{background:rgba(192,57,43,.2);color:#F87171;border:1px solid rgba(248,113,113,.17)}
+.conf-ok.activate{background:rgba(27,94,66,.26);color:#4ADE80;border:1px solid rgba(74,222,128,.17)}
+.conf-ok.reinstate{background:rgba(201,168,76,.16);color:var(--gold-b);border:1px solid rgba(201,168,76,.22)}
+.action-sheet .sheet-body{padding:.4rem 1rem 0}
+.as-item{display:flex;align-items:center;gap:.75rem;padding:.85rem .1rem;border-bottom:1px solid rgba(255,255,255,.06);font-size:14.5px;color:var(--cream);width:100%;background:none;text-align:left}
+.as-item:last-child{border-bottom:none}
+.as-ico{font-size:17px;width:24px;text-align:center;color:var(--gold-b)}
+.as-item.danger{color:#F87171}.as-item.danger .as-ico{color:#F87171}
+.as-item:active{background:rgba(255,255,255,.04);border-radius:10px}
+.toast-wrap{position:fixed;top:1rem;left:50%;transform:translateX(-50%);z-index:200;pointer-events:none;display:flex;flex-direction:column;gap:.45rem;align-items:center;width:calc(100% - 2.2rem);max-width:380px}
+.toast{background:rgba(22,14,5,.97);border:1px solid rgba(201,168,76,.2);border-radius:12px;padding:.65rem 1rem;font-size:13px;color:var(--cream);box-shadow:0 8px 32px rgba(0,0,0,.55);display:flex;align-items:center;gap:.5rem;animation:toastIn .32s var(--eo) both;backdrop-filter:blur(12px);width:100%}
+.toast.out{animation:toastOut .28s ease both}
+.ti-green{color:#4ADE80}.ti-red{color:#F87171}.ti-amber{color:#FCD34D}
+@keyframes toastIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none}}
+@keyframes toastOut{to{opacity:0;transform:translateY(-8px)}}
+.cbadge{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;padding:0 5px;background:rgba(201,168,76,.16);color:var(--gold-b);font-size:10px;font-weight:700;border-radius:99px;margin-left:4px}
+@media(min-width:640px){
+  .stats-row{grid-template-columns:repeat(4,1fr)}
+  .sheet{max-width:480px;left:50%;transform:translateX(-50%) translateY(100%)}
+  .sheet.open{transform:translateX(-50%) translateY(0)}
+}
+@media(max-width:360px){
+  .sc-name{font-size:15px}.stat-v{font-size:22px}.tab-btn{padding:.65rem .55rem;font-size:12px}
+}
+</style>
+</head>
+<body>
+
+<div id="s-load" class="screen active">
+  <div class="load-wrap">
+    <div class="load-coin">&#9819;</div>
+    <div class="load-text">Loading&hellip;</div>
+    <div class="load-sub" id="load-sub"></div>
+  </div>
+</div>
+
+<div id="s-err" class="screen">
+  <div class="err-wrap">
+    <div class="err-ico" id="err-ico">&#x26A0;&#xFE0F;</div>
+    <div class="err-t" id="err-title">Something went wrong</div>
+    <div class="err-s" id="err-msg">Unable to reach the server.</div>
+    <button class="err-btn" onclick="location.reload()">&#x21BA; Retry</button>
+    <button class="err-btn" onclick="doSignOut()">Sign out</button>
+  </div>
+</div>
+
+<div id="s-login" class="screen">
+  <div class="login-wrap">
+    <div class="login-hero">
+      <div class="lh-coin">&#9819;</div>
+      <div class="lh-title">Primo Admin</div>
+      <div class="lh-tag">Super-Admin Console</div>
+      <div class="lh-badge">&#x1F510; Internal Access Only</div>
+    </div>
+    <div class="lockout-banner" id="lockout-banner">
+      &#x1F512; Too many failed attempts. Wait <span id="lockout-cd">15:00</span> before retrying.
+    </div>
+    <div class="login-card">
+      <div class="login-h">Admin Sign In</div>
+      <div class="login-sub">Your key is validated server-side. All access attempts are logged with IP and timestamp.</div>
+      <div class="lf-g">
+        <label class="lf-l" for="adm-key">Admin Key</label>
+        <input class="lf-i" type="password" id="adm-key" placeholder="Enter admin key" autocomplete="current-password">
+      </div>
+      <div class="lf-err" id="login-err" role="alert"></div>
+      <button class="lf-btn" id="login-btn" onclick="doAdminLogin()">
+        <span id="login-btn-text">Access Dashboard</span>
+      </button>
+      <div class="attempts-note" id="attempts-note"></div>
+    </div>
+    <div class="login-note">Unauthorised access is prohibited and will be reported.</div>
+  </div>
+</div>
+
+<div id="s-dash" class="screen">
+  <div class="dash-hdr">
+    <div class="dhdr-left">
+      <div class="dhdr-coin">&#9819;</div>
+      <div>
+        <div class="dhdr-name">Primo Admin</div>
+        <div class="dhdr-tag">Super-Admin</div>
+      </div>
+    </div>
+    <div class="dhdr-right">
+      <div class="session-dot" title="Session active"></div>
+      <button class="dhdr-btn" id="refresh-btn" onclick="doRefresh()" aria-label="Refresh">&#x21BA;</button>
+      <button class="dhdr-btn" onclick="openActionSheet()" aria-label="Menu">&#x22EF;</button>
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-cell"><div class="stat-v gold" id="stat-total">&mdash;</div><div class="stat-l">Total Shops</div></div>
+    <div class="stat-cell"><div class="stat-v green" id="stat-active">&mdash;</div><div class="stat-l">Active</div></div>
+    <div class="stat-cell"><div class="stat-v amber" id="stat-pending">&mdash;</div><div class="stat-l">Pending</div></div>
+    <div class="stat-cell"><div class="stat-v red" id="stat-suspended">&mdash;</div><div class="stat-l">Suspended</div></div>
+  </div>
+
+  <div class="mrr-banner">
+    <div>
+      <div class="mrr-label">Monthly Recurring Revenue</div>
+      <div class="mrr-amount" id="mrr-total">&#x20B9;&mdash;</div>
+      <div class="mrr-sub">Active shops &middot; plan-derived estimate</div>
+    </div>
+    <div class="mrr-pills">
+      <div class="mrr-pill"><div class="mrr-pill-v" id="mrr-s">&mdash;</div><div class="mrr-pill-l">Starter</div></div>
+      <div class="mrr-pill"><div class="mrr-pill-v" id="mrr-p">&mdash;</div><div class="mrr-pill-l">Pro</div></div>
+      <div class="mrr-pill"><div class="mrr-pill-v" id="mrr-pm">&mdash;</div><div class="mrr-pill-l">Premium</div></div>
+    </div>
+  </div>
+
+  <div class="tab-bar" role="tablist">
+    <button class="tab-btn active" data-tab="shops" onclick="switchTab('shops')" role="tab">Shops <span class="cbadge" id="tab-shops-n">&mdash;</span></button>
+    <button class="tab-btn" data-tab="activity" onclick="switchTab('activity')" role="tab">Activity</button>
+    <button class="tab-btn" data-tab="revenue" onclick="switchTab('revenue')" role="tab">Revenue</button>
+    <button class="tab-btn" data-tab="audit" onclick="switchTab('audit')" role="tab">Audit Log</button>
+  </div>
+
+  <div id="tab-shops" class="tab-content active" role="tabpanel">
+    <div class="filter-bar">
+      <div class="filter-search">
+        <span class="fi-ico">&#x1F50D;</span>
+        <input class="filter-input" type="search" id="shop-search" placeholder="Name, city, owner&hellip;" oninput="renderShops()" autocomplete="off" aria-label="Search shops">
+      </div>
+      <select class="filter-select" id="f-status" onchange="renderShops()" aria-label="Filter by status">
+        <option value="">All status</option>
+        <option value="active">Active</option>
+        <option value="pending_payment">Pending</option>
+        <option value="suspended">Suspended</option>
+      </select>
+      <select class="filter-select" id="f-plan" onchange="renderShops()" aria-label="Filter by plan">
+        <option value="">All plans</option>
+        <option value="starter">Starter</option>
+        <option value="pro">Pro</option>
+        <option value="premium">Premium</option>
+      </select>
+    </div>
+    <div class="shops-list" id="shops-list"></div>
+  </div>
+
+  <div id="tab-activity" class="tab-content" role="tabpanel">
+    <div class="activity-list" id="activity-list"></div>
+  </div>
+
+  <div id="tab-revenue" class="tab-content" role="tabpanel">
+    <div class="rev-wrap" id="revenue-wrap"></div>
+  </div>
+
+  <div id="tab-audit" class="tab-content" role="tabpanel">
+    <div class="audit-list" id="audit-list"></div>
+  </div>
+</div>
+
+<div class="overlay" id="overlay" onclick="closeAllSheets()"></div>
+
+<div class="sheet" id="sheet-detail" role="dialog" aria-label="Shop details">
+  <div class="sheet-handle"></div>
+  <div class="sheet-hdr">
+    <div><div class="sheet-title" id="sd-title">&mdash;</div><div class="sheet-sub" id="sd-sub">&mdash;</div></div>
+    <button class="sheet-close" onclick="closeAllSheets()" aria-label="Close">&#x2715;</button>
+  </div>
+  <div class="sheet-body" id="sd-body"></div>
+</div>
+
+<div class="sheet confirm-sheet" id="sheet-confirm" role="dialog" aria-modal="true">
+  <div class="sheet-handle"></div>
+  <div class="sheet-body">
+    <div class="conf-ico" id="conf-ico">&#x26A0;&#xFE0F;</div>
+    <div class="conf-t" id="conf-title">Confirm</div>
+    <div class="conf-s" id="conf-msg">Are you sure?</div>
+    <div class="conf-actions">
+      <button class="conf-cancel" onclick="closeAllSheets()">Cancel</button>
+      <button class="conf-ok" id="conf-ok-btn" onclick="confirmAction()">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<div class="sheet action-sheet" id="sheet-actions">
+  <div class="sheet-handle"></div>
+  <div class="sheet-hdr">
+    <div><div class="sheet-title">Admin Menu</div></div>
+    <button class="sheet-close" onclick="closeAllSheets()">&#x2715;</button>
+  </div>
+  <div class="sheet-body">
+    <button class="as-item" onclick="closeAllSheets();doRefresh()"><span class="as-ico">&#x21BA;</span> Refresh Data</button>
+    <button class="as-item" onclick="closeAllSheets();exportCSV()"><span class="as-ico">&#x2193;</span> Export Shops CSV</button>
+    <button class="as-item danger" onclick="closeAllSheets();doSignOut()"><span class="as-ico">&#x23FB;</span> Sign Out</button>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toast-wrap" aria-live="polite"></div>
+
+<script>
+'use strict';
+/* ================================================================
+   CONFIG
+   No secrets here. Admin key lives ONLY in Deno.env on the Edge
+   Function. SUPABASE_ANON_KEY is intentionally public (RLS gates
+   all direct table access). Writes and privileged reads go through
+   Edge Functions with X-Admin-Token header validation.
+================================================================ */
+const PRIMO_CONFIG = {
+  SUPABASE_URL:      'https://plewiwrexjszcqqjwiks.supabase.co',
+  SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBsZXdpd3JleGpzemNxcWp3aWtzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3MDkxOTgsImV4cCI6MjA5NTI4NTE5OH0.UhQcVdZZw74X-HBrGVto35dyZ_V67WfkjGFepRzNlMQ',
+  EDGE_BASE:         'https://plewiwrexjszcqqjwiks.supabase.co/functions/v1',
+};
+const PLAN_MRR   = { starter:349, pro:549, premium:749 };
+const PLAN_SETUP = { starter:1499, pro:2499, premium:3999 };
+
+/* ================================================================
+   RATE LIMITING — client-side UX layer.
+   Edge Function ALSO enforces per-IP server-side (primary defence).
+================================================================ */
+const MAX_ATTEMPTS = 5;
+const LOCKOUT_MS   = 15 * 60 * 1000;
+let loginAttempts  = 0;
+let lockoutUntil   = 0;
+let lockoutTimer   = null;
+
+/* ================================================================
+   SESSION TOKEN
+   Returned by admin-auth Edge Function. Stored in sessionStorage
+   (cleared when tab closes). Sent in X-Admin-Token on every
+   privileged call. Edge Function validates it server-side.
+================================================================ */
+let ADMIN_TOKEN = sessionStorage.getItem('primo_admin_token') || null;
+/* admin_id returned by admin-auth EF — used in audit log rows so each action is traceable.
+   Falls back to 'admin' if the EF does not return one (single-operator setup). */
+let ADMIN_ID    = sessionStorage.getItem('primo_admin_id')    || 'admin';
+
+/* STATE */
+let STATE = { shops:[], customers:{}, stamps:{}, redemptions:{}, payments:[], auditLog:[] };
+let pendingAction = null;
+
+/* ================================================================
+   SUPABASE REST (anon key — public, RLS-protected)
+   Used only for non-privileged reads.
+================================================================ */
+async function sb(path, opts={}) {
+  const res = await fetch(PRIMO_CONFIG.SUPABASE_URL+'/rest/v1/'+path, {
+    ...opts,
+    headers: {
+      'apikey': PRIMO_CONFIG.SUPABASE_ANON_KEY,
+      'Authorization': 'Bearer '+PRIMO_CONFIG.SUPABASE_ANON_KEY,
+      'Content-Type': 'application/json',
+      'Prefer': opts.prefer||'return=representation',
+      ...(opts.headers||{}),
+    },
+  });
+  if (!res.ok) { const e=await res.json().catch(()=>({})); throw new Error(e.message||'HTTP '+res.status); }
+  return res.json().catch(()=>null);
+}
+
+/* ================================================================
+   EDGE FUNCTION HELPER
+   All writes + privileged reads use this. Sends ADMIN_TOKEN
+   in X-Admin-Token. On 401, forces sign-out (token expired).
+================================================================ */
+async function sbEdge(fn, payload={}) {
+  const res = await fetch(PRIMO_CONFIG.EDGE_BASE+'/'+fn, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer '+PRIMO_CONFIG.SUPABASE_ANON_KEY,
+      ...(ADMIN_TOKEN ? {'X-Admin-Token': ADMIN_TOKEN} : {}),
+    },
+    body: JSON.stringify(payload),
+  });
+  const data = await res.json().catch(()=>({}));
+  if (!res.ok) {
+    if (res.status===401) { doSignOut(); throw new Error('Session expired. Please sign in again.'); }
+    throw new Error(data.error||'Edge function error ('+res.status+')');
+  }
+  return data;
+}
+
+/* SCREENS */
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+/* ================================================================
+   RATE LIMIT UI
+================================================================ */
+function isLockedOut() { return Date.now() < lockoutUntil; }
+
+function startLockout() {
+  const banner = document.getElementById('lockout-banner');
+  const cd     = document.getElementById('lockout-cd');
+  const btn    = document.getElementById('login-btn');
+  banner.classList.add('show');
+  btn.disabled = true;
+  if (lockoutTimer) clearInterval(lockoutTimer);
+  lockoutTimer = setInterval(()=>{
+    const r = Math.max(0, lockoutUntil - Date.now());
+    if (r<=0) {
+      clearInterval(lockoutTimer);
+      banner.classList.remove('show');
+      btn.disabled = false;
+      loginAttempts = 0;
+      document.getElementById('attempts-note').textContent = '';
+    } else {
+      const m = String(Math.floor(r/60000)).padStart(2,'0');
+      const s = String(Math.floor((r%60000)/1000)).padStart(2,'0');
+      cd.textContent = m+':'+s;
+    }
+  }, 1000);
+}
+
+function recordFail() {
+  loginAttempts++;
+  if (loginAttempts >= MAX_ATTEMPTS) {
+    lockoutUntil = Date.now() + LOCKOUT_MS;
+    startLockout();
+  } else {
+    const r = MAX_ATTEMPTS - loginAttempts;
+    document.getElementById('attempts-note').textContent = r+' attempt'+(r!==1?'s':'')+' remaining';
+  }
+}
+
+/* ================================================================
+   LOGIN — calls admin-auth Edge Function.
+   Key is NEVER compared in this file.
+================================================================ */
+async function doAdminLogin() {
+  if (isLockedOut()) return;
+  const key     = document.getElementById('adm-key').value.trim();
+  const errEl   = document.getElementById('login-err');
+  const btn     = document.getElementById('login-btn');
+  const btnTxt  = document.getElementById('login-btn-text');
+  errEl.textContent = '';
+  if (!key) { errEl.textContent = 'Admin key is required.'; return; }
+  btn.disabled = true;
+  btnTxt.textContent = 'Verifying\u2026';
+  try {
+    const result = await sbEdge('admin-auth', { key });
+    if (!result.token) throw new Error('No token returned.');
+    ADMIN_TOKEN = result.token;
+    ADMIN_ID    = result.admin_id || 'admin';   // EF may return identifier for multi-operator setups
+    sessionStorage.setItem('primo_admin_token', ADMIN_TOKEN);
+    sessionStorage.setItem('primo_admin_id',    ADMIN_ID);
+    loginAttempts = 0;
+    await loadDashboard();
+  } catch(err) {
+    recordFail();
+    errEl.textContent = err.message.includes('401')||err.message.includes('Unauthorized')
+      ? 'Invalid admin key.' : err.message;
+    const inp = document.getElementById('adm-key');
+    inp.classList.add('shake');
+    setTimeout(()=>inp.classList.remove('shake'), 400);
+    if (!isLockedOut()) { btn.disabled=false; btnTxt.textContent='Access Dashboard'; }
+  }
+}
+
+document.addEventListener('keydown', e=>{
+  if (e.key==='Enter' && document.getElementById('s-login').classList.contains('active')) doAdminLogin();
+});
+
+/* ================================================================
+   DATA LOADING — via admin-data Edge Function.
+   Returns all shops + aggregates using service role key server-side.
+================================================================ */
+async function loadDashboard() {
+  setLoadSub('Authenticating\u2026');
+  showScreen('s-load');
+  try {
+    setLoadSub('Fetching shop data\u2026');
+    const data = await sbEdge('admin-data', {});
+    STATE.shops       = data.shops       || [];
+    STATE.customers   = data.customers   || {};
+    STATE.stamps      = data.stamps      || {};
+    STATE.redemptions = data.redemptions || {};
+    STATE.payments    = data.payments    || [];
+    STATE.auditLog    = data.audit_log   || [];
+    renderDashboard();
+    showScreen('s-dash');
+  } catch(err) {
+    if (document.getElementById('s-login').classList.contains('active')) return;
+    document.getElementById('err-ico').textContent   = '\uD83D\uDD0C';
+    document.getElementById('err-title').textContent = 'Load Failed';
+    document.getElementById('err-msg').textContent   = err.message;
+    showScreen('s-err');
+  }
+}
+
+function setLoadSub(msg) { const e=document.getElementById('load-sub'); if(e) e.textContent=msg; }
+
+async function doRefresh() {
+  const btn=document.getElementById('refresh-btn');
+  btn.classList.add('spinning'); btn.disabled=true;
+  try { await loadDashboard(); showToast('Refreshed','green','\u21BA'); }
+  catch(e) { showToast('Refresh failed: '+e.message,'red','\u2715'); }
+  finally { btn.classList.remove('spinning'); btn.disabled=false; }
+}
+
+/* ================================================================
+   RENDER DASHBOARD
+================================================================ */
+function renderDashboard() {
+  const shops    = STATE.shops;
+  const active   = shops.filter(s=>s.status==='active');
+  const pending  = shops.filter(s=>s.status==='pending_payment');
+  const susp     = shops.filter(s=>s.status==='suspended');
+  document.getElementById('stat-total').textContent     = shops.length;
+  document.getElementById('stat-active').textContent    = active.length;
+  document.getElementById('stat-pending').textContent   = pending.length;
+  document.getElementById('stat-suspended').textContent = susp.length;
+  document.getElementById('tab-shops-n').textContent    = shops.length;
+  const pc={starter:0,pro:0,premium:0};
+  active.forEach(s=>{if(PLAN_MRR[s.plan]) pc[s.plan]++;});
+  const mrr=pc.starter*349+pc.pro*549+pc.premium*749;
+  document.getElementById('mrr-total').textContent='\u20B9'+mrr.toLocaleString('en-IN');
+  document.getElementById('mrr-s').textContent=pc.starter;
+  document.getElementById('mrr-p').textContent=pc.pro;
+  document.getElementById('mrr-pm').textContent=pc.premium;
+  renderShops(); renderActivity(); renderRevenue(); renderAuditLog();
+}
+
+/* SHOPS */
+function renderShops() {
+  const q=document.getElementById('shop-search').value.trim().toLowerCase();
+  const sf=document.getElementById('f-status').value;
+  const pf=document.getElementById('f-plan').value;
+  let shops=STATE.shops;
+  if(q) shops=shops.filter(s=>
+    s.shop_name.toLowerCase().includes(q)||
+    (s.city||'').toLowerCase().includes(q)||
+    (s.owner_name||'').toLowerCase().includes(q)||
+    (s.slug||'').toLowerCase().includes(q)
+  );
+  if(sf) shops=shops.filter(s=>s.status===sf);
+  if(pf) shops=shops.filter(s=>s.plan===pf);
+  const list=document.getElementById('shops-list');
+  if(!shops.length){
+    list.innerHTML='<div class="empty-state"><div class="empty-ico">\uD83D\uDD0D</div><div class="empty-t">No shops found</div><div class="empty-s">Adjust search or filters.</div></div>';
+    return;
+  }
+  const SL={active:'Active',pending_payment:'Pending',suspended:'Suspended'};
+  const SC={active:'active',pending_payment:'pending',suspended:'suspended'};
+  list.innerHTML=shops.map(s=>{
+    const cust=STATE.customers[s.id]||0;
+    const stmp=STATE.stamps[s.id]||0;
+    const redm=STATE.redemptions[s.id]||0;
+    let ab='';
+    if(s.status==='active')          ab='<button class="sc-btn sc-btn-suspend"  onclick="openConfirm(\'suspend\',\''+esc(s.id)+'\')">\u23F8 Suspend</button>';
+    else if(s.status==='pending_payment') ab='<button class="sc-btn sc-btn-activate" onclick="openConfirm(\'activate\',\''+esc(s.id)+'\')">\u2713 Activate</button>';
+    else                             ab='<button class="sc-btn sc-btn-activate" onclick="openConfirm(\'reinstate\',\''+esc(s.id)+'\')">\u21BA Reinstate</button>';
+    return '<div class="shop-card">'+
+      '<div class="sc-top"><div class="sc-avatar">'+(s.product_emoji||'\uD83C\uDFEA')+'</div>'+
+      '<div class="sc-info"><div class="sc-name">'+san(s.shop_name)+'</div>'+
+      '<div class="sc-meta"><span class="sc-city">'+san(s.city||'\u2014')+'</span><span class="sc-dot">\u2022</span>'+
+      '<span class="plan-badge">'+san(s.plan)+'</span><span class="status-badge '+(SC[s.status]||'pending')+'">'+(SL[s.status]||s.status)+'</span></div></div></div>'+
+      '<div class="sc-stats">'+
+      '<div class="sc-stat"><div class="sc-sv">'+cust+'</div><div class="sc-sl">Customers</div></div>'+
+      '<div class="sc-stat"><div class="sc-sv">'+stmp+'</div><div class="sc-sl">Stamps</div></div>'+
+      '<div class="sc-stat"><div class="sc-sv">'+redm+'</div><div class="sc-sl">Redeemed</div></div></div>'+
+      '<div class="sc-actions"><button class="sc-btn sc-btn-view" onclick="openShopDetail(\''+esc(s.id)+'\')">\uD83D\uDD0D View</button>'+ab+'</div></div>';
+  }).join('');
+}
+
+/* ACTIVITY */
+function renderActivity() {
+  const events=[];
+  STATE.shops.forEach(s=>{
+    events.push({type:'signup',  shop:s.shop_name,city:s.city||'\u2014',plan:s.plan,date:s.created_at?.slice(0,10)||''});
+    if(s.activated_at) events.push({type:'activate',shop:s.shop_name,city:s.city||'\u2014',plan:s.plan,date:s.activated_at?.slice(0,10)||''});
+    if(s.status==='suspended') events.push({type:'suspend',shop:s.shop_name,city:s.city||'\u2014',plan:s.plan,date:'\u2014'});
+  });
+  events.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+  const cfg={
+    signup:   {ico:'\u2756',cls:'signup',  label:'New sign-up'},
+    activate: {ico:'\u2713',cls:'activate',label:'Activated'},
+    payment:  {ico:'\u20B9',cls:'payment', label:'Payment'},
+    suspend:  {ico:'\u23F8',cls:'suspend', label:'Suspended'},
+    reinstate:{ico:'\u21BA',cls:'reinstate',label:'Reinstated'},
+  };
+  let lastDate='';
+  const list=document.getElementById('activity-list');
+  if(!events.length){
+    list.innerHTML='<div class="empty-state"><div class="empty-ico">\uD83D\uDCCB</div><div class="empty-t">No activity yet</div><div class="empty-s">Activity appears as shops sign up and are activated.</div></div>';
+    return;
+  }
+  list.innerHTML=events.map(a=>{
+    const c=cfg[a.type]||{ico:'\u2022',cls:'signup',label:a.type};
+    let dh='';
+    if(a.date!==lastDate){dh='<div class="day-label">'+fmtDate(a.date)+'</div>';lastDate=a.date;}
+    const amt=a.amount?' \u2014 \u20B9'+Number(a.amount).toLocaleString('en-IN'):'';
+    return dh+'<div class="act-item"><div class="act-ico '+c.cls+'">'+c.ico+'</div>'+
+      '<div class="act-body"><div class="act-t">'+c.label+': <strong>'+san(a.shop)+'</strong>'+amt+'</div>'+
+      '<div class="act-meta"><span>'+san(a.city)+'</span><span>\u2022</span>'+
+      '<span class="plan-badge" style="font-size:9.5px;padding:1px 5px">'+san(a.plan)+'</span>'+
+      (a.ip?'<span style="font-family:monospace;font-size:10.5px;color:rgba(168,152,128,.38)">'+san(a.ip)+'</span>':'')+'</div></div></div>';
+  }).join('');
+}
+
+/* REVENUE */
+function renderRevenue() {
+  const active=STATE.shops.filter(s=>s.status==='active');
+  const pc={starter:0,pro:0,premium:0};
+  active.forEach(s=>{if(PLAN_MRR[s.plan]) pc[s.plan]++;});
+  const rev={starter:pc.starter*349,pro:pc.pro*549,premium:pc.premium*749};
+  const mrr=rev.starter+rev.pro+rev.premium;
+  const maxR=Math.max(...Object.values(rev),1);
+  const planL={starter:'Starter',pro:'Pro',premium:'Premium'};
+  const cards=['starter','pro','premium'].map(pl=>
+    '<div class="rpc"><div class="rpc-bar-wrap">'+
+    '<div class="rpc-top"><span class="rpc-name">'+planL[pl]+'</span><span class="rpc-amount">\u20B9'+rev[pl].toLocaleString('en-IN')+'/mo</span></div>'+
+    '<div class="rpc-bar-bg"><div class="rpc-bar-fill" style="width:'+Math.round(rev[pl]/maxR*100)+'%"></div></div>'+
+    '<div class="rpc-meta">\u20B9'+PLAN_MRR[pl]+'/shop \u00B7 Setup \u20B9'+PLAN_SETUP[pl]+'</div>'+
+    '</div><div class="rpc-count"><div class="rpc-count-v">'+pc[pl]+'</div><div class="rpc-count-l">shops</div></div></div>'
+  ).join('');
+  const payRows=STATE.payments.length
+    ? STATE.payments.map(p=>'<div class="pay-row"><div class="pay-dot '+(p.status||'paid')+'"></div>'+
+      '<div class="pay-info"><div class="pay-shop">'+san(p.shop_name||p.razorpay_payment_id||'\u2014')+'</div>'+
+      '<div class="pay-plan">'+san(p.plan||'\u2014')+' \u00B7 '+san(p.type||'payment')+'</div></div>'+
+      '<div class="pay-amount">\u20B9'+Number(p.amount||0).toLocaleString('en-IN')+'</div>'+
+      '<div class="pay-date">'+(p.captured_at?.slice(0,10)||p.date||'\u2014')+'</div></div>').join('')
+    : '<div style="padding:.85rem;text-align:center;font-size:13px;color:var(--ink-f)">No payment records yet. Deploy the <strong>razorpay-webhook</strong> Edge Function to populate this.</div>';
+  document.getElementById('revenue-wrap').innerHTML=
+    '<div class="ef-banner"><span class="ef-banner-ico">\u26A0\uFE0F</span><span>MRR is estimated from active shop plan labels. For verified revenue, deploy the <strong>razorpay-webhook</strong> Edge Function (HMAC-SHA256 verified) so payments are recorded server-side.</span></div>'+
+    '<div><div class="rev-h">MRR Breakdown</div><div class="rev-sub">Monthly recurring revenue from active shops. One-time setup fees excluded.</div>'+
+    '<div class="rev-plan-cards">'+cards+'</div></div>'+
+    '<div class="rev-total"><div><div class="rtc-label">Total MRR (est.)</div><div class="rtc-value">\u20B9'+mrr.toLocaleString('en-IN')+'</div></div>'+
+    '<div class="rtc-right"><div class="rtc-arr-label">ARR (projected)</div><div class="rtc-arr-v">\u20B9'+(mrr*12).toLocaleString('en-IN')+'</div></div></div>'+
+    '<div><div class="pay-log"><div class="pay-log-hdr"><span class="pay-log-title">Razorpay Payment Log</span><span class="pay-log-sub">'+STATE.payments.length+' records</span></div>'+payRows+'</div></div>';
+}
+
+/* AUDIT LOG */
+function renderAuditLog() {
+  const list=document.getElementById('audit-list');
+  if(!STATE.auditLog.length){
+    list.innerHTML='<div class="ef-banner" style="margin:.75rem"><span class="ef-banner-ico">\u26A0\uFE0F</span><span>Audit log empty. Deploy the <strong>admin-action</strong> Edge Function — it writes to <code>admin_audit_log</code> on every status change with action type, IP, and timestamp.</span></div>'+
+      '<div class="empty-state"><div class="empty-ico">\uD83D\uDEE1\uFE0F</div><div class="empty-t">No audit entries yet</div><div class="empty-s">Every activate/suspend action will be logged here with full details.</div></div>';
+    return;
+  }
+  const ac={activate:{ico:'\u2713',cls:'activate',label:'Activated'},suspend:{ico:'\u23F8',cls:'suspend',label:'Suspended'},reinstate:{ico:'\u21BA',cls:'reinstate',label:'Reinstated'}};
+  list.innerHTML=STATE.auditLog.map(e=>{
+    const c=ac[e.action_type]||{ico:'\u2022',cls:'activate',label:e.action_type};
+    return '<div class="audit-row"><div class="audit-badge '+c.cls+'">'+c.ico+'</div>'+
+      '<div class="audit-body"><div class="audit-action">'+c.label+': <strong>'+san(e.shop_name||e.target_id)+'</strong></div>'+
+      '<div class="audit-detail"><span>'+san(e.old_status||'\u2014')+' \u2192 '+san(e.new_status||'\u2014')+'</span><span>\u2022</span>'+
+      '<span>'+san(e.performed_by||'admin')+'</span>'+
+      (e.ip_address?'<span class="audit-ip">'+san(e.ip_address)+'</span>':'')+'</div></div>'+
+      '<span class="audit-time">'+((e.performed_at||e.created_at)?.slice(0,10)||'\u2014')+'</span></div>';
+  }).join('');
+}
+
+/* SHOP DETAIL */
+function openShopDetail(shopId) {
+  const s=STATE.shops.find(x=>x.id===shopId); if(!s) return;
+  const cust=STATE.customers[s.id]||0, stmp=STATE.stamps[s.id]||0, redm=STATE.redemptions[s.id]||0;
+  const SL={active:'Active',pending_payment:'Pending Payment',suspended:'Suspended'};
+  const SC={active:'active',pending_payment:'pending',suspended:'suspended'};
+  const waL=s.owner_phone?'https://wa.me/91'+s.owner_phone+'?text='+encodeURIComponent('Hi '+(s.owner_name||'')+', this is Primo Rewards support.'):null;
+  let ab='';
+  if(s.status==='active')          ab='<button class="da-btn da-sus" onclick="closeAllSheets();openConfirm(\'suspend\',\''+esc(s.id)+'\')">&#x23F8; Suspend</button>';
+  else if(s.status==='pending_payment') ab='<button class="da-btn da-act" onclick="closeAllSheets();openConfirm(\'activate\',\''+esc(s.id)+'\')">&#x2713; Activate</button>';
+  else                             ab='<button class="da-btn da-act" onclick="closeAllSheets();openConfirm(\'reinstate\',\''+esc(s.id)+'\')">&#x21BA; Reinstate</button>';
+  document.getElementById('sd-title').textContent=s.shop_name;
+  document.getElementById('sd-sub').textContent=(s.city||'\u2014')+' \u00B7 '+s.slug;
+  document.getElementById('sd-body').innerHTML=
+    '<div class="dsec"><div class="dsec-title">Owner</div>'+
+    '<div class="drow"><span class="dl">Name</span><span class="dv">'+san(s.owner_name||'\u2014')+'</span></div>'+
+    '<div class="drow"><span class="dl">Email</span><span class="dv">'+san(s.owner_email||'\u2014')+'</span></div>'+
+    '<div class="drow"><span class="dl">Phone</span><span class="dv">'+san(s.owner_phone||'\u2014')+'</span></div></div>'+
+    '<div class="dsec"><div class="dsec-title">Shop</div>'+
+    '<div class="drow"><span class="dl">Slug</span><span class="dv">'+san(s.slug)+'</span></div>'+
+    '<div class="drow"><span class="dl">URL</span><span class="dv"><a href="https://primorewards.app/'+san(s.slug)+'-reward" target="_blank" rel="noopener">primorewards.app/'+san(s.slug)+'-reward</a></span></div>'+
+    '<div class="drow"><span class="dl">Plan</span><span class="dv"><span class="plan-badge">'+san(s.plan)+'</span></span></div>'+
+    '<div class="drow"><span class="dl">Status</span><span class="dv"><span class="status-badge '+(SC[s.status]||'pending')+'">'+(SL[s.status]||s.status)+'</span></span></div>'+
+    '<div class="drow"><span class="dl">Rule</span><span class="dv">Buy '+(s.reward_rule?.buy||11)+', get '+(s.reward_rule?.get||1)+' free</span></div>'+
+    '<div class="drow"><span class="dl">Product</span><span class="dv">'+(s.product_emoji||'')+' '+san(s.product_name||'item')+'</span></div>'+
+    '<div class="drow"><span class="dl">Joined</span><span class="dv">'+fmtDate(s.created_at?.slice(0,10))+'</span></div>'+
+    (s.activated_at?'<div class="drow"><span class="dl">Activated</span><span class="dv">'+fmtDate(s.activated_at?.slice(0,10))+'</span></div>':'')+
+    (s.payment_id?'<div class="drow"><span class="dl">Payment ID</span><span class="dv" style="font-family:monospace;font-size:11px">'+san(s.payment_id)+'</span></div>':'')+
+    '</div><div class="dsec"><div class="dsec-title">Stats</div>'+
+    '<div class="dstats"><div class="dstat"><div class="dstat-v">'+cust+'</div><div class="dstat-l">Customers</div></div>'+
+    '<div class="dstat"><div class="dstat-v">'+stmp+'</div><div class="dstat-l">Stamps</div></div>'+
+    '<div class="dstat"><div class="dstat-v">'+redm+'</div><div class="dstat-l">Redeemed</div></div></div></div>'+
+    '<div class="d-actions">'+(waL?'<a class="da-btn da-wa" href="'+waL+'" target="_blank" rel="noopener">&#x1F4AC; WhatsApp</a>':'')+ab+'</div>';
+  openSheet('sheet-detail');
+}
+
+/* CONFIRM ACTION */
+function openConfirm(type, shopId) {
+  const s=STATE.shops.find(x=>x.id===shopId); if(!s) return;
+  pendingAction={type,shopId,newStatus:type==='suspend'?'suspended':'active'};
+  const M={
+    activate: {ico:'\u2705',title:'Activate Shop?', msg:'This will activate "'+s.shop_name+'" and make their loyalty page live.',okLabel:'Yes, Activate', cls:'activate'},
+    suspend:  {ico:'\u23F8', title:'Suspend Shop?',  msg:'Suspending "'+s.shop_name+'" deactivates their loyalty page immediately. Customers cannot access it until reinstated.',okLabel:'Yes, Suspend',  cls:'suspend'},
+    reinstate:{ico:'\u21BA', title:'Reinstate Shop?',msg:'This reinstates "'+s.shop_name+'" and restores their loyalty page.',okLabel:'Yes, Reinstate',cls:'reinstate'},
+  };
+  const m=M[type]||M.activate;
+  document.getElementById('conf-ico').textContent  =m.ico;
+  document.getElementById('conf-title').textContent=m.title;
+  document.getElementById('conf-msg').textContent  =m.msg;
+  const ok=document.getElementById('conf-ok-btn');
+  ok.textContent=m.okLabel; ok.className='conf-ok '+m.cls; ok.disabled=false;
+  openSheet('sheet-confirm');
+}
+
+async function confirmAction() {
+  if(!pendingAction) return;
+  const {type,shopId,newStatus}=pendingAction;
+  const ok=document.getElementById('conf-ok-btn');
+  ok.disabled=true; ok.textContent='Saving\u2026';
+  try {
+    /* Status change via Edge Function only — never anon-key PATCH */
+    const result = await sbEdge('admin-action', {action:type, shop_id:shopId, admin_id:ADMIN_ID});
+    /* Use status confirmed by server, not the locally assumed value */
+    const confirmedStatus = result.new_status || newStatus;
+    const shop = STATE.shops.find(s=>s.id===shopId);
+    /* Capture old_status BEFORE mutating shop.status (bug fix: was read after mutation) */
+    const oldStatus = shop?.status || 'unknown';
+    if(shop){
+      shop.status = confirmedStatus;
+      if(confirmedStatus==='active' && !shop.activated_at) shop.activated_at = new Date().toISOString();
+    }
+    /* Optimistic audit row — real row arrives on next full refresh from admin_audit_log table.
+       Column name is performed_at to match the audit section 9 SQL schema. */
+    STATE.auditLog.unshift({
+      action_type:  type,
+      shop_name:    shop?.shop_name || shopId,
+      target_id:    shopId,
+      old_status:   oldStatus,
+      new_status:   confirmedStatus,
+      performed_by: ADMIN_ID,
+      ip_address:   '\u2014',
+      performed_at: new Date().toISOString(),
+    });
+    closeAllSheets();
+    renderDashboard();
+    showToast(confirmedStatus==='active'?'Shop activated \u2713':'Shop suspended','green','\u2713');
+  } catch(err){
+    showToast('Failed: '+err.message,'red','\u2715');
+    ok.disabled=false; ok.textContent='Retry';
+  }
+}
+
+/* TABS */
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+  document.querySelector('[data-tab="'+tab+'"]').classList.add('active');
+  document.getElementById('tab-'+tab).classList.add('active');
+}
+
+/* SHEETS */
+function openSheet(id){document.getElementById('overlay').classList.add('open');document.getElementById(id).classList.add('open');document.body.style.overflow='hidden';}
+function closeAllSheets(){document.getElementById('overlay').classList.remove('open');document.querySelectorAll('.sheet').forEach(s=>s.classList.remove('open'));document.body.style.overflow='';}
+function openActionSheet(){openSheet('sheet-actions');}
+
+/* CSV */
+function exportCSV() {
+  const h=['Shop Name','Slug','City','Plan','Status','Owner Name','Owner Email','Customers','Stamps','Redemptions','Joined','Activated'];
+  const rows=STATE.shops.map(s=>[s.shop_name,s.slug,s.city||'',s.plan,s.status,s.owner_name||'',s.owner_email||'',STATE.customers[s.id]||0,STATE.stamps[s.id]||0,STATE.redemptions[s.id]||0,s.created_at?.slice(0,10)||'',s.activated_at?.slice(0,10)||'']);
+  const csv=[h,...rows].map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\n');
+  const url=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+  Object.assign(document.createElement('a'),{href:url,download:'primo-shops-'+new Date().toISOString().slice(0,10)+'.csv'}).click();
+  URL.revokeObjectURL(url);
+  showToast('CSV exported','green','\u2193');
+}
+
+/* SIGN OUT */
+function doSignOut() {
+  ADMIN_TOKEN=null; ADMIN_ID='admin';
+  sessionStorage.removeItem('primo_admin_token');
+  sessionStorage.removeItem('primo_admin_id');
+  STATE={shops:[],customers:{},stamps:{},redemptions:{},payments:[],auditLog:[]};
+  closeAllSheets();
+  document.getElementById('adm-key').value='';
+  document.getElementById('login-btn').disabled=false;
+  document.getElementById('login-btn-text').textContent='Access Dashboard';
+  document.getElementById('login-err').textContent='';
+  document.getElementById('attempts-note').textContent='';
+  showScreen('s-login');
+}
+
+/* TOAST */
+function showToast(msg,color='amber',ico='\u2139'){
+  const wrap=document.getElementById('toast-wrap');
+  const el=document.createElement('div');
+  el.className='toast';
+  el.innerHTML='<span class="ti-'+color+'">'+ico+'</span><span>'+san(msg)+'</span>';
+  wrap.appendChild(el);
+  setTimeout(()=>{el.classList.add('out');setTimeout(()=>el.remove(),350);},3200);
+}
+
+/* UTILS */
+function san(str){return String(str??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function esc(str){return String(str??'').replace(/['"\\<>]/g,'');}
+function fmtDate(d){if(!d)return'\u2014';try{return new Date(d).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});}catch{return d;}}
+
+/* INIT */
+window.addEventListener('DOMContentLoaded',()=>{
+  if(ADMIN_TOKEN) loadDashboard(); else showScreen('s-login');
+});
+</script>
+
+<!--
+================================================================
+  PRIMO ADMIN  |  primo-admin-v2.html  |  Phase 4
+  Audit applied: go-live-audit-v2 (all applicable items).
+
+  CHANGES FROM v1 → v2  (all are integration fixes, not cosmetic):
+  [BUG FIX]    confirmAction(): old_status was read AFTER shop.status
+               was mutated → audit log always showed new status as old.
+               Now captured before mutation.
+  [BUG FIX]    confirmAction(): ignored result.new_status from server.
+               UI was showing client-assumed state, not server-confirmed
+               state. Now uses result.new_status with local fallback.
+  [INTEGRATION] admin_audit_log column alignment: audit section 9 SQL
+               uses performed_at. renderAuditLog() now reads
+               (e.performed_at || e.created_at) so real EF data and
+               optimistic local rows both render correctly.
+  [INTEGRATION] ADMIN_ID tracked alongside ADMIN_TOKEN. admin-auth EF
+               may return admin_id for multi-operator traceability.
+               Stored in sessionStorage; cleared on sign-out.
+               Passed to admin-action EF so audit log shows who acted.
+  [INTEGRATION] Footer SQL overhauled to match audit section 9 exactly,
+               including shop_credentials, public_shop_card view,
+               DROP POLICY steps, and column-level anon grants.
+               Other phases depend on these for their EF integration.
+
+  SECURITY CHANGES FROM ORIGINAL (carried forward from v1):
+  [CVE-1]  ADMIN_KEY removed from PRIMO_CONFIG entirely.
+  [CVE-2]  DEV_MODE + all DEV_* arrays removed.
+           Use primo-admin-dev.html locally — never deploy it.
+  [CVE-3]  Login calls admin-auth Edge Function; real token stored.
+  [CVE-8]  confirmAction() calls admin-action Edge Function.
+           No anon-key PATCH anywhere in this file.
+  [CVE-9]  Client-side lockout: 5 attempts / 15-min countdown.
+  [#11]    Content-Security-Policy meta tag present.
+  [#12]    Audit Log tab renders admin_audit_log table.
+  [#13]    MRR clearly labelled as plan-derived estimate.
+
+================================================================
+  ADMIN-DATA EDGE FUNCTION — EXPECTED RESPONSE CONTRACT
+  (supabase/functions/admin-data/index.ts)
+
+  The loadDashboard() function expects this exact JSON shape:
+  {
+    shops: [
+      {
+        id, shop_name, slug, city, plan, status,
+        owner_name, owner_email, owner_phone,   ← service role bypasses RLS
+        product_name, product_emoji,
+        reward_rule: { buy: number, get: number },
+        payment_id, created_at, activated_at
+      }
+    ],
+    customers:   { [shop_id]: number },   ← count per shop
+    stamps:      { [shop_id]: number },
+    redemptions: { [shop_id]: number },
+    payments: [
+      {
+        shop_name, razorpay_payment_id, plan, type,
+        amount, status, captured_at
+      }
+    ],
+    audit_log: [
+      {
+        action_type, shop_name, target_id,
+        old_status, new_status,
+        performed_by, ip_address,
+        performed_at              ← column name in DB (not created_at)
+      }
+    ]
+  }
+
+  Authentication: reads X-Admin-Token header, validates against
+  Deno.env.get('PRIMO_ADMIN_TOKEN'). Uses service role key for all
+  queries — bypasses RLS to return all shops regardless of status.
+================================================================
+  ADMIN-ACTION EDGE FUNCTION — EXPECTED RESPONSE CONTRACT
+  (supabase/functions/admin-action/index.ts — see audit section 10.4)
+
+  Request:  POST { action, shop_id, admin_id }
+            Header: X-Admin-Token: <token>
+  Response: { success: true, new_status: 'active'|'suspended' }
+  On error: { error: 'message' }   HTTP 400/401/404/500
+
+  The EF must write to admin_audit_log with performed_at (not created_at).
+================================================================
+  SUPABASE SQL — RUN ONCE IN THIS ORDER (audit section 9)
+
+  ── STEP 1: Public view for customer card (shop-engine phase) ────────
+  CREATE OR REPLACE VIEW public_shop_card AS
+    SELECT
+      id, shop_name, slug, city, plan, status,
+      reward_rule, product_name, product_emoji
+    FROM shops
+    WHERE status = 'active';
+  -- Use this view in primo-shop-engine reads instead of querying shops directly.
+
+  ── STEP 2: Merchant credentials table (merchant-auth phase) ─────────
+  CREATE TABLE IF NOT EXISTS shop_credentials (
+    shop_id       UUID PRIMARY KEY REFERENCES shops(id) ON DELETE CASCADE,
+    password_hash TEXT NOT NULL,    -- bcrypt hash only, never plaintext
+    updated_at    TIMESTAMPTZ DEFAULT NOW()
+  );
+  ALTER TABLE shop_credentials ENABLE ROW LEVEL SECURITY;
+  -- No SELECT policy = anon key cannot read this table at all.
+  -- merchant-login Edge Function reads via service role key.
+
+  ── STEP 3: Admin audit log ──────────────────────────────────────────
+  CREATE TABLE IF NOT EXISTS admin_audit_log (
+    id           UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    action_type  TEXT NOT NULL,   -- 'activate' | 'suspend' | 'reinstate' | 'login'
+    target_id    UUID REFERENCES shops(id) ON DELETE SET NULL,
+    performed_by TEXT,
+    ip_address   TEXT,
+    old_status   TEXT,
+    new_status   TEXT,
+    performed_at TIMESTAMPTZ DEFAULT NOW()   -- NOTE: performed_at, not created_at
+  );
+  ALTER TABLE admin_audit_log ENABLE ROW LEVEL SECURITY;
+  -- No policy = anon key cannot read or write; service role only.
+
+  ── STEP 4: Payments table (Razorpay webhook populates) ──────────────
+  CREATE TABLE IF NOT EXISTS payments (
+    id                  UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    shop_id             UUID REFERENCES shops(id) ON DELETE CASCADE,
+    razorpay_payment_id TEXT UNIQUE,
+    amount              NUMERIC NOT NULL,
+    status              TEXT DEFAULT 'captured',
+    plan                TEXT,
+    type                TEXT DEFAULT 'payment',
+    captured_at         TIMESTAMPTZ DEFAULT NOW()
+  );
+  ALTER TABLE payments ENABLE ROW LEVEL SECURITY;
+  -- No policy = anon key cannot read or write; service role only.
+
+  ── STEP 5: Drop insecure policies (audit section 9 step 4) ──────────
+  DROP POLICY IF EXISTS "Public read active shops"  ON shops;
+  DROP POLICY IF EXISTS "Customer read"             ON customers;
+  DROP POLICY IF EXISTS "Add stamps"                ON stamps;
+  DROP POLICY IF EXISTS "Stamp read"                ON stamps;
+  DROP POLICY IF EXISTS "Add redemptions"           ON redemptions;
+  DROP POLICY IF EXISTS "Read redemptions"          ON redemptions;
+  DROP POLICY IF EXISTS "Merchant update shop"      ON shops;
+  DROP POLICY IF EXISTS "Merchant update customer"  ON customers;
+
+  ── STEP 6: Minimal anon-safe policies (audit section 9 step 5) ──────
+  -- Shops: anon reads only safe columns (no owner_phone, owner_email, admin_password)
+  CREATE POLICY "Public read shop card fields" ON shops
+    FOR SELECT USING (status = 'active');
+
+  -- Column-level grant: anon cannot see sensitive columns even with the policy above
+  REVOKE SELECT ON shops FROM anon;
+  GRANT SELECT (id, shop_name, slug, city, status, reward_rule, product_name, product_emoji)
+    ON shops TO anon;
+
+  -- Customers: anon can enroll (INSERT) but cannot read any row
+  CREATE POLICY "Customer self enroll" ON customers
+    FOR INSERT WITH CHECK (true);
+  -- No SELECT policy for anon = customers table is unreadable by anon key
+
+  -- Stamps: NO anon access at all — only via merchant-stamp Edge Function
+  -- Redemptions: NO anon access at all — only via merchant-redeem Edge Function
+
+  ── STEP 7: Remove admin_password from shops table ───────────────────
+  -- Run AFTER deploying merchant-login Edge Function and migrating hashes
+  -- to shop_credentials:
+  -- ALTER TABLE shops DROP COLUMN IF EXISTS admin_password;
+
+================================================================
+  EDGE FUNCTIONS TO DEPLOY (see audit section 10):
+    admin-auth        Validates key from Deno.env; returns token + admin_id
+    admin-data        Validates token; returns all shops + aggregates (service role)
+    admin-action      Validates token; patches shop status; writes admin_audit_log
+    merchant-login    bcrypt verify against shop_credentials (CVE-5 fix)
+    merchant-stamp    Validates merchant JWT; server-computed cycle_number (CVE-4 fix)
+    merchant-redeem   Validates merchant JWT; merchant-only (CVE-6 fix)
+    razorpay-webhook  HMAC-SHA256 verify; activates shop; logs payment (CVE-7 fix)
+
+  VERCEL DEPLOYMENT:
+    Deploy admin panel to admin.primorewards.app as a separate Vercel
+    project with Deployment Protection enabled (audit section 3).
+    Add vercel.json from audit section 11 to the root of each project
+    for server-side CSP headers + HSTS (stronger than meta tag CSP).
+
+  DO NOT deploy this file without deploying Edge Functions first.
+================================================================
+-->
+</body>
+</html>

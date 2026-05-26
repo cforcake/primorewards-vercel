@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /supabase/
+Disallow: /.well-known/
+
+Sitemap: https://primorewards.in/sitemap.xml
