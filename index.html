@@ -1659,6 +1659,7 @@ async function handleEnroll() {
       status:      'pending_payment',
       amount_paise: sAmt,
       honeypot:    document.getElementById('fHoneypot')?.value || '',
+    };
     const enrollment = await apiCall('shop_enrollments', 'POST', formData);
     enrollId = enrollment?.[0]?.id || enrollment?.id || null;
   } catch (err) {
