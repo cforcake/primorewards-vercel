@@ -166,10 +166,14 @@ nav.scrolled{background:rgba(253,250,245,.94);backdrop-filter:blur(22px);-webkit
 .how .sec-s{color:rgba(253,250,245,.45)}
 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;border-radius:26px;overflow:hidden;background:rgba(255,255,255,.06)}
 .step{background:var(--ink);padding:2.4rem 2rem;position:relative;overflow:hidden;opacity:0;transform:translateY(48px);transition:background .25s,opacity .75s var(--eo),transform .75s var(--es),box-shadow .75s var(--eo)}
-.step.lit{opacity:1;transform:none;}
-/* Gold light sweep across each step card on scroll-in */
-.step.lit::after{content:'';position:absolute;top:0;bottom:0;left:-80%;width:55%;background:linear-gradient(90deg,transparent,rgba(201,168,76,.14),transparent);pointer-events:none;z-index:4;animation:stepSweep .9s var(--eo) forwards;}
-@keyframes stepSweep{0%{left:-80%}100%{left:180%}}
+.step.lit{opacity:1;transform:none;animation:stepGoldFlash 1.45s var(--es) both;}
+/* Full-box gold flash on scroll-in — each box lights up like the Get Started button */
+@keyframes stepGoldFlash{
+  0%  {background:#1A1007;box-shadow:none;}
+  28% {background:linear-gradient(135deg,#C9A84C,#A8832A);box-shadow:inset 0 0 0 2px rgba(255,230,120,.55),inset 0 0 35px rgba(255,215,80,.18);}
+  65% {background:#1A1007;box-shadow:inset 0 0 0 1px rgba(201,168,76,.18);}
+ 100% {background:var(--ink);box-shadow:none;}
+}
 .step::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 30% 30%,rgba(201,168,76,.06),transparent 60%);opacity:0;transition:opacity .4s}
 .step:hover::before{opacity:1}
 .step-n{font-family:var(--fd);font-size:60px;font-weight:300;color:rgba(201,168,76,.08);line-height:1;margin-bottom:.9rem}
