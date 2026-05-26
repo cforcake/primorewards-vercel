@@ -51,7 +51,7 @@
   --es:cubic-bezier(.34,1.4,.64,1);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:auto}
+html{scroll-behavior:auto;overflow-x:hidden}
 body{font-family:var(--fb);background:var(--cream);color:var(--ink);-webkit-font-smoothing:antialiased;overflow-x:hidden}
 a{text-decoration:none;color:inherit}
 button{font-family:var(--fb)}
@@ -127,11 +127,11 @@ nav.scrolled{background:rgba(253,250,245,.94);backdrop-filter:blur(22px);-webkit
 .h-seal.on::before{content:'';position:absolute;inset:-3px;border-radius:50%;border:1.5px solid rgba(212,184,106,.5);pointer-events:none}
 .h-seal.on .hf{background:radial-gradient(circle at 38% 32%,#EDD97A,#C9A84C 42%,#A8832A 72%,#7A5C18);box-shadow:inset 0 3px 7px rgba(255,255,255,.45),inset 0 -3px 7px rgba(60,30,0,.3),0 4px 14px rgba(168,131,42,.42);animation:coinIn .45s var(--es) both}
 .hf{width:100%;height:100%;border-radius:50%;display:flex;align-items:center;justify-content:center;position:relative}
-.h-seal.on .hf::after{content:'\u265b';font-size:9px;color:rgba(255,255,255,.72);position:relative;z-index:1}
+.h-seal.on .hf::after{content:'♛';font-size:9px;color:rgba(255,255,255,.72);position:relative;z-index:1}
 .h-seal.reward{border:1.5px solid var(--gold-br);background:var(--gold-p)}
-.h-seal.reward .hf::after{content:'\ud83c\udf81';font-size:13px}
+.h-seal.reward .hf::after{content:'🎁';font-size:13px}
 .h-seal.reward.on .hf{background:linear-gradient(135deg,var(--em-l),var(--em));box-shadow:inset 0 2px 5px rgba(255,255,255,.2),0 4px 14px rgba(27,94,66,.4)}
-.h-seal.reward.on .hf::after{content:'\u2713';color:#fff;font-size:15px;font-weight:700}
+.h-seal.reward.on .hf::after{content:'✓';color:#fff;font-size:15px;font-weight:700}
 @keyframes coinIn{0%{transform:scale(1.6);opacity:0;filter:blur(4px)}60%{transform:scale(.9)}100%{transform:scale(1);opacity:1}}
 .lc-prog{background:var(--cream-d);border-radius:8px;padding:9px 11px}
 .lc-pr{display:flex;justify-content:space-between;margin-bottom:6px}
@@ -165,7 +165,11 @@ nav.scrolled{background:rgba(253,250,245,.94);backdrop-filter:blur(22px);-webkit
 .how .sec-t{color:var(--cream)}
 .how .sec-s{color:rgba(253,250,245,.45)}
 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;border-radius:26px;overflow:hidden;background:rgba(255,255,255,.06)}
-.step{background:var(--ink);padding:2.4rem 2rem;position:relative;overflow:hidden;transition:background .25s}
+.step{background:var(--ink);padding:2.4rem 2rem;position:relative;overflow:hidden;opacity:0;transform:translateY(48px);transition:background .25s,opacity .75s var(--eo),transform .75s var(--es),box-shadow .75s var(--eo)}
+.step.lit{opacity:1;transform:none;}
+/* Gold light sweep across each step card on scroll-in */
+.step.lit::after{content:'';position:absolute;top:0;bottom:0;left:-80%;width:55%;background:linear-gradient(90deg,transparent,rgba(201,168,76,.14),transparent);pointer-events:none;z-index:4;animation:stepSweep .9s var(--eo) forwards;}
+@keyframes stepSweep{0%{left:-80%}100%{left:180%}}
 .step::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 30% 30%,rgba(201,168,76,.06),transparent 60%);opacity:0;transition:opacity .4s}
 .step:hover::before{opacity:1}
 .step-n{font-family:var(--fd);font-size:60px;font-weight:300;color:rgba(201,168,76,.08);line-height:1;margin-bottom:.9rem}
@@ -205,14 +209,14 @@ nav.scrolled{background:rgba(253,250,245,.94);backdrop-filter:blur(22px);-webkit
 @keyframes stampC{0%{transform:scale(1.7);opacity:0;filter:blur(5px)}55%{transform:scale(.88);filter:blur(0)}80%{transform:scale(1.04)}100%{transform:scale(1);opacity:1}}
 .medal.filled::before{content:'';position:absolute;inset:-3px;border-radius:50%;border:1.5px solid rgba(212,184,106,.55);animation:rfi .3s .3s var(--eo) both}
 @keyframes rfi{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
-.m-coin::after{content:'\u265b';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:10px;color:rgba(255,255,255,.72);text-shadow:0 1px 2px rgba(0,0,0,.2)}
+.m-coin::after{content:'♛';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:10px;color:rgba(255,255,255,.72);text-shadow:0 1px 2px rgba(0,0,0,.2)}
 .m-rip{position:absolute;inset:0;border-radius:50%;border:2px solid var(--gold-b);opacity:0;animation:ripO .6s var(--eo) forwards;pointer-events:none}
 @keyframes ripO{0%{transform:scale(1);opacity:.7}100%{transform:scale(2.2);opacity:0}}
 .medal.rs .m-track{border:1.5px solid var(--gold-br);background:var(--gold-p);border-style:solid}
 .medal.rs .m-num{font-size:16px;color:var(--gold-b)}
 .medal.rs.filled .m-track{display:none}
 .medal.rs.filled .m-coin{background:linear-gradient(135deg,var(--em-l),var(--em));box-shadow:inset 0 2px 6px rgba(255,255,255,.25),inset 0 -2px 6px rgba(0,0,0,.2),0 6px 20px rgba(27,94,66,.5)}
-.medal.rs.filled .m-coin::after{content:'\u2713';font-size:18px;font-weight:700;color:#fff;text-shadow:none}
+.medal.rs.filled .m-coin::after{content:'✓';font-size:18px;font-weight:700;color:#fff;text-shadow:none}
 .medal.rs.filled::before{border-color:rgba(45,138,94,.6);inset:-4px;animation:rwdP 1.4s ease-in-out infinite}
 @keyframes rwdP{0%,100%{opacity:.7;transform:scale(1)}50%{opacity:1;transform:scale(1.04)}}
 .dp-wrap{background:var(--cream-d);border-radius:10px;padding:10px 12px}
@@ -348,11 +352,11 @@ nav.scrolled{background:rgba(253,250,245,.94);backdrop-filter:blur(22px);-webkit
 .fi:focus{border-color:var(--gold-br);background:rgba(255,255,255,.09);box-shadow:0 0 0 3px rgba(212,184,106,.15)}
 .frow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .plan-sel{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
-.plan-opt{border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:10px 7px;text-align:center;cursor:pointer;transition:all .2s;background:rgba(255,255,255,.03)}
+.plan-opt{border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:18px 8px;text-align:center;cursor:pointer;transition:all .2s;background:rgba(255,255,255,.03)}
 .plan-opt:hover{border-color:var(--gold-br);background:rgba(201,168,76,.1)}
 .plan-opt.sel{border-color:var(--gold-b);background:rgba(201,168,76,.12)}
-.po-nm{font-size:12px;font-weight:500;color:var(--cream);margin-bottom:2px}
-.po-pr{font-size:10px;color:var(--gold-b)}
+.po-nm{font-size:14px;font-weight:600;color:var(--cream);margin-bottom:5px}
+.po-pr{font-size:11.5px;color:var(--gold-b);line-height:1.4}
 .rzp-btn{width:100%;margin-top:1.2rem;background:linear-gradient(135deg,var(--gold-b),var(--gold));color:#fff;border:none;border-radius:12px;padding:15px;font-size:15px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 18px rgba(168,131,42,.38);position:relative;overflow:hidden;transition:box-shadow .25s,transform .2s}
 .rzp-btn::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent);transform:translateX(-100%);transition:transform .7s}
 .rzp-btn:hover::before{transform:translateX(100%)}
@@ -716,14 +720,14 @@ window.addEventListener('scroll',()=>{_sb.style.width=Math.min(window.scrollY/(d
 (function(){const g=document.getElementById('heroSeals');if(!g)return;for(let i=0;i<12;i++){const isR=i===11,on=i<7;const s=document.createElement('div');s.className='h-seal'+(isR?' reward':'')+(on?' on':'');const f=document.createElement('div');f.className='hf';if(on)f.style.animationDelay=(i*.06)+'s';s.appendChild(f);g.appendChild(s);}})();
 let stamps=0;const TOTAL=12,EARN=11;
 function buildMedals(){const g=document.getElementById('medalGrid');if(!g)return;g.innerHTML='';for(let i=0;i<TOTAL;i++){const isR=i===TOTAL-1,filled=i<stamps;const div=document.createElement('div');div.className='medal'+(isR?' rs':'')+(filled?' filled':'');div.setAttribute('role','listitem');div.setAttribute('aria-label',isR?'Free reward slot':`Stamp ${i+1}`);const track=document.createElement('div');track.className='m-track';const num=document.createElement('span');num.className='m-num';num.textContent=isR?'\uD83C\uDF81':(i+1);track.appendChild(num);div.appendChild(track);const coin=document.createElement('div');coin.className='m-coin';div.appendChild(coin);if(!isR&&!filled)div.addEventListener('click',(function(idx){return()=>{if(idx===stamps)triggerStamp(idx);};})(i));g.appendChild(div);}updateProgress();}
-function triggerStamp(index){if(index>=EARN||stamps>=EARN)return;if(stamps===0){const guide=document.getElementById('tryNowGuide');if(guide){guide.classList.add('gone');setTimeout(()=>guide.remove(),450);}const btn=document.getElementById('stampBtn');if(btn)btn.classList.remove('pulse-guide');}stamps++;const slot=document.getElementById('medalGrid').children[index];if(slot){slot.classList.add('filled');const rip=document.createElement('div');rip.className='m-rip';slot.appendChild(rip);setTimeout(()=>rip.remove(),700);}updateProgress();if(stamps===EARN)setTimeout(unlockReward,500);}
+function triggerStamp(index){if(index>=EARN||stamps>=EARN)return;stamps++;const slot=document.getElementById('medalGrid').children[index];if(slot){slot.classList.add('filled');const rip=document.createElement('div');rip.className='m-rip';slot.appendChild(rip);setTimeout(()=>rip.remove(),700);}updateProgress();if(stamps===EARN)setTimeout(unlockReward,500);}
 function addStamp(){if(stamps>=EARN)return;triggerStamp(stamps);}
 function unlockReward(){const slot=document.getElementById('medalGrid').children[TOTAL-1];if(slot){slot.classList.add('filled');const rip=document.createElement('div');rip.className='m-rip';rip.style.borderColor='rgba(45,138,94,.7)';slot.appendChild(rip);setTimeout(()=>rip.remove(),700);}document.getElementById('rwdBadge').classList.add('show');setTimeout(()=>document.getElementById('rdBanner').classList.add('show'),300);const btn=document.getElementById('stampBtn');btn.innerHTML='<i class="ti ti-refresh" aria-hidden="true"></i> Reset Demo';btn.removeEventListener('click',addStamp);btn.addEventListener('click',resetDemo);}
 function redeemReward(){const banner=document.getElementById('rdBanner');banner.innerHTML='<div class="rd-left"><span class="rd-ico">\u2705</span><div class="rd-text"><strong style="color:var(--em)">Redeemed Successfully!</strong><span>Enjoy your free reward \uD83C\uDF89</span></div></div>';}
 function resetDemo(){stamps=0;document.getElementById('rwdBadge').classList.remove('show');const banner=document.getElementById('rdBanner');banner.classList.remove('show');banner.innerHTML='<div class="rd-left"><span class="rd-ico">\uD83C\uDF81</span><div class="rd-text"><strong>Free Cake Unlocked!</strong><span>Show this to the shop owner to redeem</span></div></div><button class="rd-btn" id="rdBtn">Redeem Now</button>';document.getElementById('rdBtn').addEventListener('click',redeemReward);const btn=document.getElementById('stampBtn');btn.innerHTML='<i class="ti ti-circle-plus" aria-hidden="true"></i> Add a Stamp';btn.removeEventListener('click',resetDemo);btn.addEventListener('click',addStamp);buildMedals();}
 function updateProgress(){const pct=Math.min(stamps/EARN*100,100);const fill=document.getElementById('barFill');const cnt=document.getElementById('stampCnt');const bar=fill?.closest('[role="progressbar"]');if(fill)fill.style.width=pct+'%';if(cnt)cnt.textContent=Math.min(stamps,EARN)+' / '+EARN;if(bar)bar.setAttribute('aria-valuenow',Math.min(stamps,EARN));}
 buildMedals();
-const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(!e.isIntersecting)return;e.target.classList.add('in');e.target.querySelectorAll('.fc,.step').forEach((c,i)=>{c.style.opacity='0';c.style.transform='translateY(24px)';setTimeout(()=>{c.style.transition='opacity .6s var(--eo),transform .6s var(--eo)';c.style.opacity='1';c.style.transform='none';},i*90);});io.unobserve(e.target);});},{threshold:.1,rootMargin:'0px 0px -40px 0px'});
+const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(!e.isIntersecting)return;e.target.classList.add('in');e.target.querySelectorAll('.fc').forEach((c,i)=>{c.style.opacity='0';c.style.transform='translateY(24px)';setTimeout(()=>{c.style.transition='opacity .6s var(--eo),transform .6s var(--eo)';c.style.opacity='1';c.style.transform='none';},i*90);});e.target.querySelectorAll('.step').forEach((c,i)=>setTimeout(()=>c.classList.add('lit'),200+i*170));io.unobserve(e.target);});},{threshold:.1,rootMargin:'0px 0px -40px 0px'});
 document.querySelectorAll('.rv,.rvl,.rvr').forEach(el=>io.observe(el));
 const dashMock=document.querySelector('.dash-mock');if(dashMock){new IntersectionObserver(entries=>{entries.forEach(e=>{if(!e.isIntersecting)return;e.target.querySelectorAll('[data-count]').forEach(el=>{const target=+el.dataset.count;let n=0;const iv=setInterval(()=>{n=Math.min(n+Math.ceil(target/28),target);el.textContent=n;if(n>=target)clearInterval(iv);},40);});});},{threshold:.3}).observe(dashMock);}
 document.querySelectorAll('.mag').forEach(el=>{el.addEventListener('mousemove',e=>{const r=el.getBoundingClientRect();el.style.transform=`translate(${(e.clientX-r.left-r.width/2)*.18}px,${(e.clientY-r.top-r.height/2)*.18}px)`;el.style.transition='transform .12s';});el.addEventListener('mouseleave',()=>{el.style.transform='translate(0,0)';el.style.transition='transform .5s var(--eo)';});});
