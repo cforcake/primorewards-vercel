@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Us — Primo Rewards | Digital Loyalty for Local Businesses</title>
+<meta name="description" content="Primo Rewards is a digital loyalty platform built for local businesses across India. We help shops give customers a real reason to return — no app, no IT team, live in 10 minutes.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://primorewards.in/about">
+<meta property="og:type" content="website">
+<meta property="og:title" content="About Primo Rewards — Built for Local Businesses in India">
+<meta property="og:description" content="We started Primo because every local shop deserves the same customer retention tools that big chains take for granted. No app. No IT team. Live in 10 minutes.">
+<meta property="og:url" content="https://primorewards.in/about">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23C9A84C'/><text x='50%25' y='60%25' font-size='18' text-anchor='middle' fill='white'>♛</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,500;0,600;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" crossorigin="anonymous">
+<style>
+:root{
+  --cream:#FDFAF5;--cream-d:#F5EEE3;--beige:#EDE3D4;--beige-m:#D9CBBA;
+  --gold:#A8832A;--gold-b:#C9A84C;--gold-p:#FDF4E3;--gold-br:#D4B86A;
+  --em:#1B5E42;--em-l:#2D8A5E;
+  --ink:#1A1007;--ink-m:#4A3A25;--ink-l:#7A6A52;--ink-f:#A89880;
+  --white:#fff;
+  --fd:'Cormorant Garamond',Georgia,serif;
+  --fb:'DM Sans',sans-serif;
+  --eo:cubic-bezier(.16,1,.3,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{overflow-x:hidden;scroll-behavior:smooth}
+body{font-family:var(--fb);background:var(--cream);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.72;overflow-x:hidden}
+a{color:var(--gold);text-decoration:none}
+a:hover{color:var(--ink)}
+
+/* NAV */
+nav{background:rgba(253,250,245,.96);border-bottom:1px solid var(--beige);padding:1rem 2rem;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-mark{width:34px;height:34px;border-radius:9px;
+  background:linear-gradient(135deg,var(--gold-b),var(--gold));
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 2px 8px rgba(168,131,42,.3)}
+.nav-mark i{font-size:17px;color:#fff}
+.nav-word{font-family:var(--fd);font-size:22px;font-weight:600;color:var(--ink)}
+.nav-word span{color:var(--gold-b)}
+.nav-cta{display:inline-flex;align-items:center;gap:7px;
+  background:linear-gradient(135deg,var(--gold-b),var(--gold));color:#fff;
+  font-size:13.5px;font-weight:500;padding:10px 22px;border-radius:99px;
+  border:none;cursor:pointer;text-decoration:none;
+  box-shadow:0 3px 12px rgba(168,131,42,.3);transition:box-shadow .25s,transform .2s}
+.nav-cta:hover{box-shadow:0 6px 22px rgba(168,131,42,.45);transform:translateY(-1px);color:#fff}
+
+/* HERO */
+.hero{background:var(--ink);padding:6rem 2rem 5rem;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 60%, rgba(201,168,76,.12) 0%, transparent 65%);
+  pointer-events:none}
+.hero-ey{display:inline-flex;align-items:center;gap:7px;
+  background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.25);
+  border-radius:99px;padding:5px 14px;font-size:12px;font-weight:500;
+  color:var(--gold-b);margin-bottom:1.5rem;letter-spacing:.04em}
+.hero-h{font-family:var(--fd);font-size:clamp(42px,5.5vw,72px);font-weight:500;
+  color:var(--cream);line-height:1.06;letter-spacing:-.01em;margin-bottom:1.25rem}
+.hero-h em{font-style:italic;color:var(--gold-b)}
+.hero-sub{font-size:17px;color:rgba(253,250,245,.5);max-width:520px;
+  margin:0 auto 2.5rem;line-height:1.72}
+.hero-stats{display:flex;align-items:center;justify-content:center;gap:2.5rem;flex-wrap:wrap}
+.h-stat{text-align:center}
+.h-stat-v{font-family:var(--fd);font-size:36px;font-weight:500;color:var(--gold-b)}
+.h-stat-l{font-size:12px;color:rgba(253,250,245,.35);margin-top:2px;letter-spacing:.04em}
+
+/* CONTAINER */
+.container{max-width:800px;margin:0 auto;padding:0 2rem}
+.container-wide{max-width:1080px;margin:0 auto;padding:0 2rem}
+
+/* SECTIONS */
+.section{padding:5.5rem 0}
+.section-alt{background:var(--cream-d)}
+
+/* STORY */
+.story-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+.story-label{font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:.7rem}
+.story-h{font-family:var(--fd);font-size:clamp(30px,4vw,46px);font-weight:500;
+  color:var(--ink);line-height:1.1;margin-bottom:1.1rem}
+.story-h em{font-style:italic;color:var(--gold)}
+.story-body p{font-size:15.5px;line-height:1.8;color:var(--ink-l);margin-bottom:1rem}
+.story-body p:last-child{margin-bottom:0}
+.story-visual{position:relative}
+.s-card{background:var(--ink);border-radius:22px;padding:2rem;
+  box-shadow:0 20px 60px rgba(26,16,7,.18),0 4px 16px rgba(26,16,7,.08)}
+.s-card-top{display:flex;align-items:center;gap:12px;margin-bottom:1.5rem}
+.s-crown{width:42px;height:42px;border-radius:11px;
+  background:linear-gradient(135deg,var(--gold-b),var(--gold));
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 3px 12px rgba(168,131,42,.4)}
+.s-crown i{font-size:20px;color:#fff}
+.s-shop-name{font-family:var(--fd);font-size:18px;font-weight:600;color:var(--cream)}
+.s-shop-sub{font-size:11px;color:rgba(253,250,245,.3);margin-top:2px}
+.s-seals{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-bottom:14px}
+.s-seal{aspect-ratio:1;border-radius:50%;border:1.5px dashed rgba(201,168,76,.25);
+  background:rgba(201,168,76,.05);display:flex;align-items:center;justify-content:center}
+.s-seal.on{border:none;
+  background:radial-gradient(circle at 38% 32%,#EDD97A,#C9A84C 42%,#A8832A 72%,#7A5C18);
+  box-shadow:inset 0 2px 6px rgba(255,255,255,.4),inset 0 -2px 6px rgba(60,30,0,.25),0 3px 10px rgba(168,131,42,.4)}
+.s-seal.on::after{content:'♛';font-size:9px;color:rgba(255,255,255,.7)}
+.s-progress{background:rgba(255,255,255,.04);border-radius:8px;padding:9px 11px}
+.s-prog-row{display:flex;justify-content:space-between;font-size:11px;margin-bottom:6px}
+.s-prog-label{color:rgba(253,250,245,.3)}
+.s-prog-count{color:var(--gold-b);font-family:var(--fd);font-weight:500}
+.s-bar{height:3px;background:rgba(255,255,255,.06);border-radius:99px;overflow:hidden}
+.s-bar-fill{height:100%;background:linear-gradient(90deg,var(--gold-b),var(--gold));
+  border-radius:99px;width:72%}
+.s-badge{position:absolute;bottom:-16px;right:-16px;
+  background:linear-gradient(135deg,var(--em-l),var(--em));
+  border-radius:14px;padding:10px 14px;display:flex;align-items:center;gap:8px;
+  box-shadow:0 8px 24px rgba(27,94,66,.4)}
+.s-badge-ico{font-size:18px}
+.s-badge-text{font-size:11px;font-weight:500;color:#fff}
+
+/* VALUES */
+.values-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3.5rem}
+.value-card{background:var(--white);border:1.5px solid var(--beige-m);border-radius:20px;
+  padding:1.75rem;transition:box-shadow .3s var(--eo),transform .3s var(--eo),border-color .25s}
+.value-card:hover{box-shadow:0 12px 40px rgba(26,16,7,.08);transform:translateY(-4px);border-color:var(--gold-br)}
+.v-ico{width:44px;height:44px;border-radius:12px;background:var(--gold-p);
+  border:1px solid var(--gold-br);display:flex;align-items:center;justify-content:center;
+  margin-bottom:1.1rem;transition:transform .3s}
+.value-card:hover .v-ico{transform:scale(1.1) rotate(-5deg)}
+.v-ico i{font-size:21px;color:var(--gold)}
+.v-title{font-family:var(--fd);font-size:19px;font-weight:500;color:var(--ink);margin-bottom:.45rem}
+.v-desc{font-size:13.5px;line-height:1.65;color:var(--ink-l)}
+
+/* TEAM */
+.team-intro{max-width:560px;margin:0 auto;text-align:center;margin-bottom:3.5rem}
+.team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+.team-card{background:var(--white);border:1.5px solid var(--beige-m);border-radius:20px;
+  padding:1.75rem;text-align:center;transition:box-shadow .3s,transform .3s}
+.team-card:hover{box-shadow:0 10px 36px rgba(26,16,7,.08);transform:translateY(-4px)}
+.t-avatar{width:64px;height:64px;border-radius:50%;
+  background:linear-gradient(135deg,var(--gold-b),var(--gold));
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 1rem;box-shadow:0 4px 14px rgba(168,131,42,.35);
+  font-family:var(--fd);font-size:26px;font-weight:600;color:#fff}
+.t-name{font-family:var(--fd);font-size:19px;font-weight:500;color:var(--ink);margin-bottom:3px}
+.t-role{font-size:12.5px;color:var(--gold);font-weight:500;margin-bottom:.6rem;letter-spacing:.03em}
+.t-bio{font-size:13px;color:var(--ink-l);line-height:1.6}
+
+/* CONTACT */
+.contact-s{background:var(--ink);padding:5rem 0}
+.contact-inner{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+.contact-h{font-family:var(--fd);font-size:clamp(30px,4vw,46px);font-weight:500;
+  color:var(--cream);line-height:1.08;margin-bottom:.9rem}
+.contact-h em{font-style:italic;color:var(--gold-b)}
+.contact-sub{font-size:15px;color:rgba(253,250,245,.42);line-height:1.72;margin-bottom:2rem}
+.contact-items{display:flex;flex-direction:column;gap:1rem}
+.c-item{display:flex;align-items:center;gap:12px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);
+  border-radius:14px;padding:14px 16px;transition:background .2s,border-color .2s}
+.c-item:hover{background:rgba(255,255,255,.07);border-color:rgba(201,168,76,.25)}
+.c-ico{width:38px;height:38px;border-radius:10px;background:rgba(201,168,76,.1);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.c-ico i{font-size:18px;color:var(--gold-b)}
+.c-label{font-size:11px;color:rgba(253,250,245,.3);margin-bottom:2px;letter-spacing:.04em}
+.c-value{font-size:14px;color:var(--cream);font-weight:500}
+.c-value a{color:var(--gold-b);text-decoration:none}
+.c-value a:hover{text-decoration:underline}
+.cta-box{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+  border-radius:22px;padding:2.5rem;text-align:center}
+.cta-box-title{font-family:var(--fd);font-size:26px;font-weight:500;color:var(--cream);margin-bottom:.6rem}
+.cta-box-sub{font-size:14px;color:rgba(253,250,245,.4);line-height:1.65;margin-bottom:1.8rem}
+.cta-gold{display:inline-flex;align-items:center;gap:8px;
+  background:linear-gradient(135deg,var(--gold-b),var(--gold));color:#fff;
+  font-size:14px;font-weight:500;padding:13px 28px;border-radius:99px;text-decoration:none;
+  box-shadow:0 4px 18px rgba(168,131,42,.38);transition:box-shadow .25s,transform .2s}
+.cta-gold:hover{box-shadow:0 8px 28px rgba(168,131,42,.5);transform:translateY(-2px);color:#fff}
+.cta-note{font-size:12px;color:rgba(253,250,245,.25);margin-top:1rem}
+
+/* FOOTER */
+footer{background:var(--ink);border-top:1px solid rgba(255,255,255,.05);padding:2rem;text-align:center}
+.foot-bottom{display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:8px;max-width:1080px;margin:0 auto;padding-top:1.25rem;
+  border-top:1px solid rgba(255,255,255,.06)}
+.foot-copy{font-size:12px;color:rgba(253,250,245,.22)}
+.foot-links-row{display:flex;gap:1.5rem}
+.foot-links-row a{font-size:12.5px;color:rgba(253,250,245,.38);transition:color .2s}
+.foot-links-row a:hover{color:var(--cream)}
+
+/* SECTION HEADINGS */
+.sec-ey{font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:.7rem}
+.sec-h{font-family:var(--fd);font-size:clamp(32px,4vw,48px);font-weight:500;color:var(--ink);margin-bottom:.75rem;line-height:1.08}
+.sec-h em{font-style:italic;color:var(--gold)}
+
+/* REVEAL */
+.rv{opacity:0;transform:translateY(28px);transition:opacity .7s var(--eo),transform .7s var(--eo)}
+.rv.in{opacity:1;transform:none}
+.rvl{opacity:0;transform:translateX(-36px);transition:opacity .7s var(--eo),transform .7s var(--eo)}
+.rvl.in{opacity:1;transform:none}
+.rvr{opacity:0;transform:translateX(36px);transition:opacity .7s var(--eo),transform .7s var(--eo)}
+.rvr.in{opacity:1;transform:none}
+
+/* DIVIDER */
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--beige),transparent);margin:0}
+
+@media(max-width:860px){
+  .story-grid,.contact-inner{grid-template-columns:1fr}
+  .story-visual{display:none}
+  .values-grid,.team-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:560px){
+  nav{padding:.85rem 1.25rem}
+  .hero{padding:5rem 1.25rem 4rem}
+  .hero-stats{gap:1.5rem}
+  .values-grid,.team-grid{grid-template-columns:1fr}
+  .container,.container-wide{padding:0 1.25rem}
+  .section{padding:4rem 0}
+  .foot-bottom{flex-direction:column;text-align:center}
+  .foot-links-row{flex-wrap:wrap;justify-content:center}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <div class="nav-mark"><i class="ti ti-crown"></i></div>
+    <span class="nav-word">Primo<span>.</span></span>
+  </a>
+  <a href="/#enroll" class="nav-cta">Get Started <i class="ti ti-arrow-right"></i></a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-ey"><i class="ti ti-map-pin" style="font-size:11px"></i> Built in India, for India</div>
+    <h1 class="hero-h">We built this for<br><em>the shop on your street.</em></h1>
+    <p class="hero-sub">Primo Rewards is a digital loyalty platform that gives any local business the same customer retention power that large chains have always taken for granted.</p>
+    <div class="hero-stats">
+      <div class="h-stat"><div class="h-stat-v">10 min</div><div class="h-stat-l">Setup to live</div></div>
+      <div class="h-stat"><div class="h-stat-v">₹349/mo</div><div class="h-stat-l">Starting monthly</div></div>
+      <div class="h-stat"><div class="h-stat-v">0</div><div class="h-stat-l">Apps to download</div></div>
+      <div class="h-stat"><div class="h-stat-v">∞</div><div class="h-stat-l">Returning customers</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- OUR STORY -->
+<section class="section">
+  <div class="container-wide">
+    <div class="story-grid">
+      <div class="rvl">
+        <div class="story-label">Our Story</div>
+        <h2 class="story-h">Every local shop<br>deserves <em>loyal customers.</em></h2>
+        <div class="story-body">
+          <p>Walk into your favourite local bakery and the owner knows your name. They remember your order. But when you pay and leave, that relationship disappears into thin air — no way to say thank you, no way to invite you back, no way to make you feel like a regular.</p>
+          <p>Big chains solve this with loyalty apps that cost lakhs to build and full-time teams to maintain. The corner bakery, the neighbourhood salon, the local juice bar — they don't have that luxury. So they rely entirely on hope: that customers will remember to come back.</p>
+          <p>We started Primo Rewards to close that gap. A beautiful digital loyalty card, live at a shareable link, working for any shop within ten minutes of signing up. No app. No IT team. No complicated setup. Just a simple, honest tool that makes customers feel genuinely valued — and gives them a real reason to return.</p>
+        </div>
+      </div>
+      <div class="rvr story-visual">
+        <div class="s-card">
+          <div class="s-card-top">
+            <div class="s-crown"><i class="ti ti-crown"></i></div>
+            <div>
+              <div class="s-shop-name">Sweet Layers Bakery</div>
+              <div class="s-shop-sub">🎂 &nbsp;Loyalty Rewards Card</div>
+            </div>
+          </div>
+          <div class="s-seals">
+            <div class="s-seal on"></div>
+            <div class="s-seal on"></div>
+            <div class="s-seal on"></div>
+            <div class="s-seal on"></div>
+            <div class="s-seal on"></div>
+            <div class="s-seal on"></div>
+            <div class="s-seal on"></div>
+            <div class="s-seal on"></div>
+            <div class="s-seal on"></div>
+            <div class="s-seal"></div>
+            <div class="s-seal"></div>
+            <div class="s-seal" style="border:1.5px solid var(--gold-br);background:rgba(253,244,227,.08)"><span style="font-size:13px">🎁</span></div>
+          </div>
+          <div class="s-progress">
+            <div class="s-prog-row">
+              <span class="s-prog-label">Progress toward free cake</span>
+              <span class="s-prog-count">9 of 11</span>
+            </div>
+            <div class="s-bar"><div class="s-bar-fill"></div></div>
+          </div>
+        </div>
+        <div class="s-badge">
+          <span class="s-badge-ico">🎉</span>
+          <span class="s-badge-text">Almost there — 2 more to go!</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- WHAT WE BELIEVE -->
+<section class="section section-alt">
+  <div class="container-wide">
+    <div style="text-align:center" class="rv">
+      <div class="sec-ey">What we believe</div>
+      <h2 class="sec-h">A few things we<br><em>refuse to compromise on.</em></h2>
+    </div>
+    <div class="values-grid">
+      <div class="value-card rv">
+        <div class="v-ico"><i class="ti ti-heart"></i></div>
+        <div class="v-title">Simplicity is the product</div>
+        <p class="v-desc">Every feature we add is measured against one question: does this make it harder for a busy shop owner to use? If yes, it doesn't ship. Loyalty software should be invisible — it should just work.</p>
+      </div>
+      <div class="value-card rv" style="transition-delay:.1s">
+        <div class="v-ico"><i class="ti ti-shield-check"></i></div>
+        <div class="v-title">Your data is yours</div>
+        <p class="v-desc">We don't sell customer data. We don't let advertisers into our platform. Every shop's customer list is isolated — no other shop or third party can access it. Your loyal customers are your asset, not ours.</p>
+      </div>
+      <div class="value-card rv" style="transition-delay:.2s">
+        <div class="v-ico"><i class="ti ti-coin"></i></div>
+        <div class="v-title">Honest pricing, always</div>
+        <p class="v-desc">One setup fee. One monthly charge. No hidden costs, no per-stamp fees, no "enterprise tier" unlocks. We'd rather charge a fair price and build something you rely on than nickel-and-dime you into leaving.</p>
+      </div>
+      <div class="value-card rv" style="transition-delay:.05s">
+        <div class="v-ico"><i class="ti ti-device-mobile"></i></div>
+        <div class="v-title">No app, ever</div>
+        <p class="v-desc">Asking customers to download an app is asking them to do a favour before you've done one for them. Your loyalty card lives at a link. Customers tap, scan, or bookmark — and they're in. Frictionless by design.</p>
+      </div>
+      <div class="value-card rv" style="transition-delay:.15s">
+        <div class="v-ico"><i class="ti ti-rocket"></i></div>
+        <div class="v-title">Speed of trust</div>
+        <p class="v-desc">We promise your branded page goes live the same day you sign up. We mean it. Onboarding shouldn't take weeks of calls and demos — it should take the time it takes to make a cup of chai.</p>
+      </div>
+      <div class="value-card rv" style="transition-delay:.25s">
+        <div class="v-ico"><i class="ti ti-India"></i></div>
+        <div class="v-title">Built for India's shops</div>
+        <p class="v-desc">We're not adapting a Western loyalty platform for India. We built Primo specifically for how Indian local businesses run — cash-first, relationship-driven, and deeply embedded in their communities.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- TEAM -->
+<section class="section">
+  <div class="container-wide">
+    <div class="team-intro rv">
+      <div class="sec-ey">The team</div>
+      <h2 class="sec-h">Small team.<br><em>Big belief in local.</em></h2>
+      <p style="font-size:15px;color:var(--ink-l);line-height:1.72;margin-top:.75rem">We're designers, engineers, and local business enthusiasts who've spent years watching great neighbourhood shops struggle to keep customers coming back. Primo is our answer.</p>
+    </div>
+    <div class="team-grid">
+      <div class="team-card rv">
+        <div class="t-avatar">P</div>
+        <div class="t-name">Product & Design</div>
+        <div class="t-role">Experience Design</div>
+        <p class="t-bio">Obsessed with removing every unnecessary step between a customer and feeling appreciated. Every pixel on the loyalty card has been argued over.</p>
+      </div>
+      <div class="team-card rv" style="transition-delay:.12s">
+        <div class="t-avatar">E</div>
+        <div class="t-name">Engineering</div>
+        <div class="t-role">Platform & Infrastructure</div>
+        <p class="t-bio">Built the stamping engine, merchant dashboard, and real-time reward system on infrastructure that scales from one shop to thousands without breaking.</p>
+      </div>
+      <div class="team-card rv" style="transition-delay:.24s">
+        <div class="t-avatar">G</div>
+        <div class="t-name">Growth & Support</div>
+        <div class="t-role">Merchant Success</div>
+        <p class="t-bio">The person who makes sure your shop goes live on day one and that you're never left wondering what to do next. One call away, always.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CONTACT / CTA -->
+<section class="contact-s">
+  <div class="container-wide">
+    <div class="contact-inner">
+      <div class="rvl">
+        <h2 class="contact-h">Questions?<br><em>We're easy to reach.</em></h2>
+        <p class="contact-sub">Whether you're curious about how Primo works, want to talk through your shop's reward setup, or just have a question about pricing — we reply within one business day.</p>
+        <div class="contact-items">
+          <div class="c-item">
+            <div class="c-ico"><i class="ti ti-mail"></i></div>
+            <div>
+              <div class="c-label">GENERAL ENQUIRIES</div>
+              <div class="c-value"><a href="mailto:hello@primorewards.in">hello@primorewards.in</a></div>
+            </div>
+          </div>
+          <div class="c-item">
+            <div class="c-ico"><i class="ti ti-headset"></i></div>
+            <div>
+              <div class="c-label">MERCHANT SUPPORT</div>
+              <div class="c-value"><a href="mailto:support@primorewards.in">support@primorewards.in</a></div>
+            </div>
+          </div>
+          <div class="c-item">
+            <div class="c-ico"><i class="ti ti-map-pin"></i></div>
+            <div>
+              <div class="c-label">BASED IN</div>
+              <div class="c-value">India 🇮🇳 — serving businesses nationwide</div>
+            </div>
+          </div>
+          <div class="c-item">
+            <div class="c-ico"><i class="ti ti-clock"></i></div>
+            <div>
+              <div class="c-label">RESPONSE TIME</div>
+              <div class="c-value">Within one business day, usually same day</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="rvr">
+        <div class="cta-box">
+          <div style="font-size:36px;margin-bottom:1rem">♛</div>
+          <div class="cta-box-title">Ready to launch?</div>
+          <p class="cta-box-sub">Fill in your shop details and your branded loyalty page goes live within the same day. No tech knowledge needed. We handle everything.</p>
+          <a href="/#enroll" class="cta-gold">
+            <i class="ti ti-rocket"></i> Enroll Your Shop
+          </a>
+          <div class="cta-note">One-time setup &nbsp;·&nbsp; Month-to-month &nbsp;·&nbsp; Cancel anytime</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-bottom">
+    <div class="foot-copy">© 2026 Primo Rewards. All rights reserved.</div>
+    <div class="foot-links-row">
+      <a href="/">Home</a>
+      <a href="/about">About</a>
+      <a href="/privacy">Privacy Policy</a>
+      <a href="/terms">Terms of Service</a>
+      <a href="mailto:support@primorewards.in">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    e.target.classList.add('in');
+    io.unobserve(e.target);
+  });
+}, { threshold: .12, rootMargin: '0px 0px -36px 0px' });
+document.querySelectorAll('.rv,.rvl,.rvr').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
