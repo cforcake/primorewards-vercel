@@ -784,7 +784,7 @@ document.getElementById('btn-switch-reward').addEventListener('click', switchAcc
 document.getElementById('inp-phone').addEventListener('input', function() {
   this.value = this.value.replace(/\D/g, '').slice(0, 4);
 });
-document.getElementById('login-card').addEventListener('keydown', function(e) {
+document.querySelector('.login-card').addEventListener('keydown', function(e) {
   if (e.key === 'Enter') handleLogin();
 });
 
