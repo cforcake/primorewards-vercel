@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<meta name="theme-color" content="#1A1007">
+<meta name="robots" content="noindex">
+<title>Merchant Dashboard — Primo Rewards</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" integrity="sha256-MrRtG5dV4x5ysLo+J4JoXaEPmP+7B+eTSiVzNqiNPc=" crossorigin="anonymous">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23C9A84C'/><text x='50%25' y='60%25' font-size='18' text-anchor='middle' fill='white'>♛</text></svg>">
+<style>
+:root{
+  --cream:#FDFAF5;--cream-d:#F5EEE3;--beige:#EDE3D4;--beige-m:#D9CBBA;
+  --gold:#A8832A;--gold-b:#C9A84C;--gold-p:#FDF4E3;--gold-br:#D4B86A;
+  --em:#1B5E42;--em-l:#2D8A5E;--em-p:rgba(27,94,66,.08);
+  --red:#C0392B;--red-p:rgba(192,57,43,.08);
+  --ink:#1A1007;--ink-m:#4A3A25;--ink-l:#7A6A52;--ink-f:#A89880;
+  --white:#fff;
+  --fd:'Cormorant Garamond',Georgia,serif;
+  --fb:'DM Sans',sans-serif;
+  --eo:cubic-bezier(.16,1,.3,1);
+  --es:cubic-bezier(.34,1.4,.64,1);
+  --tab-h:64px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{
+  font-family:var(--fb);background:var(--cream-d);
+  color:var(--ink);-webkit-font-smoothing:antialiased;
+  display:flex;flex-direction:column;
+}
+
+/* ── SCREEN TRANSITIONS ── */
+.screen{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;
+  background:var(--cream-d);
+  transition:opacity .3s var(--eo),transform .3s var(--eo);
+}
+.screen.hidden{opacity:0;pointer-events:none;transform:translateY(12px)}
+
+/* ── LOGIN SCREEN ── */
+#s-login{
+  align-items:center;justify-content:center;
+  background:var(--ink);padding:2rem;
+  overflow-y:auto;
+}
+.login-top{text-align:center;margin-bottom:2rem}
+.login-mark{
+  width:60px;height:60px;border-radius:16px;
+  background:linear-gradient(135deg,var(--gold-b),var(--gold));
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 14px;
+  box-shadow:0 6px 24px rgba(168,131,42,.4);
+}
+.login-mark i{font-size:28px;color:#fff}
+.login-title{font-family:var(--fd);font-size:28px;font-weight:600;color:var(--cream);margin-bottom:4px}
+.login-sub{font-size:13px;color:rgba(253,250,245,.4)}
+.login-card{
+  width:100%;max-width:380px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:22px;padding:24px;
+  display:flex;flex-direction:column;gap:14px;
+}
+.field{display:flex;flex-direction:column;gap:5px}
+.field-label{font-size:11.5px;font-weight:500;color:rgba(253,250,245,.45);letter-spacing:.04em}
+.field-input{
+  width:100%;background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.1);border-radius:10px;
+  padding:13px 14px;color:var(--cream);font-family:var(--fb);font-size:15px;
+  outline:none;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none;
+}
+.field-input::placeholder{color:rgba(253,250,245,.25)}
+.field-input:focus{border-color:var(--gold-br);box-shadow:0 0 0 3px rgba(212,184,106,.15)}
+.btn-gold{
+  width:100%;padding:14px;border:none;border-radius:99px;
+  background:linear-gradient(135deg,var(--gold-b),var(--gold));
+  color:#fff;font-family:var(--fb);font-size:15px;font-weight:500;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;
+  box-shadow:0 4px 18px rgba(168,131,42,.35);transition:box-shadow .25s,transform .2s;
+}
+.btn-gold:hover:not(:disabled){box-shadow:0 8px 28px rgba(168,131,42,.48);transform:translateY(-1px)}
+.btn-gold:disabled{opacity:.5;cursor:not-allowed}
+.btn-gold i{font-size:16px}
+.form-err{
+  background:rgba(192,57,43,.12);border:1px solid rgba(192,57,43,.25);
+  border-radius:10px;padding:10px 14px;color:#E57373;
+  font-size:13px;display:flex;align-items:center;gap:8px;
+}
+.form-err i{flex-shrink:0}
+
+/* ── APP SHELL ── */
+#s-app{display:flex;flex-direction:column}
+
+/* TOP BAR */
+.topbar{
+  flex-shrink:0;
+  background:var(--ink);
+  padding:0 16px;
+  height:58px;
+  display:flex;align-items:center;justify-content:space-between;
+  box-shadow:0 1px 0 rgba(255,255,255,.06);
+  position:relative;z-index:10;
+}
+.topbar-left{display:flex;align-items:center;gap:10px}
+.topbar-mark{
+  width:32px;height:32px;border-radius:9px;
+  background:linear-gradient(135deg,var(--gold-b),var(--gold));
+  display:flex;align-items:center;justify-content:center;
+}
+.topbar-mark i{font-size:16px;color:#fff}
+.topbar-shop{font-family:var(--fd);font-size:18px;font-weight:600;color:var(--cream)}
+.topbar-plan{font-size:10px;color:var(--gold-b);background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.2);border-radius:99px;padding:2px 8px;letter-spacing:.06em;text-transform:uppercase}
+.btn-icon{
+  width:34px;height:34px;border-radius:9px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:rgba(253,250,245,.55);font-size:18px;
+  transition:background .2s,color .2s;
+}
+.btn-icon:hover{background:rgba(255,255,255,.1);color:var(--cream)}
+
+/* TAB CONTENT AREA */
+.tab-area{
+  flex:1;overflow:hidden;position:relative;
+  display:flex;flex-direction:column;
+}
+.tab-pane{
+  position:absolute;inset:0;
+  overflow-y:auto;-webkit-overflow-scrolling:touch;
+  padding-bottom:calc(var(--tab-h) + 8px);
+  transition:opacity .25s var(--eo),transform .25s var(--eo);
+}
+.tab-pane.hidden{opacity:0;pointer-events:none;transform:translateX(16px)}
+
+/* STATS ROW */
+.stats-row{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:8px;padding:12px 14px 4px;
+}
+.stat-card{
+  background:var(--ink);border-radius:14px;padding:12px;
+  border:1px solid rgba(255,255,255,.06);
+}
+.stat-v{font-family:var(--fd);font-size:26px;font-weight:500;color:var(--cream)}
+.stat-l{font-size:11px;color:rgba(253,250,245,.35);margin-top:2px}
+
+/* SEARCH */
+.search-wrap{padding:10px 14px 6px;position:sticky;top:0;z-index:5;background:var(--cream-d)}
+.search-input-wrap{position:relative}
+.search-input-wrap i{
+  position:absolute;left:13px;top:50%;transform:translateY(-50%);
+  font-size:17px;color:var(--ink-f);pointer-events:none;
+}
+.search-input{
+  width:100%;background:var(--white);
+  border:1px solid var(--beige-m);border-radius:12px;
+  padding:11px 14px 11px 40px;
+  font-family:var(--fb);font-size:14px;color:var(--ink);
+  outline:none;transition:border-color .2s,box-shadow .2s;
+  -webkit-appearance:none;
+}
+.search-input::placeholder{color:var(--ink-f)}
+.search-input:focus{border-color:var(--gold-br);box-shadow:0 0 0 3px rgba(212,184,106,.15)}
+
+/* SECTION HEADER */
+.sec-head{
+  padding:10px 14px 6px;
+  font-size:11px;font-weight:500;color:var(--ink-f);
+  letter-spacing:.08em;text-transform:uppercase;
+}
+
+/* CUSTOMER LIST */
+.cust-list{display:flex;flex-direction:column;gap:6px;padding:0 10px 8px}
+.cust-card{
+  background:var(--white);border-radius:16px;
+  border:1px solid var(--beige);
+  overflow:hidden;transition:box-shadow .2s;
+}
+.cust-card.reward-ready{border-color:rgba(45,138,94,.35);background:linear-gradient(135deg,#fff,rgba(27,94,66,.03))}
+.cust-card-head{
+  display:flex;align-items:center;gap:12px;
+  padding:13px 14px;cursor:pointer;
+}
+.cust-av{
+  width:38px;height:38px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,var(--gold-b),var(--gold));
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--fd);font-size:17px;font-weight:600;color:#fff;
+  box-shadow:0 2px 8px rgba(168,131,42,.3);
+}
+.cust-av.reward{background:linear-gradient(135deg,var(--em-l),var(--em));box-shadow:0 2px 8px rgba(27,94,66,.3)}
+.cust-info{flex:1;min-width:0}
+.cust-name{font-size:14px;font-weight:500;color:var(--ink);margin-bottom:3px}
+.cust-meta{font-size:12px;color:var(--ink-f);display:flex;align-items:center;gap:6px}
+.reward-badge{
+  display:inline-flex;align-items:center;gap:4px;
+  background:linear-gradient(135deg,var(--em-l),var(--em));
+  color:#fff;font-size:10.5px;font-weight:600;
+  padding:2px 8px;border-radius:99px;
+}
+.cust-stamps{text-align:right;flex-shrink:0}
+.stamp-count{font-family:var(--fd);font-size:17px;font-weight:500;color:var(--ink)}
+.stamp-label{font-size:10px;color:var(--ink-f);margin-top:1px}
+
+/* STAMP DOTS */
+.stamp-dots{
+  display:flex;flex-wrap:wrap;gap:4px;
+  padding:0 14px 10px;
+}
+.dot{
+  width:10px;height:10px;border-radius:50%;
+  border:1.5px solid rgba(168,131,42,.28);
+  background:rgba(253,244,227,.6);
+  transition:all .2s;
+}
+.dot.filled{
+  border:none;
+  background:radial-gradient(circle at 38% 32%,#EDD97A,#C9A84C 45%,#A8832A 72%);
+  box-shadow:0 1px 4px rgba(168,131,42,.4);
+}
+.dot.reward-dot{border:1.5px solid var(--gold-br);background:var(--gold-p)}
+.dot.reward-dot.filled{background:linear-gradient(135deg,var(--em-l),var(--em));border:none;box-shadow:0 1px 4px rgba(27,94,66,.4)}
+
+/* ACTION BUTTONS */
+.cust-actions{
+  display:flex;gap:8px;padding:0 14px 14px;
+}
+.btn-stamp{
+  flex:1;padding:11px;border:none;border-radius:99px;
+  background:linear-gradient(135deg,var(--gold-b),var(--gold));
+  color:#fff;font-family:var(--fb);font-size:13.5px;font-weight:500;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;
+  box-shadow:0 3px 12px rgba(168,131,42,.3);transition:all .2s;
+}
+.btn-stamp:hover{box-shadow:0 5px 18px rgba(168,131,42,.45);transform:translateY(-1px)}
+.btn-stamp:disabled{opacity:.45;pointer-events:none}
+.btn-stamp i{font-size:15px}
+.btn-redeem{
+  flex:1;padding:11px;border:none;border-radius:99px;
+  background:linear-gradient(135deg,var(--em-l),var(--em));
+  color:#fff;font-family:var(--fb);font-size:13.5px;font-weight:500;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;
+  box-shadow:0 3px 12px rgba(27,94,66,.25);transition:all .2s;
+}
+.btn-redeem:hover{box-shadow:0 5px 18px rgba(27,94,66,.4);transform:translateY(-1px)}
+.btn-sm{
+  padding:11px 14px;border:1.5px solid var(--beige-m);border-radius:99px;
+  background:transparent;color:var(--ink-l);font-family:var(--fb);font-size:13px;
+  cursor:pointer;display:flex;align-items:center;gap:5px;transition:all .2s;white-space:nowrap;
+}
+.btn-sm:hover{border-color:var(--gold-br);color:var(--ink-m)}
+.btn-sm i{font-size:14px}
+
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:3rem 2rem}
+.empty-ico{font-size:40px;margin-bottom:12px}
+.empty-title{font-family:var(--fd);font-size:20px;color:var(--ink);margin-bottom:6px}
+.empty-body{font-size:14px;color:var(--ink-l);line-height:1.6}
+
+/* SETTINGS */
+.settings-wrap{padding:14px}
+.settings-card{
+  background:var(--white);border-radius:18px;
+  border:1px solid var(--beige);margin-bottom:12px;overflow:hidden;
+}
+.settings-head{
+  padding:14px 16px;border-bottom:1px solid var(--beige);
+  font-size:12px;font-weight:500;color:var(--ink-l);
+  letter-spacing:.06em;text-transform:uppercase;
+  display:flex;align-items:center;gap:7px;
+}
+.settings-head i{font-size:16px;color:var(--gold)}
+.settings-field{padding:12px 16px;border-bottom:1px solid var(--beige)}
+.settings-field:last-child{border-bottom:none}
+.settings-label{font-size:11.5px;color:var(--ink-f);margin-bottom:5px;font-weight:500}
+.settings-input{
+  width:100%;background:var(--cream-d);border:1px solid var(--beige-m);
+  border-radius:9px;padding:10px 12px;font-family:var(--fb);font-size:14px;
+  color:var(--ink);outline:none;transition:border-color .2s,box-shadow .2s;
+  -webkit-appearance:none;
+}
+.settings-input:focus{border-color:var(--gold-br);box-shadow:0 0 0 3px rgba(212,184,106,.15)}
+.settings-row{display:grid;grid-template-columns:1fr 80px;gap:8px}
+.btn-save{
+  width:100%;padding:13px;border:none;border-radius:12px;
+  background:linear-gradient(135deg,var(--gold-b),var(--gold));
+  color:#fff;font-family:var(--fb);font-size:14px;font-weight:500;
+  cursor:pointer;box-shadow:0 3px 14px rgba(168,131,42,.3);transition:all .2s;
+}
+.btn-save:hover{box-shadow:0 6px 22px rgba(168,131,42,.45);transform:translateY(-1px)}
+.btn-save:disabled{opacity:.5;pointer-events:none}
+
+/* SHOP INFO CARD */
+.shop-info-card{
+  background:var(--ink);border-radius:18px;
+  padding:18px;margin-bottom:12px;
+  display:flex;align-items:center;gap:14px;
+}
+.shop-info-emoji{font-size:32px}
+.shop-info-name{font-family:var(--fd);font-size:20px;font-weight:600;color:var(--cream);margin-bottom:3px}
+.shop-info-meta{font-size:12px;color:rgba(253,250,245,.38)}
+
+/* BOTTOM TAB BAR */
+.tab-bar{
+  flex-shrink:0;height:var(--tab-h);
+  background:var(--white);border-top:1px solid var(--beige);
+  display:grid;grid-template-columns:1fr 1fr;
+  position:relative;z-index:10;
+}
+.tab-btn{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  background:none;border:none;cursor:pointer;
+  color:var(--ink-f);font-family:var(--fb);font-size:11px;
+  transition:color .2s;padding:6px;
+}
+.tab-btn i{font-size:22px;transition:transform .2s var(--es)}
+.tab-btn.active{color:var(--gold)}
+.tab-btn.active i{transform:scale(1.1)}
+
+/* TOAST */
+.toast-wrap{
+  position:fixed;top:70px;left:50%;transform:translateX(-50%);
+  z-index:9999;display:flex;flex-direction:column;align-items:center;gap:8px;
+  pointer-events:none;width:calc(100% - 28px);max-width:360px;
+}
+.toast{
+  background:var(--ink);color:var(--cream);font-size:13.5px;font-weight:500;
+  padding:11px 18px;border-radius:99px;
+  display:flex;align-items:center;gap:8px;
+  box-shadow:0 4px 20px rgba(26,16,7,.25);
+  opacity:0;transform:translateY(-10px);
+  transition:opacity .3s var(--eo),transform .3s var(--eo);
+  pointer-events:all;
+}
+.toast.show{opacity:1;transform:translateY(0)}
+.toast.success{background:var(--em);color:#fff}
+.toast.error{background:var(--red);color:#fff}
+.toast i{font-size:16px}
+
+/* MODAL OVERLAY */
+.modal-ov{
+  position:fixed;inset:0;background:rgba(26,16,7,.45);z-index:50;
+  opacity:0;pointer-events:none;transition:opacity .3s;
+  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+}
+.modal-ov.show{opacity:1;pointer-events:all}
+.modal-sheet{
+  position:fixed;bottom:0;left:0;right:0;
+  background:var(--white);border-radius:22px 22px 0 0;z-index:51;
+  padding:20px 18px 36px;
+  transform:translateY(100%);transition:transform .4s var(--eo);
+  max-height:85vh;overflow-y:auto;
+}
+.modal-ov.show .modal-sheet{transform:translateY(0)}
+.modal-handle{width:36px;height:4px;background:var(--beige-m);border-radius:99px;margin:0 auto 20px}
+.modal-title{font-family:var(--fd);font-size:22px;font-weight:500;color:var(--ink);margin-bottom:6px}
+.modal-sub{font-size:13px;color:var(--ink-l);margin-bottom:20px;line-height:1.55}
+.modal-row{display:flex;gap:10px;margin-bottom:10px}
+
+/* LOADING SPINNER */
+@keyframes spin{to{transform:rotate(360deg)}}
+.loader-ring{
+  width:36px;height:36px;border:2.5px solid var(--beige);
+  border-top-color:var(--gold-b);border-radius:50%;
+  animation:spin .7s linear infinite;margin:3rem auto;display:block;
+}
+
+/* RESPONSIVE */
+@media(min-width:500px){
+  #s-login{background:var(--ink)}
+  .tab-area,.tab-pane{max-width:500px;margin:0 auto}
+  .topbar,.tab-bar{max-width:500px;margin:0 auto;border-radius:0}
+}
+</style>
+</head>
+<body>
+
+<!-- ── LOGIN SCREEN ── -->
+<div class="screen" id="s-login">
+  <div class="login-top">
+    <div class="login-mark"><i class="ti ti-crown"></i></div>
+    <div class="login-title">Merchant Login</div>
+    <div class="login-sub">Primo Rewards — Shop Dashboard</div>
+  </div>
+  <div class="login-card">
+    <div class="field">
+      <label class="field-label" for="l-slug">Shop Slug</label>
+      <input class="field-input" type="text" id="l-slug"
+        placeholder="e.g. sweet-layers"
+        autocomplete="username" autocapitalize="none" spellcheck="false">
+    </div>
+    <div class="field">
+      <label class="field-label" for="l-pw">Password</label>
+      <input class="field-input" type="password" id="l-pw"
+        placeholder="Your merchant password"
+        autocomplete="current-password">
+    </div>
+    <div class="form-err" id="l-err" style="display:none">
+      <i class="ti ti-alert-circle"></i>
+      <span id="l-err-text"></span>
+    </div>
+    <button class="btn-gold" id="l-btn">
+      <i class="ti ti-login"></i> Sign In
+    </button>
+  </div>
+</div>
+
+<!-- ── APP SHELL ── -->
+<div class="screen hidden" id="s-app">
+  <!-- Top Bar -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-mark"><i class="ti ti-crown"></i></div>
+      <div>
+        <div class="topbar-shop" id="tb-name">Shop</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <button class="btn-icon" id="btn-refresh" title="Refresh"><i class="ti ti-refresh"></i></button>
+      <button class="btn-icon" id="btn-logout" title="Log out"><i class="ti ti-logout"></i></button>
+    </div>
+  </header>
+
+  <!-- Tab Area -->
+  <div class="tab-area">
+    <!-- CUSTOMERS TAB -->
+    <div class="tab-pane" id="tab-customers">
+      <!-- Stats -->
+      <div class="stats-row" id="stats-row">
+        <div class="stat-card"><div class="stat-v" id="st-total">—</div><div class="stat-l">Customers</div></div>
+        <div class="stat-card"><div class="stat-v" id="st-today">—</div><div class="stat-l">Stamps today</div></div>
+        <div class="stat-card"><div class="stat-v" id="st-rewards">—</div><div class="stat-l">Rewards given</div></div>
+      </div>
+      <!-- Search -->
+      <div class="search-wrap">
+        <div class="search-input-wrap">
+          <i class="ti ti-search"></i>
+          <input class="search-input" type="search" id="cust-search"
+            placeholder="Search by name or last 4 digits…" autocomplete="off">
+        </div>
+      </div>
+      <!-- Rewards ready banner -->
+      <div id="rewards-ready-section" style="display:none">
+        <div class="sec-head" style="color:var(--em)">🎁 Ready to redeem</div>
+        <div class="cust-list" id="rewards-list"></div>
+      </div>
+      <!-- All customers -->
+      <div class="sec-head" id="all-head">All customers</div>
+      <div class="cust-list" id="all-list">
+        <div class="loader-ring"></div>
+      </div>
+    </div>
+
+    <!-- SETTINGS TAB -->
+    <div class="tab-pane hidden" id="tab-settings">
+      <div class="settings-wrap">
+        <!-- Shop info -->
+        <div class="shop-info-card">
+          <div class="shop-info-emoji" id="si-emoji">🎁</div>
+          <div>
+            <div class="shop-info-name" id="si-name">—</div>
+            <div class="shop-info-meta" id="si-meta">—</div>
+          </div>
+        </div>
+        <!-- Reward settings -->
+        <div class="settings-card">
+          <div class="settings-head"><i class="ti ti-gift"></i> Reward Settings</div>
+          <div class="settings-field">
+            <div class="settings-label">Product name</div>
+            <input class="settings-input" type="text" id="s-product" placeholder="e.g. Cake, Coffee">
+          </div>
+          <div class="settings-field">
+            <div class="settings-label">Reward emoji / icon</div>
+            <input class="settings-input" type="text" id="s-emoji" placeholder="🎂" maxlength="4" style="font-size:20px">
+          </div>
+          <div class="settings-field">
+            <div class="settings-label">Stamps required before free reward</div>
+            <input class="settings-input" type="number" id="s-buy" min="1" max="50" placeholder="e.g. 11">
+          </div>
+          <div style="padding:14px 16px">
+            <button class="btn-save" id="btn-save-settings">Save Reward Settings</button>
+          </div>
+        </div>
+        <!-- Change password -->
+        <div class="settings-card">
+          <div class="settings-head"><i class="ti ti-lock"></i> Change Password</div>
+          <div class="settings-field">
+            <div class="settings-label">New password (min 6 characters)</div>
+            <input class="settings-input" type="password" id="s-pw1" placeholder="New password">
+          </div>
+          <div class="settings-field">
+            <div class="settings-label">Confirm new password</div>
+            <input class="settings-input" type="password" id="s-pw2" placeholder="Repeat new password">
+          </div>
+          <div style="padding:14px 16px">
+            <button class="btn-save" id="btn-save-pw">Update Password</button>
+          </div>
+        </div>
+        <!-- Logout -->
+        <div class="settings-card">
+          <div class="settings-head"><i class="ti ti-logout"></i> Session</div>
+          <div class="settings-field">
+            <div class="settings-label">Logged in as merchant</div>
+            <div style="font-size:13px;color:var(--ink-l);margin-top:4px" id="si-slug">—</div>
+          </div>
+          <div style="padding:14px 16px">
+            <button class="btn-save" id="btn-logout2" style="background:rgba(192,57,43,.08);color:var(--red);box-shadow:none;border:1.5px solid rgba(192,57,43,.2)">Log Out</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Tab Bar -->
+  <nav class="tab-bar">
+    <button class="tab-btn active" id="tb-customers" onclick="switchTab('customers')">
+      <i class="ti ti-users"></i>Customers
+    </button>
+    <button class="tab-btn" id="tb-settings" onclick="switchTab('settings')">
+      <i class="ti ti-settings-2"></i>Settings
+    </button>
+  </nav>
+</div>
+
+<!-- Toast -->
+<div class="toast-wrap" id="toast-wrap"></div>
+
+<!-- Stamp/Redeem Modal -->
+<div class="modal-ov" id="modal-ov" onclick="closeModal()">
+  <div class="modal-sheet" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="modal-title">Customer</div>
+    <div class="modal-sub" id="modal-sub"></div>
+    <div class="modal-row" id="modal-actions"></div>
+  </div>
+</div>
+
+<script>
+/* ── CONFIG ────────────────────────── */
+const SUPA    = 'https://plewiwrexjszcqqjwiks.supabase.co';
+const FN      = `${SUPA}/functions/v1`;
+const JWT_KEY = 'primo_merchant_jwt';
+const SHOP_KEY= 'primo_merchant_shop';
+
+/* ── STATE ─────────────────────────── */
+let jwt  = null;
+let shop = null;
+let dashData = { customers:[], stamps:[], redemptions:[] };
+let activeTab = 'customers';
+let openCustId = null;
+
+/* ── HELPERS ──────────────────────── */
+const $  = id => document.getElementById(id);
+const qs = sel => document.querySelector(sel);
+
+function show(screenId) {
+  ['s-login','s-app'].forEach(id => {
+    const el = $(id);
+    if (el.id === screenId) el.classList.remove('hidden');
+    else el.classList.add('hidden');
+  });
+}
+
+function toast(msg, type='info', duration=2800) {
+  const wrap = $('toast-wrap');
+  const t = document.createElement('div');
+  t.className = `toast ${type}`;
+  const icon = type==='success' ? 'ti-circle-check' : type==='error' ? 'ti-alert-circle' : 'ti-info-circle';
+  t.innerHTML = `<i class="ti ${icon}"></i>${msg}`;
+  wrap.appendChild(t);
+  requestAnimationFrame(() => requestAnimationFrame(() => t.classList.add('show')));
+  setTimeout(() => { t.classList.remove('show'); setTimeout(()=>t.remove(),350); }, duration);
+}
+
+async function api(fn, body, method='POST') {
+  const r = await fetch(`${FN}/${fn}`, {
+    method,
+    headers: {
+      'Content-Type':'application/json',
+      ...(jwt ? {Authorization:`Bearer ${jwt}`} : {})
+    },
+    body: JSON.stringify(body)
+  });
+  return r.json();
+}
+
+/* ── LOGIN ─────────────────────────── */
+$('l-btn').onclick = doLogin;
+$('l-slug').addEventListener('keydown', e => e.key==='Enter' && $('l-pw').focus());
+$('l-pw').addEventListener('keydown',   e => e.key==='Enter' && doLogin());
+
+async function doLogin() {
+  const slug = $('l-slug').value.trim().toLowerCase();
+  const pw   = $('l-pw').value;
+  const errEl = $('l-err');
+  errEl.style.display = 'none';
+  if (!slug || !pw) { showLoginErr('Please enter your shop slug and password.'); return; }
+  const btn = $('l-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="ti ti-loader-2" style="animation:spin .7s linear infinite"></i> Signing in…';
+  try {
+    const res = await api('merchant-auth', {slug, password: pw});
+    if (res.error) { showLoginErr(res.error); return; }
+    jwt  = res.token;
+    shop = res.shop;
+    localStorage.setItem(JWT_KEY, jwt);
+    localStorage.setItem(SHOP_KEY, JSON.stringify(shop));
+    launchApp();
+  } catch(_) {
+    showLoginErr('Could not connect. Please try again.');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="ti ti-login"></i> Sign In';
+  }
+}
+
+function showLoginErr(msg) {
+  $('l-err-text').textContent = msg;
+  $('l-err').style.display = 'flex';
+}
+
+/* ── APP LAUNCH ─────────────────────── */
+function launchApp() {
+  show('s-app');
+  $('tb-name').textContent = shop.shop_name;
+  loadSettings();
+  loadDashboard();
+}
+
+/* ── LOGOUT ─────────────────────────── */
+function doLogout() {
+  jwt = null; shop = null;
+  dashData = {customers:[],stamps:[],redemptions:[]};
+  localStorage.removeItem(JWT_KEY);
+  localStorage.removeItem(SHOP_KEY);
+  $('l-pw').value = '';
+  $('l-err').style.display = 'none';
+  show('s-login');
+}
+$('btn-logout').onclick  = doLogout;
+$('btn-logout2').onclick = doLogout;
+
+/* ── REFRESH ────────────────────────── */
+$('btn-refresh').onclick = () => { loadDashboard(true); };
+
+/* ── LOAD DASHBOARD ─────────────────── */
+async function loadDashboard(showToast=false) {
+  const listEl = $('all-list');
+  listEl.innerHTML = '<div class="loader-ring"></div>';
+  try {
+    const res = await api('merchant-api', {action:'load_dashboard'});
+    if (res.error) { toast(res.error,'error'); return; }
+    dashData = res;
+    renderStats();
+    renderCustomers();
+    if (showToast) toast('Refreshed','success',1800);
+  } catch(_) {
+    listEl.innerHTML = '<div class="empty-state"><div class="empty-title">Could not load data</div><div class="empty-body">Check your connection and try again.</div></div>';
+  }
+}
+
+/* ── STATS ──────────────────────────── */
+function renderStats() {
+  const buy = shop?.reward_rule?.buy ?? 10;
+  const today = new Date().toISOString().slice(0,10);
+  const stampsToday = dashData.stamps.filter(s => s.stamped_at?.startsWith(today)).length;
+  $('st-total').textContent   = dashData.customers.length;
+  $('st-today').textContent   = stampsToday;
+  $('st-rewards').textContent = dashData.redemptions.length;
+}
+
+/* ── CUSTOMER CARD COMPUTATION ─────── */
+function custCard(c) {
+  const buy  = shop?.reward_rule?.buy ?? 10;
+  const myStamps = dashData.stamps.filter(s=>s.customer_id===c.id);
+  const myReds   = dashData.redemptions.filter(r=>r.customer_id===c.id);
+  const cycle    = myReds.length + 1;
+  const cycleStamps = myStamps.filter(s=>s.cycle_number===cycle);
+  const count    = cycleStamps.length;
+  const hasReward = count >= buy;
+  const lastStamp = myStamps.length ? myStamps[myStamps.length-1]?.stamped_at : null;
+  return { buy, count, hasReward, cycle, totalStamps: myStamps.length, lastStamp };
+}
+
+/* ── RENDER CUSTOMERS ───────────────── */
+function renderCustomers(query='') {
+  const buy = shop?.reward_rule?.buy ?? 10;
+  const q = query.toLowerCase().trim();
+  let custs = dashData.customers.filter(c => {
+    if (!q) return true;
+    return c.first_name.toLowerCase().includes(q) || c.phone_last4.includes(q);
+  });
+
+  // Sort: reward ready first, then by last stamp date desc
+  custs.sort((a,b) => {
+    const ca = custCard(a), cb = custCard(b);
+    if (ca.hasReward && !cb.hasReward) return -1;
+    if (!ca.hasReward && cb.hasReward) return 1;
+    const la = ca.lastStamp||a.enrolled_at||'';
+    const lb = cb.lastStamp||b.enrolled_at||'';
+    return lb.localeCompare(la);
+  });
+
+  const readyList  = custs.filter(c => custCard(c).hasReward);
+  const normalList = custs.filter(c => !custCard(c).hasReward);
+
+  // Rewards ready section
+  const readySection = $('rewards-ready-section');
+  const readyEl = $('rewards-list');
+  if (readyList.length && !q) {
+    readySection.style.display = '';
+    readyEl.innerHTML = readyList.map(c => custCardHTML(c)).join('');
+  } else {
+    readySection.style.display = 'none';
+  }
+
+  // All list
+  const allEl   = $('all-list');
+  const allHead = $('all-head');
+  if (!custs.length) {
+    allHead.textContent = q ? 'No results' : 'All customers';
+    allEl.innerHTML = `<div class="empty-state">
+      <div class="empty-ico">👥</div>
+      <div class="empty-title">${q ? 'No customers found' : 'No customers yet'}</div>
+      <div class="empty-body">${q ? 'Try a different name or phone number.' : 'Customers appear here once they open their loyalty card.'}</div>
+    </div>`;
+    return;
+  }
+  allHead.textContent = q ? `Results (${custs.length})` : `All customers (${normalList.length})`;
+  allEl.innerHTML = (q ? custs : normalList).map(c => custCardHTML(c)).join('');
+
+  // Wire up expand clicks
+  document.querySelectorAll('.cust-card-head').forEach(el => {
+    el.addEventListener('click', () => toggleCard(el.dataset.cid));
+  });
+  document.querySelectorAll('.btn-stamp').forEach(btn => {
+    btn.addEventListener('click', e => { e.stopPropagation(); doStamp(btn.dataset.cid); });
+  });
+  document.querySelectorAll('.btn-redeem').forEach(btn => {
+    btn.addEventListener('click', e => { e.stopPropagation(); doRedeem(btn.dataset.cid); });
+  });
+}
+
+function custCardHTML(c) {
+  const { buy, count, hasReward, totalStamps } = custCard(c);
+  const initial = c.first_name.charAt(0).toUpperCase();
+  const isOpen = openCustId === c.id;
+  return `
+  <div class="cust-card ${hasReward?'reward-ready':''}" id="cc-${c.id}">
+    <div class="cust-card-head" data-cid="${c.id}">
+      <div class="cust-av ${hasReward?'reward':''}">${initial}</div>
+      <div class="cust-info">
+        <div class="cust-name">${esc(c.first_name)} <span style="color:var(--ink-f);font-weight:400">···${c.phone_last4}</span></div>
+        <div class="cust-meta">
+          ${hasReward ? '<span class="reward-badge">🎁 Reward ready</span>' : `<span>${count} of ${buy} stamps</span>`}
+          <span>·</span><span>${totalStamps} total</span>
+        </div>
+      </div>
+      <div class="cust-stamps">
+        <div class="stamp-count">${count}<span style="color:var(--ink-f);font-size:12px;font-weight:400">/${buy}</span></div>
+        <div class="stamp-label">this cycle</div>
+      </div>
+    </div>
+    ${isOpen ? custExpandedHTML(c, count, buy, hasReward) : ''}
+  </div>`;
+}
+
+function custExpandedHTML(c, count, buy, hasReward) {
+  // Dots
+  const total = buy + 1;
+  let dots = '';
+  for (let i=0; i<total; i++) {
+    const isR  = i===total-1;
+    const filled = isR ? hasReward : i<count;
+    dots += `<div class="dot ${isR?'reward-dot':''} ${filled?'filled':''}"></div>`;
+  }
+  return `
+    <div class="stamp-dots">${dots}</div>
+    <div class="cust-actions">
+      <button class="btn-stamp" data-cid="${c.id}" ${hasReward?'disabled':''}>
+        <i class="ti ti-circle-plus"></i>Add Stamp
+      </button>
+      ${hasReward ? `<button class="btn-redeem" data-cid="${c.id}"><i class="ti ti-gift"></i>Redeem</button>` : ''}
+    </div>`;
+}
+
+function toggleCard(cid) {
+  openCustId = openCustId === cid ? null : cid;
+  renderCustomers($('cust-search').value);
+}
+
+function esc(str) {
+  return String(str).replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
+}
+
+/* ── SEARCH ─────────────────────────── */
+$('cust-search').addEventListener('input', function() {
+  renderCustomers(this.value);
+});
+
+/* ── STAMP ──────────────────────────── */
+async function doStamp(cid) {
+  const btn = document.querySelector(`.btn-stamp[data-cid="${cid}"]`);
+  if (btn) { btn.disabled = true; btn.innerHTML = '<i class="ti ti-loader-2" style="animation:spin .7s linear infinite"></i>Stamping…'; }
+  try {
+    const res = await api('merchant-api', {action:'stamp', customer_id:cid});
+    if (res.error) { toast(res.error,'error'); return; }
+    const c = dashData.customers.find(x=>x.id===cid);
+    toast(`✓ Stamp added for ${c?.first_name||'customer'}!`, 'success');
+    await loadDashboard();
+    openCustId = cid;
+    renderCustomers($('cust-search').value);
+  } catch(_) { toast('Failed to add stamp','error'); }
+}
+
+/* ── REDEEM ─────────────────────────── */
+async function doRedeem(cid) {
+  const c = dashData.customers.find(x=>x.id===cid);
+  if (!confirm(`Confirm: Give ${c?.first_name||'customer'} their free ${shop?.product_name||'reward'}?`)) return;
+  try {
+    const res = await api('merchant-api', {action:'redeem', customer_id:cid});
+    if (res.error) { toast(res.error,'error'); return; }
+    toast(`🎁 Reward redeemed for ${c?.first_name}!`, 'success', 3500);
+    openCustId = null;
+    await loadDashboard();
+    renderCustomers($('cust-search').value);
+  } catch(_) { toast('Failed to redeem','error'); }
+}
+
+/* ── SETTINGS ───────────────────────── */
+function loadSettings() {
+  if (!shop) return;
+  $('si-emoji').textContent = shop.product_emoji || '🎁';
+  $('si-name').textContent  = shop.shop_name;
+  $('si-meta').textContent  = `${shop.plan?.toUpperCase()||'PRO'} Plan · ${shop.city||'—'}`;
+  $('si-slug').textContent  = `@${shop.slug}`;
+  $('s-product').value = shop.product_name || '';
+  $('s-emoji').value   = shop.product_emoji || '🎁';
+  $('s-buy').value     = shop.reward_rule?.buy ?? 11;
+}
+
+$('btn-save-settings').onclick = async function() {
+  const product_name  = $('s-product').value.trim();
+  const product_emoji = $('s-emoji').value.trim();
+  const buy = parseInt($('s-buy').value);
+  if (!product_name) { toast('Product name is required','error'); return; }
+  if (!product_emoji) { toast('Emoji is required','error'); return; }
+  if (isNaN(buy) || buy<1 || buy>50) { toast('Stamps required must be 1–50','error'); return; }
+  this.disabled = true;
+  this.textContent = 'Saving…';
+  try {
+    const res = await api('merchant-api', {action:'save_settings', product_name, product_emoji, reward_rule:{buy,get:1}});
+    if (res.error) { toast(res.error,'error'); return; }
+    shop = {...shop, ...res.shop};
+    localStorage.setItem(SHOP_KEY, JSON.stringify(shop));
+    loadSettings();
+    toast('Settings saved!','success');
+  } catch(_) { toast('Failed to save','error'); }
+  finally { this.disabled=false; this.textContent='Save Reward Settings'; }
+};
+
+$('btn-save-pw').onclick = async function() {
+  const p1 = $('s-pw1').value;
+  const p2 = $('s-pw2').value;
+  if (!p1 || p1.length < 6) { toast('Password must be at least 6 characters','error'); return; }
+  if (p1 !== p2) { toast('Passwords do not match','error'); return; }
+  this.disabled = true;
+  this.textContent = 'Updating…';
+  try {
+    const res = await api('merchant-api', {action:'change_password', new_password:p1});
+    if (res.error) { toast(res.error,'error'); return; }
+    $('s-pw1').value = '';
+    $('s-pw2').value = '';
+    toast('Password updated!','success');
+  } catch(_) { toast('Failed to update password','error'); }
+  finally { this.disabled=false; this.textContent='Update Password'; }
+};
+
+/* ── TAB SWITCHING ──────────────────── */
+function switchTab(tab) {
+  activeTab = tab;
+  ['customers','settings'].forEach(t => {
+    $(`tab-${t}`).classList.toggle('hidden', t!==tab);
+    $(`tb-${t}`).classList.toggle('active', t===tab);
+  });
+}
+
+/* ── MODAL ──────────────────────────── */
+function closeModal() {
+  $('modal-ov').classList.remove('show');
+}
+
+/* ── BOOT ───────────────────────────── */
+(function boot() {
+  const savedJwt  = localStorage.getItem(JWT_KEY);
+  const savedShop = localStorage.getItem(SHOP_KEY);
+  if (savedJwt && savedShop) {
+    try {
+      jwt  = savedJwt;
+      shop = JSON.parse(savedShop);
+      launchApp();
+      return;
+    } catch(_) {}
+  }
+  show('s-login');
+})();
+</script>
+</body>
+</html>

@@ -36,6 +36,10 @@
   ],
   "rewrites": [
     {
+      "source": "/merchant",
+      "destination": "/merchant.html"
+    },
+    {
       "source": "/about",
       "destination": "/about.html"
     },
