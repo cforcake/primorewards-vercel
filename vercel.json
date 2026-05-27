@@ -36,8 +36,12 @@
   ],
   "rewrites": [
     {
+      "source": "/admin",
+      "destination": "/primo-admin-v2.html"
+    },
+    {
       "source": "/merchant",
-      "destination": "/merchant.html"
+      "destination": "/primo-merchant-v3 (2).html"
     },
     {
       "source": "/about",
@@ -53,7 +57,7 @@
     },
     {
       "source": "/:slug-reward",
-      "destination": "/primo-shop-engine.html"
+      "destination": "/primo-shop-engine-v5.html"
     }
   ]
 }
