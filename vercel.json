@@ -59,5 +59,6 @@
       "source": "/:slug-reward",
       "destination": "/primo-shop-engine-v5.html"
     }
-  ]
+  ],
+  "$schema": "https://openapi.vercel.sh/vercel.json"
 }
