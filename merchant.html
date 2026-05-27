@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" integrity="sha256-MrRtG5dV4x5ysLo+J4JoXaEPmP+7B+eTSiVzNqiNPc=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23C9A84C'/><text x='50%25' y='60%25' font-size='18' text-anchor='middle' fill='white'>♛</text></svg>">
 <style>
 :root{
@@ -373,8 +373,12 @@ body{
 /* RESPONSIVE */
 @media(min-width:500px){
   #s-login{background:var(--ink)}
-  .tab-area,.tab-pane{max-width:500px;margin:0 auto}
-  .topbar,.tab-bar{max-width:500px;margin:0 auto;border-radius:0}
+  .tab-area,.tab-pane{max-width:700px;margin:0 auto}
+  .topbar,.tab-bar{max-width:700px;margin:0 auto;border-radius:0}
+}
+@media(min-width:700px){
+  #s-app{background:#e8e0d5}
+  .topbar{border-radius:0 0 0 0}
 }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
