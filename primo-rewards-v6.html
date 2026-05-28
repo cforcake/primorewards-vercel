@@ -1660,68 +1660,58 @@ async function handleEnroll() {
   }
 
   // Step 5: Open Razorpay checkout
-  // ── WIRE THIS WHEN RAZORPAY KEY IS READY ──────────────────────────
-  //
-  // btn.innerHTML = '<i class="ti ti-lock" aria-hidden="true"></i> Opening payment...';
-  // const rzpScript = document.createElement('script');
-  // rzpScript.src = 'https://checkout.razorpay.com/v1/checkout.js';
-  // rzpScript.onload = () => {
-  //   const rzp = new Razorpay({
-  //     key: PRIMO_CONFIG.RAZORPAY_KEY,          // ← insert live key
-  //     amount: sAmt,
-  //     currency: 'INR',
-  //     name: 'Primo Rewards',
-  //     description: `Shop Setup — ${sPlan}`,
-  //     image: 'https://primorewards.app/logo.png',
-  //     prefill: {
-  //       name:    document.getElementById('fName').value,
-  //       email:   document.getElementById('fEmail').value,
-  //       contact: document.getElementById('fPhone').value,
-  //     },
-  //     notes: {
-  //       enroll_id: enrollId,        // ← webhook reads this to activate the shop
-  //       shop_name: document.getElementById('fShop').value,
-  //       plan:      sPlan,
-  //     },
-  //     theme: { color: '#C9A84C' },
-  //     handler: async (response) => {
-  //       // ⚠ AUDIT CVE-7 FIX:
-  //       // DO NOT call provisionShop() here.
-  //       // DO NOT write status:'active' to Supabase from the client.
-  //       // ONLY record that payment was received on the enrollment row.
-  //       // The Razorpay webhook Edge Function (razorpay-webhook/index.ts)
-  //       // verifies the payment signature and activates the shop server-side.
-  //       try {
-  //         if (enrollId) {
-  //           await apiCall(`shop_enrollments?id=eq.${enrollId}`, 'PATCH', {
-  //             razorpay_payment_id: response.razorpay_payment_id,
-  //             status: 'payment_received',
-  //           });
-  //         }
-  //       } catch(e) { console.warn('Could not update enrollment:', e); }
-  //       showEnrollmentSuccess(response.razorpay_payment_id);
-  //     },
-  //     modal: {
-  //       ondismiss: () => {
-  //         btn.innerHTML = origHTML;
-  //         btn.disabled = false;
-  //         showToast('Payment cancelled', 'Your enrollment details are saved. Complete payment anytime.', 'info');
-  //       }
-  //     }
-  //   });
-  //   rzp.open();
-  // };
-  // rzpScript.onerror = () => {
-  //   showToast('Payment error', 'Could not load payment gateway. Check your connection and try again.', 'error');
-  //   btn.innerHTML = origHTML; btn.disabled = false;
-  // };
-  // document.body.appendChild(rzpScript);
-  // ── END RAZORPAY WIRING ───────────────────────────────────────────
-
-  // Placeholder until Razorpay keys are live:
-  setTimeout(() => {
-    showEnrollmentSuccess('DEMO-' + Date.now().toString(36).toUpperCase());
-  }, 1000);
+  btn.innerHTML = '<i class="ti ti-lock" aria-hidden="true"></i> Opening payment...';
+  const rzpScript = document.createElement('script');
+  rzpScript.src = 'https://checkout.razorpay.com/v1/checkout.js';
+  rzpScript.onload = () => {
+    const rzp = new Razorpay({
+      key: PRIMO_CONFIG.RAZORPAY_KEY,
+      amount: sAmt,
+      currency: 'INR',
+      name: 'Primo Rewards',
+      description: `Shop Setup — ${sPlan}`,
+      image: 'https://primorewards.in/logo.png',
+      prefill: {
+        name:    document.getElementById('fName').value,
+        email:   document.getElementById('fEmail').value,
+        contact: document.getElementById('fPhone').value,
+      },
+      notes: {
+        enroll_id: enrollId,
+        shop_name: document.getElementById('fShop').value,
+        plan:      sPlan,
+      },
+      theme: { color: '#C9A84C' },
+      handler: async (response) => {
+        // ⚠ SECURITY: Do NOT activate shop here client-side.
+        // Only record payment_id on the enrollment row.
+        // The razorpay-webhook Edge Function verifies HMAC-SHA256
+        // and activates the shop server-side using service_role key.
+        try {
+          if (enrollId) {
+            await apiCall(`shop_enrollments?id=eq.${enrollId}`, 'PATCH', {
+              razorpay_payment_id: response.razorpay_payment_id,
+              status: 'payment_received',
+            });
+          }
+        } catch(e) { console.warn('Could not update enrollment:', e); }
+        showEnrollmentSuccess(response.razorpay_payment_id);
+      },
+      modal: {
+        ondismiss: () => {
+          btn.innerHTML = origHTML;
+          btn.disabled = false;
+          showToast('Payment cancelled', 'Your enrollment details are saved. Complete payment anytime.', 'info');
+        }
+      }
+    });
+    rzp.open();
+  };
+  rzpScript.onerror = () => {
+    showToast('Payment error', 'Could not load payment gateway. Check your connection and try again.', 'error');
+    btn.innerHTML = origHTML; btn.disabled = false;
+  };
+  document.body.appendChild(rzpScript);
 }
 
 function showEnrollmentSuccess(refId) {
@@ -1751,7 +1741,7 @@ function showEnrollmentSuccess(refId) {
 const PRIMO_CONFIG = {
   SUPABASE_URL:      'https://plewiwrexjszcqqjwiks.supabase.co',
   SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBsZXdpd3JleGpzemNxcWp3aWtzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3MDkxOTgsImV4cCI6MjA5NTI4NTE5OH0.UhQcVdZZw74X-HBrGVto35dyZ_V67WfkjGFepRzNlMQ',
-  RAZORPAY_KEY:      'YOUR_RAZORPAY_KEY_ID', // ⏳ replace with rzp_live_XXXX when Razorpay is ready
+  RAZORPAY_KEY:      'rzp_live_Sug0c4WKIKghJS', // ✅ Live key — DO NOT commit secret key to any HTML file
   // NEVER put service_role key or webhook secret in any HTML file
 };
 
