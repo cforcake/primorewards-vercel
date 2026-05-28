@@ -316,6 +316,26 @@ nav.scrolled{background:rgba(253,250,245,.94);backdrop-filter:blur(22px);-webkit
 .dash-perks{list-style:none;display:flex;flex-direction:column;gap:11px;margin-top:1.5rem}
 .dash-perks li{display:flex;align-items:center;gap:10px;font-size:14px;color:rgba(253,250,245,.52)}
 .dash-perks li i{font-size:17px;color:var(--gold-b);flex-shrink:0;pointer-events:none}
+/* REVIEWS */
+.reviews-s{background:var(--ink);padding:5rem 0;overflow:hidden}
+.reviews-s .sec-ey{color:var(--gold-b)}.reviews-s .sec-t{color:var(--cream)}.reviews-s .sec-s{color:rgba(253,250,245,.45)}
+.reviews-s .sec-head{text-align:center;margin-bottom:3rem}
+.marquee-wrap{display:flex;flex-direction:column;gap:18px;overflow:hidden;mask-image:linear-gradient(to right,transparent 0%,#000 8%,#000 92%,transparent 100%);-webkit-mask-image:linear-gradient(to right,transparent 0%,#000 8%,#000 92%,transparent 100%)}
+.marquee-row{display:flex;gap:18px;width:max-content}
+.marquee-row.row-fwd{animation:mq-fwd 38s linear infinite}
+.marquee-row.row-rev{animation:mq-rev 42s linear infinite}
+.marquee-row:hover{animation-play-state:paused}
+@keyframes mq-fwd{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes mq-rev{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+.rv-card{flex:0 0 300px;background:rgba(255,255,255,.04);border:1.5px solid rgba(201,168,76,.14);border-radius:20px;padding:1.6rem 1.8rem;transition:border-color .3s,background .3s;cursor:default}
+.rv-card:hover{background:rgba(201,168,76,.06);border-color:rgba(201,168,76,.35)}
+.rv-stars{font-size:13px;color:#C9A84C;margin-bottom:.9rem;letter-spacing:1px}
+.rv-text{font-size:14px;line-height:1.75;color:rgba(253,250,245,.65);margin-bottom:1.1rem}
+.rv-footer{display:flex;align-items:center;gap:.75rem}
+.rv-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#C9A84C,#A8832A);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;flex-shrink:0}
+.rv-name{font-size:13px;font-weight:600;color:var(--cream);line-height:1.2}
+.rv-biz{font-size:12px;color:rgba(253,250,245,.4);margin-top:2px}
+.rv-badge{font-size:10px;font-weight:600;letter-spacing:.04em;background:rgba(201,168,76,.12);color:var(--gold-b);border:1px solid rgba(201,168,76,.25);border-radius:99px;padding:2px 8px;margin-left:auto;white-space:nowrap}
 .pricing-s{background:var(--cream-d)}
 .pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
 .pc{background:var(--white);border-radius:26px;padding:2.25rem;border:1.5px solid var(--beige-m);position:relative;transition:box-shadow .35s var(--eo),transform .35s var(--eo),border-color .3s}
@@ -619,6 +639,16 @@ footer{background:var(--ink);border-top:1px solid rgba(255,255,255,.05);padding:
     </div>
   </div>
 </section>
+<section id="reviews" class="reviews-s">
+  <div class="container">
+    <div class="sec-head rv">
+      <div class="sec-ey">What merchants say</div>
+      <h2 class="sec-t display" style="max-width:640px;margin:.5rem auto .75rem">Real results from<br><em style="font-style:italic">real shop owners</em></h2>
+      <p class="sec-s" style="max-width:480px;margin:0 auto">Salons, cafés, bakeries — see how Primo Rewards is working for businesses just like yours.</p>
+    </div>
+  </div>
+  <div class="marquee-wrap" id="reviewsMarquee"></div>
+</section>
 <section id="pricing" class="section pricing-s">
   <div class="container">
     <div style="text-align:center;margin-bottom:3.5rem">
@@ -791,6 +821,25 @@ const PRIMO_CONFIG={SUPABASE_URL:'https://plewiwrexjszcqqjwiks.supabase.co',SUPA
 async function apiCall(endpoint,method='GET',body=null){const headers={'Content-Type':'application/json','apikey':PRIMO_CONFIG.SUPABASE_ANON_KEY,'Authorization':'Bearer '+PRIMO_CONFIG.SUPABASE_ANON_KEY,'Prefer':method==='POST'?'return=representation':'return=minimal'};const url=`${PRIMO_CONFIG.SUPABASE_URL}/rest/v1/${endpoint}`;const res=await fetch(url,{method,headers,body:body?JSON.stringify(body):null});if(!res.ok){const errText=await res.text();throw new Error(`Supabase ${method} ${endpoint} \u2192 ${res.status}: ${errText}`);}const text=await res.text();return text?JSON.parse(text):null;}
 function slugify(str){return(str||'').toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');}
 if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',wireAllLinks);}else{wireAllLinks();}
+</script>
+<script>
+(function(){
+  var wrap=document.getElementById('reviewsMarquee');
+  if(!wrap)return;
+  var R=[
+    {n:'Priya Sharma',b:'Glow Studio',t:'Salon',c:'Mumbai',r:5,q:'My clients keep coming back just to collect stamps — they love it! Set up in under 10 minutes and the QR poster looks so professional on my counter.'},
+    {n:'Rajan Mehta',b:'The Daily Grind',t:'Café',c:'Pune',r:5,q:'We went from remembering regulars by face to having 200+ enrolled in the first month. The branded page feels like it was built just for us.'},
+    {n:'Sunita Agarwal',b:'Butter & Crumb',t:'Bakery',c:'Bengaluru',r:5,q:'I was worried it would be complicated but it literally took one lunch break to set up. My Sunday regulars now come in every day just to get their free cake stamp.'},
+    {n:'Arjun Nair',b:'Snip & Style',t:'Salon',c:'Chennai',r:5,q:'Loyalty cards were always getting lost. Now everything is on the customer\'s phone. Redemptions are smooth and my team loves it.'},
+    {n:'Meena Iyer',b:'Bombay Brew House',t:'Café',c:'Mumbai',r:5,q:'The WhatsApp nudge feature alone brought back 30+ customers who hadn\'t visited in weeks. Worth every rupee.'},
+    {n:'Deepak Kulkarni',b:'Mithai & More',t:'Sweet Shop',c:'Nagpur',r:5,q:'During festivals our footfall doubled. Customers share the reward link on their own — it\'s free word-of-mouth marketing.'}
+  ];
+  function ini(name){return name.trim().split(/\s+/).map(function(w){return w[0];}).join('').slice(0,2).toUpperCase();}
+  function card(r){return '<div class="rv-card"><div class="rv-stars">★★★★★</div><p class="rv-text">"'+r.q+'"</p><div class="rv-footer"><div class="rv-avatar">'+ini(r.n)+'</div><div><div class="rv-name">'+r.n+'</div><div class="rv-biz">'+r.b+' · '+r.c+'</div></div><span class="rv-badge">'+r.t+'</span></div></div>';}
+  function row(arr,cls){var d=document.createElement('div');d.className='marquee-row '+cls;var h=arr.map(card).join('');d.innerHTML=h+h+h;wrap.appendChild(d);}
+  row(R,'row-fwd');
+  row(R.slice().reverse(),'row-rev');
+})();
 </script>
 </body>
 </html>
