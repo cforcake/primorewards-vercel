@@ -1670,7 +1670,7 @@ async function handleEnroll() {
       currency: 'INR',
       name: 'Primo Rewards',
       description: `Shop Setup — ${sPlan}`,
-      image: 'https://primorewards.in/logo.png',
+      image: 'https://primorewards.app/logo.png',
       prefill: {
         name:    document.getElementById('fName').value,
         email:   document.getElementById('fEmail').value,
@@ -1683,10 +1683,12 @@ async function handleEnroll() {
       },
       theme: { color: '#C9A84C' },
       handler: async (response) => {
-        // ⚠ SECURITY: Do NOT activate shop here client-side.
-        // Only record payment_id on the enrollment row.
-        // The razorpay-webhook Edge Function verifies HMAC-SHA256
-        // and activates the shop server-side using service_role key.
+        // ⚠ AUDIT CVE-7 FIX:
+        // DO NOT call provisionShop() here.
+        // DO NOT write status:'active' to Supabase from the client.
+        // ONLY record that payment was received on the enrollment row.
+        // The Razorpay webhook Edge Function (razorpay-webhook/index.ts)
+        // verifies the payment signature and activates the shop server-side.
         try {
           if (enrollId) {
             await apiCall(`shop_enrollments?id=eq.${enrollId}`, 'PATCH', {
@@ -1741,7 +1743,7 @@ function showEnrollmentSuccess(refId) {
 const PRIMO_CONFIG = {
   SUPABASE_URL:      'https://plewiwrexjszcqqjwiks.supabase.co',
   SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBsZXdpd3JleGpzemNxcWp3aWtzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3MDkxOTgsImV4cCI6MjA5NTI4NTE5OH0.UhQcVdZZw74X-HBrGVto35dyZ_V67WfkjGFepRzNlMQ',
-  RAZORPAY_KEY:      'rzp_live_Sug0c4WKIKghJS', // ✅ Live key — DO NOT commit secret key to any HTML file
+  RAZORPAY_KEY:      'rzp_live_Sug0c4WKIKghJS',
   // NEVER put service_role key or webhook secret in any HTML file
 };
 
