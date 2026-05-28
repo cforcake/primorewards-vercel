@@ -2,1064 +2,441 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#1A1007">
-<meta name="robots" content="noindex">
-<title>Merchant Dashboard — Primo Rewards</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com https://cdn.jsdelivr.net 'unsafe-inline'; font-src https://fonts.gstatic.com https://cdn.jsdelivr.net; connect-src 'self' https://*.supabase.co; img-src 'self' data:; object-src 'none'; base-uri 'self'">
+<title>Primo Merchant — Dashboard</title>
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+<meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23C9A84C'/><text x='50%25' y='60%25' font-size='18' text-anchor='middle' fill='white'>♛</text></svg>">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap"></noscript>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer crossorigin="anonymous"></script>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23C9A84C'/><text x='50%25' y='62%25' font-size='18' text-anchor='middle' fill='white'>&#9819;</text></svg>">
 <style>
-:root{
-  --cream:#FDFAF5;--cream-d:#F5EEE3;--beige:#EDE3D4;--beige-m:#D9CBBA;
-  --gold:#A8832A;--gold-b:#C9A84C;--gold-p:#FDF4E3;--gold-br:#D4B86A;
-  --em:#1B5E42;--em-l:#2D8A5E;--em-p:rgba(27,94,66,.08);
-  --red:#C0392B;--red-p:rgba(192,57,43,.08);
-  --ink:#1A1007;--ink-m:#4A3A25;--ink-l:#7A6A52;--ink-f:#A89880;
-  --white:#fff;
-  --fd:'Cormorant Garamond',Georgia,serif;
-  --fb:'DM Sans',sans-serif;
-  --eo:cubic-bezier(.16,1,.3,1);
-  --es:cubic-bezier(.34,1.4,.64,1);
-  --tab-h:64px;
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;overflow:hidden}
-body{
-  font-family:var(--fb);background:var(--cream-d);
-  color:var(--ink);-webkit-font-smoothing:antialiased;
-  display:flex;flex-direction:column;
-}
-
-/* ── SCREEN TRANSITIONS ── */
-.screen{
-  position:absolute;inset:0;
-  display:flex;flex-direction:column;
-  background:var(--cream-d);
-  transition:opacity .3s var(--eo),transform .3s var(--eo);
-}
-.screen.hidden{opacity:0;pointer-events:none;transform:translateY(12px)}
-
-/* ── LOGIN SCREEN ── */
-#s-login{
-  align-items:center;justify-content:center;
-  background:var(--ink);padding:2rem;
-  overflow-y:auto;
-}
-.login-top{text-align:center;margin-bottom:2rem}
-.login-mark{
-  width:60px;height:60px;border-radius:16px;
-  background:linear-gradient(135deg,var(--gold-b),var(--gold));
-  display:flex;align-items:center;justify-content:center;
-  margin:0 auto 14px;
-  box-shadow:0 6px 24px rgba(168,131,42,.4);
-}
-.login-mark i{font-size:28px;color:#fff}
-.login-title{font-family:var(--fd);font-size:28px;font-weight:600;color:var(--cream);margin-bottom:4px}
-.login-sub{font-size:13px;color:rgba(253,250,245,.4)}
-.login-card{
-  width:100%;max-width:380px;
-  background:rgba(255,255,255,.05);
-  border:1px solid rgba(255,255,255,.09);
-  border-radius:22px;padding:24px;
-  display:flex;flex-direction:column;gap:14px;
-}
-.field{display:flex;flex-direction:column;gap:5px}
-.field-label{font-size:11.5px;font-weight:500;color:rgba(253,250,245,.45);letter-spacing:.04em}
-.field-input{
-  width:100%;background:rgba(255,255,255,.06);
-  border:1px solid rgba(255,255,255,.1);border-radius:10px;
-  padding:13px 14px;color:var(--cream);font-family:var(--fb);font-size:15px;
-  outline:none;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none;
-}
-.field-input::placeholder{color:rgba(253,250,245,.25)}
-.field-input:focus{border-color:var(--gold-br);box-shadow:0 0 0 3px rgba(212,184,106,.15)}
-.btn-gold{
-  width:100%;padding:14px;border:none;border-radius:99px;
-  background:linear-gradient(135deg,var(--gold-b),var(--gold));
-  color:#fff;font-family:var(--fb);font-size:15px;font-weight:500;
-  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;
-  box-shadow:0 4px 18px rgba(168,131,42,.35);transition:box-shadow .25s,transform .2s;
-}
-.btn-gold:hover:not(:disabled){box-shadow:0 8px 28px rgba(168,131,42,.48);transform:translateY(-1px)}
-.btn-gold:disabled{opacity:.5;cursor:not-allowed}
-.btn-gold i{font-size:16px}
-.form-err{
-  background:rgba(192,57,43,.12);border:1px solid rgba(192,57,43,.25);
-  border-radius:10px;padding:10px 14px;color:#E57373;
-  font-size:13px;display:flex;align-items:center;gap:8px;
-}
-.form-err i{flex-shrink:0}
-
-/* ── APP SHELL ── */
-#s-app{display:flex;flex-direction:column}
-
-/* TOP BAR */
-.topbar{
-  flex-shrink:0;
-  background:var(--ink);
-  padding:0 16px;
-  height:58px;
-  display:flex;align-items:center;justify-content:space-between;
-  box-shadow:0 1px 0 rgba(255,255,255,.06);
-  position:relative;z-index:10;
-}
-.topbar-left{display:flex;align-items:center;gap:10px}
-.topbar-mark{
-  width:32px;height:32px;border-radius:9px;
-  background:linear-gradient(135deg,var(--gold-b),var(--gold));
-  display:flex;align-items:center;justify-content:center;
-}
-.topbar-mark i{font-size:16px;color:#fff}
-.topbar-shop{font-family:var(--fd);font-size:18px;font-weight:600;color:var(--cream)}
-.topbar-plan{font-size:10px;color:var(--gold-b);background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.2);border-radius:99px;padding:2px 8px;letter-spacing:.06em;text-transform:uppercase}
-.btn-icon{
-  width:34px;height:34px;border-radius:9px;
-  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;color:rgba(253,250,245,.55);font-size:18px;
-  transition:background .2s,color .2s;
-}
-.btn-icon:hover{background:rgba(255,255,255,.1);color:var(--cream)}
-
-/* TAB CONTENT AREA */
-.tab-area{
-  flex:1;overflow:hidden;position:relative;
-  display:flex;flex-direction:column;
-}
-.tab-pane{
-  position:absolute;inset:0;
-  overflow-y:auto;-webkit-overflow-scrolling:touch;
-  padding-bottom:calc(var(--tab-h) + 8px);
-  transition:opacity .25s var(--eo),transform .25s var(--eo);
-}
-.tab-pane.hidden{opacity:0;pointer-events:none;transform:translateX(16px)}
-
-/* STATS ROW */
-.stats-row{
-  display:grid;grid-template-columns:repeat(3,1fr);
-  gap:8px;padding:12px 14px 4px;
-}
-.stat-card{
-  background:var(--ink);border-radius:14px;padding:12px;
-  border:1px solid rgba(255,255,255,.06);
-}
-.stat-v{font-family:var(--fd);font-size:26px;font-weight:500;color:var(--cream)}
-.stat-l{font-size:11px;color:rgba(253,250,245,.35);margin-top:2px}
-
-/* SEARCH */
-.search-wrap{padding:10px 14px 6px;position:sticky;top:0;z-index:5;background:var(--cream-d)}
-.search-input-wrap{position:relative}
-.search-input-wrap i{
-  position:absolute;left:13px;top:50%;transform:translateY(-50%);
-  font-size:17px;color:var(--ink-f);pointer-events:none;
-}
-.search-input{
-  width:100%;background:var(--white);
-  border:1px solid var(--beige-m);border-radius:12px;
-  padding:11px 14px 11px 40px;
-  font-family:var(--fb);font-size:14px;color:var(--ink);
-  outline:none;transition:border-color .2s,box-shadow .2s;
-  -webkit-appearance:none;
-}
-.search-input::placeholder{color:var(--ink-f)}
-.search-input:focus{border-color:var(--gold-br);box-shadow:0 0 0 3px rgba(212,184,106,.15)}
-
-/* SECTION HEADER */
-.sec-head{
-  padding:10px 14px 6px;
-  font-size:11px;font-weight:500;color:var(--ink-f);
-  letter-spacing:.08em;text-transform:uppercase;
-}
-
-/* CUSTOMER LIST */
-.cust-list{display:flex;flex-direction:column;gap:6px;padding:0 10px 8px}
-.cust-card{
-  background:var(--white);border-radius:16px;
-  border:1px solid var(--beige);
-  overflow:hidden;transition:box-shadow .2s;
-}
-.cust-card.reward-ready{border-color:rgba(45,138,94,.35);background:linear-gradient(135deg,#fff,rgba(27,94,66,.03))}
-.cust-card-head{
-  display:flex;align-items:center;gap:12px;
-  padding:13px 14px;cursor:pointer;
-}
-.cust-av{
-  width:38px;height:38px;border-radius:50%;flex-shrink:0;
-  background:linear-gradient(135deg,var(--gold-b),var(--gold));
-  display:flex;align-items:center;justify-content:center;
-  font-family:var(--fd);font-size:17px;font-weight:600;color:#fff;
-  box-shadow:0 2px 8px rgba(168,131,42,.3);
-}
-.cust-av.reward{background:linear-gradient(135deg,var(--em-l),var(--em));box-shadow:0 2px 8px rgba(27,94,66,.3)}
-.cust-info{flex:1;min-width:0}
-.cust-name{font-size:14px;font-weight:500;color:var(--ink);margin-bottom:3px}
-.cust-meta{font-size:12px;color:var(--ink-f);display:flex;align-items:center;gap:6px}
-.reward-badge{
-  display:inline-flex;align-items:center;gap:4px;
-  background:linear-gradient(135deg,var(--em-l),var(--em));
-  color:#fff;font-size:10.5px;font-weight:600;
-  padding:2px 8px;border-radius:99px;
-}
-.cust-stamps{text-align:right;flex-shrink:0}
-.stamp-count{font-family:var(--fd);font-size:17px;font-weight:500;color:var(--ink)}
-.stamp-label{font-size:10px;color:var(--ink-f);margin-top:1px}
-
-/* STAMP DOTS */
-.stamp-dots{
-  display:flex;flex-wrap:wrap;gap:4px;
-  padding:0 14px 10px;
-}
-.dot{
-  width:10px;height:10px;border-radius:50%;
-  border:1.5px solid rgba(168,131,42,.28);
-  background:rgba(253,244,227,.6);
-  transition:all .2s;
-}
-.dot.filled{
-  border:none;
-  background:radial-gradient(circle at 38% 32%,#EDD97A,#C9A84C 45%,#A8832A 72%);
-  box-shadow:0 1px 4px rgba(168,131,42,.4);
-}
-.dot.reward-dot{border:1.5px solid var(--gold-br);background:var(--gold-p)}
-.dot.reward-dot.filled{background:linear-gradient(135deg,var(--em-l),var(--em));border:none;box-shadow:0 1px 4px rgba(27,94,66,.4)}
-
-/* ACTION BUTTONS */
-.cust-actions{
-  display:flex;gap:8px;padding:0 14px 14px;
-}
-.btn-stamp{
-  flex:1;padding:11px;border:none;border-radius:99px;
-  background:linear-gradient(135deg,var(--gold-b),var(--gold));
-  color:#fff;font-family:var(--fb);font-size:13.5px;font-weight:500;
-  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;
-  box-shadow:0 3px 12px rgba(168,131,42,.3);transition:all .2s;
-}
-.btn-stamp:hover{box-shadow:0 5px 18px rgba(168,131,42,.45);transform:translateY(-1px)}
-.btn-stamp:disabled{opacity:.45;pointer-events:none}
-.btn-stamp i{font-size:15px}
-.btn-redeem{
-  flex:1;padding:11px;border:none;border-radius:99px;
-  background:linear-gradient(135deg,var(--em-l),var(--em));
-  color:#fff;font-family:var(--fb);font-size:13.5px;font-weight:500;
-  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;
-  box-shadow:0 3px 12px rgba(27,94,66,.25);transition:all .2s;
-}
-.btn-redeem:hover{box-shadow:0 5px 18px rgba(27,94,66,.4);transform:translateY(-1px)}
-.btn-sm{
-  padding:11px 14px;border:1.5px solid var(--beige-m);border-radius:99px;
-  background:transparent;color:var(--ink-l);font-family:var(--fb);font-size:13px;
-  cursor:pointer;display:flex;align-items:center;gap:5px;transition:all .2s;white-space:nowrap;
-}
-.btn-sm:hover{border-color:var(--gold-br);color:var(--ink-m)}
-.btn-sm i{font-size:14px}
-
-/* EMPTY STATE */
-.empty-state{text-align:center;padding:3rem 2rem}
-.empty-ico{font-size:40px;margin-bottom:12px}
-.empty-title{font-family:var(--fd);font-size:20px;color:var(--ink);margin-bottom:6px}
-.empty-body{font-size:14px;color:var(--ink-l);line-height:1.6}
-
-/* SETTINGS */
-.settings-wrap{padding:14px}
-.settings-card{
-  background:var(--white);border-radius:18px;
-  border:1px solid var(--beige);margin-bottom:12px;overflow:hidden;
-}
-.settings-head{
-  padding:14px 16px;border-bottom:1px solid var(--beige);
-  font-size:12px;font-weight:500;color:var(--ink-l);
-  letter-spacing:.06em;text-transform:uppercase;
-  display:flex;align-items:center;gap:7px;
-}
-.settings-head i{font-size:16px;color:var(--gold)}
-.settings-field{padding:12px 16px;border-bottom:1px solid var(--beige)}
-.settings-field:last-child{border-bottom:none}
-.settings-label{font-size:11.5px;color:var(--ink-f);margin-bottom:5px;font-weight:500}
-.settings-input{
-  width:100%;background:var(--cream-d);border:1px solid var(--beige-m);
-  border-radius:9px;padding:10px 12px;font-family:var(--fb);font-size:14px;
-  color:var(--ink);outline:none;transition:border-color .2s,box-shadow .2s;
-  -webkit-appearance:none;
-}
-.settings-input:focus{border-color:var(--gold-br);box-shadow:0 0 0 3px rgba(212,184,106,.15)}
-.settings-row{display:grid;grid-template-columns:1fr 80px;gap:8px}
-.btn-save{
-  width:100%;padding:13px;border:none;border-radius:12px;
-  background:linear-gradient(135deg,var(--gold-b),var(--gold));
-  color:#fff;font-family:var(--fb);font-size:14px;font-weight:500;
-  cursor:pointer;box-shadow:0 3px 14px rgba(168,131,42,.3);transition:all .2s;
-}
-.btn-save:hover{box-shadow:0 6px 22px rgba(168,131,42,.45);transform:translateY(-1px)}
-.btn-save:disabled{opacity:.5;pointer-events:none}
-
-/* SHOP INFO CARD */
-.shop-info-card{
-  background:var(--ink);border-radius:18px;
-  padding:18px;margin-bottom:12px;
-  display:flex;align-items:center;gap:14px;
-}
-.shop-info-emoji{font-size:32px}
-.shop-info-name{font-family:var(--fd);font-size:20px;font-weight:600;color:var(--cream);margin-bottom:3px}
-.shop-info-meta{font-size:12px;color:rgba(253,250,245,.38)}
-
-/* BOTTOM TAB BAR */
-.tab-bar{
-  flex-shrink:0;height:var(--tab-h);
-  background:var(--white);border-top:1px solid var(--beige);
-  display:grid;grid-template-columns:1fr 1fr;
-  position:relative;z-index:10;
-}
-.tab-btn{
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
-  background:none;border:none;cursor:pointer;
-  color:var(--ink-f);font-family:var(--fb);font-size:11px;
-  transition:color .2s;padding:6px;
-}
-.tab-btn i{font-size:22px;transition:transform .2s var(--es)}
-.tab-btn.active{color:var(--gold)}
-.tab-btn.active i{transform:scale(1.1)}
-
-/* TOAST */
-.toast-wrap{
-  position:fixed;top:70px;left:50%;transform:translateX(-50%);
-  z-index:9999;display:flex;flex-direction:column;align-items:center;gap:8px;
-  pointer-events:none;width:calc(100% - 28px);max-width:360px;
-}
-.toast{
-  background:var(--ink);color:var(--cream);font-size:13.5px;font-weight:500;
-  padding:11px 18px;border-radius:99px;
-  display:flex;align-items:center;gap:8px;
-  box-shadow:0 4px 20px rgba(26,16,7,.25);
-  opacity:0;transform:translateY(-10px);
-  transition:opacity .3s var(--eo),transform .3s var(--eo);
-  pointer-events:all;
-}
-.toast.show{opacity:1;transform:translateY(0)}
-.toast.success{background:var(--em);color:#fff}
-.toast.error{background:var(--red);color:#fff}
-.toast i{font-size:16px}
-
-/* MODAL OVERLAY */
-.modal-ov{
-  position:fixed;inset:0;background:rgba(26,16,7,.45);z-index:50;
-  opacity:0;pointer-events:none;transition:opacity .3s;
-  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
-}
-.modal-ov.show{opacity:1;pointer-events:all}
-.modal-sheet{
-  position:fixed;bottom:0;left:0;right:0;
-  background:var(--white);border-radius:22px 22px 0 0;z-index:51;
-  padding:20px 18px 36px;
-  transform:translateY(100%);transition:transform .4s var(--eo);
-  max-height:85vh;overflow-y:auto;
-}
-.modal-ov.show .modal-sheet{transform:translateY(0)}
-.modal-handle{width:36px;height:4px;background:var(--beige-m);border-radius:99px;margin:0 auto 20px}
-.modal-title{font-family:var(--fd);font-size:22px;font-weight:500;color:var(--ink);margin-bottom:6px}
-.modal-sub{font-size:13px;color:var(--ink-l);margin-bottom:20px;line-height:1.55}
-.modal-row{display:flex;gap:10px;margin-bottom:10px}
-
-/* LOADING SPINNER */
-@keyframes spin{to{transform:rotate(360deg)}}
-.loader-ring{
-  width:36px;height:36px;border:2.5px solid var(--beige);
-  border-top-color:var(--gold-b);border-radius:50%;
-  animation:spin .7s linear infinite;margin:3rem auto;display:block;
-}
-
-/* RESPONSIVE */
-@media(min-width:500px){
-  #s-login{background:var(--ink)}
-  .tab-area,.tab-pane{max-width:700px;margin:0 auto}
-  .topbar,.tab-bar{max-width:700px;margin:0 auto;border-radius:0}
-}
-@media(min-width:700px){
-  #s-app{background:#e8e0d5}
-  .topbar{border-radius:0 0 0 0}
-}
+:root{--cream:#FDFAF5;--cream-d:#F5EEE3;--beige:#EDE3D4;--beige-m:#D9CBBA;--gold:#A8832A;--gold-b:#C9A84C;--gold-p:#FDF4E3;--gold-br:#D4B86A;--em:#1B5E42;--em-l:#2D8A5E;--wa:#25D366;--wa-d:#128C7E;--ink:#1A1007;--ink-m:#4A3A25;--ink-l:#7A6A52;--ink-f:#A89880;--white:#FFFFFF;--fd:'Cormorant Garamond',Georgia,serif;--fb:'DM Sans',sans-serif;--eo:cubic-bezier(.16,1,.3,1);--eb:cubic-bezier(.34,1.56,.64,1);--es:cubic-bezier(.34,1.4,.64,1);--safe-b:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}html{height:100%;-webkit-tap-highlight-color:transparent}body{font-family:var(--fb);background:var(--cream);color:var(--ink);-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100%}button{font-family:var(--fb);cursor:pointer;border:none;outline:none;-webkit-tap-highlight-color:transparent}a{text-decoration:none;color:inherit}input,select{font-family:var(--fb);border-radius:0;-webkit-appearance:none}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");opacity:.022}
+.screen{display:none;min-height:100vh;min-height:100dvh;flex-direction:column}.screen.active{display:flex;animation:screenIn .45s var(--eo) both}@keyframes screenIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+#s-load{align-items:center;justify-content:center;background:var(--cream)}.load-wrap{text-align:center;display:flex;flex-direction:column;align-items:center;gap:1.2rem}.load-coin{width:72px;height:72px;border-radius:50%;background:radial-gradient(circle at 38% 32%,#EDD97A,#C9A84C 42%,#A8832A 72%,#7A5C18);box-shadow:inset 0 4px 10px rgba(255,255,255,.45),inset 0 -4px 10px rgba(60,30,0,.3),0 10px 40px rgba(168,131,42,.45);display:flex;align-items:center;justify-content:center;font-size:28px;color:rgba(255,255,255,.75);font-family:var(--fd);animation:coinPulse 1.8s ease-in-out infinite}@keyframes coinPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}.load-text{font-size:14px;color:var(--ink-l);animation:fadeOsc 1.8s ease-in-out infinite}@keyframes fadeOsc{0%,100%{opacity:.4}50%{opacity:1}}
+#s-err{align-items:center;justify-content:center;padding:2rem;background:var(--cream)}.err-wrap{text-align:center;max-width:340px;display:flex;flex-direction:column;align-items:center;gap:1rem}.err-ico{font-size:52px}.err-t{font-family:var(--fd);font-size:28px;font-weight:500;color:var(--ink)}.err-s{font-size:15px;line-height:1.72;color:var(--ink-l)}.err-btn{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;border-radius:99px;border:1.5px solid var(--gold-br);background:transparent;color:var(--gold);font-size:14px;font-weight:500;transition:background .2s;margin-top:.5rem}.err-btn:active{background:var(--gold-p)}
+#s-login{align-items:center;background:var(--cream);overflow-y:auto}.login-wrap{width:100%;max-width:420px;margin:0 auto;padding:0 1.1rem 3rem;display:flex;flex-direction:column;align-items:center}.login-hero{width:100%;background:var(--ink);border-radius:0 0 28px 28px;padding:3rem 1.5rem 2rem;text-align:center;margin-bottom:1.5rem;position:relative;overflow:hidden}.login-hero::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 10%,rgba(201,168,76,.22),transparent 68%)}.login-hero::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:50px;background:linear-gradient(to bottom,transparent,var(--cream));pointer-events:none}.lh-coin{width:64px;height:64px;border-radius:50%;background:radial-gradient(circle at 38% 32%,#EDD97A,#C9A84C 42%,#A8832A 72%,#7A5C18);box-shadow:inset 0 3px 8px rgba(255,255,255,.4),0 10px 36px rgba(168,131,42,.6);display:flex;align-items:center;justify-content:center;font-size:24px;color:rgba(255,255,255,.75);font-family:var(--fd);margin:0 auto .9rem;position:relative;z-index:1}.lh-title{font-family:var(--fd);font-size:24px;font-weight:600;color:var(--cream);position:relative;z-index:1;margin-bottom:.2rem}.lh-tag{font-size:11px;letter-spacing:.1em;color:rgba(253,250,245,.38);position:relative;z-index:1}.lh-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.28);border-radius:99px;padding:4px 11px;font-size:11px;color:var(--gold-b);margin-top:.75rem;position:relative;z-index:1}
+.login-card{width:100%;background:var(--white);border-radius:20px;padding:1.5rem 1.25rem;box-shadow:0 14px 44px rgba(26,16,7,.09),0 2px 8px rgba(26,16,7,.04),inset 0 1px 0 rgba(255,255,255,.9);margin-bottom:1.25rem}.login-h{font-family:var(--fd);font-size:23px;font-weight:500;color:var(--ink);margin-bottom:.25rem}.login-sub{font-size:13.5px;color:var(--ink-l);line-height:1.65;margin-bottom:1.2rem}.lf-g{margin-bottom:.9rem}.lf-l{display:block;font-size:11px;font-weight:500;color:var(--ink-m);letter-spacing:.06em;text-transform:uppercase;margin-bottom:.35rem}.lf-hint{font-size:10px;color:var(--ink-f);margin-top:.2rem;line-height:1.35}.lf-i{width:100%;padding:11px 13px;border:1.5px solid var(--beige);border-radius:12px;font-size:15px;color:var(--ink);background:var(--cream);transition:border-color .2s,box-shadow .2s;outline:none}.lf-i:focus{border-color:var(--gold-b);box-shadow:0 0 0 3px rgba(201,168,76,.13)}.lf-i::placeholder{color:var(--ink-f)}.lf-i.err{border-color:#e74c3c;box-shadow:0 0 0 3px rgba(231,76,60,.1)}.lf-err{min-height:18px;font-size:12.5px;color:#c0392b;display:flex;align-items:center;gap:4px;margin-bottom:.5rem}.lf-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:13px 22px;border-radius:99px;background:linear-gradient(135deg,var(--gold-b),var(--gold));color:#fff;font-size:15px;font-weight:600;box-shadow:0 4px 18px rgba(168,131,42,.35);transition:box-shadow .2s,opacity .2s;margin-bottom:.7rem;min-height:48px}.lf-btn:active:not(:disabled){box-shadow:0 2px 8px rgba(168,131,42,.3)}.lf-btn:disabled{opacity:.6;cursor:not-allowed}.lf-note{font-size:11.5px;color:var(--ink-f);text-align:center;line-height:1.55}
+.login-primo{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-f)}.lp-brand{font-family:var(--fd);font-size:14px;font-weight:600;color:var(--ink-m)}.lp-brand span{color:var(--gold-b)}
+/* Login cooldown */
+.cooldown-notice{font-size:12px;color:#c0392b;text-align:center;margin-top:.5rem;line-height:1.5}
+/* Security banner */
+.sec-banner{display:none;align-items:center;gap:.6rem;background:#fef3cd;border-bottom:1px solid #ffc107;padding:.5rem .9rem;font-size:11px;color:#856404;line-height:1.4}.sec-banner i{font-size:15px;flex-shrink:0}.sec-banner.show{display:flex}
+/* Dashboard */
+#s-dash{background:var(--cream-d);min-height:100vh;min-height:100dvh;flex-direction:column}
+.dash-hdr{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:.7rem .9rem;background:var(--ink);border-bottom:1px solid rgba(201,168,76,.18)}.dash-hdr::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),var(--gold-b),var(--gold))}.dhdr-left{display:flex;align-items:center;gap:.6rem;min-width:0}.dhdr-coin-sm{width:32px;height:32px;border-radius:50%;flex-shrink:0;background:radial-gradient(circle at 38% 32%,#EDD97A,#C9A84C 42%,#A8832A 72%,#7A5C18);box-shadow:inset 0 2px 5px rgba(255,255,255,.4),0 3px 10px rgba(168,131,42,.5);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:12px;color:rgba(255,255,255,.75)}.dhdr-info{min-width:0}.dhdr-shop{font-family:var(--fd);font-size:16px;font-weight:600;color:var(--cream);line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.dhdr-plan{display:inline-flex;align-items:center;gap:3px;font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-b);margin-top:1px}.dhdr-plan::before{content:'';display:inline-block;width:4px;height:4px;border-radius:50%;background:var(--gold-b)}.profile-btn{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,rgba(201,168,76,.25),rgba(201,168,76,.12));border:1.5px solid rgba(201,168,76,.35);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:16px;font-weight:600;color:var(--gold-b);flex-shrink:0}.profile-btn:active{background:rgba(201,168,76,.35)}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:.45rem;padding:.7rem .75rem .4rem}.stat-card{background:var(--white);border-radius:14px;padding:.65rem .5rem;box-shadow:0 3px 12px rgba(26,16,7,.06);text-align:center}.stat-val{font-family:var(--fd);font-size:26px;font-weight:600;color:var(--ink);line-height:1}.stat-lbl{font-size:9.5px;color:var(--ink-l);margin-top:2px;line-height:1.3}.stat-card.go .stat-val{color:var(--gold)}.stat-card.em .stat-val{color:var(--em)}
+.tab-bar{display:flex;border-bottom:1px solid var(--beige);background:rgba(253,250,245,.96);backdrop-filter:blur(12px);position:sticky;top:52px;z-index:40}.tab-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;padding:.45rem .15rem;font-size:9.5px;font-weight:500;color:var(--ink-l);border-bottom:2.5px solid transparent;background:transparent;line-height:1.1;min-height:44px;justify-content:center}.tab-btn i{font-size:16px}.tab-btn.active{color:var(--gold);border-bottom-color:var(--gold)}.tab-btn.wa-tab.active{color:var(--wa-d);border-bottom-color:var(--wa)}.tab-content{display:none}.tab-content.active{display:block;animation:screenIn .3s var(--eo) both}
+/* Mini stamp grid */
+.mini-grid{display:flex;flex-wrap:wrap;gap:4px;margin:.5rem 0 .25rem}.mc{width:22px;height:22px;border-radius:50%;position:relative;display:flex;align-items:center;justify-content:center;flex-shrink:0}.mc-track{position:absolute;inset:0;border-radius:50%;border:1.5px dashed rgba(168,131,42,.28);background:rgba(253,244,227,.5);display:flex;align-items:center;justify-content:center}.mc-n{font-size:6.5px;color:rgba(168,131,42,.32);font-family:var(--fd);font-weight:500}.mc-c{position:absolute;inset:0;border-radius:50%;opacity:0;pointer-events:none}.mc.f .mc-c{opacity:1;background:radial-gradient(circle at 38% 32%,#EDD97A,#C9A84C 42%,#A8832A 72%,#7A5C18);box-shadow:inset 0 2px 4px rgba(255,255,255,.4),inset 0 -2px 4px rgba(60,30,0,.25),0 2px 6px rgba(168,131,42,.35)}.mc.f::before{content:'';position:absolute;inset:-2px;border-radius:50%;border:1px solid rgba(212,184,106,.45)}.mc-c::after{content:'♛';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:7.5px;color:rgba(255,255,255,.7);font-family:var(--fd)}.mc.rs .mc-track{border:1.5px solid var(--gold-br);background:var(--gold-p);border-style:solid}.mc.rs .mc-n{font-size:9px;color:var(--gold-b)}.mc.rs.f .mc-track{display:none}.mc.rs.f .mc-c{background:linear-gradient(135deg,var(--em-l),var(--em));box-shadow:inset 0 2px 5px rgba(255,255,255,.25),0 3px 10px rgba(27,94,66,.5)}.mc.rs.f .mc-c::after{content:'✓';font-size:10px;font-weight:700;color:#fff}.mc.rs.f::before{border-color:rgba(45,138,94,.5);animation:rp 1.4s ease-in-out infinite}@keyframes rp{0%,100%{opacity:.7;transform:scale(1)}50%{opacity:1;transform:scale(1.06)}}.stamp-lbl{font-size:10.5px;color:var(--ink-l)}.full-card .stamp-lbl{color:var(--em);font-weight:600}
+/* Customer cards */
+.cust-toolbar{display:flex;gap:.45rem;align-items:center;padding:.7rem .75rem .4rem}.search-wrap{position:relative;flex:1}.search-ico{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:15px;color:var(--ink-f);pointer-events:none}.search-inp{width:100%;padding:10px 12px 10px 32px;border:1.5px solid var(--beige);border-radius:12px;font-size:14px;color:var(--ink);background:var(--white);outline:none;transition:border-color .2s,box-shadow .2s}.search-inp:focus{border-color:var(--gold-b);box-shadow:0 0 0 3px rgba(201,168,76,.13)}.search-inp::placeholder{color:var(--ink-f)}.add-btn{display:flex;align-items:center;justify-content:center;gap:4px;padding:10px 12px;border-radius:12px;background:linear-gradient(135deg,var(--gold-b),var(--gold));color:#fff;font-size:12px;font-weight:600;box-shadow:0 3px 10px rgba(168,131,42,.3);white-space:nowrap;flex-shrink:0;min-height:44px}.cust-list{padding:0 .75rem 6rem;display:flex;flex-direction:column;gap:.45rem}.cust-empty{text-align:center;padding:2.5rem 1rem;color:var(--ink-l);font-size:13.5px;line-height:1.8}.cust-empty-ico{font-size:38px;margin-bottom:.4rem}
+.cust-card{background:var(--white);border-radius:14px;padding:.8rem .85rem;box-shadow:0 2px 10px rgba(26,16,7,.05);position:relative;overflow:hidden}.cust-card.full-card{border-left:3px solid var(--em)}.cust-card.just-redeemed{animation:rFlash .8s var(--eo)}@keyframes rFlash{0%{box-shadow:0 0 0 3px rgba(27,94,66,.5)}100%{box-shadow:0 2px 10px rgba(26,16,7,.05)}}.merch-badge{position:absolute;top:0;right:10px;background:linear-gradient(135deg,var(--em-l),var(--em));color:#fff;font-size:10px;font-weight:600;padding:3px 9px;border-radius:0 0 8px 8px;display:flex;align-items:center;gap:3px;box-shadow:0 2px 8px rgba(27,94,66,.4);animation:bdIn .35s var(--eb) both}@keyframes bdIn{from{transform:translateY(-100%);opacity:0}to{transform:none;opacity:1}}
+.cust-top{display:flex;align-items:center;gap:.6rem}.cust-av{width:36px;height:36px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--beige),var(--beige-m));display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:16px;font-weight:600;color:var(--ink-m)}.full-card .cust-av{background:linear-gradient(135deg,rgba(27,94,66,.12),rgba(27,94,66,.22));color:var(--em)}.cust-info{flex:1;min-width:0}.cust-nm{font-size:14px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.cust-ph{font-size:11px;color:var(--ink-f);margin-top:1px;display:flex;align-items:center;gap:.4rem;flex-wrap:wrap}.cust-ph .bday{color:var(--ink-l)}.cust-acts{display:flex;align-items:center;gap:.3rem;flex-shrink:0}
+.s-btn{display:flex;align-items:center;gap:3px;padding:7px 10px;border-radius:9px;background:var(--gold-p);border:1.5px solid rgba(201,168,76,.3);color:var(--gold);font-size:11.5px;font-weight:600;min-height:36px}.s-btn:active{background:rgba(201,168,76,.25)}.s-btn:disabled{opacity:.5;cursor:not-allowed}.s-btn.confirming{background:var(--gold);border-color:var(--gold);color:#fff;animation:cPulse .45s var(--eb)}@keyframes cPulse{0%{transform:scale(1)}45%{transform:scale(1.06)}100%{transform:scale(1)}}.r-btn{display:flex;align-items:center;gap:3px;padding:7px 10px;border-radius:9px;background:linear-gradient(135deg,var(--em-l),var(--em));color:#fff;font-size:11.5px;font-weight:600;box-shadow:0 2px 8px rgba(27,94,66,.3);min-height:36px}.r-btn:disabled{opacity:.5;cursor:not-allowed}.e-btn{width:28px;height:28px;border-radius:50%;background:transparent;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--ink-f)}.e-btn:active{background:var(--beige)}.cust-bot{display:flex;align-items:center;justify-content:space-between;margin-top:.3rem}.last-v{font-size:10px;color:var(--ink-f)}.wa-chip{display:inline-flex;align-items:center;gap:3px;font-size:10px;color:var(--wa-d);font-weight:500;background:rgba(37,211,102,.08);padding:2px 7px;border-radius:99px}
+/* WhatsApp tab */
+.wa-wrap{padding:.7rem .75rem 6rem}.tpl-scroll{display:flex;gap:.4rem;overflow-x:auto;padding:.2rem 0 .5rem;scrollbar-width:none}.tpl-scroll::-webkit-scrollbar{display:none}.tpl-pill{display:flex;align-items:center;gap:5px;padding:8px 14px;border-radius:99px;border:1.5px solid var(--beige);background:var(--white);color:var(--ink-m);font-size:12px;font-weight:500;white-space:nowrap;flex-shrink:0}.tpl-pill.sel{border-color:var(--wa);background:rgba(37,211,102,.08);color:var(--wa-d)}.tpl-pill.sel i{color:var(--wa)}.tpl-pill i{font-size:15px;color:var(--ink-f)}.tpl-preview{background:var(--white);border-radius:14px;padding:.85rem 1rem;box-shadow:0 2px 10px rgba(26,16,7,.05);margin-bottom:.7rem;border-left:3px solid var(--wa)}.tpl-preview-lbl{font-size:10px;font-weight:600;color:var(--wa-d);letter-spacing:.06em;text-transform:uppercase;margin-bottom:.3rem}.tpl-preview-txt{font-size:13px;color:var(--ink-m);line-height:1.65}.wa-banner{display:flex;align-items:center;gap:.65rem;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);border-radius:12px;padding:.65rem .85rem;margin-bottom:.65rem}.wa-banner-ico{font-size:18px;flex-shrink:0}.wa-banner-txt{font-size:12px;color:var(--ink-m);line-height:1.5}.wa-banner-txt strong{color:var(--gold)}.wa-sec{font-size:10px;font-weight:600;color:var(--ink-l);letter-spacing:.08em;text-transform:uppercase;margin:.55rem 0 .35rem}.wa-row{display:flex;align-items:center;gap:.65rem;background:var(--white);border-radius:12px;padding:.65rem .75rem;box-shadow:0 1px 6px rgba(26,16,7,.04);margin-bottom:.35rem}.wa-av{width:34px;height:34px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--beige),var(--beige-m));display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:14px;font-weight:600;color:var(--ink-m)}.wa-info{flex:1;min-width:0}.wa-nm{font-size:13px;font-weight:600;color:var(--ink)}.wa-st{font-size:10.5px;color:var(--ink-l);margin-top:1px}.wa-send{display:flex;align-items:center;justify-content:center;gap:4px;padding:8px 12px;border-radius:9px;background:var(--wa);color:#fff;font-size:11.5px;font-weight:600;box-shadow:0 2px 8px rgba(37,211,102,.25);flex-shrink:0;min-height:36px}.wa-empty{text-align:center;padding:2rem 1rem;color:var(--ink-l);font-size:13px;line-height:1.7}
+/* Settings */
+.settings-wrap{padding:.7rem .75rem 6rem}.settings-card{background:var(--white);border-radius:16px;padding:1.15rem 1rem;box-shadow:0 3px 14px rgba(26,16,7,.06);margin-bottom:.7rem}.settings-h{font-family:var(--fd);font-size:19px;font-weight:500;color:var(--ink);margin-bottom:.85rem}.sf-row{display:grid;grid-template-columns:1fr 75px;gap:.6rem;margin-bottom:.7rem}.sf-g{margin-bottom:.7rem}.sf-l{display:block;font-size:10.5px;font-weight:500;color:var(--ink-m);letter-spacing:.06em;text-transform:uppercase;margin-bottom:.3rem}.sf-i{width:100%;padding:10px 12px;border:1.5px solid var(--beige);border-radius:11px;font-size:15px;color:var(--ink);background:var(--cream);outline:none;transition:border-color .2s,box-shadow .2s}.sf-i:focus{border-color:var(--gold-b);box-shadow:0 0 0 3px rgba(201,168,76,.13)}.sf-rule-row{display:grid;grid-template-columns:1fr 28px 1fr;gap:.35rem;align-items:end}.sf-rule-sep{font-size:20px;font-family:var(--fd);color:var(--ink-l);padding-bottom:.4rem;text-align:center}.save-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:7px;padding:11px 20px;border-radius:99px;background:linear-gradient(135deg,var(--gold-b),var(--gold));color:#fff;font-size:14px;font-weight:600;box-shadow:0 3px 14px rgba(168,131,42,.3);min-height:44px}.save-btn:disabled{opacity:.6;cursor:not-allowed}.settings-note{font-size:11px;color:var(--ink-f);line-height:1.6;margin-top:.5rem;text-align:center}
+/* QR */
+.qr-wrap{padding:.7rem .75rem 6rem;max-width:460px;margin:0 auto;width:100%}.qr-card{background:var(--white);border-radius:16px;padding:1.4rem 1rem;box-shadow:0 3px 14px rgba(26,16,7,.06);text-align:center;margin-bottom:.7rem}.qr-title{font-family:var(--fd);font-size:20px;font-weight:500;color:var(--ink);margin-bottom:.25rem}.qr-sub{font-size:12.5px;color:var(--ink-l);line-height:1.65;margin-bottom:1rem}#qr-canvas-wrap{display:inline-flex;padding:12px;border-radius:14px;border:1.5px solid var(--beige);box-shadow:0 3px 14px rgba(26,16,7,.05);margin-bottom:.85rem}#qr-canvas-wrap canvas{display:block;border-radius:3px}.qr-url{font-size:11.5px;color:var(--ink-l);word-break:break-all;background:var(--cream);border-radius:9px;padding:.5rem .7rem;margin-bottom:.9rem;font-family:monospace}.qr-actions{display:flex;gap:.45rem}.qr-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;padding:10px 12px;border-radius:11px;font-size:12.5px;font-weight:500;min-height:44px}.qr-btn.outline{border:1.5px solid var(--beige);background:transparent;color:var(--ink-m)}.qr-btn.gold{background:linear-gradient(135deg,var(--gold-b),var(--gold));color:#fff;box-shadow:0 3px 10px rgba(168,131,42,.3);border:none}
+.export-card{background:var(--white);border-radius:16px;padding:1rem;box-shadow:0 3px 14px rgba(26,16,7,.06);display:flex;align-items:center;gap:.8rem}.export-ico{width:42px;height:42px;border-radius:11px;flex-shrink:0;background:var(--gold-p);border:1.5px solid rgba(201,168,76,.22);display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--gold)}.export-info{flex:1}.export-info strong{font-size:13px;font-weight:600;color:var(--ink)}.export-info p{font-size:11px;color:var(--ink-l);margin-top:1px}.export-btn{display:flex;align-items:center;gap:4px;padding:8px 12px;border-radius:9px;background:var(--gold-p);border:1.5px solid rgba(201,168,76,.28);color:var(--gold);font-size:12px;font-weight:600;flex-shrink:0;min-height:36px}
+/* Sheets + Modals */
+.sheet-overlay{position:fixed;inset:0;z-index:200;background:rgba(26,16,7,.55);backdrop-filter:blur(4px);display:none;align-items:flex-end;justify-content:center}.sheet-overlay.open{display:flex;animation:oIn .2s ease both}@keyframes oIn{from{opacity:0}to{opacity:1}}.sheet{width:100%;max-width:460px;background:var(--white);border-radius:22px 22px 0 0;padding:0 1.15rem calc(1.5rem + var(--safe-b));animation:sUp .3s var(--eo) both}@keyframes sUp{from{transform:translateY(100%)}to{transform:none}}.sheet-pull{width:34px;height:4px;border-radius:99px;background:var(--beige-m);margin:10px auto 1rem}.sheet-top{display:flex;align-items:center;gap:.75rem;padding:.5rem 0 .85rem;border-bottom:1px solid var(--beige);margin-bottom:.85rem}.sheet-coin{width:46px;height:46px;border-radius:50%;flex-shrink:0;background:radial-gradient(circle at 38% 32%,#EDD97A,#C9A84C 42%,#A8832A 72%,#7A5C18);box-shadow:inset 0 3px 7px rgba(255,255,255,.4),0 5px 16px rgba(168,131,42,.4);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:18px;color:rgba(255,255,255,.75)}.sheet-sn{font-family:var(--fd);font-size:19px;font-weight:600;color:var(--ink)}.sheet-sc{font-size:11.5px;color:var(--ink-l);margin-top:1px}.sheet-items{display:flex;flex-direction:column;gap:.4rem}.sheet-item{display:flex;align-items:center;gap:.8rem;padding:.85rem .9rem;border-radius:13px;background:var(--cream);width:100%;text-align:left;min-height:56px}.sheet-item:active{background:var(--beige)}.si-ico{width:38px;height:38px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:17px}.si-ico.gold{background:var(--gold-p);color:var(--gold)}.si-ico.red{background:rgba(231,76,60,.1);color:#c0392b}.si-info strong{font-size:13.5px;font-weight:600;color:var(--ink)}.si-info p{font-size:11px;color:var(--ink-l);margin-top:1px}
+.modal-overlay{position:fixed;inset:0;z-index:200;background:rgba(26,16,7,.55);backdrop-filter:blur(4px);display:none;align-items:flex-end;justify-content:center}.modal-overlay.open{display:flex;animation:oIn .2s ease both}.modal-sheet{width:100%;max-width:460px;background:var(--white);border-radius:22px 22px 0 0;padding:0 1.15rem calc(1.5rem + var(--safe-b));animation:sUp .3s var(--eo) both;max-height:92vh;max-height:92dvh;overflow-y:auto;-webkit-overflow-scrolling:touch}.modal-pull{width:34px;height:4px;border-radius:99px;background:var(--beige-m);margin:10px auto 1rem}.modal-h{font-family:var(--fd);font-size:21px;font-weight:500;color:var(--ink);margin-bottom:.2rem}.modal-sub{font-size:13px;color:var(--ink-l);line-height:1.6;margin-bottom:1rem}.modal-2col{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}.derived-badge{display:inline-flex;align-items:center;gap:4px;background:var(--gold-p);border:1px solid rgba(201,168,76,.3);border-radius:8px;padding:4px 10px;font-size:12px;color:var(--gold);font-weight:500;margin-top:.3rem}.derived-badge i{font-size:13px}.modal-actions{display:flex;gap:.5rem;margin-top:1rem;padding-bottom:.25rem}.modal-cancel{flex:1;padding:11px;border-radius:99px;border:1.5px solid var(--beige);background:transparent;color:var(--ink-m);font-size:14px;font-weight:500;min-height:44px}.modal-cancel:active{background:var(--beige)}.modal-confirm{flex:2;padding:11px;border-radius:99px;background:linear-gradient(135deg,var(--em-l),var(--em));color:#fff;font-size:14px;font-weight:600;box-shadow:0 3px 14px rgba(27,94,66,.3);min-height:44px}.modal-confirm:disabled{opacity:.6;cursor:not-allowed}.modal-confirm.gold-c{background:linear-gradient(135deg,var(--gold-b),var(--gold));box-shadow:0 3px 14px rgba(168,131,42,.3)}
+/* Edit sheet extras */
+.edit-header{display:flex;align-items:center;gap:.65rem;padding:.3rem 0 .8rem;border-bottom:1px solid var(--beige);margin-bottom:.85rem}.edit-av{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--beige),var(--beige-m));display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:20px;font-weight:600;color:var(--ink-m);flex-shrink:0}.edit-av-info strong{font-size:15px;font-weight:600;color:var(--ink)}.edit-av-info p{font-size:11.5px;color:var(--ink-l);margin-top:1px}.edit-stamp-preview{background:var(--cream);border-radius:12px;padding:.65rem .8rem;margin-bottom:.85rem}.edit-stamp-lbl{font-size:10px;font-weight:600;color:var(--ink-l);letter-spacing:.06em;text-transform:uppercase;margin-bottom:.35rem}
+/* WA Preview sheet */
+.wa-preview-card{background:var(--cream);border-radius:14px;padding:1rem;margin:.6rem 0 .3rem;border-left:3px solid var(--wa)}.wa-preview-lbl{font-size:10px;font-weight:600;color:var(--wa-d);letter-spacing:.06em;text-transform:uppercase;margin-bottom:.4rem}.wa-preview-msg{font-size:13.5px;color:var(--ink);line-height:1.65;white-space:pre-wrap}.wa-preview-to{font-size:12px;color:var(--ink-l);margin-top:.5rem}
+.modal-confirm.wa-c{background:var(--wa);box-shadow:0 3px 14px rgba(37,211,102,.3)}.modal-confirm.wa-c:active{box-shadow:0 1px 6px rgba(37,211,102,.2)}
+/* Toast */
+#toast{position:fixed;bottom:calc(70px + var(--safe-b));left:50%;transform:translateX(-50%) translateY(10px);z-index:9000;background:var(--ink);color:var(--cream);padding:9px 16px;border-radius:11px;font-size:13px;font-weight:500;opacity:0;transition:opacity .2s,transform .25s var(--eo);pointer-events:none;white-space:nowrap;max-width:92vw}#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+/* Dev */
+@media(max-width:380px){.stats-row{gap:.3rem;padding:.6rem .6rem .3rem}.stat-val{font-size:22px}.stat-lbl{font-size:8.5px}.cust-toolbar{padding:.6rem .6rem .3rem}.cust-list{padding:0 .6rem 5rem}.search-inp{font-size:13px;padding:9px 10px 9px 30px}.add-btn{padding:9px 10px;font-size:11px}.cust-card{padding:.7rem .7rem}.cust-nm{font-size:13px}.s-btn,.r-btn{padding:6px 8px;font-size:10.5px}.mc{width:19px;height:19px}.mc-c::after{font-size:6.5px}.mini-grid{gap:3px}.modal-sheet{padding:0 .9rem calc(1.25rem + var(--safe-b))}.wa-wrap{padding:.6rem .6rem 5rem}.tpl-pill{padding:7px 11px;font-size:11px}}
 </style>
-<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
 </head>
 <body>
 
-<!-- ── LOGIN SCREEN ── -->
-<div class="screen" id="s-login">
-  <div class="login-top">
-    <div class="login-mark"><i class="ti ti-crown"></i></div>
-    <div class="login-title">Merchant Login</div>
-    <div class="login-sub">Primo Rewards — Shop Dashboard</div>
-  </div>
-  <div class="login-card">
-    <div class="field">
-      <label class="field-label" for="l-slug">Shop Slug</label>
-      <input class="field-input" type="text" id="l-slug"
-        placeholder="e.g. sweet-layers"
-        autocomplete="username" autocapitalize="none" spellcheck="false">
+<div id="s-load" class="screen active"><div class="load-wrap"><div class="load-coin">♛</div><div class="load-text">Loading…</div></div></div>
+<div id="s-err" class="screen"><div class="err-wrap"><div class="err-ico" id="errIco">⚠️</div><div class="err-t" id="errTitle">Error</div><div class="err-s" id="errMsg">Something went wrong.</div><button class="err-btn" onclick="location.reload()"><i class="ti ti-refresh"></i> Try Again</button></div></div>
+
+<div id="s-login" class="screen">
+  <div class="login-wrap">
+    <div class="login-hero"><div class="lh-coin">♛</div><div class="lh-title">Primo Rewards</div><div class="lh-tag">MERCHANT PORTAL</div><div class="lh-badge"><i class="ti ti-shield-check"></i> Secure Merchant Access</div></div>
+    <div class="login-card">
+      <div class="login-h">Merchant Login</div>
+      <div class="login-sub">Enter your shop slug and admin password.</div>
+      <div class="lf-g"><label class="lf-l" for="inSlug">Shop Slug</label><input id="inSlug" class="lf-i" type="text" placeholder="e.g. sweetlayers" autocomplete="off" spellcheck="false"></div>
+      <div class="lf-g"><label class="lf-l" for="inPwd">Admin Password</label><input id="inPwd" class="lf-i" type="password" placeholder="Your admin password" autocomplete="current-password"></div>
+      <div class="lf-err" id="loginErr"></div>
+      <button class="lf-btn" id="loginBtn"><i class="ti ti-arrow-right"></i><span id="loginBtnTxt">Access Dashboard</span></button>
+      <div class="cooldown-notice" id="cooldownNotice" style="display:none"></div>
+      <div class="lf-note">Restricted to registered Primo merchants.</div>
     </div>
-    <div class="field">
-      <label class="field-label" for="l-pw">Password</label>
-      <input class="field-input" type="password" id="l-pw"
-        placeholder="Your merchant password"
-        autocomplete="current-password">
-    </div>
-    <div class="form-err" id="l-err" style="display:none">
-      <i class="ti ti-alert-circle"></i>
-      <span id="l-err-text"></span>
-    </div>
-    <button class="btn-gold" id="l-btn">
-      <i class="ti ti-login"></i> Sign In
-    </button>
+    <div class="login-primo"><span>Powered by</span><span class="lp-brand">Primo<span>★</span></span><span>Rewards</span></div>
   </div>
 </div>
 
-<!-- ── APP SHELL ── -->
-<div class="screen hidden" id="s-app">
-  <!-- Top Bar -->
-  <header class="topbar">
-    <div class="topbar-left">
-      <div class="topbar-mark"><i class="ti ti-crown"></i></div>
-      <div>
-        <div class="topbar-shop" id="tb-name">Shop</div>
-      </div>
-    </div>
-    <div style="display:flex;align-items:center;gap:8px">
-      <button class="btn-icon" id="btn-refresh" title="Refresh"><i class="ti ti-refresh"></i></button>
-      <button class="btn-icon" id="btn-logout" title="Log out"><i class="ti ti-logout"></i></button>
-    </div>
-  </header>
-
-  <!-- Tab Area -->
-  <div class="tab-area">
-    <!-- CUSTOMERS TAB -->
-    <div class="tab-pane" id="tab-customers">
-      <!-- Stats -->
-      <div class="stats-row" id="stats-row">
-        <div class="stat-card"><div class="stat-v" id="st-total">—</div><div class="stat-l">Customers</div></div>
-        <div class="stat-card"><div class="stat-v" id="st-today">—</div><div class="stat-l">Stamps today</div></div>
-        <div class="stat-card"><div class="stat-v" id="st-rewards">—</div><div class="stat-l">Rewards given</div></div>
-      </div>
-      <!-- Search -->
-      <div class="search-wrap">
-        <div class="search-input-wrap">
-          <i class="ti ti-search"></i>
-          <input class="search-input" type="search" id="cust-search"
-            placeholder="Search by name or last 4 digits…" autocomplete="off">
-        </div>
-      </div>
-      <!-- Rewards ready banner -->
-      <div id="rewards-ready-section" style="display:none">
-        <div class="sec-head" style="color:var(--em)">🎁 Ready to redeem</div>
-        <div class="cust-list" id="rewards-list"></div>
-      </div>
-      <!-- All customers -->
-      <div class="sec-head" id="all-head">All customers</div>
-      <div class="cust-list" id="all-list">
-        <div class="loader-ring"></div>
-      </div>
-    </div>
-
-    <!-- SETTINGS TAB -->
-    <div class="tab-pane hidden" id="tab-settings">
-      <div class="settings-wrap">
-        <!-- Shop info -->
-        <div class="shop-info-card">
-          <div class="shop-info-emoji" id="si-emoji">🎁</div>
-          <div>
-            <div class="shop-info-name" id="si-name">—</div>
-            <div class="shop-info-meta" id="si-meta">—</div>
-          </div>
-        </div>
-        <!-- Reward settings -->
-        <div class="settings-card">
-          <div class="settings-head"><i class="ti ti-gift"></i> Reward Settings</div>
-          <div class="settings-field">
-            <div class="settings-label">Product name</div>
-            <input class="settings-input" type="text" id="s-product" placeholder="e.g. Cake, Coffee">
-          </div>
-          <div class="settings-field">
-            <div class="settings-label">Reward emoji / icon</div>
-            <input class="settings-input" type="text" id="s-emoji" placeholder="🎂" maxlength="4" style="font-size:20px">
-          </div>
-          <div class="settings-field">
-            <div class="settings-label">Stamps required before free reward</div>
-            <input class="settings-input" type="number" id="s-buy" min="1" max="50" placeholder="e.g. 11">
-          </div>
-          <div style="padding:14px 16px">
-            <button class="btn-save" id="btn-save-settings">Save Reward Settings</button>
-          </div>
-        </div>
-        <!-- Change password -->
-        <div class="settings-card">
-          <div class="settings-head"><i class="ti ti-lock"></i> Change Password</div>
-          <div class="settings-field">
-            <div class="settings-label">New password (min 6 characters)</div>
-            <input class="settings-input" type="password" id="s-pw1" placeholder="New password">
-          </div>
-          <div class="settings-field">
-            <div class="settings-label">Confirm new password</div>
-            <input class="settings-input" type="password" id="s-pw2" placeholder="Repeat new password">
-          </div>
-          <div style="padding:14px 16px">
-            <button class="btn-save" id="btn-save-pw">Update Password</button>
-          </div>
-        </div>
-
-        <!-- QR Poster -->
-        <div class="settings-card">
-          <div class="settings-head"><i class="ti ti-qrcode"></i> QR Loyalty Poster</div>
-          <div class="settings-field">
-            <div class="settings-label">Print-ready poster for your counter</div>
-            <div style="font-size:12px;color:var(--ink-f);margin-top:4px">800 × 1060px · Download PNG · Share on Instagram Stories</div>
-          </div>
-          <div style="padding:14px 16px">
-            <button class="btn-save" id="btn-poster"><i class="ti ti-download" style="margin-right:6px"></i>Preview &amp; Download Poster</button>
-          </div>
-        </div>
-        <!-- Logout -->
-        <div class="settings-card">
-          <div class="settings-head"><i class="ti ti-logout"></i> Session</div>
-          <div class="settings-field">
-            <div class="settings-label">Logged in as merchant</div>
-            <div style="font-size:13px;color:var(--ink-l);margin-top:4px" id="si-slug">—</div>
-          </div>
-          <div style="padding:14px 16px">
-            <button class="btn-save" id="btn-logout2" style="background:rgba(192,57,43,.08);color:var(--red);box-shadow:none;border:1.5px solid rgba(192,57,43,.2)">Log Out</button>
-          </div>
-        </div>
-      </div>
-    </div>
+<div id="s-dash" class="screen">
+  <div class="sec-banner" id="secBanner"><i class="ti ti-alert-triangle"></i><span>⚠ Running in direct mode — Edge Functions not configured. Not safe for production.</span></div>
+  <div class="dash-hdr"><div class="dhdr-left"><div class="dhdr-coin-sm">♛</div><div class="dhdr-info"><div class="dhdr-shop" id="hdrShopName">Shop</div><div class="dhdr-plan" id="hdrPlan">PRO</div></div></div><button class="profile-btn" id="profileMenuBtn" aria-label="Menu"><span id="hdrAvatar">S</span></button></div>
+  <div class="stats-row"><div class="stat-card"><div class="stat-val" id="statCust">—</div><div class="stat-lbl">Customers</div></div><div class="stat-card go"><div class="stat-val" id="statToday">—</div><div class="stat-lbl">Stamps Today</div></div><div class="stat-card em"><div class="stat-val" id="statMonth">—</div><div class="stat-lbl">Rewards / Mo</div></div></div>
+  <div class="tab-bar">
+    <button class="tab-btn active" data-tab="t-cust"><i class="ti ti-users"></i>Customers</button>
+    <button class="tab-btn wa-tab" data-tab="t-wa"><i class="ti ti-brand-whatsapp"></i>WhatsApp</button>
+    <button class="tab-btn" data-tab="t-set"><i class="ti ti-settings"></i>Settings</button>
+    <button class="tab-btn" data-tab="t-qr"><i class="ti ti-qrcode"></i>QR &amp; CSV</button>
   </div>
-
-  <!-- Bottom Tab Bar -->
-  <nav class="tab-bar">
-    <button class="tab-btn active" id="tb-customers" onclick="switchTab('customers')">
-      <i class="ti ti-users"></i>Customers
-    </button>
-    <button class="tab-btn" id="tb-settings" onclick="switchTab('settings')">
-      <i class="ti ti-settings-2"></i>Settings
-    </button>
-  </nav>
+  <div id="t-cust" class="tab-content active"><div class="cust-toolbar"><div class="search-wrap"><i class="ti ti-search search-ico"></i><input id="searchInp" class="search-inp" type="search" placeholder="Search by name…" autocomplete="off"></div><button class="add-btn" id="addCustBtn"><i class="ti ti-user-plus"></i>Add</button></div><div class="cust-list" id="custList"><div class="cust-empty"><div class="cust-empty-ico">🪙</div>Loading…</div></div></div>
+  <div id="t-wa" class="tab-content"><div class="wa-wrap"><div class="tpl-scroll" id="tplScroll"><button class="tpl-pill sel" data-tpl="progress" onclick="selTpl(this)"><i class="ti ti-chart-bar"></i>Stamp Update</button><button class="tpl-pill" data-tpl="ready" onclick="selTpl(this)"><i class="ti ti-gift"></i>Reward Ready</button><button class="tpl-pill" data-tpl="birthday" onclick="selTpl(this)"><i class="ti ti-cake"></i>Birthday</button></div><div class="tpl-preview" id="tplPreview"><div class="tpl-preview-lbl">Message Preview</div><div class="tpl-preview-txt" id="tplPreviewTxt"></div></div><div class="wa-banner" id="waBanner" style="display:none"><div class="wa-banner-ico">📱</div><div class="wa-banner-txt" id="waBannerTxt"></div></div><div class="wa-sec">Customers with WhatsApp</div><div id="waList"><div class="wa-empty">Loading…</div></div></div></div>
+  <div id="t-set" class="tab-content"><div class="settings-wrap"><div class="settings-card"><div class="settings-h">Loyalty Programme</div><div class="sf-row"><div><label class="sf-l" for="sfProduct">Product Name</label><input id="sfProduct" class="sf-i" type="text" placeholder="e.g. cake"></div><div><label class="sf-l" for="sfEmoji">Emoji</label><input id="sfEmoji" class="sf-i" type="text" placeholder="🎂" maxlength="2"></div></div><div class="sf-g"><label class="sf-l">Reward Rule</label><div class="sf-rule-row"><div><label class="sf-l" for="sfBuy">Buy</label><input id="sfBuy" class="sf-i" type="number" min="1" max="50"></div><div class="sf-rule-sep">→</div><div><label class="sf-l" for="sfGet">Free</label><input id="sfGet" class="sf-i" type="number" min="1" max="10"></div></div></div><button class="save-btn" id="saveSetBtn"><i class="ti ti-device-floppy"></i><span id="saveSetTxt">Save Changes</span></button><div class="settings-note">Changes apply immediately on all customer-facing cards.</div></div><div class="settings-card"><div class="settings-h">Change Password</div><div class="sf-g"><label class="sf-l" for="sfNewPwd">New Password</label><input id="sfNewPwd" class="sf-i" type="password" placeholder="At least 6 characters"></div><div class="sf-g"><label class="sf-l" for="sfNewPwdC">Confirm</label><input id="sfNewPwdC" class="sf-i" type="password" placeholder="Repeat new password"></div><div class="lf-err" id="pwdErr"></div><button class="save-btn" id="savePwdBtn" style="background:linear-gradient(135deg,#5a8f7b,var(--em))"><i class="ti ti-lock"></i><span id="savePwdTxt">Update Password</span></button></div></div></div>
+  <div id="t-qr" class="tab-content"><div class="qr-wrap"><div class="qr-card"><div class="qr-title">Customer Loyalty Link</div><div class="qr-sub">Display at your counter — customers scan to join instantly.</div><div id="qr-canvas-wrap"><div style="width:180px;height:180px;display:flex;align-items:center;justify-content:center;color:var(--ink-f);font-size:12px">Generating…</div></div><div class="qr-url" id="qrUrl">—</div><div class="qr-actions"><button class="qr-btn outline" id="copyLinkBtn"><i class="ti ti-copy"></i>Copy</button><button class="qr-btn gold" id="shareLinkBtn"><i class="ti ti-share"></i>Share</button></div></div><div class="export-card"><div class="export-ico"><i class="ti ti-table-export"></i></div><div class="export-info"><strong>Export Customers</strong><p>All data as CSV.</p></div><button class="export-btn" id="csvBtn"><i class="ti ti-download"></i>CSV</button></div></div></div>
 </div>
 
-<!-- Toast -->
-<div class="toast-wrap" id="toast-wrap"></div>
+<!-- MENU SHEET -->
+<div id="menuSheet" class="sheet-overlay"><div class="sheet"><div class="sheet-pull"></div><div class="sheet-top"><div class="sheet-coin">♛</div><div><div class="sheet-sn" id="sheetSN">Shop</div><div class="sheet-sc" id="sheetSC">—</div></div></div><div class="sheet-items"><button class="sheet-item" id="sheetRefresh"><div class="si-ico gold"><i class="ti ti-refresh"></i></div><div class="si-info"><strong>Refresh Data</strong><p>Sync latest stamps &amp; customers</p></div></button><button class="sheet-item" id="sheetSignOut"><div class="si-ico red"><i class="ti ti-logout"></i></div><div class="si-info"><strong>Sign Out</strong><p>Return to login</p></div></button></div></div></div>
 
-<!-- Stamp/Redeem Modal -->
-<div class="modal-ov" id="modal-ov" onclick="closeModal()">
-  <div class="modal-sheet" onclick="event.stopPropagation()">
-    <div class="modal-handle"></div>
-    <div class="modal-title" id="modal-title">Customer</div>
-    <div class="modal-sub" id="modal-sub"></div>
-    <div class="modal-row" id="modal-actions"></div>
-  </div>
-</div>
+<!-- ADD CUSTOMER -->
+<div id="addModal" class="modal-overlay"><div class="modal-sheet"><div class="modal-pull"></div><div class="modal-h">Add Customer</div><div class="modal-sub">The customer's last 4 digits of their mobile number becomes their login PIN.</div><div class="lf-g"><label class="lf-l" for="addName">First Name</label><input id="addName" class="lf-i" type="text" placeholder="e.g. Priya" autocomplete="off"></div><div class="lf-g"><label class="lf-l" for="addMobile">Mobile Number</label><input id="addMobile" class="lf-i" type="tel" placeholder="e.g. 9819012345" inputmode="numeric" maxlength="15" autocomplete="off"><div class="lf-hint">Full number for WhatsApp — last 4 auto-extracted for login</div><div class="derived-badge" id="addDerived" style="display:none"><i class="ti ti-key"></i> Login PIN: <strong id="addDerived4">—</strong></div></div><div class="lf-g"><label class="lf-l" for="addBday">Birthday <span style="color:var(--ink-f);font-weight:400;text-transform:none;letter-spacing:0">(optional)</span></label><input id="addBday" class="lf-i" type="date" style="color-scheme:light"></div><div class="lf-err" id="addErr"></div><div class="modal-actions"><button class="modal-cancel" id="addCancel">Cancel</button><button class="modal-confirm gold-c" id="addConfirm"><span id="addConfirmTxt">Enrol Customer</span></button></div></div></div>
+
+<!-- EDIT CUSTOMER -->
+<div id="editModal" class="modal-overlay"><div class="modal-sheet"><div class="modal-pull"></div><input type="hidden" id="editCid"><div class="edit-header"><div class="edit-av" id="editAv">?</div><div class="edit-av-info"><strong id="editName">Customer</strong><p id="editMeta">••••0000</p></div></div><div class="edit-stamp-preview"><div class="edit-stamp-lbl">Current Stamp Progress</div><div id="editStampGrid"></div><div class="stamp-lbl" id="editStampLbl" style="margin-top:.2rem">—</div></div><div class="lf-g"><label class="lf-l" for="editMobile">Mobile Number <span style="color:var(--ink-f);font-weight:400;text-transform:none;letter-spacing:0">(for WhatsApp)</span></label><input id="editMobile" class="lf-i" type="tel" placeholder="e.g. 9819012345" inputmode="numeric" maxlength="15"></div><div class="lf-g"><label class="lf-l" for="editBday">Birthday <span style="color:var(--ink-f);font-weight:400;text-transform:none;letter-spacing:0">(optional)</span></label><input id="editBday" class="lf-i" type="date" style="color-scheme:light"></div><div class="lf-err" id="editErr"></div><div class="modal-actions"><button class="modal-cancel" id="editCancel">Cancel</button><button class="modal-confirm gold-c" id="editConfirm"><span id="editConfirmTxt">Save Details</span></button></div></div></div>
+
+<!-- REDEEM CONFIRM -->
+<div id="redeemModal" class="modal-overlay"><div class="modal-sheet"><div class="modal-pull"></div><div class="modal-h">Redeem Reward?</div><div class="modal-sub" id="redeemSub">This will reset their stamp card to a fresh cycle.</div><div class="modal-actions"><button class="modal-cancel" id="redeemCancel">Cancel</button><button class="modal-confirm" id="redeemConfirm"><span id="redeemConfirmTxt">Confirm Redeem</span></button></div></div></div>
+
+<!-- WHATSAPP PREVIEW -->
+<div id="waPreviewModal" class="modal-overlay"><div class="modal-sheet"><div class="modal-pull"></div><div class="modal-h">Send via WhatsApp</div><div class="modal-sub">Review the message before sending.</div><div class="wa-preview-card"><div class="wa-preview-lbl">Message</div><div class="wa-preview-msg" id="waPreviewMsg">—</div><div class="wa-preview-to" id="waPreviewTo">To: —</div></div><div class="modal-actions"><button class="modal-cancel" id="waPreviewCancel">Cancel</button><button class="modal-confirm wa-c" id="waPreviewSend"><i class="ti ti-brand-whatsapp"></i> <span>Open WhatsApp</span></button></div></div></div>
+
+<div id="toast" role="status" aria-live="polite"></div>
 
 <script>
-/* ── CONFIG ────────────────────────── */
-const SUPA    = 'https://plewiwrexjszcqqjwiks.supabase.co';
-const FN      = `${SUPA}/functions/v1`;
-const JWT_KEY = 'primo_merchant_jwt';
-const SHOP_KEY= 'primo_merchant_shop';
+/* ══════════════════════════════════════════════════════
+   CONFIG
+   ──────────────────────────────────────────────────────
+   EDGE_BASE: Set to YOUR_SUPABASE_URL/functions/v1 for production.
+   When set, all sensitive operations (login, stamp, redeem,
+   settings, password) route through Edge Functions.
+   When empty, falls back to direct Supabase REST (DEV ONLY).
+══════════════════════════════════════════════════════ */
+const PRIMO_CONFIG = {
+  SUPABASE_URL:      'https://plewiwrexjszcqqjwiks.supabase.co',
+  SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBsZXdpd3JleGpzemNxcWp3aWtzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3MDkxOTgsImV4cCI6MjA5NTI4NTE5OH0.UhQcVdZZw74X-HBrGVto35dyZ_V67WfkjGFepRzNlMQ',
+  EDGE_BASE:         'https://plewiwrexjszcqqjwiks.supabase.co/functions/v1', // was '' — critical fix
+};
 
-/* ── STATE ─────────────────────────── */
-let jwt  = null;
-let shop = null;
-let dashData = { customers:[], stamps:[], redemptions:[] };
-let activeTab = 'customers';
-let openCustId = null;
+/* ══ STATE ══ */
+let shop=null,customers=[],allStamps=[],allReds=[],custMap={},searchQ='',redeemTarget=null,selTplKey='progress';
+let merchantToken=null; // JWT from Edge Function auth — stored in memory only (never sessionStorage)
+const justRedeemed=new Set();
+const loginAttempts={count:0,lastAt:0,cooldownUntil:0}; // CVE-9 fix: client-side brute force cooldown
+let waPendingCid=null; // customer ID for WA preview
 
-/* ── HELPERS ──────────────────────── */
-const $  = id => document.getElementById(id);
-const qs = sel => document.querySelector(sel);
+/* ══ UTIL ══ */
+const san=s=>String(s).replace(/[<>"'&]/g,c=>({'<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','&':'&amp;'}[c]));
+function relD(iso){if(!iso)return'—';const d=Math.floor((Date.now()-new Date(iso).getTime())/1e3);if(d<60)return'just now';if(d<3600)return Math.floor(d/60)+'m ago';if(d<86400)return Math.floor(d/3600)+'h ago';if(d<604800)return Math.floor(d/86400)+'d ago';return new Date(iso).toLocaleDateString('en-IN',{day:'numeric',month:'short'})}
+function fmtBday(iso){if(!iso)return null;try{const d=new Date(iso+'T00:00:00');return'🎂 '+d.toLocaleDateString('en-IN',{day:'numeric',month:'short'})}catch{return null}}
+function isBdayToday(iso){if(!iso)return false;const t=new Date(),d=new Date(iso+'T00:00:00');return t.getMonth()===d.getMonth()&&t.getDate()===d.getDate()}
+function todayM(){const d=new Date();d.setHours(0,0,0,0);return d}
+function monthM(){const d=new Date();d.setDate(1);d.setHours(0,0,0,0);return d}
+function toast(m,ms=2800){const e=document.getElementById('toast');e.textContent=m;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),ms)}
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id)?.classList.add('active')}
+function showError(type){const m={notfound:{i:'🔍',t:'Shop Not Found',m:'No active shop for that slug.'},network:{i:'📡',t:'Connection Error',m:"Couldn't reach the server."},generic:{i:'⚠️',t:'Error',m:'Something went wrong.'}};const o=m[type]||m.generic;document.getElementById('errIco').textContent=o.i;document.getElementById('errTitle').textContent=o.t;document.getElementById('errMsg').textContent=o.m;showScreen('s-err')}
+function last4(phone){const d=(phone||'').replace(/\D/g,'');return d.length>=4?d.slice(-4):d}
 
-function show(screenId) {
-  ['s-login','s-app'].forEach(id => {
-    const el = $(id);
-    if (el.id === screenId) el.classList.remove('hidden');
-    else el.classList.add('hidden');
-  });
-}
+/* ══════════════════════════════════════════════════════
+   API LAYER — Edge Function vs Direct Supabase
+   ──────────────────────────────────────────────────────
+   edge()  — calls Edge Functions (production mode)
+   sb()    — direct Supabase REST (read-only fallback)
+   secure  — true when EDGE_BASE is configured
+══════════════════════════════════════════════════════ */
+const secure=()=>PRIMO_CONFIG.EDGE_BASE&&PRIMO_CONFIG.EDGE_BASE.startsWith('http');
 
-function toast(msg, type='info', duration=2800) {
-  const wrap = $('toast-wrap');
-  const t = document.createElement('div');
-  t.className = `toast ${type}`;
-  const icon = type==='success' ? 'ti-circle-check' : type==='error' ? 'ti-alert-circle' : 'ti-info-circle';
-  t.innerHTML = `<i class="ti ${icon}"></i>${msg}`;
-  wrap.appendChild(t);
-  requestAnimationFrame(() => requestAnimationFrame(() => t.classList.add('show')));
-  setTimeout(() => { t.classList.remove('show'); setTimeout(()=>t.remove(),350); }, duration);
-}
-
-async function api(fn, body, method='POST') {
-  const r = await fetch(`${FN}/${fn}`, {
-    method,
-    headers: {
+async function edge(fn,body={}){
+  const res=await fetch(`${PRIMO_CONFIG.EDGE_BASE}/${fn}`,{
+    method:'POST',
+    headers:{
       'Content-Type':'application/json',
-      ...(jwt ? {Authorization:`Bearer ${jwt}`} : {})
+      ...(merchantToken?{'Authorization':`Bearer ${merchantToken}`}:{}),
     },
-    body: JSON.stringify(body)
+    body:JSON.stringify(body),
   });
+  if(res.status===401){merchantToken=null;signOut();toast('Session expired. Please log in again.');throw new Error('Session expired')}
+  if(!res.ok){const e=await res.json().catch(()=>({error:'Unknown error'}));throw new Error(e.error||`API ${res.status}`)}
+  return res.json();
+}
+
+async function sb(ep,o={}){
+  const method=o.method||'GET';
+  const r=await fetch(`${PRIMO_CONFIG.SUPABASE_URL}/rest/v1${ep}`,{
+    method,headers:{'apikey':PRIMO_CONFIG.SUPABASE_ANON_KEY,'Authorization':`Bearer ${PRIMO_CONFIG.SUPABASE_ANON_KEY}`,'Content-Type':'application/json','Prefer':o.prefer||(method==='POST'?'return=representation':method==='PATCH'?'return=representation':''),...(o.headers||{})},
+    body:o.body?JSON.stringify(o.body):undefined,
+  });
+  if(!r.ok)throw new Error(`SB ${r.status}`);
+  if(r.status===204)return null;
   return r.json();
 }
 
-/* ── LOGIN ─────────────────────────── */
-$('l-btn').onclick = doLogin;
-$('l-slug').addEventListener('keydown', e => e.key==='Enter' && $('l-pw').focus());
-$('l-pw').addEventListener('keydown',   e => e.key==='Enter' && doLogin());
+/* ══ LOGIN (CVE-5 + CVE-9 fixes) ══ */
+async function handleLogin(){
+  const errEl=document.getElementById('loginErr'),btn=document.getElementById('loginBtn'),txt=document.getElementById('loginBtnTxt'),sEl=document.getElementById('inSlug'),pEl=document.getElementById('inPwd'),cdEl=document.getElementById('cooldownNotice');
+  errEl.textContent='';sEl.classList.remove('err');pEl.classList.remove('err');cdEl.style.display='none';
 
-async function doLogin() {
-  const slug = $('l-slug').value.trim().toLowerCase();
-  const pw   = $('l-pw').value;
-  const errEl = $('l-err');
-  errEl.style.display = 'none';
-  if (!slug || !pw) { showLoginErr('Please enter your shop slug and password.'); return; }
-  const btn = $('l-btn');
-  btn.disabled = true;
-  btn.innerHTML = '<i class="ti ti-loader-2" style="animation:spin .7s linear infinite"></i> Signing in…';
-  try {
-    const res = await api('merchant-auth', {slug, password: pw});
-    if (res.error) { showLoginErr(res.error); return; }
-    jwt  = res.token;
-    shop = res.shop;
-    localStorage.setItem(JWT_KEY, jwt);
-    localStorage.setItem(SHOP_KEY, JSON.stringify(shop));
-    launchApp();
-  } catch(_) {
-    showLoginErr('Could not connect. Please try again.');
-  } finally {
-    btn.disabled = false;
-    btn.innerHTML = '<i class="ti ti-login"></i> Sign In';
-  }
-}
-
-function showLoginErr(msg) {
-  $('l-err-text').textContent = msg;
-  $('l-err').style.display = 'flex';
-}
-
-/* ── APP LAUNCH ─────────────────────── */
-function launchApp() {
-  show('s-app');
-  $('tb-name').textContent = shop.shop_name;
-  loadSettings();
-  loadDashboard();
-}
-
-/* ── LOGOUT ─────────────────────────── */
-function doLogout() {
-  jwt = null; shop = null;
-  dashData = {customers:[],stamps:[],redemptions:[]};
-  localStorage.removeItem(JWT_KEY);
-  localStorage.removeItem(SHOP_KEY);
-  $('l-pw').value = '';
-  $('l-err').style.display = 'none';
-  show('s-login');
-}
-$('btn-logout').onclick  = doLogout;
-$('btn-logout2').onclick = doLogout;
-
-/* ── REFRESH ────────────────────────── */
-$('btn-refresh').onclick = () => { loadDashboard(true); };
-
-/* ── LOAD DASHBOARD ─────────────────── */
-async function loadDashboard(showToast=false) {
-  const listEl = $('all-list');
-  listEl.innerHTML = '<div class="loader-ring"></div>';
-  try {
-    const res = await api('merchant-api', {action:'load_dashboard'});
-    if (res.error) { toast(res.error,'error'); return; }
-    dashData = res;
-    renderStats();
-    renderCustomers();
-    if (showToast) toast('Refreshed','success',1800);
-  } catch(_) {
-    listEl.innerHTML = '<div class="empty-state"><div class="empty-title">Could not load data</div><div class="empty-body">Check your connection and try again.</div></div>';
-  }
-}
-
-/* ── STATS ──────────────────────────── */
-function renderStats() {
-  const buy = shop?.reward_rule?.buy ?? 10;
-  const today = new Date().toISOString().slice(0,10);
-  const stampsToday = dashData.stamps.filter(s => s.stamped_at?.startsWith(today)).length;
-  $('st-total').textContent   = dashData.customers.length;
-  $('st-today').textContent   = stampsToday;
-  $('st-rewards').textContent = dashData.redemptions.length;
-}
-
-/* ── CUSTOMER CARD COMPUTATION ─────── */
-function custCard(c) {
-  const buy  = shop?.reward_rule?.buy ?? 10;
-  const myStamps = dashData.stamps.filter(s=>s.customer_id===c.id);
-  const myReds   = dashData.redemptions.filter(r=>r.customer_id===c.id);
-  const cycle    = myReds.length + 1;
-  const cycleStamps = myStamps.filter(s=>s.cycle_number===cycle);
-  const count    = cycleStamps.length;
-  const hasReward = count >= buy;
-  const lastStamp = myStamps.length ? myStamps[myStamps.length-1]?.stamped_at : null;
-  return { buy, count, hasReward, cycle, totalStamps: myStamps.length, lastStamp };
-}
-
-/* ── RENDER CUSTOMERS ───────────────── */
-function renderCustomers(query='') {
-  const buy = shop?.reward_rule?.buy ?? 10;
-  const q = query.toLowerCase().trim();
-  let custs = dashData.customers.filter(c => {
-    if (!q) return true;
-    return c.first_name.toLowerCase().includes(q) || c.phone_last4.includes(q);
-  });
-
-  // Sort: reward ready first, then by last stamp date desc
-  custs.sort((a,b) => {
-    const ca = custCard(a), cb = custCard(b);
-    if (ca.hasReward && !cb.hasReward) return -1;
-    if (!ca.hasReward && cb.hasReward) return 1;
-    const la = ca.lastStamp||a.enrolled_at||'';
-    const lb = cb.lastStamp||b.enrolled_at||'';
-    return lb.localeCompare(la);
-  });
-
-  const readyList  = custs.filter(c => custCard(c).hasReward);
-  const normalList = custs.filter(c => !custCard(c).hasReward);
-
-  // Rewards ready section
-  const readySection = $('rewards-ready-section');
-  const readyEl = $('rewards-list');
-  if (readyList.length && !q) {
-    readySection.style.display = '';
-    readyEl.innerHTML = readyList.map(c => custCardHTML(c)).join('');
-  } else {
-    readySection.style.display = 'none';
+  // Brute force cooldown check (CVE-9)
+  const now=Date.now();
+  if(loginAttempts.cooldownUntil>now){
+    const secs=Math.ceil((loginAttempts.cooldownUntil-now)/1000);
+    cdEl.textContent=`Too many attempts. Try again in ${secs}s.`;
+    cdEl.style.display='block';return;
   }
 
-  // All list
-  const allEl   = $('all-list');
-  const allHead = $('all-head');
-  if (!custs.length) {
-    allHead.textContent = q ? 'No results' : 'All customers';
-    allEl.innerHTML = `<div class="empty-state">
-      <div class="empty-ico">👥</div>
-      <div class="empty-title">${q ? 'No customers found' : 'No customers yet'}</div>
-      <div class="empty-body">${q ? 'Try a different name or phone number.' : 'Customers appear here once they open their loyalty card.'}</div>
-    </div>`;
-    return;
-  }
-  allHead.textContent = q ? `Results (${custs.length})` : `All customers (${normalList.length})`;
-  allEl.innerHTML = (q ? custs : normalList).map(c => custCardHTML(c)).join('');
+  const slug=sEl.value.trim().toLowerCase().replace(/[^a-z0-9-]/g,''),pwd=pEl.value;
+  if(!slug||slug.length<2){sEl.classList.add('err');errEl.textContent='⚠ Enter your shop slug.';return}
+  if(!pwd){pEl.classList.add('err');errEl.textContent='⚠ Enter your admin password.';return}
 
-  // Wire up expand clicks
-  document.querySelectorAll('.cust-card-head').forEach(el => {
-    el.addEventListener('click', () => toggleCard(el.dataset.cid));
-  });
-  document.querySelectorAll('.btn-stamp').forEach(btn => {
-    btn.addEventListener('click', e => { e.stopPropagation(); doStamp(btn.dataset.cid); });
-  });
-  document.querySelectorAll('.btn-redeem').forEach(btn => {
-    btn.addEventListener('click', e => { e.stopPropagation(); doRedeem(btn.dataset.cid); });
-  });
-}
-
-function custCardHTML(c) {
-  const { buy, count, hasReward, totalStamps } = custCard(c);
-  const initial = c.first_name.charAt(0).toUpperCase();
-  const isOpen = openCustId === c.id;
-  return `
-  <div class="cust-card ${hasReward?'reward-ready':''}" id="cc-${c.id}">
-    <div class="cust-card-head" data-cid="${c.id}">
-      <div class="cust-av ${hasReward?'reward':''}">${initial}</div>
-      <div class="cust-info">
-        <div class="cust-name">${esc(c.first_name)} <span style="color:var(--ink-f);font-weight:400">···${c.phone_last4}</span></div>
-        <div class="cust-meta">
-          ${hasReward ? '<span class="reward-badge">🎁 Reward ready</span>' : `<span>${count} of ${buy} stamps</span>`}
-          <span>·</span><span>${totalStamps} total</span>
-        </div>
-      </div>
-      <div class="cust-stamps">
-        <div class="stamp-count">${count}<span style="color:var(--ink-f);font-size:12px;font-weight:400">/${buy}</span></div>
-        <div class="stamp-label">this cycle</div>
-      </div>
-    </div>
-    ${isOpen ? custExpandedHTML(c, count, buy, hasReward) : ''}
-  </div>`;
-}
-
-function custExpandedHTML(c, count, buy, hasReward) {
-  // Dots
-  const total = buy + 1;
-  let dots = '';
-  for (let i=0; i<total; i++) {
-    const isR  = i===total-1;
-    const filled = isR ? hasReward : i<count;
-    dots += `<div class="dot ${isR?'reward-dot':''} ${filled?'filled':''}"></div>`;
-  }
-  return `
-    <div class="stamp-dots">${dots}</div>
-    <div class="cust-actions">
-      <button class="btn-stamp" data-cid="${c.id}" ${hasReward?'disabled':''}>
-        <i class="ti ti-circle-plus"></i>Add Stamp
-      </button>
-      ${hasReward ? `<button class="btn-redeem" data-cid="${c.id}"><i class="ti ti-gift"></i>Redeem</button>` : ''}
-    </div>`;
-}
-
-function toggleCard(cid) {
-  openCustId = openCustId === cid ? null : cid;
-  renderCustomers($('cust-search').value);
-}
-
-function esc(str) {
-  return String(str).replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
-}
-
-/* ── SEARCH ─────────────────────────── */
-$('cust-search').addEventListener('input', function() {
-  renderCustomers(this.value);
-});
-
-/* ── STAMP ──────────────────────────── */
-async function doStamp(cid) {
-  const btn = document.querySelector(`.btn-stamp[data-cid="${cid}"]`);
-  if (btn) { btn.disabled = true; btn.innerHTML = '<i class="ti ti-loader-2" style="animation:spin .7s linear infinite"></i>Stamping…'; }
-  try {
-    const res = await api('merchant-api', {action:'stamp', customer_id:cid});
-    if (res.error) { toast(res.error,'error'); return; }
-    const c = dashData.customers.find(x=>x.id===cid);
-    toast(`✓ Stamp added for ${c?.first_name||'customer'}!`, 'success');
-    await loadDashboard();
-    openCustId = cid;
-    renderCustomers($('cust-search').value);
-  } catch(_) { toast('Failed to add stamp','error'); }
-}
-
-/* ── REDEEM ─────────────────────────── */
-async function doRedeem(cid) {
-  const c = dashData.customers.find(x=>x.id===cid);
-  if (!confirm(`Confirm: Give ${c?.first_name||'customer'} their free ${shop?.product_name||'reward'}?`)) return;
-  try {
-    const res = await api('merchant-api', {action:'redeem', customer_id:cid});
-    if (res.error) { toast(res.error,'error'); return; }
-    toast(`🎁 Reward redeemed for ${c?.first_name}!`, 'success', 3500);
-    openCustId = null;
-    await loadDashboard();
-    renderCustomers($('cust-search').value);
-  } catch(_) { toast('Failed to redeem','error'); }
-}
-
-/* ── SETTINGS ───────────────────────── */
-function loadSettings() {
-  if (!shop) return;
-  $('si-emoji').textContent = shop.product_emoji || '🎁';
-  $('si-name').textContent  = shop.shop_name;
-  $('si-meta').textContent  = `${shop.plan?.toUpperCase()||'PRO'} Plan · ${shop.city||'—'}`;
-  $('si-slug').textContent  = `@${shop.slug}`;
-  $('s-product').value = shop.product_name || '';
-  $('s-emoji').value   = shop.product_emoji || '🎁';
-  $('s-buy').value     = shop.reward_rule?.buy ?? 11;
-}
-
-$('btn-save-settings').onclick = async function() {
-  const product_name  = $('s-product').value.trim();
-  const product_emoji = $('s-emoji').value.trim();
-  const buy = parseInt($('s-buy').value);
-  if (!product_name) { toast('Product name is required','error'); return; }
-  if (!product_emoji) { toast('Emoji is required','error'); return; }
-  if (isNaN(buy) || buy<1 || buy>50) { toast('Stamps required must be 1–50','error'); return; }
-  this.disabled = true;
-  this.textContent = 'Saving…';
-  try {
-    const res = await api('merchant-api', {action:'save_settings', product_name, product_emoji, reward_rule:{buy,get:1}});
-    if (res.error) { toast(res.error,'error'); return; }
-    shop = {...shop, ...res.shop};
-    localStorage.setItem(SHOP_KEY, JSON.stringify(shop));
-    loadSettings();
-    toast('Settings saved!','success');
-  } catch(_) { toast('Failed to save','error'); }
-  finally { this.disabled=false; this.textContent='Save Reward Settings'; }
-};
-
-$('btn-save-pw').onclick = async function() {
-  const p1 = $('s-pw1').value;
-  const p2 = $('s-pw2').value;
-  if (!p1 || p1.length < 6) { toast('Password must be at least 6 characters','error'); return; }
-  if (p1 !== p2) { toast('Passwords do not match','error'); return; }
-  this.disabled = true;
-  this.textContent = 'Updating…';
-  try {
-    const res = await api('merchant-api', {action:'change_password', new_password:p1});
-    if (res.error) { toast(res.error,'error'); return; }
-    $('s-pw1').value = '';
-    $('s-pw2').value = '';
-    toast('Password updated!','success');
-  } catch(_) { toast('Failed to update password','error'); }
-  finally { this.disabled=false; this.textContent='Update Password'; }
-};
-
-/* ── TAB SWITCHING ──────────────────── */
-function switchTab(tab) {
-  activeTab = tab;
-  ['customers','settings'].forEach(t => {
-    $(`tab-${t}`).classList.toggle('hidden', t!==tab);
-    $(`tb-${t}`).classList.toggle('active', t===tab);
-  });
-}
-
-/* ── MODAL ──────────────────────────── */
-function closeModal() {
-  $('modal-ov').classList.remove('show');
-}
-
-
-/* ── QR POSTER ─────────────────────── */
-function roundedRect(ctx,x,y,w,h,r){
-  ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);
-  ctx.arcTo(x+w,y,x+w,y+r,r);ctx.lineTo(x+w,y+h-r);
-  ctx.arcTo(x+w,y+h,x+w-r,y+h,r);ctx.lineTo(x+r,y+h);
-  ctx.arcTo(x,y+h,x,y+h-r,r);ctx.lineTo(x,y+r);
-  ctx.arcTo(x,y,x+r,y,r);ctx.closePath();
-}
-
-async function generatePoster(){
-  const W=800,H=1060;
-  const canvas=$('poster-canvas');
-  canvas.width=W;canvas.height=H;
-  const ctx=canvas.getContext('2d');
-
-  const slug=shop.slug;
-  const cardURL=`https://primorewards.in/${slug}-reward`;
-  const shopName=shop.shop_name;
-  const emoji=shop.product_emoji||'🎁';
-  const product=shop.product_name||'item';
-
-  /* Background */
-  ctx.fillStyle='#FDFAF5';ctx.fillRect(0,0,W,H);
-
-  /* Gold header */
-  const g1=ctx.createLinearGradient(0,0,W,0);
-  g1.addColorStop(0,'#C9A84C');g1.addColorStop(1,'#A8832A');
-  ctx.fillStyle=g1;roundedRect(ctx,0,0,W,168,0);ctx.fill();
-
-  /* Crown watermark */
-  ctx.fillStyle='rgba(255,255,255,.14)';
-  ctx.font='130px serif';ctx.textAlign='right';
-  ctx.fillText('\u265b',W-18,148);
-
-  /* Shop name */
-  ctx.fillStyle='#fff';ctx.textAlign='center';
-  ctx.font='bold 44px Georgia,serif';
-  let nm=shopName.length>22?shopName.slice(0,20)+'\u2026':shopName;
-  ctx.fillText(nm,W/2,102);
-
-  /* Sub-label */
-  ctx.fillStyle='rgba(255,255,255,.7)';
-  ctx.font='20px sans-serif';
-  ctx.fillText('Loyalty Rewards Programme',W/2,140);
-
-  /* Emoji circle */
-  ctx.fillStyle='#FDF4E3';
-  ctx.beginPath();ctx.arc(W/2,236,62,0,Math.PI*2);ctx.fill();
-  ctx.strokeStyle='#D4B86A';ctx.lineWidth=3;ctx.stroke();
-  ctx.font='62px serif';ctx.fillStyle='#000';
-  ctx.fillText(emoji,W/2,256);
-
-  /* Headline */
-  ctx.fillStyle='#1A1007';
-  ctx.font='bold 32px Georgia,serif';
-  ctx.fillText('Earn stamps. Get free',W/2,342);
-  ctx.fillStyle='#A8832A';
-  ctx.font='bold 32px Georgia,serif';
-  ctx.fillText(`${product}s!`,W/2,382);
-
-  /* Instructions */
-  ctx.fillStyle='#7A6A52';
-  ctx.font='19px sans-serif';
-  ctx.fillText('Scan the QR code to open your loyalty card',W/2,428);
-  ctx.fillText('and earn a stamp with every purchase.',W/2,456);
-
-  /* QR white box */
-  ctx.fillStyle='#fff';
-  roundedRect(ctx,W/2-154,478,308,308,22);ctx.fill();
-  ctx.strokeStyle='#EDE3D4';ctx.lineWidth=2;ctx.stroke();
-
-  /* QR code */
-  const qrCanvas=document.createElement('canvas');
-  await QRCode.toCanvas(qrCanvas,cardURL,{
-    width:272,margin:1,
-    color:{dark:'#1A1007',light:'#FFFFFF'}
-  });
-  ctx.drawImage(qrCanvas,W/2-136,496,272,272);
-
-  /* URL */
-  ctx.fillStyle='#4A3A25';ctx.font='15px monospace';
-  ctx.fillText(cardURL,W/2,832);
-
-  /* Gold divider */
-  ctx.strokeStyle='#D4B86A';ctx.lineWidth=1;
-  ctx.beginPath();ctx.moveTo(120,860);ctx.lineTo(W-120,860);ctx.stroke();
-
-  /* Primo branding */
-  ctx.fillStyle='#C9A84C';
-  ctx.font='bold 26px Georgia,serif';
-  ctx.fillText('\u265b  Primo Rewards',W/2,910);
-  ctx.fillStyle='#A89880';ctx.font='15px sans-serif';
-  ctx.fillText('Digital Loyalty for Local Businesses \u00b7 primorewards.in',W/2,940);
-
-  /* Gold footer */
-  const g2=ctx.createLinearGradient(0,990,W,990);
-  g2.addColorStop(0,'#C9A84C');g2.addColorStop(1,'#A8832A');
-  ctx.fillStyle=g2;roundedRect(ctx,0,990,W,70,0);ctx.fill();
-  ctx.fillStyle='rgba(255,255,255,.85)';ctx.font='18px sans-serif';
-  ctx.fillText('Every purchase brings you closer to a reward \u2728',W/2,1032);
-}
-
-$('btn-poster').onclick=async function(){
-  this.disabled=true;
-  this.innerHTML='<i class="ti ti-loader-2" style="animation:spin .7s linear infinite;margin-right:6px"></i>Generating\u2026';
+  btn.disabled=true;txt.textContent='Checking…';
   try{
-    await generatePoster();
-    $('poster-ov').classList.add('show');
-    $('btn-dl-poster').onclick=function(){
-      const a=document.createElement('a');
-      a.download=`${shop.slug}-loyalty-poster.png`;
-      a.href=$('poster-canvas').toDataURL('image/png');
-      a.click();
-    };
-  }catch(e){toast('Could not generate poster. Try again.','error');console.error(e);}
-  finally{this.disabled=false;this.innerHTML='<i class="ti ti-download" style="margin-right:6px"></i>Preview &amp; Download Poster';}
-};
+    if(secure()){
+      // PRODUCTION: Edge Function handles bcrypt verification server-side
+      // Password never leaves this request. Admin_password column never read by client.
+      const res=await edge('merchant-auth',{slug,password:pwd});
+      merchantToken=res.token;
+      shop=res.shop;
+      loginAttempts.count=0;
+    }else{
+      // DEV FALLBACK: Direct Supabase (insecure — password compared client-side)
+      // ⚠ DO NOT use in production — admin_password exposed via anon SELECT
+      console.warn('[PRIMO] ⚠ INSECURE: Direct login mode. Configure EDGE_BASE for production.');
+      const rows=await sb(`/shops?slug=eq.${encodeURIComponent(slug)}&select=id,shop_name,slug,city,plan,status,reward_rule,product_name,product_emoji,admin_password&limit=1`);
+      if(!rows?.length){sEl.classList.add('err');errEl.textContent='⚠ Shop not found.';recordFailedLogin();return}
+      const s=rows[0];
+      if(s.status!=='active'){errEl.textContent='⚠ Shop not yet active.';recordFailedLogin();return}
+      if(s.admin_password&&s.admin_password!==pwd){pEl.classList.add('err');errEl.textContent='⚠ Incorrect password.';pEl.value='';recordFailedLogin();return}
+      const{admin_password,...safeShop}=s; // strip password from in-memory shop object
+      shop=safeShop;
+      loginAttempts.count=0;
+    }
+    await loadDash();renderDash();showScreen('s-dash');
+    if(!secure())document.getElementById('secBanner').classList.add('show');
+  }catch(e){
+    console.error(e);
+    if(e.message.includes('401')||e.message.includes('Invalid')){pEl.classList.add('err');errEl.textContent='⚠ Incorrect password.';pEl.value='';recordFailedLogin();}
+    else showError('network');
+  }finally{btn.disabled=false;txt.textContent='Access Dashboard'}
+}
 
-function closePoster(){$('poster-ov').classList.remove('show');}
-
-/* ── BOOT ───────────────────────────── */
-(function boot() {
-  const savedJwt  = localStorage.getItem(JWT_KEY);
-  const savedShop = localStorage.getItem(SHOP_KEY);
-  if (savedJwt && savedShop) {
-    try {
-      jwt  = savedJwt;
-      shop = JSON.parse(savedShop);
-      launchApp();
-      return;
-    } catch(_) {}
+function recordFailedLogin(){
+  loginAttempts.count++;loginAttempts.lastAt=Date.now();
+  // Exponential backoff: 5 failures → 30s, 10 → 120s, 15 → 300s
+  if(loginAttempts.count>=5){
+    const wait=Math.min(300,Math.pow(2,loginAttempts.count-4)*15)*1000;
+    loginAttempts.cooldownUntil=Date.now()+wait;
+    const secs=Math.ceil(wait/1000);
+    const cdEl=document.getElementById('cooldownNotice');
+    cdEl.textContent=`Too many failed attempts. Please wait ${secs} seconds.`;cdEl.style.display='block';
   }
-  show('s-login');
-})();
-</script>
+}
 
-<!-- QR Poster Modal -->
-<div class="modal-ov" id="poster-ov" onclick="closePoster()">
-  <div class="modal-sheet" onclick="event.stopPropagation()" style="text-align:center;padding-bottom:48px">
-    <div class="modal-handle"></div>
-    <div class="modal-title" style="margin-bottom:4px">QR Loyalty Poster</div>
-    <div class="modal-sub">Ready to print (A4/A5) or share on social</div>
-    <canvas id="poster-canvas" style="max-width:100%;border-radius:14px;box-shadow:0 6px 28px rgba(26,16,7,.14);display:block;margin:0 auto 16px"></canvas>
-    <button class="btn-save" id="btn-dl-poster" style="max-width:320px">
-      <i class="ti ti-download" style="margin-right:6px"></i>Download PNG
-    </button>
-  </div>
-</div>
+/* ══ DATA LOAD ══ */
+async function loadDash(){
+  if(secure()){
+    // Production: single authenticated Edge Function call returns all data
+    const data=await edge('merchant-api',{action:'load_dashboard'});
+    shop=data.shop||shop;customers=data.customers||[];allStamps=data.stamps||[];allReds=data.redemptions||[];
+  }else{
+    // Dev fallback: 3 parallel anon queries (limited to 2000 rows each)
+    const sid=shop.id;
+    const[fc,fs,fr]=await Promise.all([
+      sb(`/customers?shop_id=eq.${sid}&order=enrolled_at.desc&limit=2000`),
+      sb(`/stamps?shop_id=eq.${sid}&order=stamped_at.desc&limit=5000`),
+      sb(`/redemptions?shop_id=eq.${sid}&order=redeemed_at.desc&limit=2000`),
+    ]);
+    customers=fc||[];allStamps=fs||[];allReds=fr||[];
+  }
+  buildCustMap();
+}
+
+function buildCustMap(){
+  const buy=shop.reward_rule?.buy||11;custMap={};
+  customers.forEach(c=>{const cid=c.id;const cr=allReds.filter(r=>r.customer_id===cid).sort((a,b)=>new Date(a.redeemed_at)-new Date(b.redeemed_at));const cy=cr.length+1;const cs=allStamps.filter(s=>s.customer_id===cid);const cys=cs.filter(s=>s.cycle_number===cy);const la=cs[0]?.stamped_at||c.enrolled_at;custMap[cid]={reds:cr,allSt:cs,cySt:cys,cycle:cy,last:la,full:cys.length>=buy}});
+}
+
+/* ══ RENDER ══ */
+function renderDash(){
+  document.getElementById('hdrShopName').textContent=shop.shop_name;document.getElementById('hdrAvatar').textContent=(shop.shop_name||'S')[0].toUpperCase();document.getElementById('hdrPlan').textContent=(shop.plan||'pro').toUpperCase();document.getElementById('sheetSN').textContent=shop.shop_name;document.getElementById('sheetSC').textContent=[shop.city,(shop.plan||'pro').toUpperCase()+' plan'].filter(Boolean).join(' · ');
+  const td=todayM(),mo=monthM();document.getElementById('statCust').textContent=customers.length;document.getElementById('statToday').textContent=allStamps.filter(s=>new Date(s.stamped_at)>=td).length;document.getElementById('statMonth').textContent=allReds.filter(r=>new Date(r.redeemed_at)>=mo).length;
+  document.getElementById('sfProduct').value=shop.product_name||'';document.getElementById('sfEmoji').value=shop.product_emoji||'';document.getElementById('sfBuy').value=shop.reward_rule?.buy||11;document.getElementById('sfGet').value=shop.reward_rule?.get||1;
+  renderQR();renderCustList();renderWA();updateTplPreview();
+}
+
+function buildGrid(count,buy){let h='<div class="mini-grid">';for(let i=0;i<buy;i++){const fi=i<count,rs=i===buy-1;h+=`<div class="mc${fi?' f':''}${rs?' rs':''}"><div class="mc-track"><span class="mc-n">${rs?'★':(i+1)}</span></div><div class="mc-c"></div></div>`}h+='</div>';return h}
+
+function renderCustList(){
+  const list=document.getElementById('custList'),buy=shop.reward_rule?.buy||11,q=searchQ.toLowerCase().trim();
+  let fl=q?customers.filter(c=>c.first_name.toLowerCase().includes(q)||last4(c.full_phone||c.phone_last4||'').includes(q)):customers.slice();
+  fl.sort((a,b)=>{const af=custMap[a.id]?.full?1:0,bf=custMap[b.id]?.full?1:0;if(bf!==af)return bf-af;return(custMap[b.id]?.last||'').localeCompare(custMap[a.id]?.last||'')});
+  if(!fl.length){list.innerHTML=`<div class="cust-empty"><div class="cust-empty-ico">🔍</div>${q?`No results for "${san(q)}".`:'No customers yet. Tap Add to enrol your first!'}</div>`;return}
+  list.innerHTML=fl.map(c=>{
+    const cm=custMap[c.id]||{cySt:[],cycle:1,full:false},cnt=cm.cySt.length,full=cm.full,ini=(c.first_name||'?')[0].toUpperCase(),bd=fmtBday(c.birthday),bdt=isBdayToday(c.birthday),jr=justRedeemed.has(c.id),hp=!!c.full_phone;
+    return`<div class="cust-card${full?' full-card':''}${jr?' just-redeemed':''}" id="card-${c.id}">${jr?'<div class="merch-badge"><i class="ti ti-gift"></i>1× Redeemed — card reset!</div>':''}<div class="cust-top"><div class="cust-av">${ini}</div><div class="cust-info"><div class="cust-nm">${san(c.first_name)}${bdt?' 🎂':''}</div><div class="cust-ph"><span>••••${san(c.phone_last4||'????')}</span>${bd?`<span class="bday">${bd}</span>`:''}</div></div><div class="cust-acts">${full?`<button class="r-btn" onclick="openRedeem('${c.id}')"><i class="ti ti-gift"></i>Redeem</button>`:`<button class="s-btn" id="sb-${c.id}" onclick="doStamp('${c.id}')"><i class="ti ti-stamp"></i>Stamp</button>`}<button class="e-btn" onclick="openEdit('${c.id}')" title="Edit"><i class="ti ti-pencil"></i></button></div></div>${buildGrid(cnt,buy)}<div class="stamp-lbl">${full?`✦ Reward ready! ${buy}/${buy}`:`${cnt} / ${buy} stamps`}</div><div class="cust-bot"><span class="last-v">${cm.last?relD(cm.last):''}</span>${hp?`<button class="wa-chip" onclick="openWAPreview('${c.id}')" title="Send WhatsApp"><i class="ti ti-brand-whatsapp"></i> WhatsApp</button>`:''}</div></div>`}).join('');
+}
+
+/* ── WHATSAPP with preview (audit fix) ── */
+function selTpl(el){document.querySelectorAll('.tpl-pill').forEach(p=>p.classList.remove('sel'));el.classList.add('sel');selTplKey=el.dataset.tpl;updateTplPreview();renderWA()}
+function updateTplPreview(){const previews={progress:`Hi {name}! 👋 You have {count}/{buy} stamps at ${shop?.shop_name||'{shop}'}. {left} more for a free ${shop?.product_name||'{product}'}! ${shop?.product_emoji||'🎁'}`,ready:`Hi {name}! 🎉 Your free ${shop?.product_name||'{product}'} reward at ${shop?.shop_name||'{shop}'} is ready! Come claim it.`,birthday:`Happy Birthday {name}! 🎂🎉 The team at ${shop?.shop_name||'{shop}'} wishes you a wonderful day!`};document.getElementById('tplPreviewTxt').textContent=previews[selTplKey]||previews.progress}
+function buildMsg(cid){const c=customers.find(x=>x.id===cid),cm=custMap[cid]||{cySt:[],full:false};if(!c)return'';const buy=shop.reward_rule?.buy||11,cnt=cm.cySt.length,left=buy-cnt,prod=shop.product_name||'item',emo=shop.product_emoji||'🎁',sn=shop.shop_name;const m={progress:`Hi ${c.first_name}! 👋 You have ${cnt}/${buy} stamps at ${sn}. ${left} more for a free ${prod}! ${emo}`,ready:`Hi ${c.first_name}! 🎉 Your free ${prod} reward at ${sn} is ready! Come claim it on your next visit.`,birthday:`Happy Birthday ${c.first_name}! 🎂🎉 The team at ${sn} wishes you a wonderful day. Come visit us for a special surprise!`};return m[selTplKey]||m.progress}
+
+// Two-step WhatsApp: preview modal first, then open link (audit fix)
+function openWAPreview(cid){
+  const c=customers.find(x=>x.id===cid);if(!c?.full_phone){toast('⚠ No phone number saved. Edit customer to add one.');return}
+  waPendingCid=cid;const msg=buildMsg(cid);let ph=c.full_phone.replace(/\D/g,'');if(ph.length===10)ph='91'+ph;
+  document.getElementById('waPreviewMsg').textContent=msg;
+  document.getElementById('waPreviewTo').textContent=`To: ${c.first_name} (${ph.slice(0,2)} ••••${ph.slice(-4)})`;
+  document.getElementById('waPreviewModal').classList.add('open');
+}
+function closeWAPreview(){document.getElementById('waPreviewModal').classList.remove('open');waPendingCid=null}
+function confirmSendWA(){
+  if(!waPendingCid)return;const c=customers.find(x=>x.id===waPendingCid);if(!c?.full_phone)return;
+  const msg=buildMsg(waPendingCid);let ph=c.full_phone.replace(/\D/g,'');if(ph.length===10)ph='91'+ph;
+  window.open(`https://wa.me/${ph}?text=${encodeURIComponent(msg)}`,'_blank','noopener');closeWAPreview();
+}
+
+function renderWA(){const buy=shop.reward_rule?.buy||11,wp=customers.filter(c=>c.full_phone),np=customers.filter(c=>!c.full_phone);const banner=document.getElementById('waBanner'),btxt=document.getElementById('waBannerTxt');if(np.length){banner.style.display='flex';btxt.innerHTML=`<strong>${np.length}</strong> customer${np.length>1?'s':''} missing phone. Edit their card to add.`}else{banner.style.display='none'}const list=document.getElementById('waList');if(!wp.length){list.innerHTML='<div class="wa-empty">No customers have a phone number yet.<br>Edit a customer card to add one.</div>';return}list.innerHTML=wp.map(c=>{const cm=custMap[c.id]||{cySt:[],full:false},cnt=cm.cySt.length,full=cm.full,ini=(c.first_name||'?')[0].toUpperCase(),bdt=isBdayToday(c.birthday);return`<div class="wa-row"><div class="wa-av">${ini}</div><div class="wa-info"><div class="wa-nm">${san(c.first_name)}${bdt?' 🎂':''}</div><div class="wa-st">${full?'🎉 Reward ready!':`${cnt}/${buy} stamps`}</div></div><button class="wa-send" onclick="openWAPreview('${c.id}')"><i class="ti ti-brand-whatsapp"></i>Send</button></div>`}).join('')}
+
+function renderQR(){const url=`https://primorewards.app/${shop.slug}-reward`;document.getElementById('qrUrl').textContent=url;const w=document.getElementById('qr-canvas-wrap');w.innerHTML='';if(typeof QRCode!=='undefined'){new QRCode(w,{text:url,width:180,height:180,colorDark:'#1A1007',colorLight:'#FFFFFF',correctLevel:QRCode.CorrectLevel.H})}else{setTimeout(renderQR,800)}}
+
+/* ══ STAMP (CVE-4 fix) ══ */
+const stTimers={};
+async function doStamp(cid){
+  const btn=document.getElementById(`sb-${cid}`);if(!btn)return;
+  if(!btn.classList.contains('confirming')){btn.classList.add('confirming');btn.innerHTML='<i class="ti ti-check"></i>Confirm?';if(stTimers[cid])clearTimeout(stTimers[cid]);stTimers[cid]=setTimeout(()=>{if(btn){btn.classList.remove('confirming');btn.innerHTML='<i class="ti ti-stamp"></i>Stamp'}},3e3);return}
+  if(stTimers[cid])clearTimeout(stTimers[cid]);btn.disabled=true;btn.innerHTML='<i class="ti ti-loader-2"></i>';
+  const c=customers.find(x=>x.id===cid),cm=custMap[cid];if(!c||!cm){btn.disabled=false;return}
+  try{
+    if(secure()){
+      // Production: Edge Function validates merchant JWT, computes cycle server-side
+      await edge('merchant-api',{action:'stamp',customer_id:cid});
+    }else{
+      // Dev fallback: direct INSERT (⚠ insecure — anyone with anon key can stamp)
+      console.warn('[PRIMO] ⚠ INSECURE: Direct stamp INSERT');
+      await sb('/stamps',{method:'POST',body:{customer_id:cid,shop_id:shop.id,cycle_number:cm.cycle}});
+    }
+    toast(`✦ Stamped for ${c.first_name}!`);await loadDash();renderDash();
+  }catch(e){console.error(e);toast('⚠ Stamp failed.');btn.disabled=false;btn.classList.remove('confirming');btn.innerHTML='<i class="ti ti-stamp"></i>Stamp'}
+}
+
+/* ══ REDEEM (CVE-6 fix) ══ */
+function openRedeem(cid){const c=customers.find(x=>x.id===cid);if(!c)return;redeemTarget=cid;const g=shop.reward_rule?.get||1,p=shop.product_name||'item',e=shop.product_emoji||'🎁';document.getElementById('redeemSub').textContent=`${c.first_name} earned ${g} free ${p} ${e}. Redeem and start a fresh stamp cycle?`;document.getElementById('redeemModal').classList.add('open')}
+function closeRedeem(){document.getElementById('redeemModal').classList.remove('open');redeemTarget=null}
+async function confirmRedeem(){if(!redeemTarget)return;const cid=redeemTarget,c=customers.find(x=>x.id===cid),cm=custMap[cid],btn=document.getElementById('redeemConfirm'),txt=document.getElementById('redeemConfirmTxt');btn.disabled=true;txt.textContent='Processing…';
+  try{
+    if(secure()){await edge('merchant-api',{action:'redeem',customer_id:cid})}
+    else{console.warn('[PRIMO] ⚠ INSECURE: Direct redeem INSERT');await sb('/redemptions',{method:'POST',body:{customer_id:cid,shop_id:shop.id,cycle_number:cm.cycle}})}
+    toast(`✦ Redeemed for ${c.first_name}! Card reset to cycle ${cm.cycle+1}.`);justRedeemed.add(cid);setTimeout(()=>{justRedeemed.delete(cid);renderCustList()},6e3);closeRedeem();await loadDash();renderDash();
+  }catch(e){console.error(e);toast('⚠ Redeem failed.')}finally{btn.disabled=false;txt.textContent='Confirm Redeem'}}
+
+/* ══ ADD CUSTOMER ══ */
+function openAdd(){['addName','addMobile','addBday'].forEach(i=>{document.getElementById(i).value=''});document.getElementById('addErr').textContent='';document.getElementById('addDerived').style.display='none';document.getElementById('addName').classList.remove('err');document.getElementById('addMobile').classList.remove('err');document.getElementById('addModal').classList.add('open');setTimeout(()=>document.getElementById('addName').focus(),300)}
+function closeAdd(){document.getElementById('addModal').classList.remove('open')}
+async function confirmAdd(){
+  const nameEl=document.getElementById('addName'),mobEl=document.getElementById('addMobile'),bdEl=document.getElementById('addBday'),errEl=document.getElementById('addErr'),btn=document.getElementById('addConfirm'),txt=document.getElementById('addConfirmTxt');errEl.textContent='';nameEl.classList.remove('err');mobEl.classList.remove('err');
+  const name=nameEl.value.trim().replace(/[<>"'&]/g,'').substring(0,60),rawMob=mobEl.value.replace(/\D/g,''),bday=bdEl.value||null;
+  if(!name||name.length<2){nameEl.classList.add('err');errEl.textContent='⚠ Enter a valid name (min 2 chars).';return}
+  if(rawMob.length<4){mobEl.classList.add('err');errEl.textContent='⚠ Enter at least the last 4 digits.';return}
+  const p4=rawMob.slice(-4),fullPhone=rawMob.length>=10?rawMob:null;
+  btn.disabled=true;txt.textContent='Enrolling…';
+  try{
+    if(secure()){await edge('merchant-api',{action:'add_customer',first_name:name,phone_last4:p4,full_phone:fullPhone,birthday:bday})}
+    else{
+      const ex=await sb(`/customers?shop_id=eq.${shop.id}&first_name=eq.${encodeURIComponent(name)}&phone_last4=eq.${p4}&limit=1`);
+      if(ex?.length){errEl.textContent='⚠ This customer already exists.';return}
+      const body={shop_id:shop.id,first_name:name,phone_last4:p4};if(fullPhone)body.full_phone=fullPhone;if(bday)body.birthday=bday;
+      await sb('/customers',{method:'POST',body});
+    }
+    toast(`✦ ${name} enrolled!`);closeAdd();await loadDash();renderDash();
+  }catch(e){console.error(e);errEl.textContent='⚠ Enrolment failed.'}finally{btn.disabled=false;txt.textContent='Enrol Customer'}}
+
+/* ══ EDIT CUSTOMER ══ */
+function openEdit(cid){const c=customers.find(x=>x.id===cid),cm=custMap[cid]||{cySt:[],cycle:1,full:false};if(!c)return;const buy=shop.reward_rule?.buy||11;document.getElementById('editCid').value=cid;document.getElementById('editAv').textContent=(c.first_name||'?')[0].toUpperCase();document.getElementById('editName').textContent=c.first_name;document.getElementById('editMeta').textContent=`••••${c.phone_last4||'????'}`;document.getElementById('editStampGrid').innerHTML=buildGrid(cm.cySt.length,buy);document.getElementById('editStampLbl').textContent=cm.full?`✦ Reward ready! ${buy}/${buy}`:`${cm.cySt.length} / ${buy} stamps · Cycle ${cm.cycle}`;document.getElementById('editMobile').value=c.full_phone||'';document.getElementById('editBday').value=c.birthday||'';document.getElementById('editErr').textContent='';document.getElementById('editModal').classList.add('open')}
+function closeEdit(){document.getElementById('editModal').classList.remove('open')}
+async function confirmEdit(){const cid=document.getElementById('editCid').value,btn=document.getElementById('editConfirm'),txt=document.getElementById('editConfirmTxt');const rawMob=document.getElementById('editMobile').value.replace(/\D/g,''),fullPhone=rawMob.length>=10?rawMob:(rawMob||null),bday=document.getElementById('editBday').value||null;btn.disabled=true;txt.textContent='Saving…';
+  try{
+    if(secure()){await edge('merchant-api',{action:'edit_customer',customer_id:cid,full_phone:fullPhone||null,birthday:bday||null})}
+    else{await sb(`/customers?id=eq.${cid}`,{method:'PATCH',prefer:'return=minimal',body:{full_phone:fullPhone||null,birthday:bday||null}})}
+    const idx=customers.findIndex(x=>x.id===cid);if(idx>=0){customers[idx].full_phone=fullPhone||null;customers[idx].birthday=bday||null}
+    toast('✦ Saved!');closeEdit();renderCustList();renderWA();
+  }catch(e){console.error(e);document.getElementById('editErr').textContent='⚠ Failed to save.'}finally{btn.disabled=false;txt.textContent='Save Details'}}
+
+/* ══ SETTINGS ══ */
+async function saveSets(){const btn=document.getElementById('saveSetBtn'),txt=document.getElementById('saveSetTxt'),prod=document.getElementById('sfProduct').value.trim().substring(0,40),emo=document.getElementById('sfEmoji').value.trim().substring(0,4),buy=parseInt(document.getElementById('sfBuy').value,10)||11,get=parseInt(document.getElementById('sfGet').value,10)||1;if(buy<1||buy>50||get<1||get>10){toast('⚠ Invalid values.');return}btn.disabled=true;txt.textContent='Saving…';
+  try{
+    if(secure()){const res=await edge('merchant-api',{action:'save_settings',product_name:prod||shop.product_name,product_emoji:emo||shop.product_emoji,reward_rule:{buy,get}});if(res.shop)shop=res.shop}
+    else{const u=await sb(`/shops?id=eq.${shop.id}`,{method:'PATCH',prefer:'return=representation',body:{product_name:prod||shop.product_name,product_emoji:emo||shop.product_emoji,reward_rule:{buy,get}}});if(u?.length)shop={...shop,...u[0]}}
+    await loadDash();renderDash();toast('✦ Settings saved!');
+  }catch(e){console.error(e);toast('⚠ Save failed.')}finally{btn.disabled=false;txt.textContent='Save Changes'}}
+async function changePwd(){const pEl=document.getElementById('sfNewPwd'),pcEl=document.getElementById('sfNewPwdC'),errEl=document.getElementById('pwdErr'),btn=document.getElementById('savePwdBtn'),txt=document.getElementById('savePwdTxt');errEl.textContent='';if(!pEl.value||pEl.value.length<6){errEl.textContent='⚠ Min 6 characters.';return}if(pEl.value!==pcEl.value){errEl.textContent="⚠ Passwords don't match.";return}btn.disabled=true;txt.textContent='Updating…';
+  try{
+    if(secure()){await edge('merchant-api',{action:'change_password',new_password:pEl.value})}
+    else{await sb(`/shops?id=eq.${shop.id}`,{method:'PATCH',prefer:'return=minimal',body:{admin_password:pEl.value}})}
+    pEl.value='';pcEl.value='';toast('✦ Password updated!');
+  }catch(e){console.error(e);toast('⚠ Failed.')}finally{btn.disabled=false;txt.textContent='Update Password'}}
+
+/* ══ CSV ══ */
+function exportCSV(){if(!customers.length){toast('No data.');return}const buy=shop.reward_rule?.buy||11;const rows=[['Name','Last4','Full Phone','Birthday','Enrolled','Cycle','Stamps','Total Stamps','Redemptions','Full']];customers.forEach(c=>{const cm=custMap[c.id]||{};rows.push([c.first_name,c.phone_last4,c.full_phone||'',c.birthday||'',c.enrolled_at?new Date(c.enrolled_at).toLocaleDateString('en-IN'):'',cm.cycle||1,cm.cySt?.length||0,cm.allSt?.length||0,cm.reds?.length||0,cm.full?'Yes':'No'])});const csv=rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');const b=new Blob([csv],{type:'text/csv'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download=`${shop.slug}-customers-${new Date().toISOString().slice(0,10)}.csv`;a.click();URL.revokeObjectURL(u);toast('✦ CSV exported!')}
+async function handleShare(){const url=`https://primorewards.app/${shop.slug}-reward`;if(navigator.share){try{await navigator.share({title:`${shop.shop_name} Rewards`,url});return}catch{}}try{await navigator.clipboard.writeText(url);toast('✦ Link copied!')}catch{toast('Copy: '+url)}}
+
+/* ══ SHEETS ══ */
+function openMenu(){document.getElementById('menuSheet').classList.add('open')}
+function closeMenu(){document.getElementById('menuSheet').classList.remove('open')}
+async function doRefresh(){closeMenu();try{await loadDash();renderDash();toast('Refreshed ✓')}catch{toast('⚠ Failed.')}}
+function signOut(){closeMenu();shop=null;customers=[];allStamps=[];allReds=[];custMap={};merchantToken=null;document.getElementById('inSlug').value='';document.getElementById('inPwd').value='';document.getElementById('loginErr').textContent='';document.getElementById('secBanner').classList.remove('show');showScreen('s-login');toast('Signed out')}
+
+/* ══ WIRE ══ */
+function wire(){
+  document.getElementById('loginBtn').addEventListener('click',handleLogin);document.getElementById('inSlug').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('inPwd').focus()});document.getElementById('inPwd').addEventListener('keydown',e=>{if(e.key==='Enter')handleLogin()});
+  document.getElementById('profileMenuBtn').addEventListener('click',openMenu);document.getElementById('menuSheet').addEventListener('click',e=>{if(e.target.id==='menuSheet')closeMenu()});document.getElementById('sheetRefresh').addEventListener('click',doRefresh);document.getElementById('sheetSignOut').addEventListener('click',signOut);
+  document.querySelectorAll('.tab-btn').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.tab-btn').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));b.classList.add('active');document.getElementById(b.dataset.tab).classList.add('active');if(b.dataset.tab==='t-qr'&&shop)renderQR();if(b.dataset.tab==='t-wa'&&shop)renderWA()}));
+  document.getElementById('searchInp').addEventListener('input',e=>{searchQ=e.target.value;renderCustList()});
+  document.getElementById('addCustBtn').addEventListener('click',openAdd);document.getElementById('addConfirm').addEventListener('click',confirmAdd);document.getElementById('addCancel').addEventListener('click',closeAdd);document.getElementById('addModal').addEventListener('click',e=>{if(e.target.id==='addModal')closeAdd()});
+  document.getElementById('addMobile').addEventListener('input',function(){const d=this.value.replace(/\D/g,'');this.value=d;const badge=document.getElementById('addDerived'),b4=document.getElementById('addDerived4');if(d.length>=4){badge.style.display='inline-flex';b4.textContent=d.slice(-4)}else{badge.style.display='none'}});
+  document.getElementById('editConfirm').addEventListener('click',confirmEdit);document.getElementById('editCancel').addEventListener('click',closeEdit);document.getElementById('editModal').addEventListener('click',e=>{if(e.target.id==='editModal')closeEdit()});
+  document.getElementById('redeemConfirm').addEventListener('click',confirmRedeem);document.getElementById('redeemCancel').addEventListener('click',closeRedeem);document.getElementById('redeemModal').addEventListener('click',e=>{if(e.target.id==='redeemModal')closeRedeem()});
+  document.getElementById('waPreviewSend').addEventListener('click',confirmSendWA);document.getElementById('waPreviewCancel').addEventListener('click',closeWAPreview);document.getElementById('waPreviewModal').addEventListener('click',e=>{if(e.target.id==='waPreviewModal')closeWAPreview()});
+  document.getElementById('saveSetBtn').addEventListener('click',saveSets);document.getElementById('savePwdBtn').addEventListener('click',changePwd);
+  document.getElementById('copyLinkBtn').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(`https://primorewards.app/${shop?.slug}-reward`);toast('✦ Link copied!')}catch{toast('⚠ Copy failed.')}});
+  document.getElementById('shareLinkBtn').addEventListener('click',handleShare);document.getElementById('csvBtn').addEventListener('click',exportCSV);
+}
+
+document.addEventListener('DOMContentLoaded',()=>{wire();showScreen('s-login');});
+
+/*
+ * EDGE FUNCTIONS REQUIRED FOR PRODUCTION:
+ * ────────────────────────────────────────
+ * 1. merchant-auth   — POST {slug, password} → {token, shop}
+ *    bcrypt verify via shop_credentials table. Returns signed JWT (4h expiry).
+ *    Rate limited: 5 attempts / 15min per slug (Upstash Redis).
+ *
+ * 2. merchant-api     — POST {action, ...params}  (Bearer token required)
+ *    Actions: load_dashboard, stamp, redeem, add_customer,
+ *             edit_customer, save_settings, change_password
+ *    All actions validate JWT → extract shop_id → scope queries to shop.
+ *    Stamp/redeem compute cycle_number server-side (never trust client).
+ *
+ * See primo-go-live-audit-v2.md Section 10 for blueprints.
+ */
+
+</script>
 </body>
 </html>
