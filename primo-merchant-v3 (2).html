@@ -315,7 +315,7 @@ function confirmSendWA(){
 
 function renderWA(){const buy=shop.reward_rule?.buy||11,wp=customers.filter(c=>c.full_phone),np=customers.filter(c=>!c.full_phone);const banner=document.getElementById('waBanner'),btxt=document.getElementById('waBannerTxt');if(np.length){banner.style.display='flex';btxt.innerHTML=`<strong>${np.length}</strong> customer${np.length>1?'s':''} missing phone. Edit their card to add.`}else{banner.style.display='none'}const list=document.getElementById('waList');if(!wp.length){list.innerHTML='<div class="wa-empty">No customers have a phone number yet.<br>Edit a customer card to add one.</div>';return}list.innerHTML=wp.map(c=>{const cm=custMap[c.id]||{cySt:[],full:false},cnt=cm.cySt.length,full=cm.full,ini=(c.first_name||'?')[0].toUpperCase(),bdt=isBdayToday(c.birthday);return`<div class="wa-row"><div class="wa-av">${ini}</div><div class="wa-info"><div class="wa-nm">${san(c.first_name)}${bdt?' 🎂':''}</div><div class="wa-st">${full?'🎉 Reward ready!':`${cnt}/${buy} stamps`}</div></div><button class="wa-send" onclick="openWAPreview('${c.id}')"><i class="ti ti-brand-whatsapp"></i>Send</button></div>`}).join('')}
 
-function renderQR(){const url=`https://primorewards.app/${shop.slug}-reward`;document.getElementById('qrUrl').textContent=url;const w=document.getElementById('qr-canvas-wrap');w.innerHTML='';if(typeof QRCode!=='undefined'){new QRCode(w,{text:url,width:180,height:180,colorDark:'#1A1007',colorLight:'#FFFFFF',correctLevel:QRCode.CorrectLevel.H})}else{setTimeout(renderQR,800)}}
+function renderQR(){const url=`https://primorewards.in/${shop.slug}-reward`;document.getElementById('qrUrl').textContent=url;const w=document.getElementById('qr-canvas-wrap');w.innerHTML='';if(typeof QRCode!=='undefined'){new QRCode(w,{text:url,width:180,height:180,colorDark:'#1A1007',colorLight:'#FFFFFF',correctLevel:QRCode.CorrectLevel.H})}else{setTimeout(renderQR,800)}}
 
 /* ══ STAMP (CVE-4 fix) ══ */
 const stTimers={};
@@ -395,7 +395,7 @@ async function changePwd(){const pEl=document.getElementById('sfNewPwd'),pcEl=do
 
 /* ══ CSV ══ */
 function exportCSV(){if(!customers.length){toast('No data.');return}const buy=shop.reward_rule?.buy||11;const rows=[['Name','Last4','Full Phone','Birthday','Enrolled','Cycle','Stamps','Total Stamps','Redemptions','Full']];customers.forEach(c=>{const cm=custMap[c.id]||{};rows.push([c.first_name,c.phone_last4,c.full_phone||'',c.birthday||'',c.enrolled_at?new Date(c.enrolled_at).toLocaleDateString('en-IN'):'',cm.cycle||1,cm.cySt?.length||0,cm.allSt?.length||0,cm.reds?.length||0,cm.full?'Yes':'No'])});const csv=rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');const b=new Blob([csv],{type:'text/csv'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download=`${shop.slug}-customers-${new Date().toISOString().slice(0,10)}.csv`;a.click();URL.revokeObjectURL(u);toast('✦ CSV exported!')}
-async function handleShare(){const url=`https://primorewards.app/${shop.slug}-reward`;if(navigator.share){try{await navigator.share({title:`${shop.shop_name} Rewards`,url});return}catch{}}try{await navigator.clipboard.writeText(url);toast('✦ Link copied!')}catch{toast('Copy: '+url)}}
+async function handleShare(){const url=`https://primorewards.in/${shop.slug}-reward`;if(navigator.share){try{await navigator.share({title:`${shop.shop_name} Rewards`,url});return}catch{}}try{await navigator.clipboard.writeText(url);toast('✦ Link copied!')}catch{toast('Copy: '+url)}}
 
 /* ══ SHEETS ══ */
 function openMenu(){document.getElementById('menuSheet').classList.add('open')}
@@ -415,7 +415,7 @@ function wire(){
   document.getElementById('redeemConfirm').addEventListener('click',confirmRedeem);document.getElementById('redeemCancel').addEventListener('click',closeRedeem);document.getElementById('redeemModal').addEventListener('click',e=>{if(e.target.id==='redeemModal')closeRedeem()});
   document.getElementById('waPreviewSend').addEventListener('click',confirmSendWA);document.getElementById('waPreviewCancel').addEventListener('click',closeWAPreview);document.getElementById('waPreviewModal').addEventListener('click',e=>{if(e.target.id==='waPreviewModal')closeWAPreview()});
   document.getElementById('saveSetBtn').addEventListener('click',saveSets);document.getElementById('savePwdBtn').addEventListener('click',changePwd);
-  document.getElementById('copyLinkBtn').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(`https://primorewards.app/${shop?.slug}-reward`);toast('✦ Link copied!')}catch{toast('⚠ Copy failed.')}});
+  document.getElementById('copyLinkBtn').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(`https://primorewards.in/${shop?.slug}-reward`);toast('✦ Link copied!')}catch{toast('⚠ Copy failed.')}});
   document.getElementById('shareLinkBtn').addEventListener('click',handleShare);document.getElementById('csvBtn').addEventListener('click',exportCSV);
 }
 
