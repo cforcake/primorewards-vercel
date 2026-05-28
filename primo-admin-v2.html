@@ -876,7 +876,7 @@ function openShopDetail(shopId) {
     '<div class="drow"><span class="dl">Phone</span><span class="dv">'+san(s.owner_phone||'\u2014')+'</span></div></div>'+
     '<div class="dsec"><div class="dsec-title">Shop</div>'+
     '<div class="drow"><span class="dl">Slug</span><span class="dv">'+san(s.slug)+'</span></div>'+
-    '<div class="drow"><span class="dl">URL</span><span class="dv"><a href="https://primorewards.app/'+san(s.slug)+'-reward" target="_blank" rel="noopener">primorewards.app/'+san(s.slug)+'-reward</a></span></div>'+
+    '<div class="drow"><span class="dl">URL</span><span class="dv"><a href="https://primorewards.in/'+san(s.slug)+'-reward" target="_blank" rel="noopener">primorewards.in/'+san(s.slug)+'-reward</a></span></div>'+
     '<div class="drow"><span class="dl">Plan</span><span class="dv"><span class="plan-badge">'+san(s.plan)+'</span></span></div>'+
     '<div class="drow"><span class="dl">Status</span><span class="dv"><span class="status-badge '+(SC[s.status]||'pending')+'">'+(SL[s.status]||s.status)+'</span></span></div>'+
     '<div class="drow"><span class="dl">Rule</span><span class="dv">Buy '+(s.reward_rule?.buy||11)+', get '+(s.reward_rule?.get||1)+' free</span></div>'+
@@ -1186,7 +1186,7 @@ window.addEventListener('DOMContentLoaded',()=>{
     razorpay-webhook  HMAC-SHA256 verify; activates shop; logs payment (CVE-7 fix)
 
   VERCEL DEPLOYMENT:
-    Deploy admin panel to admin.primorewards.app as a separate Vercel
+    Deploy admin panel to admin.primorewards.in as a separate Vercel
     project with Deployment Protection enabled (audit section 3).
     Add vercel.json from audit section 11 to the root of each project
     for server-side CSP headers + HSTS (stronger than meta tag CSP).
