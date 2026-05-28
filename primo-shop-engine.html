@@ -727,10 +727,40 @@ function showError(msg) {
   show('screen-error');
 }
 
+let _countdownTimer = null;
+
+function startCountdown(seconds) {
+  const btn   = document.getElementById('btn-login');
+  const errEl = document.getElementById('login-err');
+  const errTx = document.getElementById('login-err-text');
+  if (_countdownTimer) clearInterval(_countdownTimer);
+  let remaining = seconds;
+  function tick() {
+    const m = Math.floor(remaining / 60);
+    const s = String(remaining % 60).padStart(2, '0');
+    errTx.textContent = `Too many attempts. Try again in ${m}:${s}`;
+    errEl.style.display = 'flex';
+    btn.disabled = true;
+    btn.innerHTML = `<i class="ti ti-clock"></i> Wait ${m}:${s}`;
+    if (remaining <= 0) {
+      clearInterval(_countdownTimer);
+      _countdownTimer = null;
+      btn.disabled = false;
+      btn.innerHTML = '<i class="ti ti-arrow-right"></i> Open My Card';
+      errEl.style.display = 'none';
+    }
+    remaining--;
+  }
+  tick();
+  _countdownTimer = setInterval(tick, 1000);
+}
+
 async function handleLogin() {
   const btn = document.getElementById('btn-login');
   const errEl = document.getElementById('login-err');
   const errTx = document.getElementById('login-err-text');
+
+  if (btn.disabled) return;
 
   const rawName = document.getElementById('inp-name').value.trim();
   const phone4 = document.getElementById('inp-phone').value.trim();
@@ -748,6 +778,12 @@ async function handleLogin() {
 
   try {
     const res = await post('customer-lookup', { shop_id: shop.id, first_name: name, phone_last4: phone4 });
+
+    if (res.retry_after_seconds) {
+      startCountdown(res.retry_after_seconds);
+      return;
+    }
+
     if (res.error) {
       showErr(res.error);
       btn.disabled = false;
