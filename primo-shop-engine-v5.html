@@ -712,7 +712,7 @@ body::after {
     <div class="err-ico" aria-hidden="true">🔍</div>
     <h1 class="err-t" id="errTitle">Shop Not Found</h1>
     <p class="err-s" id="errMsg">This rewards link doesn't match any active shop. Check with your shop for the correct link.</p>
-    <a href="https://primorewards.app" class="err-btn">
+    <a href="https://www.primorewards.in" class="err-btn">
       <i class="ti ti-external-link" aria-hidden="true"></i> About Primo Rewards
     </a>
   </div>
@@ -932,7 +932,7 @@ body::after {
     <div class="qr-img-wrap">
       <img id="qrImg" src="" alt="QR code for shop reward link" width="180" height="180">
     </div>
-    <div class="qr-url" id="qrUrl">primorewards.app/shop-reward</div>
+    <div class="qr-url" id="qrUrl">primorewards.in/shop-reward</div>
     <button class="qr-close" id="qrClose">Close</button>
   </div>
 </div>
@@ -994,7 +994,7 @@ body::after {
 /* ════════════════════════════════════════════════════════════════════
    PRIMO SHOP ENGINE — Phase 2
    File  : primo-shop-engine-v1.html
-   URL   : primorewards.app/[slug]-reward
+   URL   : primorewards.in/[slug]-reward
    Reads : shops, customers, stamps, redemptions  (Supabase REST)
    Writes: customers (enroll), redemptions (redeem)
 ════════════════════════════════════════════════════════════════════ */
@@ -1501,7 +1501,7 @@ function copyStatus() {
 }
 
 function showQR() {
-  const url   = `https://primorewards.app/${shop.slug}-reward`;
+  const url   = `https://www.primorewards.in/${shop.slug}-reward`;
   const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(url)}&bgcolor=FDFAF5&color=1A1007&margin=4`;
   document.getElementById('qrImg').src          = qrUrl;
   document.getElementById('qrUrl').textContent  = url;
@@ -1570,7 +1570,7 @@ function downloadCard() {
   ctx.fillText(count>=buy?`${emoji} Reward ready!`:`${buy-count} more for free ${prod}`,W-40,barY-10); ctx.textAlign='left';
 
   // Footer
-  ctx.fillStyle='#A89880'; ctx.font='12px sans-serif'; ctx.fillText('Powered by Primo Rewards · primorewards.app',40,H-25);
+  ctx.fillStyle='#A89880'; ctx.font='12px sans-serif'; ctx.fillText('Powered by Primo Rewards · primorewards.in',40,H-25);
 
   const link=document.createElement('a'); link.download=`${shop.slug||'loyalty'}-card.png`; link.href=canvas.toDataURL('image/png'); link.click();
   toast('Card downloaded ✓');
