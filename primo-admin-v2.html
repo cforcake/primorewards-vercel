@@ -360,6 +360,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
 
   <div class="tab-bar" role="tablist">
     <button class="tab-btn active" data-tab="shops" onclick="switchTab('shops')" role="tab">Shops <span class="cbadge" id="tab-shops-n">&mdash;</span></button>
+    <button class="tab-btn" data-tab="funnel" onclick="switchTab('funnel')" role="tab">Funnel <span class="cbadge" id="tab-funnel-n">&mdash;</span></button>
     <button class="tab-btn" data-tab="activity" onclick="switchTab('activity')" role="tab">Activity</button>
     <button class="tab-btn" data-tab="revenue" onclick="switchTab('revenue')" role="tab">Revenue</button>
     <button class="tab-btn" data-tab="audit" onclick="switchTab('audit')" role="tab">Audit Log</button>
@@ -385,6 +386,10 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
       </select>
     </div>
     <div class="shops-list" id="shops-list"></div>
+  </div>
+
+  <div id="tab-funnel" class="tab-content" role="tabpanel">
+    <div id="funnel-wrap" style="padding:.75rem"></div>
   </div>
 
   <div id="tab-activity" class="tab-content" role="tabpanel">
@@ -622,6 +627,7 @@ async function loadDashboard() {
     STATE.redemptions = data.redemptions || {};
     STATE.payments    = data.payments    || [];
     STATE.auditLog    = data.audit_log   || [];
+    STATE.enrollments = data.enrollments || [];
     renderDashboard();
     showScreen('s-dash');
   } catch(err) {
@@ -656,6 +662,10 @@ function renderDashboard() {
   document.getElementById('stat-pending').textContent   = pending.length;
   document.getElementById('stat-suspended').textContent = susp.length;
   document.getElementById('tab-shops-n').textContent    = shops.length;
+  const enr = STATE.enrollments || [];
+  const dropoffs = enr.filter(e=>e.status==='pending_payment').length;
+  const funnelBadge = document.getElementById('tab-funnel-n');
+  if(funnelBadge) funnelBadge.textContent = enr.length;
   const pc={starter:0,pro:0,premium:0};
   active.forEach(s=>{if(PLAN_MRR[s.plan]) pc[s.plan]++;});
   const mrr=pc.starter*349+pc.pro*549+pc.premium*749;
@@ -663,7 +673,7 @@ function renderDashboard() {
   document.getElementById('mrr-s').textContent=pc.starter;
   document.getElementById('mrr-p').textContent=pc.pro;
   document.getElementById('mrr-pm').textContent=pc.premium;
-  renderShops(); renderActivity(); renderRevenue(); renderAuditLog();
+  renderShops(); renderActivity(); renderRevenue(); renderAuditLog(); renderFunnel();
 }
 
 /* SHOPS */
@@ -793,6 +803,57 @@ function renderAuditLog() {
       (e.ip_address?'<span class="audit-ip">'+san(e.ip_address)+'</span>':'')+'</div></div>'+
       '<span class="audit-time">'+((e.performed_at||e.created_at)?.slice(0,10)||'\u2014')+'</span></div>';
   }).join('');
+}
+
+/* FUNNEL */
+function renderFunnel() {
+  const wrap = document.getElementById('funnel-wrap');
+  if (!wrap) return;
+  const enr = STATE.enrollments || [];
+  if (!enr.length) {
+    wrap.innerHTML = '<div class="empty-state"><div class="empty-ico">📋</div><div class="empty-t">No enrollments yet</div><div class="empty-s">When merchants fill the enroll form, all submissions appear here — including drop-offs before payment.</div></div>';
+    return;
+  }
+  const total       = enr.length;
+  const paid        = enr.filter(e=>e.status==='active').length;
+  const pending     = enr.filter(e=>e.status==='pending_payment').length;
+  const received    = enr.filter(e=>e.status==='payment_received').length;
+  const convRate    = total > 0 ? Math.round((paid/total)*100) : 0;
+  const fmtDate = d => d ? new Date(d).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}) : '—';
+  const statusLabel = {active:'✅ Converted',pending_payment:'⏳ Drop-off',payment_received:'💳 Payment received',failed:'❌ Failed'};
+  const statusCls   = {active:'enr-active',pending_payment:'enr-pending',payment_received:'enr-received',failed:'enr-failed'};
+  const planAmt     = {starter:'₹1,499',pro:'₹2,499',premium:'₹4,999'};
+  wrap.innerHTML = `
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:1rem">
+      <div class="dstat" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:.75rem;text-align:center">
+        <div class="dstat-v" style="font-size:24px;font-weight:600;color:var(--cream)">${total}</div><div style="font-size:11px;color:var(--ink-f);margin-top:2px">Total Signups</div></div>
+      <div class="dstat" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:.75rem;text-align:center">
+        <div class="dstat-v" style="font-size:24px;font-weight:600;color:#4ADE80">${paid}</div><div style="font-size:11px;color:var(--ink-f);margin-top:2px">Converted</div></div>
+      <div class="dstat" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:.75rem;text-align:center">
+        <div class="dstat-v" style="font-size:24px;font-weight:600;color:#F87171">${pending}</div><div style="font-size:11px;color:var(--ink-f);margin-top:2px">Drop-offs</div></div>
+      <div class="dstat" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:.75rem;text-align:center">
+        <div class="dstat-v" style="font-size:24px;font-weight:600;color:var(--gold-b)">${convRate}%</div><div style="font-size:11px;color:var(--ink-f);margin-top:2px">Conversion</div></div>
+    </div>
+    <div style="margin-bottom:.5rem;font-size:12px;color:var(--ink-f)">${total} enrollment${total!==1?'s':''} — newest first</div>
+    ${enr.map(e=>`
+      <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:.85rem 1rem;margin-bottom:.5rem;display:flex;align-items:flex-start;gap:.75rem">
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:.3rem">
+            <span style="font-size:14px;font-weight:600;color:var(--cream)">${san(e.shop_name||'—')}</span>
+            <span style="font-size:10px;padding:2px 8px;border-radius:99px;background:rgba(255,255,255,.06);color:var(--ink-f)">${san(e.plan||'—')}</span>
+            <span style="font-size:10px;padding:2px 8px;border-radius:99px;font-weight:600;${e.status==='active'?'background:rgba(74,222,128,.12);color:#4ADE80':e.status==='pending_payment'?'background:rgba(248,113,113,.12);color:#F87171':'background:rgba(201,168,76,.12);color:var(--gold-b)'}">${statusLabel[e.status]||e.status}</span>
+          </div>
+          <div style="font-size:12px;color:var(--ink-f);display:flex;gap:1rem;flex-wrap:wrap">
+            <span>👤 ${san(e.owner_name||'—')}</span>
+            <span>✉️ ${san(e.owner_email||'—')}</span>
+            <span>📱 ${san(e.owner_phone||'—')}</span>
+            <span>📍 ${san(e.city||'—')}</span>
+            <span>🕐 ${fmtDate(e.created_at)}</span>
+            ${e.amount_paise?`<span>💰 ₹${(e.amount_paise/100).toLocaleString('en-IN')}</span>`:''}
+          </div>
+        </div>
+        ${e.status==='pending_payment'&&e.owner_phone?`<a href="https://wa.me/91${e.owner_phone}?text=${encodeURIComponent('Hi '+e.owner_name+', you started enrolling your shop "'+e.shop_name+'" on Primo Rewards but didn\'t complete payment. Would you like to continue? We\'re happy to help!')}" target="_blank" style="flex-shrink:0;font-size:12px;padding:6px 12px;border-radius:8px;background:rgba(37,211,102,.1);color:#25D366;border:1px solid rgba(37,211,102,.2);text-decoration:none;white-space:nowrap">💬 Follow up</a>`:''}
+      </div>`).join('')}`;
 }
 
 /* SHOP DETAIL */
