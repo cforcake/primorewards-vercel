@@ -772,7 +772,7 @@ async function doRefresh() {
 function renderDashboard() {
   const shops    = STATE.shops;
   const active   = shops.filter(s=>s.status==='active');
-  const pending  = shops.filter(s=>s.status==='pending_payment');
+  const pending  = shops.filter(s=>s.status==='pending_payment'||s.status==='trial_pending');
   const susp     = shops.filter(s=>s.status==='suspended');
   document.getElementById('stat-total').textContent     = shops.length;
   document.getElementById('stat-active').textContent    = active.length;
@@ -780,7 +780,7 @@ function renderDashboard() {
   document.getElementById('stat-suspended').textContent = susp.length;
   document.getElementById('tab-shops-n').textContent    = shops.length;
   const enr = STATE.enrollments || [];
-  const dropoffs = enr.filter(e=>e.status==='pending_payment').length;
+  const dropoffs = enr.filter(e=>e.status==='pending_payment'||e.status==='trial_pending').length;
   const funnelBadge = document.getElementById('tab-funnel-n');
   if(funnelBadge) funnelBadge.textContent = enr.length;
   const pc={starter:0,pro:0,premium:0};
@@ -812,15 +812,15 @@ function renderShops() {
     list.innerHTML='<div class="empty-state"><div class="empty-ico">\uD83D\uDD0D</div><div class="empty-t">No shops found</div><div class="empty-s">Adjust search or filters.</div></div>';
     return;
   }
-  const SL={active:'Active',pending_payment:'Pending',suspended:'Suspended'};
-  const SC={active:'active',pending_payment:'pending',suspended:'suspended'};
+  const SL={active:'Active',pending_payment:'Pending',trial_pending:'Trial Pending',suspended:'Suspended'};
+  const SC={active:'active',pending_payment:'pending',trial_pending:'pending',suspended:'suspended'};
   list.innerHTML=shops.map(s=>{
     const cust=STATE.customers[s.id]||0;
     const stmp=STATE.stamps[s.id]||0;
     const redm=STATE.redemptions[s.id]||0;
     let ab='';
     if(s.status==='active')          ab='<button class="sc-btn sc-btn-suspend"  onclick="openConfirm(\'suspend\',\''+esc(s.id)+'\')">\u23F8 Suspend</button>';
-    else if(s.status==='pending_payment') ab='<button class="sc-btn sc-btn-activate" onclick="openConfirm(\'activate\',\''+esc(s.id)+'\')">\u2713 Activate</button>';
+    else if(s.status==='pending_payment'||s.status==='trial_pending') ab='<button class="sc-btn sc-btn-activate" onclick="openConfirm(\'activate\',\''+esc(s.id)+'\')">&#x2713; Activate</button>';
     else                             ab='<button class="sc-btn sc-btn-activate" onclick="openConfirm(\'reinstate\',\''+esc(s.id)+'\')">\u21BA Reinstate</button>';
     return '<div class="shop-card">'+
       '<div class="sc-top"><div class="sc-avatar">'+(s.product_emoji||'\uD83C\uDFEA')+'</div>'+
@@ -937,8 +937,8 @@ function renderFunnel() {
   const received    = enr.filter(e=>e.status==='payment_received').length;
   const convRate    = total > 0 ? Math.round((paid/total)*100) : 0;
   const fmtDate = d => d ? new Date(d).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}) : '—';
-  const statusLabel = {active:'✅ Converted',pending_payment:'⏳ Drop-off',payment_received:'💳 Payment received',failed:'❌ Failed'};
-  const statusCls   = {active:'enr-active',pending_payment:'enr-pending',payment_received:'enr-received',failed:'enr-failed'};
+  const statusLabel = {active:'✅ Converted',pending_payment:'⏳ Pending',trial_pending:'🆓 Trial Pending',payment_received:'💳 Payment received',failed:'❌ Failed'};
+  const statusCls   = {active:'enr-active',pending_payment:'enr-pending',trial_pending:'enr-pending',payment_received:'enr-received',failed:'enr-failed'};
   const planAmt     = {starter:'₹1,499',pro:'₹2,499',premium:'₹4,999'};
   wrap.innerHTML = `
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:1rem">
@@ -958,7 +958,7 @@ function renderFunnel() {
           <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:.3rem">
             <span style="font-size:14px;font-weight:600;color:var(--cream)">${san(e.shop_name||'—')}</span>
             <span style="font-size:10px;padding:2px 8px;border-radius:99px;background:rgba(255,255,255,.06);color:var(--ink-f)">${san(e.plan||'—')}</span>
-            <span style="font-size:10px;padding:2px 8px;border-radius:99px;font-weight:600;${e.status==='active'?'background:rgba(74,222,128,.12);color:#4ADE80':e.status==='pending_payment'?'background:rgba(248,113,113,.12);color:#F87171':'background:rgba(201,168,76,.12);color:var(--gold-b)'}">${statusLabel[e.status]||e.status}</span>
+            <span style="font-size:10px;padding:2px 8px;border-radius:99px;font-weight:600;${e.status==='active'?'background:rgba(74,222,128,.12);color:#4ADE80':e.status==='trial_pending'?'background:rgba(99,179,237,.12);color:#63B3ED':(e.status==='pending_payment')?'background:rgba(248,113,113,.12);color:#F87171':'background:rgba(201,168,76,.12);color:var(--gold-b)'}">${statusLabel[e.status]||e.status}</span>
           </div>
           <div style="font-size:12px;color:var(--ink-f);display:flex;gap:1rem;flex-wrap:wrap">
             <span>👤 ${san(e.owner_name||'—')}</span>
@@ -969,7 +969,7 @@ function renderFunnel() {
             ${e.amount_paise?`<span>💰 ₹${(e.amount_paise/100).toLocaleString('en-IN')}</span>`:''}
           </div>
         </div>
-        ${e.status==='pending_payment'&&e.owner_phone?`<a href="https://wa.me/91${e.owner_phone}?text=${encodeURIComponent('Hi '+e.owner_name+', you started enrolling your shop "'+e.shop_name+'" on Primo Rewards but didn\'t complete payment. Would you like to continue? We\'re happy to help!')}" target="_blank" style="flex-shrink:0;font-size:12px;padding:6px 12px;border-radius:8px;background:rgba(37,211,102,.1);color:#25D366;border:1px solid rgba(37,211,102,.2);text-decoration:none;white-space:nowrap">💬 Follow up</a>`:''}
+        ${(e.status==='pending_payment'||e.status==='trial_pending')&&e.owner_phone?`<a href="https://wa.me/91${e.owner_phone}?text=${encodeURIComponent('Hi '+e.owner_name+', your shop "'+e.shop_name+'" is enrolled on Primo Rewards! We\'re setting up your 30-day free trial. We\'ll be in touch shortly to get you started. 🚀')}" target="_blank" style="flex-shrink:0;font-size:12px;padding:6px 12px;border-radius:8px;background:rgba(37,211,102,.1);color:#25D366;border:1px solid rgba(37,211,102,.2);text-decoration:none;white-space:nowrap">💬 Follow up</a>`:''}
       </div>`).join('')}`;
 }
 
@@ -977,13 +977,28 @@ function renderFunnel() {
 function openShopDetail(shopId) {
   const s=STATE.shops.find(x=>x.id===shopId); if(!s) return;
   const cust=STATE.customers[s.id]||0, stmp=STATE.stamps[s.id]||0, redm=STATE.redemptions[s.id]||0;
-  const SL={active:'Active',pending_payment:'Pending Payment',suspended:'Suspended'};
-  const SC={active:'active',pending_payment:'pending',suspended:'suspended'};
+  const SL={active:'Active',pending_payment:'Pending Payment',trial_pending:'Trial Pending',suspended:'Suspended'};
+  const SC={active:'active',pending_payment:'pending',trial_pending:'pending',suspended:'suspended'};
   const waL=s.owner_phone?'https://wa.me/91'+s.owner_phone+'?text='+encodeURIComponent('Hi '+(s.owner_name||'')+', this is Primo Rewards support.'):null;
   let ab='';
-  if(s.status==='active')          ab='<button class="da-btn da-sus" onclick="closeAllSheets();openConfirm(\'suspend\',\''+esc(s.id)+'\')">&#x23F8; Suspend</button>';
-  else if(s.status==='pending_payment') ab='<button class="da-btn da-act" onclick="closeAllSheets();openConfirm(\'activate\',\''+esc(s.id)+'\')">&#x2713; Activate</button>';
-  else                             ab='<button class="da-btn da-act" onclick="closeAllSheets();openConfirm(\'reinstate\',\''+esc(s.id)+'\')">&#x21BA; Reinstate</button>';
+  if(s.status==='active')                                           ab='<button class="da-btn da-sus" onclick="closeAllSheets();openConfirm(\'suspend\',\''+esc(s.id)+'\')">&#x23F8; Suspend</button>';
+  else if(s.status==='pending_payment'||s.status==='trial_pending') ab='<button class="da-btn da-act" onclick="closeAllSheets();openConfirm(\'activate\',\''+esc(s.id)+'\')">&#x2713; Activate</button>';
+  else                                                              ab='<button class="da-btn da-act" onclick="closeAllSheets();openConfirm(\'reinstate\',\''+esc(s.id)+'\')">&#x21BA; Reinstate</button>';
+  // Subscription section
+  const subStatusMap={none:{bg:'rgba(168,152,128,.08)',color:'#a89880',label:'None'},trial:{bg:'rgba(99,179,237,.12)',color:'#63B3ED',label:'In Trial'},pending_mandate:{bg:'rgba(248,178,74,.12)',color:'#F8B24A',label:'Mandate Pending'},active:{bg:'rgba(74,222,128,.12)',color:'#4ADE80',label:'Active'},halted:{bg:'rgba(248,113,113,.12)',color:'#F87171',label:'Halted'},cancelled:{bg:'rgba(168,152,128,.12)',color:'#a89880',label:'Cancelled'}};
+  const ss=s.subscription_status||'none';
+  const subSt=subStatusMap[ss]||subStatusMap.none;
+  const subBadge='<span style="font-size:11px;font-weight:600;padding:2px 9px;border-radius:99px;background:'+subSt.bg+';color:'+subSt.color+';border:1px solid '+subSt.color+'33">'+subSt.label+'</span>';
+  const fmtDt=iso=>iso?new Date(iso).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}):'—';
+  const subSection='<div class="dsec"><div class="dsec-title">Subscription</div>'+
+    '<div class="drow"><span class="dl">Status</span><span class="dv">'+subBadge+'</span></div>'+
+    (s.subscription_plan?'<div class="drow"><span class="dl">Plan</span><span class="dv"><span class="plan-badge">'+san(s.subscription_plan)+'</span></span></div>':'')+
+    (s.trial_ends_at?'<div class="drow"><span class="dl">Trial ends</span><span class="dv">'+fmtDt(s.trial_ends_at)+'</span></div>':'')+
+    (s.next_charge_at?'<div class="drow"><span class="dl">Next charge</span><span class="dv">'+fmtDt(s.next_charge_at)+'</span></div>':'')+
+    (s.razorpay_subscription_id?'<div class="drow"><span class="dl">Sub ID</span><span class="dv" style="font-family:monospace;font-size:11px">'+san(s.razorpay_subscription_id)+'</span></div>':'')+
+    (s.coupon_code?'<div class="drow"><span class="dl">Coupon</span><span class="dv"><span class="cp-badge sub">'+san(s.coupon_code)+'</span></span></div>':'')+
+    (['pending_mandate','active','halted'].includes(ss)&&s.razorpay_subscription_id?'<div class="drow" style="margin-top:.4rem"><button class="da-btn" style="background:rgba(248,113,113,.08);color:#F87171;border:1px solid rgba(248,113,113,.22);width:100%;font-size:13px" onclick="cancelSubscription(\''+esc(s.id)+'\',\''+esc(s.shop_name)+'\')">Cancel Subscription</button></div>':'')+
+    '</div>';
   document.getElementById('sd-title').textContent=s.shop_name;
   document.getElementById('sd-sub').textContent=(s.city||'\u2014')+' \u00B7 '+s.slug;
   document.getElementById('sd-body').innerHTML=
@@ -1001,7 +1016,7 @@ function openShopDetail(shopId) {
     '<div class="drow"><span class="dl">Joined</span><span class="dv">'+fmtDate(s.created_at?.slice(0,10))+'</span></div>'+
     (s.activated_at?'<div class="drow"><span class="dl">Activated</span><span class="dv">'+fmtDate(s.activated_at?.slice(0,10))+'</span></div>':'')+
     (s.payment_id?'<div class="drow"><span class="dl">Payment ID</span><span class="dv" style="font-family:monospace;font-size:11px">'+san(s.payment_id)+'</span></div>':'')+
-    '</div><div class="dsec"><div class="dsec-title">Stats</div>'+
+    '</div>'+subSection+'<div class="dsec"><div class="dsec-title">Stats</div>'+
     '<div class="dstats"><div class="dstat"><div class="dstat-v">'+cust+'</div><div class="dstat-l">Customers</div></div>'+
     '<div class="dstat"><div class="dstat-v">'+stmp+'</div><div class="dstat-l">Stamps</div></div>'+
     '<div class="dstat"><div class="dstat-v">'+redm+'</div><div class="dstat-l">Redeemed</div></div></div></div>'+
@@ -1038,11 +1053,17 @@ async function confirmAction() {
     /* Use status confirmed by server, not the locally assumed value */
     const confirmedStatus = result.new_status || newStatus;
     const shop = STATE.shops.find(s=>s.id===shopId);
-    /* Capture old_status BEFORE mutating shop.status (bug fix: was read after mutation) */
     const oldStatus = shop?.status || 'unknown';
     if(shop){
       shop.status = confirmedStatus;
       if(confirmedStatus==='active' && !shop.activated_at) shop.activated_at = new Date().toISOString();
+      // Update subscription state from create-subscription result
+      if(result.subscription){
+        shop.subscription_status      = result.subscription.subscription_id ? 'pending_mandate' : shop.subscription_status;
+        shop.razorpay_subscription_id = result.subscription.subscription_id || shop.razorpay_subscription_id;
+        shop.subscription_plan        = shop.plan;
+        shop.trial_ends_at            = result.subscription.trial_ends_at   || shop.trial_ends_at;
+      }
     }
     /* Optimistic audit row — real row arrives on next full refresh from admin_audit_log table.
        Column name is performed_at to match the audit section 9 SQL schema. */
@@ -1218,8 +1239,22 @@ function updateCouponForm() {
   if(setupValLabel) setupValLabel.textContent = setupType==='setup_percent'?'% Off':'Amount (₹)';
 }
 
-async function submitCoupon() {
-  const btn = document.getElementById('cp-submit-btn');
+async function cancelSubscription(shopId, shopName) {
+  if(!confirm(`Cancel subscription for "${shopName}"?\n\nThis will suspend their shop immediately. This cannot be undone.`)) return;
+  try {
+    await sbEdge('admin-action', { action:'suspend', shop_id:shopId });
+    const shop = STATE.shops.find(s=>s.id===shopId);
+    if(shop){ shop.status='suspended'; shop.subscription_status='cancelled'; }
+    closeAllSheets();
+    renderDashboard();
+    showToast('Subscription cancelled — shop suspended','red','◼');
+  } catch(e) {
+    showToast('Cancel failed — check Razorpay dashboard','red','✗');
+    console.error('[cancelSubscription]', e);
+  }
+}
+
+async function submitCoupon() {  const btn = document.getElementById('cp-submit-btn');
   const errEl = document.getElementById('cp-err');
   errEl.textContent='';
 
