@@ -49,6 +49,16 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
 .wa-wrap{padding:.7rem .75rem 6rem}.tpl-scroll{display:flex;gap:.4rem;overflow-x:auto;padding:.2rem 0 .5rem;scrollbar-width:none}.tpl-scroll::-webkit-scrollbar{display:none}.tpl-pill{display:flex;align-items:center;gap:5px;padding:8px 14px;border-radius:99px;border:1.5px solid var(--beige);background:var(--white);color:var(--ink-m);font-size:12px;font-weight:500;white-space:nowrap;flex-shrink:0}.tpl-pill.sel{border-color:var(--wa);background:rgba(37,211,102,.08);color:var(--wa-d)}.tpl-pill.sel i{color:var(--wa)}.tpl-pill i{font-size:15px;color:var(--ink-f)}.tpl-preview{background:var(--white);border-radius:14px;padding:.85rem 1rem;box-shadow:0 2px 10px rgba(26,16,7,.05);margin-bottom:.7rem;border-left:3px solid var(--wa)}.tpl-preview-lbl{font-size:10px;font-weight:600;color:var(--wa-d);letter-spacing:.06em;text-transform:uppercase;margin-bottom:.3rem}.tpl-preview-txt{font-size:13px;color:var(--ink-m);line-height:1.65}.wa-banner{display:flex;align-items:center;gap:.65rem;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);border-radius:12px;padding:.65rem .85rem;margin-bottom:.65rem}.wa-banner-ico{font-size:18px;flex-shrink:0}.wa-banner-txt{font-size:12px;color:var(--ink-m);line-height:1.5}.wa-banner-txt strong{color:var(--gold)}.wa-sec{font-size:10px;font-weight:600;color:var(--ink-l);letter-spacing:.08em;text-transform:uppercase;margin:.55rem 0 .35rem}.wa-row{display:flex;align-items:center;gap:.65rem;background:var(--white);border-radius:12px;padding:.65rem .75rem;box-shadow:0 1px 6px rgba(26,16,7,.04);margin-bottom:.35rem}.wa-av{width:34px;height:34px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--beige),var(--beige-m));display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:14px;font-weight:600;color:var(--ink-m)}.wa-info{flex:1;min-width:0}.wa-nm{font-size:13px;font-weight:600;color:var(--ink)}.wa-st{font-size:10.5px;color:var(--ink-l);margin-top:1px}.wa-send{display:flex;align-items:center;justify-content:center;gap:4px;padding:8px 12px;border-radius:9px;background:var(--wa);color:#fff;font-size:11.5px;font-weight:600;box-shadow:0 2px 8px rgba(37,211,102,.25);flex-shrink:0;min-height:36px}.wa-empty{text-align:center;padding:2rem 1rem;color:var(--ink-l);font-size:13px;line-height:1.7}
 /* Settings */
 .settings-wrap{padding:.7rem .75rem 6rem}.settings-card{background:var(--white);border-radius:16px;padding:1.15rem 1rem;box-shadow:0 3px 14px rgba(26,16,7,.06);margin-bottom:.7rem}.settings-h{font-family:var(--fd);font-size:19px;font-weight:500;color:var(--ink);margin-bottom:.85rem}.sf-row{display:grid;grid-template-columns:1fr 75px;gap:.6rem;margin-bottom:.7rem}.sf-g{margin-bottom:.7rem}.sf-l{display:block;font-size:10.5px;font-weight:500;color:var(--ink-m);letter-spacing:.06em;text-transform:uppercase;margin-bottom:.3rem}.sf-i{width:100%;padding:10px 12px;border:1.5px solid var(--beige);border-radius:11px;font-size:15px;color:var(--ink);background:var(--cream);outline:none;transition:border-color .2s,box-shadow .2s}.sf-i:focus{border-color:var(--gold-b);box-shadow:0 0 0 3px rgba(201,168,76,.13)}.sf-rule-row{display:grid;grid-template-columns:1fr 28px 1fr;gap:.35rem;align-items:end}.sf-rule-sep{font-size:20px;font-family:var(--fd);color:var(--ink-l);padding-bottom:.4rem;text-align:center}.save-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:7px;padding:11px 20px;border-radius:99px;background:linear-gradient(135deg,var(--gold-b),var(--gold));color:#fff;font-size:14px;font-weight:600;box-shadow:0 3px 14px rgba(168,131,42,.3);min-height:44px}.save-btn:disabled{opacity:.6;cursor:not-allowed}.settings-note{font-size:11px;color:var(--ink-f);line-height:1.6;margin-top:.5rem;text-align:center}
+/* Billing card special styling */
+#billingCard{background:linear-gradient(160deg,#FFFDF5,#FFF9EC);border:2px solid rgba(201,168,76,.3);box-shadow:0 4px 20px rgba(168,131,42,.12),0 1px 4px rgba(168,131,42,.08)}
+#billingCard .settings-h{color:var(--gold);display:flex;align-items:center;gap:6px}
+#billingCard .settings-h::before{content:'✦';font-size:14px}
+.bl-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(201,168,76,.12)}
+.bl-label{font-size:12.5px;color:var(--ink-m);font-weight:500}
+.bl-value{font-size:13.5px;font-weight:700;color:var(--ink)}
+/* Trial banner animations */
+@keyframes mandatePulse{0%,100%{box-shadow:0 2px 10px rgba(232,107,14,.18),0 0 0 0 rgba(232,107,14,.15)}60%{box-shadow:0 4px 18px rgba(232,107,14,.32),0 0 0 6px rgba(232,107,14,0)}}
+@keyframes urgentPulse{0%,100%{box-shadow:0 2px 10px rgba(220,53,69,.18),0 0 0 0 rgba(220,53,69,.15)}60%{box-shadow:0 4px 18px rgba(220,53,69,.3),0 0 0 6px rgba(220,53,69,0)}}
 /* QR */
 .qr-wrap{padding:.7rem .75rem 6rem;max-width:460px;margin:0 auto;width:100%}.qr-card{background:var(--white);border-radius:16px;padding:1.4rem 1rem;box-shadow:0 3px 14px rgba(26,16,7,.06);text-align:center;margin-bottom:.7rem}.qr-title{font-family:var(--fd);font-size:20px;font-weight:500;color:var(--ink);margin-bottom:.25rem}.qr-sub{font-size:12.5px;color:var(--ink-l);line-height:1.65;margin-bottom:1rem}#qr-canvas-wrap{display:inline-flex;padding:12px;border-radius:14px;border:1.5px solid var(--beige);box-shadow:0 3px 14px rgba(26,16,7,.05);margin-bottom:.85rem}#qr-canvas-wrap canvas{display:block;border-radius:3px}.qr-url{font-size:11.5px;color:var(--ink-l);word-break:break-all;background:var(--cream);border-radius:9px;padding:.5rem .7rem;margin-bottom:.9rem;font-family:monospace}.qr-actions{display:flex;gap:.45rem}.qr-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;padding:10px 12px;border-radius:11px;font-size:12.5px;font-weight:500;min-height:44px}.qr-btn.outline{border:1.5px solid var(--beige);background:transparent;color:var(--ink-m)}.qr-btn.gold{background:linear-gradient(135deg,var(--gold-b),var(--gold));color:#fff;box-shadow:0 3px 10px rgba(168,131,42,.3);border:none}
 .export-card{background:var(--white);border-radius:16px;padding:1rem;box-shadow:0 3px 14px rgba(26,16,7,.06);display:flex;align-items:center;gap:.8rem}.export-ico{width:42px;height:42px;border-radius:11px;flex-shrink:0;background:var(--gold-p);border:1.5px solid rgba(201,168,76,.22);display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--gold)}.export-info{flex:1}.export-info strong{font-size:13px;font-weight:600;color:var(--ink)}.export-info p{font-size:11px;color:var(--ink-l);margin-top:1px}.export-btn{display:flex;align-items:center;gap:4px;padding:8px 12px;border-radius:9px;background:var(--gold-p);border:1.5px solid rgba(201,168,76,.28);color:var(--gold);font-size:12px;font-weight:600;flex-shrink:0;min-height:36px}
@@ -472,33 +482,71 @@ function renderBillingCard(){
   const ss=shop.subscription_status||'none';
   const plan=shop.subscription_plan||shop.plan||'pro';
   document.getElementById('bl-plan').textContent=(plan.charAt(0).toUpperCase()+plan.slice(1))+' · '+(PLAN_AMT[plan]||'');
-  document.getElementById('bl-status').innerHTML=`<span style="font-weight:600;color:${SUB_COLOR[ss]||'#9E8E70'}">${SUB_LABEL[ss]||ss}</span>`;
+  const statusMap={
+    none:            {text:'Not set up',         color:'#92623A', bg:'#FFF3E0'},
+    pending_mandate: {text:'⚡ Action required',  color:'#92400E', bg:'#FEF3C7'},
+    active:          {text:'✅ Billing active',   color:'#065F46', bg:'#D1FAE5'},
+    halted:          {text:'⚠️ Payment failed',   color:'#991B1B', bg:'#FEE2E2'},
+    cancelled:       {text:'Cancelled',           color:'#6B7280', bg:'#F3F4F6'},
+  };
+  const st=statusMap[ss]||statusMap.none;
+  document.getElementById('bl-status').innerHTML=`<span style="font-weight:700;font-size:12.5px;color:${st.color};background:${st.bg};padding:3px 11px;border-radius:99px;border:1.5px solid ${st.color}33">${st.text}</span>`;
   const trialRow=document.getElementById('bl-trial-row'),nextRow=document.getElementById('bl-next-row');
   if(shop.trial_ends_at){trialRow.style.display='flex';document.getElementById('bl-trial-date').textContent=fmtDt(shop.trial_ends_at);}
   else trialRow.style.display='none';
   if(shop.next_charge_at){nextRow.style.display='flex';document.getElementById('bl-next-date').textContent=fmtDt(shop.next_charge_at);}
   else nextRow.style.display='none';
-
   const cta=document.getElementById('bl-cta');
-  // 5.1 — Set up billing (none status OR pending_mandate with mandate_url)
   if(ss==='none'||ss==='pending_mandate'){
     const hasUrl=ss==='pending_mandate'&&shop.mandate_url;
     cta.style.display='block';
-    cta.innerHTML=hasUrl
-      ?`<a href="${shop.mandate_url}" target="_blank" rel="noopener" style="display:block;text-align:center;padding:11px;border-radius:10px;background:linear-gradient(135deg,#C9A84C,#A8832A);color:#1A1007;font-weight:700;font-size:14px;text-decoration:none">✦ Complete billing setup</a><p style="font-size:12px;color:#9E8E70;text-align:center;margin:8px 0 0">Secure mandate via Razorpay · Takes 30 seconds</p>`
-      :`<button onclick="initiateBilling()" id="bl-initiate-btn" style="width:100%;padding:11px;border-radius:10px;background:linear-gradient(135deg,#C9A84C,#A8832A);color:#1A1007;font-weight:700;font-size:14px;border:none;cursor:pointer">✦ Set up billing now</button><p style="font-size:12px;color:#9E8E70;text-align:center;margin:8px 0 0">Keep Primo Rewards running after your trial · Takes 30 seconds</p>`;
-  }
-  // 5.3 — Update payment method (active or halted)
-  else if((ss==='active'||ss==='halted')&&shop.mandate_url){
-    const isHalted=ss==='halted';
+    if(hasUrl){
+      cta.innerHTML=`<a href="${shop.mandate_url}" target="_blank" rel="noopener"
+        style="display:block;text-align:center;padding:13px;border-radius:12px;margin-top:4px;
+        background:linear-gradient(135deg,#E8850E,#C96E08);color:#fff;
+        font-weight:800;font-size:15px;text-decoration:none;letter-spacing:.01em;
+        box-shadow:0 4px 16px rgba(232,133,14,.4)">
+        ⚡ Complete mandate now →
+      </a>
+      <p style="font-size:12px;color:#92623A;text-align:center;margin:8px 0 0;font-weight:500">
+        One-time setup · Charged only after trial ends · Cancel anytime
+      </p>`;
+    } else {
+      cta.innerHTML=`<button onclick="initiateBilling()" id="bl-initiate-btn"
+        style="width:100%;padding:13px;border-radius:12px;margin-top:4px;
+        background:linear-gradient(135deg,#C9A84C,#A8832A);
+        color:#fff;font-weight:800;font-size:15px;border:none;cursor:pointer;
+        box-shadow:0 4px 14px rgba(168,131,42,.35);letter-spacing:.01em">
+        ✦ Set up billing now
+      </button>
+      <p style="font-size:12px;color:var(--ink-l);text-align:center;margin:8px 0 0">
+        Charged only after trial ends · Cancel anytime
+      </p>`;
+    }
+  } else if(ss==='halted'&&shop.mandate_url){
     cta.style.display='block';
-    cta.innerHTML=`<a href="${shop.mandate_url}" target="_blank" rel="noopener" style="display:block;text-align:center;padding:10px;border-radius:10px;background:${isHalted?'rgba(248,113,113,.12)':'rgba(201,168,76,.08)'};color:${isHalted?'#F87171':'#C9A84C'};font-weight:600;font-size:13.5px;border:1px solid ${isHalted?'rgba(248,113,113,.3)':'rgba(201,168,76,.2)'};text-decoration:none">${isHalted?'⚠️ Update payment method — action required':'↗ Update payment method'}</a>`;
-  }
-  else if(ss==='active'){
+    cta.innerHTML=`<a href="${shop.mandate_url}" target="_blank" rel="noopener"
+      style="display:block;text-align:center;padding:13px;border-radius:12px;margin-top:4px;
+      background:linear-gradient(135deg,#DC3545,#991B1B);color:#fff;
+      font-weight:800;font-size:15px;text-decoration:none;
+      box-shadow:0 4px 14px rgba(220,53,69,.4)">
+      ⚠️ Update payment method now →
+    </a>`;
+  } else if(ss==='active'&&shop.mandate_url){
     cta.style.display='block';
-    cta.innerHTML=`<p style="text-align:center;font-size:13px;color:#4ADE80;margin:0">✅ Billing active — you're all set</p>`;
-  }
-  else { cta.style.display='none'; }
+    cta.innerHTML=`<a href="${shop.mandate_url}" target="_blank" rel="noopener"
+      style="display:block;text-align:center;padding:10px;border-radius:11px;margin-top:4px;
+      border:1.5px solid rgba(201,168,76,.4);color:var(--gold);
+      font-weight:600;font-size:13.5px;text-decoration:none;background:rgba(201,168,76,.06)">
+      Update payment method →
+    </a>`;
+  } else if(ss==='active'){
+    cta.style.display='block';
+    cta.innerHTML=`<p style="text-align:center;font-size:13.5px;color:#065F46;font-weight:700;margin:8px 0 0;
+      background:#D1FAE5;padding:10px;border-radius:11px;border:1px solid #6EE7B7">
+      ✅ Billing active — you're all set
+    </p>`;
+  } else { cta.style.display='none'; }
 }
 
 function updateTrialBanner(){
@@ -511,35 +559,66 @@ function updateTrialBanner(){
   const now=Date.now();
   const end=shop.trial_ends_at?new Date(shop.trial_ends_at).getTime():null;
   const diff=end?end-now:null;
-  const days=diff!=null?Math.floor(diff/(1000*60*60*24)):null;
-  const hrs=diff!=null?Math.floor((diff%(1000*60*60*24))/(1000*60*60)):null;
+  const days=diff!=null?Math.floor(diff/864e5):null;
+  const hrs=diff!=null?Math.floor((diff%864e5)/36e5):null;
   const btn=document.getElementById('tbn-btn');
   const title=document.getElementById('tbn-title');
   const sub=document.getElementById('tbn-sub');
-
   banner.style.display='block';
+  banner.style.borderRadius='13px';
+  banner.style.padding='.75rem 1rem';
 
-  if(diff!=null&&diff<=0){
-    // Expired
-    Object.assign(banner.style,{background:'rgba(248,113,113,.1)',borderColor:'rgba(248,113,113,.3)',color:'#F87171'});
-    title.textContent='⚠️ Trial expired — billing required';
-    sub.textContent='Set up billing to reactivate your shop';
-    btn.style.display='block';btn.textContent='Set up now →';
-  } else if(ss==='pending_mandate'){
-    Object.assign(banner.style,{background:'rgba(248,178,74,.08)',borderColor:'rgba(248,178,74,.25)',color:'#F8B24A'});
-    title.textContent=days!=null?`${days}d left · Complete your billing mandate`:'Mandate pending';
-    sub.textContent='Tap to finish — takes 30 seconds via Razorpay';
-    btn.style.display='block';btn.textContent='Complete →';
+  if(ss==='pending_mandate'){
+    // Vivid orange — action needed NOW — pulsing
+    Object.assign(banner.style,{background:'linear-gradient(135deg,#FFF7ED,#FFF3E0)',
+      borderColor:'#E8850E',color:'#92400E',
+      animation:'mandatePulse 2.5s ease-in-out infinite',
+      boxShadow:'0 3px 14px rgba(232,133,14,.22)'});
+    title.style.cssText='font-size:14px;font-weight:800;margin-bottom:3px;color:#92400E';
+    title.textContent=days!=null&&days>=0?`⚡ ${days}d ${hrs}h left — billing mandate required`:'⚡ Billing mandate required';
+    sub.style.cssText='font-size:12px;color:#B45309;font-weight:600';
+    sub.textContent='Set up payment now — you won\'t be charged until trial ends';
+    Object.assign(btn.style,{display:'inline-block',fontSize:'12.5px',fontWeight:'800',
+      padding:'7px 16px',borderRadius:'9px',border:'none',cursor:'pointer',
+      background:'#E8850E',color:'#fff',
+      boxShadow:'0 3px 10px rgba(232,133,14,.45)',whiteSpace:'nowrap'});
+    btn.textContent='Complete →';
+  } else if(diff!=null&&diff<=0){
+    // Expired — red urgent
+    Object.assign(banner.style,{background:'linear-gradient(135deg,#FEF2F2,#FFF0F0)',
+      borderColor:'#DC3545',color:'#7F1D1D',
+      animation:'urgentPulse 2s ease-in-out infinite',
+      boxShadow:'0 3px 14px rgba(220,53,69,.2)'});
+    title.style.cssText='font-size:14px;font-weight:800;margin-bottom:3px;color:#7F1D1D';
+    title.textContent='⛔ Trial expired — action required';
+    sub.style.cssText='font-size:12px;color:#991B1B;font-weight:600';
+    sub.textContent='Set up billing to reactivate your shop now';
+    Object.assign(btn.style,{display:'inline-block',fontSize:'12.5px',fontWeight:'800',
+      padding:'7px 16px',borderRadius:'9px',border:'none',cursor:'pointer',
+      background:'#DC3545',color:'#fff',whiteSpace:'nowrap'});
+    btn.textContent='Fix now →';
   } else if(days!=null&&days<=7){
-    // Urgent < 7 days
-    Object.assign(banner.style,{background:'rgba(248,113,113,.08)',borderColor:'rgba(248,113,113,.22)',color:'#F87171'});
-    title.textContent=`⚡ ${days}d ${hrs}h left in trial`;
-    sub.textContent='Set up billing to keep Primo Rewards running';
-    btn.style.display='block';btn.textContent='Set up →';
+    // < 7 days — orange urgent
+    Object.assign(banner.style,{background:'linear-gradient(135deg,#FFFBEB,#FFF7ED)',
+      borderColor:'#D97706',color:'#78350F',
+      animation:'mandatePulse 3s ease-in-out infinite',
+      boxShadow:'0 3px 12px rgba(217,119,6,.18)'});
+    title.style.cssText='font-size:14px;font-weight:800;margin-bottom:3px;color:#78350F';
+    title.textContent=`🔔 Only ${days}d ${hrs}h left in trial`;
+    sub.style.cssText='font-size:12px;color:#B45309;font-weight:600';
+    sub.textContent='Set up billing before trial ends';
+    Object.assign(btn.style,{display:'inline-block',fontSize:'12.5px',fontWeight:'800',
+      padding:'7px 16px',borderRadius:'9px',border:'none',cursor:'pointer',
+      background:'#D97706',color:'#fff',whiteSpace:'nowrap'});
+    btn.textContent='Set up →';
   } else {
-    // Normal trial
-    Object.assign(banner.style,{background:'rgba(99,179,237,.07)',borderColor:'rgba(99,179,237,.2)',color:'#63B3ED'});
+    // Normal trial — calm blue
+    Object.assign(banner.style,{background:'linear-gradient(135deg,#EFF6FF,#F0F7FF)',
+      borderColor:'#60A5FA',color:'#1E40AF',
+      animation:'none',boxShadow:'0 2px 8px rgba(96,165,250,.12)'});
+    title.style.cssText='font-size:13.5px;font-weight:700;margin-bottom:3px;color:#1E40AF';
     title.textContent=days!=null?`🎁 ${days} days left in your free trial`:'🎁 Free trial active';
+    sub.style.cssText='font-size:12px;color:#3B82F6;font-weight:500';
     sub.textContent='Go to Settings → Billing to set up your subscription';
     btn.style.display='none';
   }
