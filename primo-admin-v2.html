@@ -264,22 +264,6 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
 @keyframes toastIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none}}
 @keyframes toastOut{to{opacity:0;transform:translateY(-8px)}}
 .cbadge{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;padding:0 5px;background:rgba(201,168,76,.16);color:var(--gold-b);font-size:10px;font-weight:700;border-radius:99px;margin-left:4px}
-/* Shop customer list — detail sheet */
-.sd-cust-hdr{display:flex;align-items:center;justify-content:space-between}
-.da-csv{background:rgba(201,168,76,.1);color:var(--gold-b);border:1px solid rgba(201,168,76,.17);padding:5px 12px;border-radius:8px;font-size:11.5px;font-weight:600;display:inline-flex;align-items:center;gap:4px;transition:opacity .18s}
-.da-csv:disabled{opacity:.32;cursor:not-allowed}
-.da-csv:active:not(:disabled){opacity:.65}
-.sd-cust-list{margin-top:.4rem;display:flex;flex-direction:column}
-.sd-cust-row{display:flex;align-items:center;gap:.6rem;padding:.48rem 0;border-bottom:1px solid rgba(255,255,255,.04)}
-.sd-cust-row:last-child{border-bottom:none}
-.sd-cav{width:30px;height:30px;border-radius:50%;background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.17);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--gold-b);flex-shrink:0;font-family:var(--fd)}
-.sd-cinfo{flex:1;min-width:0}
-.sd-cname{font-size:13px;color:var(--cream);font-weight:500;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sd-cmeta{font-size:10.5px;color:var(--ink-f);margin-top:.1rem}
-.sd-cbadge{font-size:10px;font-weight:600;padding:2px 8px;border-radius:99px;flex-shrink:0;white-space:nowrap}
-.sd-cbadge.ready{background:rgba(27,94,66,.25);color:#4ADE80;border:1px solid rgba(74,222,128,.15)}
-.sd-cbadge.prog{background:rgba(168,131,42,.1);color:var(--gold-b);border:1px solid rgba(201,168,76,.15)}
-.sd-fetch-state{font-size:12px;color:var(--ink-f);padding:.6rem 0;text-align:center}
 @media(min-width:640px){
   .stats-row{grid-template-columns:repeat(4,1fr)}
   .sheet{max-width:480px;left:50%;transform:translateX(-50%) translateY(100%)}
@@ -474,8 +458,8 @@ const PRIMO_CONFIG = {
   SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBsZXdpd3JleGpzemNxcWp3aWtzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3MDkxOTgsImV4cCI6MjA5NTI4NTE5OH0.UhQcVdZZw74X-HBrGVto35dyZ_V67WfkjGFepRzNlMQ',
   EDGE_BASE:         'https://plewiwrexjszcqqjwiks.supabase.co/functions/v1',
 };
-const PLAN_MRR   = { starter:349, pro:549, premium:749 };
-const PLAN_SETUP = { starter:1499, pro:2499, premium:3999 };
+const PLAN_MRR   = { starter:199, pro:299, premium:499 };   // updated May 2026 — no-setup model
+const PLAN_SETUP = { starter:0,   pro:0,   premium:0   };   // ₹0 now; structure kept for future reinstatement
 
 /* ================================================================
    RATE LIMITING — client-side UX layer.
@@ -501,8 +485,6 @@ let ADMIN_ID    = sessionStorage.getItem('primo_admin_id')    || 'admin';
 /* STATE */
 let STATE = { shops:[], customers:{}, stamps:{}, redemptions:{}, payments:[], auditLog:[] };
 let pendingAction = null;
-let activeShopId = null;
-let shopCustomersCache = {};
 
 /* ================================================================
    SUPABASE REST (anon key — public, RLS-protected)
@@ -686,7 +668,7 @@ function renderDashboard() {
   if(funnelBadge) funnelBadge.textContent = enr.length;
   const pc={starter:0,pro:0,premium:0};
   active.forEach(s=>{if(PLAN_MRR[s.plan]) pc[s.plan]++;});
-  const mrr=pc.starter*349+pc.pro*549+pc.premium*749;
+  const mrr=pc.starter*199+pc.pro*299+pc.premium*499;
   document.getElementById('mrr-total').textContent='\u20B9'+mrr.toLocaleString('en-IN');
   document.getElementById('mrr-s').textContent=pc.starter;
   document.getElementById('mrr-p').textContent=pc.pro;
@@ -776,7 +758,7 @@ function renderRevenue() {
   const active=STATE.shops.filter(s=>s.status==='active');
   const pc={starter:0,pro:0,premium:0};
   active.forEach(s=>{if(PLAN_MRR[s.plan]) pc[s.plan]++;});
-  const rev={starter:pc.starter*349,pro:pc.pro*549,premium:pc.premium*749};
+  const rev={starter:pc.starter*199,pro:pc.pro*299,premium:pc.premium*499};
   const mrr=rev.starter+rev.pro+rev.premium;
   const maxR=Math.max(...Object.values(rev),1);
   const planL={starter:'Starter',pro:'Pro',premium:'Premium'};
@@ -906,108 +888,8 @@ function openShopDetail(shopId) {
     '<div class="dstats"><div class="dstat"><div class="dstat-v">'+cust+'</div><div class="dstat-l">Customers</div></div>'+
     '<div class="dstat"><div class="dstat-v">'+stmp+'</div><div class="dstat-l">Stamps</div></div>'+
     '<div class="dstat"><div class="dstat-v">'+redm+'</div><div class="dstat-l">Redeemed</div></div></div></div>'+
-    '<div class="dsec">'+
-      '<div class="dsec-title sd-cust-hdr">Customers <button class="da-csv" id="sd-csv-btn" onclick="downloadShopCSV()" disabled>&#8595; CSV</button></div>'+
-      '<div class="sd-cust-list" id="sd-cust-list"><div class="sd-fetch-state">Loading\u2026</div></div>'+
-    '</div>'+
     '<div class="d-actions">'+(waL?'<a class="da-btn da-wa" href="'+waL+'" target="_blank" rel="noopener">&#x1F4AC; WhatsApp</a>':'')+ab+'</div>';
-  activeShopId = shopId;
   openSheet('sheet-detail');
-  fetchShopCustomers(shopId);
-}
-
-/* SHOP CUSTOMERS — lazy-loaded per shop */
-async function fetchShopCustomers(shopId) {
-  const listEl = document.getElementById('sd-cust-list');
-  const csvBtn = document.getElementById('sd-csv-btn');
-  if (!listEl) return;
-  if (shopCustomersCache[shopId]) {
-    renderShopCustomers(shopCustomersCache[shopId]);
-    if (csvBtn) csvBtn.disabled = false;
-    return;
-  }
-  listEl.innerHTML = '<div class="sd-fetch-state">Loading customers\u2026</div>';
-  try {
-    // Direct fetch — do NOT use sbEdge() here; sbEdge triggers doSignOut() on 401
-    const res = await fetch(PRIMO_CONFIG.EDGE_BASE+'/admin-customers', {
-      method: 'POST',
-      headers: {
-        'Content-Type':  'application/json',
-        'Authorization': 'Bearer '+PRIMO_CONFIG.SUPABASE_ANON_KEY,
-        ...(ADMIN_TOKEN ? {'X-Admin-Token': ADMIN_TOKEN} : {}),
-      },
-      body: JSON.stringify({ shop_id: shopId }),
-    });
-    const data = await res.json().catch(()=>({}));
-    if (!res.ok) throw new Error(data.error||'HTTP '+res.status);
-    shopCustomersCache[shopId] = data;
-    renderShopCustomers(data);
-    if (csvBtn) csvBtn.disabled = false;
-  } catch(err) {
-    listEl.innerHTML = '<div class="sd-fetch-state" style="color:#F87171">\u26A0\uFE0F '+san(err.message)+'</div>';
-  }
-}
-
-function renderShopCustomers(data) {
-  const listEl = document.getElementById('sd-cust-list');
-  if (!listEl) return;
-  const { customers = [], buy = 11 } = data;
-  if (!customers.length) {
-    listEl.innerHTML = '<div class="sd-fetch-state">No customers yet.</div>';
-    return;
-  }
-  listEl.innerHTML = customers.map(c => {
-    const ini = (c.first_name || '?')[0].toUpperCase();
-    const sic  = c.stamps_in_cycle;
-    const ready = c.reward_ready;
-    const reds  = c.total_redemptions;
-    const meta  = '\u2022\u2022\u2022\u2022'+san(c.phone_last4||'????')+' \u00B7 '+sic+'/'+buy+' stamps'+
-                  (reds ? ' \u00B7 '+reds+' reward'+(reds>1?'s':'') : '');
-    return '<div class="sd-cust-row">'+
-      '<div class="sd-cav">'+ini+'</div>'+
-      '<div class="sd-cinfo">'+
-        '<div class="sd-cname">'+san(c.first_name)+'</div>'+
-        '<div class="sd-cmeta">'+meta+'</div>'+
-      '</div>'+
-      '<div class="sd-cbadge '+(ready?'ready':'prog')+'">'+(ready?'\u2713 Ready':sic+'/'+buy)+'</div>'+
-    '</div>';
-  }).join('');
-}
-
-function downloadShopCSV() {
-  if (!activeShopId || !shopCustomersCache[activeShopId]) return;
-  const shop = STATE.shops.find(x => x.id === activeShopId);
-  const { customers = [], buy = 11 } = shopCustomersCache[activeShopId];
-  const hdr = ['Name','Phone Last 4','Full Phone','Birthday','Enrolled Date',
-                'Current Cycle','Stamps in Cycle','Buy Target','Total Stamps',
-                'Total Redeemed','Reward Ready','Last Stamp','Last Redeemed'];
-  const rows = customers.map(c => [
-    c.first_name||'',
-    c.phone_last4||'',
-    c.full_phone||'',
-    c.birthday||'',
-    c.enrolled_at ? c.enrolled_at.slice(0,10) : '',
-    c.current_cycle,
-    c.stamps_in_cycle,
-    buy,
-    c.total_stamps,
-    c.total_redemptions,
-    c.reward_ready ? 'Yes' : 'No',
-    c.last_stamp_at   ? c.last_stamp_at.slice(0,16).replace('T',' ')   : '',
-    c.last_redeemed_at ? c.last_redeemed_at.slice(0,16).replace('T',' ') : '',
-  ]);
-  const csv = [hdr, ...rows]
-    .map(r => r.map(v => '"'+String(v).replace(/"/g,'""')+'"').join(','))
-    .join('\n');
-  const blob = new Blob(['\uFEFF'+csv], { type:'text/csv;charset=utf-8;' });
-  const url  = URL.createObjectURL(blob);
-  const a    = document.createElement('a');
-  const date = new Date().toISOString().slice(0,10);
-  a.href = url;
-  a.download = (shop?.slug||'shop')+'-customers-'+date+'.csv';
-  a.click();
-  URL.revokeObjectURL(url);
-  showToast('\u2193 CSV downloaded \u2014 '+customers.length+' customers','green','\u2713');
 }
 
 /* CONFIRM ACTION */
