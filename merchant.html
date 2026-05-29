@@ -119,7 +119,39 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
   </div>
   <div id="t-cust" class="tab-content active"><div class="cust-toolbar"><div class="search-wrap"><i class="ti ti-search search-ico"></i><input id="searchInp" class="search-inp" type="search" placeholder="Search by name…" autocomplete="off"></div><button class="add-btn" id="addCustBtn"><i class="ti ti-user-plus"></i>Add</button></div><div class="cust-list" id="custList"><div class="cust-empty"><div class="cust-empty-ico"><i class="ti ti-coin"></i></div>Loading…</div></div></div>
   <div id="t-wa" class="tab-content"><div class="wa-wrap"><div class="tpl-scroll" id="tplScroll"><button class="tpl-pill sel" data-tpl="progress" onclick="selTpl(this)"><i class="ti ti-chart-bar"></i>Stamp Update</button><button class="tpl-pill" data-tpl="ready" onclick="selTpl(this)"><i class="ti ti-gift"></i>Reward Ready</button><button class="tpl-pill" data-tpl="birthday" onclick="selTpl(this)"><i class="ti ti-cake"></i>Birthday</button></div><div class="tpl-preview" id="tplPreview"><div class="tpl-preview-lbl">Message Preview</div><div class="tpl-preview-txt" id="tplPreviewTxt"></div></div><div class="wa-banner" id="waBanner" style="display:none"><div class="wa-banner-ico">📱</div><div class="wa-banner-txt" id="waBannerTxt"></div></div><div class="wa-sec">Customers with WhatsApp</div><div id="waList"><div class="wa-empty">Loading…</div></div></div></div>
-  <div id="t-set" class="tab-content"><div class="settings-wrap"><div class="settings-card"><div class="settings-h">Loyalty Programme</div><div class="sf-row"><div><label class="sf-l" for="sfProduct">Product Name</label><input id="sfProduct" class="sf-i" type="text" placeholder="e.g. cake"></div><div class="emoji-field"><label class="sf-l">Product Icon</label><input type="hidden" id="sfEmoji"><button type="button" class="emoji-trigger" id="emojiTrigger" aria-haspopup="listbox" aria-expanded="false" onclick="toggleEmojiPicker(event)"><span class="et-left"><span class="et-emoji" id="emojiDisplay">🎂</span><span class="et-lbl">Choose icon</span></span><i class="ti ti-chevron-down" aria-hidden="true"></i></button><div class="emoji-picker" id="emojiPicker" role="listbox" aria-label="Product icon picker"></div></div></div><div class="sf-g"><label class="sf-l">Reward Rule</label><div class="sf-rule-row"><div><label class="sf-l" for="sfBuy">Buy</label><input id="sfBuy" class="sf-i" type="number" min="1" max="50"></div><div class="sf-rule-sep">→</div><div><label class="sf-l" for="sfGet">Free</label><input id="sfGet" class="sf-i" type="number" min="1" max="10"></div></div></div><button class="save-btn" id="saveSetBtn"><i class="ti ti-device-floppy"></i><span id="saveSetTxt">Save Changes</span></button><div class="settings-note">Changes apply immediately on all customer-facing cards.</div></div><div class="settings-card"><div class="settings-h">Change Password</div><div class="sf-g"><label class="sf-l" for="sfNewPwd">New Password</label><input id="sfNewPwd" class="sf-i" type="password" placeholder="At least 6 characters"></div><div class="sf-g"><label class="sf-l" for="sfNewPwdC">Confirm</label><input id="sfNewPwdC" class="sf-i" type="password" placeholder="Repeat new password"></div><div class="lf-err" id="pwdErr"></div><button class="save-btn" id="savePwdBtn" style="background:linear-gradient(135deg,#5a8f7b,var(--em))"><i class="ti ti-lock"></i><span id="savePwdTxt">Update Password</span></button></div></div></div>
+  <div id="t-set" class="tab-content"><div class="settings-wrap">
+
+    <!-- Billing Card -->
+    <div class="settings-card" id="billingCard">
+      <div class="settings-h">Billing</div>
+      <div id="billingBody" style="font-size:14px;color:#D5C9B0;line-height:1.8">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(201,168,76,.1)">
+          <span style="color:#9E8E70;font-size:13px">Plan</span>
+          <span id="bl-plan" style="font-weight:600;color:#EDE3C8">—</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(201,168,76,.1)">
+          <span style="color:#9E8E70;font-size:13px">Status</span>
+          <span id="bl-status">—</span>
+        </div>
+        <div id="bl-trial-row" style="display:none;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(201,168,76,.1)">
+          <span style="color:#9E8E70;font-size:13px">Trial ends</span>
+          <span id="bl-trial-date" style="font-weight:600;color:#EDE3C8">—</span>
+        </div>
+        <div id="bl-next-row" style="display:none;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(201,168,76,.1)">
+          <span style="color:#9E8E70;font-size:13px">Next charge</span>
+          <span id="bl-next-date" style="font-weight:600;color:#EDE3C8">—</span>
+        </div>
+        <div id="bl-mandate-row" style="margin-top:14px;display:none">
+          <a id="bl-mandate-btn" href="#" target="_blank" rel="noopener"
+            style="display:block;text-align:center;padding:11px;border-radius:10px;background:linear-gradient(135deg,#C9A84C,#A8832A);color:#1A1007;font-weight:700;font-size:14px;text-decoration:none">
+            ✦ Set up billing now
+          </a>
+          <p style="font-size:12px;color:#9E8E70;text-align:center;margin:8px 0 0">Secure mandate via Razorpay · Takes 30 seconds</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-card"><div class="settings-h">Loyalty Programme</div><div class="sf-row"><div><label class="sf-l" for="sfProduct">Product Name</label><input id="sfProduct" class="sf-i" type="text" placeholder="e.g. cake"></div><div class="emoji-field"><label class="sf-l">Product Icon</label><input type="hidden" id="sfEmoji"><button type="button" class="emoji-trigger" id="emojiTrigger" aria-haspopup="listbox" aria-expanded="false" onclick="toggleEmojiPicker(event)"><span class="et-left"><span class="et-emoji" id="emojiDisplay">🎂</span><span class="et-lbl">Choose icon</span></span><i class="ti ti-chevron-down" aria-hidden="true"></i></button><div class="emoji-picker" id="emojiPicker" role="listbox" aria-label="Product icon picker"></div></div></div><div class="sf-g"><label class="sf-l">Reward Rule</label><div class="sf-rule-row"><div><label class="sf-l" for="sfBuy">Buy</label><input id="sfBuy" class="sf-i" type="number" min="1" max="50"></div><div class="sf-rule-sep">→</div><div><label class="sf-l" for="sfGet">Free</label><input id="sfGet" class="sf-i" type="number" min="1" max="10"></div></div></div><button class="save-btn" id="saveSetBtn"><i class="ti ti-device-floppy"></i><span id="saveSetTxt">Save Changes</span></button><div class="settings-note">Changes apply immediately on all customer-facing cards.</div></div><div class="settings-card"><div class="settings-h">Change Password</div><div class="sf-g"><label class="sf-l" for="sfNewPwd">New Password</label><input id="sfNewPwd" class="sf-i" type="password" placeholder="At least 6 characters"></div><div class="sf-g"><label class="sf-l" for="sfNewPwdC">Confirm</label><input id="sfNewPwdC" class="sf-i" type="password" placeholder="Repeat new password"></div><div class="lf-err" id="pwdErr"></div><button class="save-btn" id="savePwdBtn" style="background:linear-gradient(135deg,#5a8f7b,var(--em))"><i class="ti ti-lock"></i><span id="savePwdTxt">Update Password</span></button></div></div></div>
   <div id="t-qr" class="tab-content"><div class="qr-wrap"><div class="qr-card"><div class="qr-title">Customer Loyalty Link</div><div class="qr-sub">Display at your counter — customers scan to join instantly.</div><div id="qr-canvas-wrap"><div style="width:180px;height:180px;display:flex;align-items:center;justify-content:center;color:var(--ink-f);font-size:12px">Generating…</div></div><div class="qr-url" id="qrUrl">—</div><div class="qr-actions"><button class="qr-btn outline" id="copyLinkBtn"><i class="ti ti-copy"></i>Copy</button><button class="qr-btn gold" id="shareLinkBtn"><i class="ti ti-share"></i>Share</button></div></div><div class="export-card"><div class="export-ico"><i class="ti ti-table-export"></i></div><div class="export-info"><strong>Export Customers</strong><p>All data as CSV.</p></div><button class="export-btn" id="csvBtn"><i class="ti ti-download"></i>CSV</button></div></div></div>
 </div>
 
@@ -238,7 +270,7 @@ async function handleLogin(){
       // DEV FALLBACK: Direct Supabase (insecure — password compared client-side)
       // ⚠ DO NOT use in production — admin_password exposed via anon SELECT
       console.warn('[PRIMO] ⚠ INSECURE: Direct login mode. Configure EDGE_BASE for production.');
-      const rows=await sb(`/shops?slug=eq.${encodeURIComponent(slug)}&select=id,shop_name,slug,city,plan,status,reward_rule,product_name,product_emoji,admin_password&limit=1`);
+      const rows=await sb(`/shops?slug=eq.${encodeURIComponent(slug)}&select=id,shop_name,slug,city,plan,status,reward_rule,product_name,product_emoji,admin_password,subscription_status,subscription_plan,trial_ends_at,next_charge_at,mandate_url,razorpay_subscription_id&limit=1`);
       if(!rows?.length){sEl.classList.add('err');errEl.textContent='⚠ Shop not found.';recordFailedLogin();return}
       const s=rows[0];
       if(s.status!=='active'){errEl.textContent='⚠ Shop not yet active.';recordFailedLogin();return}
@@ -318,6 +350,19 @@ function renderDash(){
   document.getElementById('hdrShopName').textContent=shop.shop_name;document.getElementById('hdrAvatar').textContent=(shop.shop_name||'S')[0].toUpperCase();document.getElementById('hdrPlan').textContent=(shop.plan||'pro').toUpperCase();document.getElementById('sheetSN').textContent=shop.shop_name;document.getElementById('sheetSC').textContent=[shop.city,(shop.plan||'pro').toUpperCase()+' plan'].filter(Boolean).join(' · ');
   const td=todayM(),mo=monthM();document.getElementById('statCust').textContent=customers.length;document.getElementById('statToday').textContent=allStamps.filter(s=>new Date(s.stamped_at)>=td).length;document.getElementById('statMonth').textContent=allReds.filter(r=>new Date(r.redeemed_at)>=mo).length;
   document.getElementById('sfProduct').value=shop.product_name||'';document.getElementById('sfEmoji').value=shop.product_emoji||'';document.getElementById('emojiDisplay').textContent=shop.product_emoji||'🎂';document.getElementById('sfBuy').value=shop.reward_rule?.buy||11;document.getElementById('sfGet').value=shop.reward_rule?.get||1;
+  // Billing card
+  const subStatusLabel={none:'No subscription',trial:'In Trial',pending_mandate:'Mandate pending',active:'Billing active',halted:'Payment failed',cancelled:'Cancelled'};
+  const subStatusColor={none:'#9E8E70',trial:'#63B3ED',pending_mandate:'#F8B24A',active:'#4ADE80',halted:'#F87171',cancelled:'#9E8E70'};
+  const ss=shop.subscription_status||'none';
+  const fmtD=iso=>iso?new Date(iso).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}):'—';
+  const planAmt={starter:'₹199/mo',pro:'₹299/mo',premium:'₹499/mo'};
+  const plan=shop.subscription_plan||shop.plan||'pro';
+  document.getElementById('bl-plan').textContent=(plan.charAt(0).toUpperCase()+plan.slice(1))+' · '+(planAmt[plan]||'');
+  document.getElementById('bl-status').innerHTML=`<span style="font-weight:600;color:${subStatusColor[ss]||'#9E8E70'}">${subStatusLabel[ss]||ss}</span>`;
+  const trialRow=document.getElementById('bl-trial-row'),nextRow=document.getElementById('bl-next-row'),mandateRow=document.getElementById('bl-mandate-row');
+  if(shop.trial_ends_at){trialRow.style.display='flex';document.getElementById('bl-trial-date').textContent=fmtD(shop.trial_ends_at);}else{trialRow.style.display='none';}
+  if(shop.next_charge_at){nextRow.style.display='flex';document.getElementById('bl-next-date').textContent=fmtD(shop.next_charge_at);}else{nextRow.style.display='none';}
+  if(ss==='pending_mandate'&&shop.mandate_url){mandateRow.style.display='block';document.getElementById('bl-mandate-btn').href=shop.mandate_url;}else{mandateRow.style.display='none';}
   renderQR();renderCustList();renderWA();updateTplPreview();
 }
 
