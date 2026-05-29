@@ -716,6 +716,14 @@ footer{background:var(--ink);border-top:1px solid rgba(255,255,255,.05);padding:
             </div>
           </div>
           <input type="text" id="fHoneypot" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none">
+          <div class="fg" id="couponRow">
+            <label class="fl" for="fCoupon">Coupon Code <span style="font-weight:400;opacity:.6">(optional)</span></label>
+            <div style="display:flex;gap:8px">
+              <input type="text" class="fi" id="fCoupon" placeholder="e.g. EARLY30" maxlength="20" autocomplete="off" oninput="this.value=this.value.toUpperCase().replace(/[^A-Z0-9_]/g,'')" style="flex:1;text-transform:uppercase;letter-spacing:.06em">
+              <button type="button" id="couponApplyBtn" onclick="applyCoupon()" style="flex-shrink:0;padding:0 16px;border-radius:10px;border:1.5px solid rgba(201,168,76,.35);background:transparent;color:var(--gold-b);font-size:13.5px;font-weight:600;cursor:pointer;white-space:nowrap;transition:border-color .18s,background .18s">Apply</button>
+            </div>
+            <div id="couponMsg" style="min-height:20px;font-size:13px;margin-top:6px;transition:all .2s"></div>
+          </div>
           <div class="consent-row" id="consentRow">
             <input type="checkbox" id="fConsent" name="consent" aria-required="true">
             <label class="consent-label" for="fConsent">I agree to Primo Rewards collecting and processing my business data as described in the <a href="/privacy" target="_blank" rel="noopener">Privacy Policy</a> and accept the <a href="/terms" target="_blank" rel="noopener">Terms of Service</a>. I understand my data is protected under India's DPDP Act 2023.</label>
@@ -787,7 +795,47 @@ function closeDrawer(){document.getElementById('mDr').classList.remove('open');d
 const TOAST_ICONS={success:'ti-circle-check',error:'ti-alert-circle',info:'ti-info-circle'};
 function showToast(title,msg,type='info',duration=6000){const wrap=document.getElementById('toastWrap');if(!wrap)return;const t=document.createElement('div');t.className=`p-toast t-${type}`;t.innerHTML=`<i class="ti ${TOAST_ICONS[type]} p-toast-ico" aria-hidden="true"></i><div class="p-toast-body"><div class="p-toast-title">${title}</div>${msg?`<div class="p-toast-msg">${msg}</div>`:''}</div><button class="p-toast-close" aria-label="Dismiss" onclick="this.closest('.p-toast').remove()"><i class="ti ti-x" aria-hidden="true"></i></button>`;wrap.appendChild(t);requestAnimationFrame(()=>requestAnimationFrame(()=>t.classList.add('show')));if(duration>0)setTimeout(()=>{t.classList.add('hiding');setTimeout(()=>t.remove(),320);},duration);}
 let sPlan='pro',sAmt=0;// setup fee paise — 0=waived; structure kept for future reinstatement
-function sanitize(str){if(typeof str!=='string')return'';return str.replace(/[<>&"'\/]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&#x27;','/':'&#x2F;'}[c]));}
+let activeCoupon=null; // holds validated coupon response from validate-coupon EF
+
+async function applyCoupon(){
+  const code=document.getElementById('fCoupon').value.trim().toUpperCase();
+  const msg=document.getElementById('couponMsg');
+  const btn=document.getElementById('couponApplyBtn');
+  if(!code){msg.style.color='#e87c7c';msg.textContent='Please enter a coupon code.';return;}
+  btn.disabled=true;btn.textContent='Checking…';msg.textContent='';
+  try{
+    const res=await fetch(`${PRIMO_CONFIG.SUPABASE_URL.replace('supabase.co','supabase.co')}/functions/v1/validate-coupon`,{
+      method:'POST',headers:{'Content-Type':'application/json','apikey':PRIMO_CONFIG.SUPABASE_ANON_KEY},
+      body:JSON.stringify({code,plan:sPlan,setup_amount_paise:sAmt})
+    });
+    const data=await res.json();
+    if(!data.valid){
+      activeCoupon=null;
+      msg.style.color='#e87c7c';
+      msg.textContent='❌ '+data.error;
+    } else {
+      activeCoupon=data.coupon;
+      msg.style.color='#4ADE80';
+      const c=data.coupon;
+      const effectMap={
+        extended_trial:`✅ ${code} applied — enjoy ${30+c.extra_trial_days} days free!`,
+        free_months:`✅ ${code} applied — ${c.free_months} month${c.free_months!==1?'s':''} free after trial`,
+        monthly_flat:`✅ ${code} applied — ₹${c.sub_discount_value}/mo off${c.sub_duration_months?' for '+c.sub_duration_months+' months':''}`,
+        monthly_percent:`✅ ${code} applied — ${c.sub_discount_value}% off${c.sub_duration_months?' for '+c.sub_duration_months+' months':''}`,
+        lifetime_discount:`✅ ${code} applied — ${c.sub_discount_value}% off every month`,
+        setup_flat:`✅ ${code} applied — ₹${c.sub_discount_value} off setup fee`,
+        setup_percent:`✅ ${code} applied — ${c.sub_discount_value}% off setup fee`,
+        setup_full:`✅ ${code} applied — setup fee fully waived`,
+      };
+      msg.textContent=effectMap[c.sub_discount_type||c.setup_discount_type]||`✅ ${code} applied`;
+    }
+  }catch(e){
+    activeCoupon=null;
+    msg.style.color='#e87c7c';
+    msg.textContent='Could not verify coupon. Please try again.';
+  }finally{btn.disabled=false;btn.textContent='Apply';}
+}
+
 async function handleEnroll(){
   const fields=[{id:'fName',validate:v=>v.trim().length>=2},{id:'fPhone',validate:v=>/^(\+91[\-\s]?)?[6-9]\d{9}$/.test(v.trim().replace(/[\s\-]/g,''))},{id:'fShop',validate:v=>v.trim().length>=2},{id:'fEmail',validate:v=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim())},{id:'fCity',validate:v=>v.trim().length>=2}];
   let valid=true;fields.forEach(f=>{const el=document.getElementById(f.id);if(!el)return;el.classList.remove('field-error');if(!f.validate(el.value)){el.classList.add('field-error');el.setAttribute('aria-invalid','true');valid=false;}else el.setAttribute('aria-invalid','false');});
@@ -797,7 +845,30 @@ async function handleEnroll(){
   consentRow?.classList.remove('consent-err');
   const btn=document.getElementById('enrollBtn');const origHTML=btn.innerHTML;btn.innerHTML='<i class="ti ti-loader-2" style="animation:spin .8s linear infinite" aria-hidden="true"></i> Saving your details...';btn.disabled=true;
   let enrollId=null;
-  try{const formData={owner_name:sanitize(document.getElementById('fName').value.trim()),owner_email:sanitize(document.getElementById('fEmail').value.trim()),owner_phone:sanitize(document.getElementById('fPhone').value.trim()),shop_name:sanitize(document.getElementById('fShop').value.trim()),city:sanitize(document.getElementById('fCity').value.trim()),plan:sPlan,slug:slugify(document.getElementById('fShop').value.trim()),status:'pending_payment',amount_paise:sAmt,honeypot:document.getElementById('fHoneypot')?.value||''};const enrollment=await apiCall('shop_enrollments','POST',formData);enrollId=enrollment?.[0]?.id||enrollment?.id||null;}catch(err){console.error('Enrollment save failed:',err);showToast('Note','Could not pre-save enrollment. Continuing to payment.','info',3000);}
+  try{
+    const formData={
+      owner_name:sanitize(document.getElementById('fName').value.trim()),
+      owner_email:sanitize(document.getElementById('fEmail').value.trim()),
+      owner_phone:sanitize(document.getElementById('fPhone').value.trim()),
+      shop_name:sanitize(document.getElementById('fShop').value.trim()),
+      city:sanitize(document.getElementById('fCity').value.trim()),
+      plan:sPlan,
+      slug:slugify(document.getElementById('fShop').value.trim()),
+      status:'trial_pending',   // fixed: was 'pending_payment' (old flow)
+      amount_paise:sAmt,
+      honeypot:document.getElementById('fHoneypot')?.value||'',
+      // Coupon fields — null when no coupon applied
+      coupon_code:             activeCoupon?.code||null,
+      trial_extended_days:     activeCoupon?.extra_trial_days||0,
+      sub_discount_months:     activeCoupon?.sub_duration_months||0,
+      sub_discount_value:      activeCoupon?.sub_discount_value||0,
+      sub_discount_type:       activeCoupon?.sub_discount_type||null,
+      setup_discount_paise:    activeCoupon?.setup_discount_paise||0,
+      original_setup_paise:    sAmt,
+    };
+    const enrollment=await apiCall('shop_enrollments','POST',formData);
+    enrollId=enrollment?.[0]?.id||enrollment?.id||null;
+  }catch(err){console.error('Enrollment save failed:',err);showToast('Note','Could not pre-save enrollment. Continuing to payment.','info',3000);}
   // TODO: When create-subscription + razorpay-webhook EFs are deployed,
   // replace this block with Razorpay subscription checkout (trial_period=30).
   showEnrollmentSuccess(enrollId);
