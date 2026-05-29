@@ -117,6 +117,16 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
     <button class="tab-btn" data-tab="t-set"><i class="ti ti-settings"></i>Settings</button>
     <button class="tab-btn" data-tab="t-qr"><i class="ti ti-qrcode"></i>QR &amp; CSV</button>
   </div>
+  <!-- Trial countdown banner — shown on all tabs during trial period -->
+  <div id="trialBanner" style="display:none;margin:.5rem .9rem .1rem;border-radius:12px;padding:.65rem .9rem;border:1px solid;transition:background .3s,border-color .3s" role="status">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:.75rem">
+      <div style="min-width:0">
+        <div id="tbn-title" style="font-size:13px;font-weight:700;margin-bottom:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></div>
+        <div id="tbn-sub" style="font-size:11.5px;opacity:.75"></div>
+      </div>
+      <button id="tbn-btn" onclick="switchToSettings()" style="display:none;flex-shrink:0;font-size:12px;font-weight:700;padding:5px 12px;border-radius:8px;border:none;cursor:pointer;white-space:nowrap;background:rgba(255,255,255,.15);color:inherit"></button>
+    </div>
+  </div>
   <div id="t-cust" class="tab-content active"><div class="cust-toolbar"><div class="search-wrap"><i class="ti ti-search search-ico"></i><input id="searchInp" class="search-inp" type="search" placeholder="Search by name…" autocomplete="off"></div><button class="add-btn" id="addCustBtn"><i class="ti ti-user-plus"></i>Add</button></div><div class="cust-list" id="custList"><div class="cust-empty"><div class="cust-empty-ico"><i class="ti ti-coin"></i></div>Loading…</div></div></div>
   <div id="t-wa" class="tab-content"><div class="wa-wrap"><div class="tpl-scroll" id="tplScroll"><button class="tpl-pill sel" data-tpl="progress" onclick="selTpl(this)"><i class="ti ti-chart-bar"></i>Stamp Update</button><button class="tpl-pill" data-tpl="ready" onclick="selTpl(this)"><i class="ti ti-gift"></i>Reward Ready</button><button class="tpl-pill" data-tpl="birthday" onclick="selTpl(this)"><i class="ti ti-cake"></i>Birthday</button></div><div class="tpl-preview" id="tplPreview"><div class="tpl-preview-lbl">Message Preview</div><div class="tpl-preview-txt" id="tplPreviewTxt"></div></div><div class="wa-banner" id="waBanner" style="display:none"><div class="wa-banner-ico">📱</div><div class="wa-banner-txt" id="waBannerTxt"></div></div><div class="wa-sec">Customers with WhatsApp</div><div id="waList"><div class="wa-empty">Loading…</div></div></div></div>
   <div id="t-set" class="tab-content"><div class="settings-wrap">
@@ -141,13 +151,8 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
           <span style="color:#9E8E70;font-size:13px">Next charge</span>
           <span id="bl-next-date" style="font-weight:600;color:#EDE3C8">—</span>
         </div>
-        <div id="bl-mandate-row" style="margin-top:14px;display:none">
-          <a id="bl-mandate-btn" href="#" target="_blank" rel="noopener"
-            style="display:block;text-align:center;padding:11px;border-radius:10px;background:linear-gradient(135deg,#C9A84C,#A8832A);color:#1A1007;font-weight:700;font-size:14px;text-decoration:none">
-            ✦ Set up billing now
-          </a>
-          <p style="font-size:12px;color:#9E8E70;text-align:center;margin:8px 0 0">Secure mandate via Razorpay · Takes 30 seconds</p>
-        </div>
+        <!-- CTA row — changes based on subscription_status -->
+        <div id="bl-cta" style="margin-top:14px;display:none"></div>
       </div>
     </div>
 
@@ -350,19 +355,9 @@ function renderDash(){
   document.getElementById('hdrShopName').textContent=shop.shop_name;document.getElementById('hdrAvatar').textContent=(shop.shop_name||'S')[0].toUpperCase();document.getElementById('hdrPlan').textContent=(shop.plan||'pro').toUpperCase();document.getElementById('sheetSN').textContent=shop.shop_name;document.getElementById('sheetSC').textContent=[shop.city,(shop.plan||'pro').toUpperCase()+' plan'].filter(Boolean).join(' · ');
   const td=todayM(),mo=monthM();document.getElementById('statCust').textContent=customers.length;document.getElementById('statToday').textContent=allStamps.filter(s=>new Date(s.stamped_at)>=td).length;document.getElementById('statMonth').textContent=allReds.filter(r=>new Date(r.redeemed_at)>=mo).length;
   document.getElementById('sfProduct').value=shop.product_name||'';document.getElementById('sfEmoji').value=shop.product_emoji||'';document.getElementById('emojiDisplay').textContent=shop.product_emoji||'🎂';document.getElementById('sfBuy').value=shop.reward_rule?.buy||11;document.getElementById('sfGet').value=shop.reward_rule?.get||1;
-  // Billing card
-  const subStatusLabel={none:'No subscription',trial:'In Trial',pending_mandate:'Mandate pending',active:'Billing active',halted:'Payment failed',cancelled:'Cancelled'};
-  const subStatusColor={none:'#9E8E70',trial:'#63B3ED',pending_mandate:'#F8B24A',active:'#4ADE80',halted:'#F87171',cancelled:'#9E8E70'};
-  const ss=shop.subscription_status||'none';
-  const fmtD=iso=>iso?new Date(iso).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}):'—';
-  const planAmt={starter:'₹199/mo',pro:'₹299/mo',premium:'₹499/mo'};
-  const plan=shop.subscription_plan||shop.plan||'pro';
-  document.getElementById('bl-plan').textContent=(plan.charAt(0).toUpperCase()+plan.slice(1))+' · '+(planAmt[plan]||'');
-  document.getElementById('bl-status').innerHTML=`<span style="font-weight:600;color:${subStatusColor[ss]||'#9E8E70'}">${subStatusLabel[ss]||ss}</span>`;
-  const trialRow=document.getElementById('bl-trial-row'),nextRow=document.getElementById('bl-next-row'),mandateRow=document.getElementById('bl-mandate-row');
-  if(shop.trial_ends_at){trialRow.style.display='flex';document.getElementById('bl-trial-date').textContent=fmtD(shop.trial_ends_at);}else{trialRow.style.display='none';}
-  if(shop.next_charge_at){nextRow.style.display='flex';document.getElementById('bl-next-date').textContent=fmtD(shop.next_charge_at);}else{nextRow.style.display='none';}
-  if(ss==='pending_mandate'&&shop.mandate_url){mandateRow.style.display='block';document.getElementById('bl-mandate-btn').href=shop.mandate_url;}else{mandateRow.style.display='none';}
+  // Billing card render
+  renderBillingCard();
+  updateTrialBanner();
   renderQR();renderCustList();renderWA();updateTplPreview();
 }
 
@@ -465,6 +460,118 @@ async function confirmEdit(){const cid=document.getElementById('editCid').value,
   }catch(e){console.error(e);document.getElementById('editErr').textContent='⚠ Failed to save.'}finally{btn.disabled=false;txt.textContent='Save Details'}}
 
 /* ══ SETTINGS ══ */
+/* ══ BILLING ══ */
+const PLAN_AMT={starter:'₹199/mo',pro:'₹299/mo',premium:'₹499/mo'};
+const SUB_LABEL={none:'No subscription',pending_mandate:'Mandate pending',active:'Billing active',halted:'Payment failed — action required',cancelled:'Cancelled'};
+const SUB_COLOR={none:'#9E8E70',pending_mandate:'#F8B24A',active:'#4ADE80',halted:'#F87171',cancelled:'#9E8E70'};
+
+function fmtDt(iso){return iso?new Date(iso).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}):'—';}
+
+function renderBillingCard(){
+  if(!shop) return;
+  const ss=shop.subscription_status||'none';
+  const plan=shop.subscription_plan||shop.plan||'pro';
+  document.getElementById('bl-plan').textContent=(plan.charAt(0).toUpperCase()+plan.slice(1))+' · '+(PLAN_AMT[plan]||'');
+  document.getElementById('bl-status').innerHTML=`<span style="font-weight:600;color:${SUB_COLOR[ss]||'#9E8E70'}">${SUB_LABEL[ss]||ss}</span>`;
+  const trialRow=document.getElementById('bl-trial-row'),nextRow=document.getElementById('bl-next-row');
+  if(shop.trial_ends_at){trialRow.style.display='flex';document.getElementById('bl-trial-date').textContent=fmtDt(shop.trial_ends_at);}
+  else trialRow.style.display='none';
+  if(shop.next_charge_at){nextRow.style.display='flex';document.getElementById('bl-next-date').textContent=fmtDt(shop.next_charge_at);}
+  else nextRow.style.display='none';
+
+  const cta=document.getElementById('bl-cta');
+  // 5.1 — Set up billing (none status OR pending_mandate with mandate_url)
+  if(ss==='none'||ss==='pending_mandate'){
+    const hasUrl=ss==='pending_mandate'&&shop.mandate_url;
+    cta.style.display='block';
+    cta.innerHTML=hasUrl
+      ?`<a href="${shop.mandate_url}" target="_blank" rel="noopener" style="display:block;text-align:center;padding:11px;border-radius:10px;background:linear-gradient(135deg,#C9A84C,#A8832A);color:#1A1007;font-weight:700;font-size:14px;text-decoration:none">✦ Complete billing setup</a><p style="font-size:12px;color:#9E8E70;text-align:center;margin:8px 0 0">Secure mandate via Razorpay · Takes 30 seconds</p>`
+      :`<button onclick="initiateBilling()" id="bl-initiate-btn" style="width:100%;padding:11px;border-radius:10px;background:linear-gradient(135deg,#C9A84C,#A8832A);color:#1A1007;font-weight:700;font-size:14px;border:none;cursor:pointer">✦ Set up billing now</button><p style="font-size:12px;color:#9E8E70;text-align:center;margin:8px 0 0">Keep Primo Rewards running after your trial · Takes 30 seconds</p>`;
+  }
+  // 5.3 — Update payment method (active or halted)
+  else if((ss==='active'||ss==='halted')&&shop.mandate_url){
+    const isHalted=ss==='halted';
+    cta.style.display='block';
+    cta.innerHTML=`<a href="${shop.mandate_url}" target="_blank" rel="noopener" style="display:block;text-align:center;padding:10px;border-radius:10px;background:${isHalted?'rgba(248,113,113,.12)':'rgba(201,168,76,.08)'};color:${isHalted?'#F87171':'#C9A84C'};font-weight:600;font-size:13.5px;border:1px solid ${isHalted?'rgba(248,113,113,.3)':'rgba(201,168,76,.2)'};text-decoration:none">${isHalted?'⚠️ Update payment method — action required':'↗ Update payment method'}</a>`;
+  }
+  else if(ss==='active'){
+    cta.style.display='block';
+    cta.innerHTML=`<p style="text-align:center;font-size:13px;color:#4ADE80;margin:0">✅ Billing active — you're all set</p>`;
+  }
+  else { cta.style.display='none'; }
+}
+
+function updateTrialBanner(){
+  const banner=document.getElementById('trialBanner');
+  if(!banner||!shop) return;
+  const ss=shop.subscription_status||'none';
+  if(ss==='active'||ss==='cancelled'){banner.style.display='none';return;}
+  if(!shop.trial_ends_at&&ss==='none'){banner.style.display='none';return;}
+
+  const now=Date.now();
+  const end=shop.trial_ends_at?new Date(shop.trial_ends_at).getTime():null;
+  const diff=end?end-now:null;
+  const days=diff!=null?Math.floor(diff/(1000*60*60*24)):null;
+  const hrs=diff!=null?Math.floor((diff%(1000*60*60*24))/(1000*60*60)):null;
+  const btn=document.getElementById('tbn-btn');
+  const title=document.getElementById('tbn-title');
+  const sub=document.getElementById('tbn-sub');
+
+  banner.style.display='block';
+
+  if(diff!=null&&diff<=0){
+    // Expired
+    Object.assign(banner.style,{background:'rgba(248,113,113,.1)',borderColor:'rgba(248,113,113,.3)',color:'#F87171'});
+    title.textContent='⚠️ Trial expired — billing required';
+    sub.textContent='Set up billing to reactivate your shop';
+    btn.style.display='block';btn.textContent='Set up now →';
+  } else if(ss==='pending_mandate'){
+    Object.assign(banner.style,{background:'rgba(248,178,74,.08)',borderColor:'rgba(248,178,74,.25)',color:'#F8B24A'});
+    title.textContent=days!=null?`${days}d left · Complete your billing mandate`:'Mandate pending';
+    sub.textContent='Tap to finish — takes 30 seconds via Razorpay';
+    btn.style.display='block';btn.textContent='Complete →';
+  } else if(days!=null&&days<=7){
+    // Urgent < 7 days
+    Object.assign(banner.style,{background:'rgba(248,113,113,.08)',borderColor:'rgba(248,113,113,.22)',color:'#F87171'});
+    title.textContent=`⚡ ${days}d ${hrs}h left in trial`;
+    sub.textContent='Set up billing to keep Primo Rewards running';
+    btn.style.display='block';btn.textContent='Set up →';
+  } else {
+    // Normal trial
+    Object.assign(banner.style,{background:'rgba(99,179,237,.07)',borderColor:'rgba(99,179,237,.2)',color:'#63B3ED'});
+    title.textContent=days!=null?`🎁 ${days} days left in your free trial`:'🎁 Free trial active';
+    sub.textContent='Go to Settings → Billing to set up your subscription';
+    btn.style.display='none';
+  }
+}
+
+function switchToSettings(){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+  document.querySelector('[data-tab="t-set"]').classList.add('active');
+  document.getElementById('t-set').classList.add('active');
+}
+
+async function initiateBilling(){
+  const btn=document.getElementById('bl-initiate-btn');
+  if(btn){btn.disabled=true;btn.textContent='Setting up…';}
+  try{
+    const res=await edge('merchant-api',{action:'initiate_billing'});
+    // Update local shop state
+    shop.subscription_status='pending_mandate';
+    shop.mandate_url=res.mandate_url;
+    shop.trial_ends_at=res.trial_ends_at;
+    shop.razorpay_subscription_id=res.subscription_id;
+    renderBillingCard();
+    updateTrialBanner();
+    if(res.mandate_url) window.open(res.mandate_url,'_blank','noopener');
+    toast('✦ Billing initiated! Complete your mandate in the new tab.');
+  }catch(e){
+    toast('⚠ '+(e.message||'Could not set up billing. Try again.'));
+    if(btn){btn.disabled=false;btn.textContent='✦ Set up billing now';}
+  }
+}
+
 async function saveSets(){const btn=document.getElementById('saveSetBtn'),txt=document.getElementById('saveSetTxt'),prod=document.getElementById('sfProduct').value.trim().substring(0,40),emo=document.getElementById('sfEmoji').value.trim().substring(0,4),buy=parseInt(document.getElementById('sfBuy').value,10)||11,get=parseInt(document.getElementById('sfGet').value,10)||1;if(buy<1||buy>50||get<1||get>10){toast('⚠ Invalid values.');return}btn.disabled=true;txt.textContent='Saving…';
   try{
     if(secure()){const res=await edge('merchant-api',{action:'save_settings',product_name:prod||shop.product_name,product_emoji:emo||shop.product_emoji,reward_rule:{buy,get}});if(res.shop)shop=res.shop}
