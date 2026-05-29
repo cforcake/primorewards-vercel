@@ -57,8 +57,8 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
 .bl-label{font-size:12.5px;color:var(--ink-m);font-weight:500}
 .bl-value{font-size:13.5px;font-weight:700;color:var(--ink)}
 /* Trial banner animations */
-@keyframes mandatePulse{0%,100%{box-shadow:0 2px 10px rgba(232,107,14,.18),0 0 0 0 rgba(232,107,14,.15)}60%{box-shadow:0 4px 18px rgba(232,107,14,.32),0 0 0 6px rgba(232,107,14,0)}}
-@keyframes urgentPulse{0%,100%{box-shadow:0 2px 10px rgba(220,53,69,.18),0 0 0 0 rgba(220,53,69,.15)}60%{box-shadow:0 4px 18px rgba(220,53,69,.3),0 0 0 6px rgba(220,53,69,0)}}
+@keyframes mandatePulse{0%,100%{box-shadow:0 2px 10px rgba(124,58,237,.15),0 0 0 0 rgba(124,58,237,.12)}60%{box-shadow:0 4px 18px rgba(124,58,237,.3),0 0 0 6px rgba(124,58,237,0)}}
+@keyframes urgentPulse{0%,100%{box-shadow:0 2px 10px rgba(190,24,93,.15),0 0 0 0 rgba(190,24,93,.12)}60%{box-shadow:0 4px 18px rgba(190,24,93,.28),0 0 0 6px rgba(190,24,93,0)}}
 /* QR */
 .qr-wrap{padding:.7rem .75rem 6rem;max-width:460px;margin:0 auto;width:100%}.qr-card{background:var(--white);border-radius:16px;padding:1.4rem 1rem;box-shadow:0 3px 14px rgba(26,16,7,.06);text-align:center;margin-bottom:.7rem}.qr-title{font-family:var(--fd);font-size:20px;font-weight:500;color:var(--ink);margin-bottom:.25rem}.qr-sub{font-size:12.5px;color:var(--ink-l);line-height:1.65;margin-bottom:1rem}#qr-canvas-wrap{display:inline-flex;padding:12px;border-radius:14px;border:1.5px solid var(--beige);box-shadow:0 3px 14px rgba(26,16,7,.05);margin-bottom:.85rem}#qr-canvas-wrap canvas{display:block;border-radius:3px}.qr-url{font-size:11.5px;color:var(--ink-l);word-break:break-all;background:var(--cream);border-radius:9px;padding:.5rem .7rem;margin-bottom:.9rem;font-family:monospace}.qr-actions{display:flex;gap:.45rem}.qr-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;padding:10px 12px;border-radius:11px;font-size:12.5px;font-weight:500;min-height:44px}.qr-btn.outline{border:1.5px solid var(--beige);background:transparent;color:var(--ink-m)}.qr-btn.gold{background:linear-gradient(135deg,var(--gold-b),var(--gold));color:#fff;box-shadow:0 3px 10px rgba(168,131,42,.3);border:none}
 .export-card{background:var(--white);border-radius:16px;padding:1rem;box-shadow:0 3px 14px rgba(26,16,7,.06);display:flex;align-items:center;gap:.8rem}.export-ico{width:42px;height:42px;border-radius:11px;flex-shrink:0;background:var(--gold-p);border:1.5px solid rgba(201,168,76,.22);display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--gold)}.export-info{flex:1}.export-info strong{font-size:13px;font-weight:600;color:var(--ink)}.export-info p{font-size:11px;color:var(--ink-l);margin-top:1px}.export-btn{display:flex;align-items:center;gap:4px;padding:8px 12px;border-radius:9px;background:var(--gold-p);border:1.5px solid rgba(201,168,76,.28);color:var(--gold);font-size:12px;font-weight:600;flex-shrink:0;min-height:36px}
@@ -484,7 +484,7 @@ function renderBillingCard(){
   document.getElementById('bl-plan').textContent=(plan.charAt(0).toUpperCase()+plan.slice(1))+' · '+(PLAN_AMT[plan]||'');
   const statusMap={
     none:            {text:'Not set up',         color:'#92623A', bg:'#FFF3E0'},
-    pending_mandate: {text:'⚡ Action required',  color:'#92400E', bg:'#FEF3C7'},
+    pending_mandate: {text:'⚡ Action required',  color:'#5B21B6', bg:'#EDE9FE'},
     active:          {text:'✅ Billing active',   color:'#065F46', bg:'#D1FAE5'},
     halted:          {text:'⚠️ Payment failed',   color:'#991B1B', bg:'#FEE2E2'},
     cancelled:       {text:'Cancelled',           color:'#6B7280', bg:'#F3F4F6'},
@@ -503,12 +503,12 @@ function renderBillingCard(){
     if(hasUrl){
       cta.innerHTML=`<a href="${shop.mandate_url}" target="_blank" rel="noopener"
         style="display:block;text-align:center;padding:13px;border-radius:12px;margin-top:4px;
-        background:linear-gradient(135deg,#E8850E,#C96E08);color:#fff;
+        background:linear-gradient(135deg,#7C3AED,#6D28D9);color:#fff;
         font-weight:800;font-size:15px;text-decoration:none;letter-spacing:.01em;
-        box-shadow:0 4px 16px rgba(232,133,14,.4)">
+        box-shadow:0 4px 16px rgba(124,58,237,.4)">
         ⚡ Complete mandate now →
       </a>
-      <p style="font-size:12px;color:#92623A;text-align:center;margin:8px 0 0;font-weight:500">
+      <p style="font-size:12px;color:#6D28D9;text-align:center;margin:8px 0 0;font-weight:500">
         One-time setup · Charged only after trial ends · Cancel anytime
       </p>`;
     } else {
@@ -569,47 +569,47 @@ function updateTrialBanner(){
   banner.style.padding='.75rem 1rem';
 
   if(ss==='pending_mandate'){
-    // Vivid orange — action needed NOW — pulsing
-    Object.assign(banner.style,{background:'linear-gradient(135deg,#FFF7ED,#FFF3E0)',
-      borderColor:'#E8850E',color:'#92400E',
+    // Vivid violet — cool, unmissable, action-needed
+    Object.assign(banner.style,{background:'linear-gradient(135deg,#F5F3FF,#EDE9FE)',
+      borderColor:'#7C3AED',color:'#4C1D95',
       animation:'mandatePulse 2.5s ease-in-out infinite',
-      boxShadow:'0 3px 14px rgba(232,133,14,.22)'});
-    title.style.cssText='font-size:14px;font-weight:800;margin-bottom:3px;color:#92400E';
+      boxShadow:'0 3px 16px rgba(124,58,237,.22)'});
+    title.style.cssText='font-size:14px;font-weight:800;margin-bottom:3px;color:#4C1D95';
     title.textContent=days!=null&&days>=0?`⚡ ${days}d ${hrs}h left — billing mandate required`:'⚡ Billing mandate required';
-    sub.style.cssText='font-size:12px;color:#B45309;font-weight:600';
+    sub.style.cssText='font-size:12px;color:#6D28D9;font-weight:600';
     sub.textContent='Set up payment now — you won\'t be charged until trial ends';
     Object.assign(btn.style,{display:'inline-block',fontSize:'12.5px',fontWeight:'800',
       padding:'7px 16px',borderRadius:'9px',border:'none',cursor:'pointer',
-      background:'#E8850E',color:'#fff',
-      boxShadow:'0 3px 10px rgba(232,133,14,.45)',whiteSpace:'nowrap'});
+      background:'#7C3AED',color:'#fff',
+      boxShadow:'0 3px 10px rgba(124,58,237,.45)',whiteSpace:'nowrap'});
     btn.textContent='Complete →';
   } else if(diff!=null&&diff<=0){
-    // Expired — red urgent
-    Object.assign(banner.style,{background:'linear-gradient(135deg,#FEF2F2,#FFF0F0)',
-      borderColor:'#DC3545',color:'#7F1D1D',
+    // Expired — cool crimson
+    Object.assign(banner.style,{background:'linear-gradient(135deg,#FDF2F8,#FCE7F3)',
+      borderColor:'#BE185D',color:'#831843',
       animation:'urgentPulse 2s ease-in-out infinite',
-      boxShadow:'0 3px 14px rgba(220,53,69,.2)'});
-    title.style.cssText='font-size:14px;font-weight:800;margin-bottom:3px;color:#7F1D1D';
+      boxShadow:'0 3px 14px rgba(190,24,93,.2)'});
+    title.style.cssText='font-size:14px;font-weight:800;margin-bottom:3px;color:#831843';
     title.textContent='⛔ Trial expired — action required';
-    sub.style.cssText='font-size:12px;color:#991B1B;font-weight:600';
+    sub.style.cssText='font-size:12px;color:#9D174D;font-weight:600';
     sub.textContent='Set up billing to reactivate your shop now';
     Object.assign(btn.style,{display:'inline-block',fontSize:'12.5px',fontWeight:'800',
       padding:'7px 16px',borderRadius:'9px',border:'none',cursor:'pointer',
-      background:'#DC3545',color:'#fff',whiteSpace:'nowrap'});
+      background:'#BE185D',color:'#fff',whiteSpace:'nowrap'});
     btn.textContent='Fix now →';
   } else if(days!=null&&days<=7){
-    // < 7 days — orange urgent
-    Object.assign(banner.style,{background:'linear-gradient(135deg,#FFFBEB,#FFF7ED)',
-      borderColor:'#D97706',color:'#78350F',
+    // < 7 days — indigo urgent
+    Object.assign(banner.style,{background:'linear-gradient(135deg,#EEF2FF,#E0E7FF)',
+      borderColor:'#4338CA',color:'#1E1B4B',
       animation:'mandatePulse 3s ease-in-out infinite',
-      boxShadow:'0 3px 12px rgba(217,119,6,.18)'});
-    title.style.cssText='font-size:14px;font-weight:800;margin-bottom:3px;color:#78350F';
+      boxShadow:'0 3px 12px rgba(67,56,202,.18)'});
+    title.style.cssText='font-size:14px;font-weight:800;margin-bottom:3px;color:#1E1B4B';
     title.textContent=`🔔 Only ${days}d ${hrs}h left in trial`;
-    sub.style.cssText='font-size:12px;color:#B45309;font-weight:600';
+    sub.style.cssText='font-size:12px;color:#4338CA;font-weight:600';
     sub.textContent='Set up billing before trial ends';
     Object.assign(btn.style,{display:'inline-block',fontSize:'12.5px',fontWeight:'800',
       padding:'7px 16px',borderRadius:'9px',border:'none',cursor:'pointer',
-      background:'#D97706',color:'#fff',whiteSpace:'nowrap'});
+      background:'#4338CA',color:'#fff',whiteSpace:'nowrap'});
     btn.textContent='Set up →';
   } else {
     // Normal trial — calm blue
