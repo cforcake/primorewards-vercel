@@ -203,14 +203,31 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
 .audit-list{padding:.6rem .75rem;display:flex;flex-direction:column;gap:.45rem;padding-bottom:calc(1.5rem + var(--safe-b))}
 .audit-row{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:.7rem .85rem;display:flex;align-items:flex-start;gap:.65rem}
 .audit-badge{flex-shrink:0;width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;margin-top:1px}
-.audit-badge.activate,.audit-badge.reinstate{background:rgba(27,94,66,.2);border:1px solid rgba(74,222,128,.14)}
-.audit-badge.suspend{background:rgba(192,57,43,.13);border:1px solid rgba(248,113,113,.13)}
+.audit-badge.activate,.audit-badge.reinstate{background:rgba(27,94,66,.2);border:1px solid rgba(74,222,128,.14)}.audit-badge.suspend{background:rgba(192,57,43,.13);border:1px solid rgba(248,113,113,.13)}
 .audit-body{flex:1;min-width:0}
 .audit-action{font-size:13px;color:var(--cream);line-height:1.3}
 .audit-action strong{color:var(--gold-b)}
 .audit-detail{font-size:11px;color:var(--ink-f);margin-top:.2rem;display:flex;gap:.4rem;flex-wrap:wrap}
 .audit-ip{font-family:monospace;font-size:10.5px;color:rgba(168,152,128,.4)}
 .audit-time{font-size:11px;color:rgba(168,152,128,.4);flex-shrink:0;white-space:nowrap}
+/* Coupons Tab */
+.cp-card{background:rgba(255,255,255,.04);border:1px solid rgba(201,168,76,.12);border-radius:14px;padding:.85rem 1rem;margin-bottom:.65rem}
+.cp-card.inactive{opacity:.5}
+.cp-code{font-family:'Courier New',monospace;font-size:15px;font-weight:700;color:var(--cream);letter-spacing:.05em}
+.cp-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;letter-spacing:.06em;text-transform:uppercase}
+.cp-badge.sub{background:rgba(74,222,128,.12);color:#4ADE80;border:1px solid rgba(74,222,128,.2)}
+.cp-badge.setup{background:rgba(248,178,74,.12);color:#F8B24A;border:1px solid rgba(248,178,74,.2)}
+.cp-badge.both{background:rgba(201,168,76,.12);color:var(--gold-b);border:1px solid rgba(201,168,76,.2)}
+.cp-desc{font-size:12.5px;color:var(--ink-f);margin-bottom:.4rem;line-height:1.5}
+.cp-effect{font-size:13px;color:var(--cream-d);margin-bottom:.55rem}
+.cp-meta{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap}
+.cp-usage{font-size:12px;color:var(--ink-f)}
+.cp-actions{display:flex;align-items:center;gap:.5rem;margin-left:auto}
+.cp-toggle{padding:4px 12px;border-radius:99px;font-size:12px;font-weight:600;border:1px solid;cursor:pointer;background:transparent;transition:all .18s}
+.cp-toggle.on{color:#4ADE80;border-color:rgba(74,222,128,.3)}
+.cp-toggle.off{color:var(--ink-f);border-color:rgba(168,152,128,.2)}
+.cp-del{padding:4px 10px;border-radius:99px;font-size:12px;color:#F87171;border:1px solid rgba(248,113,113,.25);background:transparent;cursor:pointer}
+.cp-del:disabled{opacity:.3;cursor:not-allowed}
 .overlay{position:fixed;inset:0;background:rgba(10,6,2,.7);z-index:100;opacity:0;pointer-events:none;transition:opacity .28s}
 .overlay.open{opacity:1;pointer-events:all}
 .sheet{position:fixed;bottom:0;left:0;right:0;z-index:101;background:#1E1309;border-top:1px solid rgba(201,168,76,.17);border-radius:22px 22px 0 0;padding:0 0 calc(1.5rem + var(--safe-b));max-height:92vh;overflow-y:auto;transform:translateY(100%);transition:transform .38s var(--eo);-webkit-overflow-scrolling:touch}
@@ -364,6 +381,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
     <button class="tab-btn" data-tab="activity" onclick="switchTab('activity')" role="tab">Activity</button>
     <button class="tab-btn" data-tab="revenue" onclick="switchTab('revenue')" role="tab">Revenue</button>
     <button class="tab-btn" data-tab="audit" onclick="switchTab('audit')" role="tab">Audit Log</button>
+    <button class="tab-btn" data-tab="coupons" onclick="switchTab('coupons')" role="tab">Coupons <span class="cbadge" id="tab-coupons-n">&mdash;</span></button>
   </div>
 
   <div id="tab-shops" class="tab-content active" role="tabpanel">
@@ -403,6 +421,13 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
   <div id="tab-audit" class="tab-content" role="tabpanel">
     <div class="audit-list" id="audit-list"></div>
   </div>
+
+  <div id="tab-coupons" class="tab-content" role="tabpanel">
+    <div style="padding:.75rem .75rem 0">
+      <button class="lf-btn" style="max-width:100%;margin-bottom:.75rem" onclick="openCouponSheet()">&#x2B; Create Coupon</button>
+    </div>
+    <div id="coupons-list" style="padding:0 .75rem .75rem"></div>
+  </div>
 </div>
 
 <div class="overlay" id="overlay" onclick="closeAllSheets()"></div>
@@ -439,6 +464,98 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
     <button class="as-item" onclick="closeAllSheets();doRefresh()"><span class="as-ico">&#x21BA;</span> Refresh Data</button>
     <button class="as-item" onclick="closeAllSheets();exportCSV()"><span class="as-ico">&#x2193;</span> Export Shops CSV</button>
     <button class="as-item danger" onclick="closeAllSheets();doSignOut()"><span class="as-ico">&#x23FB;</span> Sign Out</button>
+  </div>
+</div>
+
+<!-- Coupon Create/Edit Sheet -->
+<div class="sheet" id="sheet-coupon" role="dialog" aria-label="Create Coupon" style="max-height:92vh;overflow-y:auto">
+  <div class="sheet-handle"></div>
+  <div class="sheet-hdr">
+    <div><div class="sheet-title">Create Coupon</div><div class="sheet-sub">New discount code</div></div>
+    <button class="sheet-close" onclick="closeAllSheets()" aria-label="Close">&#x2715;</button>
+  </div>
+  <div class="sheet-body" style="padding-bottom:2rem">
+    <div class="lf-g">
+      <label class="lf-l">Code <span style="color:var(--ink-f);text-transform:none;font-size:10px">(auto-uppercased, max 20 chars)</span></label>
+      <input class="lf-i" id="cp-code" type="text" maxlength="20" placeholder="LAUNCH500" oninput="this.value=this.value.toUpperCase().replace(/[^A-Z0-9_]/g,'')">
+    </div>
+    <div class="lf-g">
+      <label class="lf-l">Description</label>
+      <input class="lf-i" id="cp-desc" type="text" placeholder="Launch offer — ₹500 off setup">
+    </div>
+    <div class="lf-g">
+      <label class="lf-l">Applies To</label>
+      <select class="lf-i" id="cp-applies" onchange="updateCouponForm()">
+        <option value="subscription">Subscription</option>
+        <option value="setup">Setup Fee</option>
+        <option value="both">Both (Bundle)</option>
+      </select>
+    </div>
+
+    <!-- Subscription fields -->
+    <div id="cp-sub-section">
+      <div style="font-size:11px;font-weight:600;color:var(--gold-b);letter-spacing:.1em;text-transform:uppercase;margin:.75rem 0 .5rem">Subscription Discount</div>
+      <div class="lf-g">
+        <label class="lf-l">Type</label>
+        <select class="lf-i" id="cp-sub-type" onchange="updateCouponForm()">
+          <option value="extended_trial">Extended Trial</option>
+          <option value="free_months">Free Months</option>
+          <option value="monthly_flat">Monthly Flat (₹ off/mo)</option>
+          <option value="monthly_percent">Monthly % Discount</option>
+          <option value="lifetime_discount">Lifetime % Discount</option>
+        </select>
+      </div>
+      <div class="lf-g" id="cp-sub-val-group">
+        <label class="lf-l" id="cp-sub-val-label">Extra Days</label>
+        <input class="lf-i" id="cp-sub-val" type="number" min="0" placeholder="30">
+      </div>
+      <div class="lf-g" id="cp-sub-dur-group">
+        <label class="lf-l">Duration (months) <span style="color:var(--ink-f);text-transform:none;font-size:10px">blank = forever</span></label>
+        <input class="lf-i" id="cp-sub-dur" type="number" min="1" placeholder="3">
+      </div>
+    </div>
+
+    <!-- Setup fee fields -->
+    <div id="cp-setup-section" style="display:none">
+      <div style="font-size:11px;font-weight:600;color:#F8B24A;letter-spacing:.1em;text-transform:uppercase;margin:.75rem 0 .5rem">Setup Fee Discount</div>
+      <div style="font-size:12px;color:var(--ink-f);background:rgba(248,178,74,.08);border:1px solid rgba(248,178,74,.2);border-radius:8px;padding:.5rem .65rem;margin-bottom:.65rem">
+        ℹ️ Setup fee coupons activate when setup fee is reinstated (currently ₹0)
+      </div>
+      <div class="lf-g">
+        <label class="lf-l">Type</label>
+        <select class="lf-i" id="cp-setup-type" onchange="updateCouponForm()">
+          <option value="setup_flat">Flat ₹ Off</option>
+          <option value="setup_percent">Percent Off</option>
+          <option value="setup_full">Full Waiver</option>
+        </select>
+      </div>
+      <div class="lf-g" id="cp-setup-val-group">
+        <label class="lf-l" id="cp-setup-val-label">Amount (₹)</label>
+        <input class="lf-i" id="cp-setup-val" type="number" min="0" placeholder="500">
+      </div>
+    </div>
+
+    <!-- Common fields -->
+    <div style="font-size:11px;font-weight:600;color:var(--ink-f);letter-spacing:.1em;text-transform:uppercase;margin:.75rem 0 .5rem">Restrictions</div>
+    <div class="lf-g">
+      <label class="lf-l">Min Plan</label>
+      <select class="lf-i" id="cp-min-plan">
+        <option value="">Any</option>
+        <option value="pro">Pro or higher</option>
+        <option value="premium">Premium only</option>
+      </select>
+    </div>
+    <div class="lf-g">
+      <label class="lf-l">Max Uses <span style="color:var(--ink-f);text-transform:none;font-size:10px">blank = unlimited</span></label>
+      <input class="lf-i" id="cp-max-uses" type="number" min="1" placeholder="100">
+    </div>
+    <div class="lf-g">
+      <label class="lf-l">Expires <span style="color:var(--ink-f);text-transform:none;font-size:10px">blank = never</span></label>
+      <input class="lf-i" id="cp-expires" type="date">
+    </div>
+
+    <button class="lf-btn" id="cp-submit-btn" onclick="submitCoupon()" style="margin-top:.5rem">Create Coupon</button>
+    <div id="cp-err" style="min-height:18px;font-size:12.5px;color:#e87c7c;margin-top:.5rem;text-align:center"></div>
   </div>
 </div>
 
@@ -954,12 +1071,195 @@ function switchTab(tab) {
   document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
   document.querySelector('[data-tab="'+tab+'"]').classList.add('active');
   document.getElementById('tab-'+tab).classList.add('active');
+  if(tab==='coupons') loadCoupons();
 }
 
 /* SHEETS */
 function openSheet(id){document.getElementById('overlay').classList.add('open');document.getElementById(id).classList.add('open');document.body.style.overflow='hidden';}
 function closeAllSheets(){document.getElementById('overlay').classList.remove('open');document.querySelectorAll('.sheet').forEach(s=>s.classList.remove('open'));document.body.style.overflow='';}
 function openActionSheet(){openSheet('sheet-actions');}
+
+/* ================================================================
+   COUPONS
+================================================================ */
+let COUPONS_CACHE = [];
+
+function couponEffect(c) {
+  const v = parseFloat(c.sub_discount_value) || 0;
+  const dur = c.sub_duration_months ? ` for ${c.sub_duration_months} mo` : ' forever';
+  switch(c.sub_discount_type) {
+    case 'extended_trial':    return `+${v} extra trial days`;
+    case 'free_months':       return `${v} free month${v!==1?'s':''} after trial`;
+    case 'monthly_flat':      return `₹${v}/mo off${dur}`;
+    case 'monthly_percent':   return `${v}% off/mo${dur}`;
+    case 'lifetime_discount': return `${v}% off every month`;
+    default: break;
+  }
+  const sv = parseFloat(c.setup_discount_value) || 0;
+  switch(c.setup_discount_type) {
+    case 'setup_flat':    return `₹${sv} off setup fee`;
+    case 'setup_percent': return `${sv}% off setup fee`;
+    case 'setup_full':    return 'Full setup fee waived';
+    default: return c.description || '—';
+  }
+}
+
+function renderCoupons() {
+  const wrap = document.getElementById('coupons-list');
+  const badge = document.getElementById('tab-coupons-n');
+  if(!wrap) return;
+  badge.textContent = COUPONS_CACHE.length || '0';
+  if(!COUPONS_CACHE.length) {
+    wrap.innerHTML='<div class="empty-state"><div class="empty-ico">🎟️</div><div class="empty-t">No coupons yet</div><div class="empty-s">Create your first coupon to start offering discounts.</div></div>';
+    return;
+  }
+  wrap.innerHTML = COUPONS_CACHE.map(c => {
+    const badgeCls = c.applies_to==='setup'?'setup':c.applies_to==='both'?'both':'sub';
+    const badgeLbl = c.applies_to==='setup'?'SETUP':c.applies_to==='both'?'BOTH':'SUB';
+    const usage = c.max_uses!=null ? `${c.used_count} / ${c.max_uses} used` : `${c.used_count} used`;
+    const expires = c.expires_at ? ` · expires ${c.expires_at.slice(0,10)}` : '';
+    const minPlan = c.min_plan ? ` · ${c.min_plan}+` : '';
+    return `<div class="cp-card${c.is_active?'':' inactive'}">
+      <div class="cp-top"><span class="cp-code">${esc(c.code)}</span><span class="cp-badge ${badgeCls}">${badgeLbl}</span></div>
+      ${c.description?`<div class="cp-desc">${esc(c.description)}</div>`:''}
+      <div class="cp-effect">${couponEffect(c)}</div>
+      <div class="cp-meta">
+        <span class="cp-usage">${usage}${expires}${minPlan}</span>
+        <div class="cp-actions">
+          <button class="cp-toggle ${c.is_active?'on':'off'}" onclick="toggleCoupon('${c.id}',${c.is_active})">${c.is_active?'Active':'Off'}</button>
+          <button class="cp-del" onclick="deleteCoupon('${c.id}','${esc(c.code)}')" ${c.used_count>0?'disabled title="Deactivate instead — coupon has been used"':''}>Del</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function loadCoupons() {
+  const wrap = document.getElementById('coupons-list');
+  if(wrap) wrap.innerHTML='<div style="padding:1.5rem;text-align:center;color:var(--ink-f);font-size:13px">Loading…</div>';
+  try {
+    const res = await sbEdge('admin-coupons', { action:'list' });
+    COUPONS_CACHE = res.coupons || [];
+    renderCoupons();
+  } catch(e) {
+    if(wrap) wrap.innerHTML='<div style="padding:1.5rem;text-align:center;color:#F87171;font-size:13px">Failed to load coupons</div>';
+    console.error('[loadCoupons]', e);
+  }
+}
+
+async function toggleCoupon(id, currentlyActive) {
+  try {
+    const res = await sbEdge('admin-coupons', { action:'toggle', id });
+    const idx = COUPONS_CACHE.findIndex(c=>c.id===id);
+    if(idx>-1) COUPONS_CACHE[idx] = res.coupon;
+    renderCoupons();
+    showToast(res.coupon.is_active?'Coupon activated':'Coupon deactivated', res.coupon.is_active?'green':'orange', res.coupon.is_active?'✓':'◼');
+  } catch(e) { showToast('Failed to update coupon','red','✗'); }
+}
+
+async function deleteCoupon(id, code) {
+  if(!confirm(`Delete coupon ${code}? This cannot be undone.`)) return;
+  try {
+    await sbEdge('admin-coupons', { action:'delete', id });
+    COUPONS_CACHE = COUPONS_CACHE.filter(c=>c.id!==id);
+    renderCoupons();
+    showToast(`${code} deleted`,'green','✓');
+  } catch(e) {
+    const msg = e?.message||'';
+    showToast(msg.includes('used')?'Cannot delete — deactivate instead':'Delete failed','red','✗');
+  }
+}
+
+/* Coupon create sheet */
+function openCouponSheet() {
+  // Reset form
+  ['cp-code','cp-desc','cp-sub-val','cp-sub-dur','cp-setup-val','cp-max-uses','cp-expires'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.value='';
+  });
+  document.getElementById('cp-applies').value='subscription';
+  document.getElementById('cp-sub-type').value='extended_trial';
+  document.getElementById('cp-setup-type').value='setup_flat';
+  document.getElementById('cp-min-plan').value='';
+  document.getElementById('cp-err').textContent='';
+  updateCouponForm();
+  openSheet('sheet-coupon');
+}
+
+function updateCouponForm() {
+  const applies = document.getElementById('cp-applies').value;
+  const subType = document.getElementById('cp-sub-type').value;
+  const setupType = document.getElementById('cp-setup-type').value;
+
+  // Show/hide sections
+  document.getElementById('cp-sub-section').style.display =
+    ['subscription','both'].includes(applies) ? '' : 'none';
+  document.getElementById('cp-setup-section').style.display =
+    ['setup','both'].includes(applies) ? '' : 'none';
+
+  // Sub value label
+  const subValLabel = document.getElementById('cp-sub-val-label');
+  const subValGroup = document.getElementById('cp-sub-val-group');
+  const subDurGroup = document.getElementById('cp-sub-dur-group');
+  const subValInput = document.getElementById('cp-sub-val');
+  const labelMap = {
+    extended_trial:'Extra Days',free_months:'Free Months',
+    monthly_flat:'₹ Off Per Month',monthly_percent:'% Off Per Month',
+    lifetime_discount:'% Off (lifetime)'
+  };
+  if(subValLabel) subValLabel.textContent = labelMap[subType]||'Value';
+  // Hide duration for trial/free/lifetime
+  if(subDurGroup) subDurGroup.style.display = ['extended_trial','free_months','lifetime_discount'].includes(subType)?'none':'';
+  if(subValInput) subValInput.placeholder = subType==='extended_trial'?'30':subType==='free_months'?'3':subType==='monthly_flat'?'50':'20';
+
+  // Setup value label + visibility
+  const setupValLabel = document.getElementById('cp-setup-val-label');
+  const setupValGroup = document.getElementById('cp-setup-val-group');
+  if(setupValGroup) setupValGroup.style.display = setupType==='setup_full'?'none':'';
+  if(setupValLabel) setupValLabel.textContent = setupType==='setup_percent'?'% Off':'Amount (₹)';
+}
+
+async function submitCoupon() {
+  const btn = document.getElementById('cp-submit-btn');
+  const errEl = document.getElementById('cp-err');
+  errEl.textContent='';
+
+  const applies = document.getElementById('cp-applies').value;
+  const payload = {
+    action: 'create',
+    code:           document.getElementById('cp-code').value.trim().toUpperCase(),
+    description:    document.getElementById('cp-desc').value.trim()||null,
+    applies_to:     applies,
+    min_plan:       document.getElementById('cp-min-plan').value||null,
+    max_uses:       document.getElementById('cp-max-uses').value ? Number(document.getElementById('cp-max-uses').value) : null,
+    expires_at:     document.getElementById('cp-expires').value||null,
+  };
+
+  if(['subscription','both'].includes(applies)) {
+    payload.sub_discount_type  = document.getElementById('cp-sub-type').value;
+    payload.sub_discount_value = Number(document.getElementById('cp-sub-val').value)||0;
+    const dur = document.getElementById('cp-sub-dur').value;
+    payload.sub_duration_months = dur ? Number(dur) : null;
+  }
+  if(['setup','both'].includes(applies)) {
+    payload.setup_discount_type  = document.getElementById('cp-setup-type').value;
+    payload.setup_discount_value = Number(document.getElementById('cp-setup-val').value)||0;
+  }
+
+  if(!payload.code) { errEl.textContent='Code is required'; return; }
+
+  btn.disabled=true; btn.textContent='Creating…';
+  try {
+    const res = await sbEdge('admin-coupons', payload);
+    COUPONS_CACHE.unshift(res.coupon);
+    renderCoupons();
+    closeAllSheets();
+    showToast(`${res.coupon.code} created`,'green','✓');
+  } catch(e) {
+    errEl.textContent = e?.message||'Failed to create coupon';
+  } finally {
+    btn.disabled=false; btn.textContent='Create Coupon';
+  }
+}
 
 /* CSV */
 function exportCSV() {
