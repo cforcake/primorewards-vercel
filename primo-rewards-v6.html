@@ -8,7 +8,7 @@
      SEO — Primary Meta
 ═══════════════════════════════════════════ -->
 <title>Primo Rewards — Digital Loyalty Program for Local Businesses | India</title>
-<meta name="description" content="Primo gives any shop a beautiful digital loyalty rewards program. Customers earn gold medallion stamps on every purchase. No app needed. Unique link per shop. Starting ₹1,499 setup + ₹349/mo.">
+<meta name="description" content="Primo gives any shop a beautiful digital loyalty rewards program. Customers earn gold medallion stamps on every purchase. No app needed. Unique link per shop. 30-day free trial. From ₹199/mo."  >
 <meta name="keywords" content="loyalty rewards program india, digital loyalty card, cake shop loyalty, local business rewards, customer retention india, stamp card app, loyalty program software">
 <meta name="author" content="Primo Rewards">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
@@ -80,21 +80,21 @@
         {
           "@type": "Offer",
           "name": "Starter Plan",
-          "price": "349",
+          "price": "199",
           "priceCurrency": "INR",
           "priceSpecification": { "@type": "UnitPriceSpecification", "billingDuration": "P1M" }
         },
         {
           "@type": "Offer",
           "name": "Pro Plan",
-          "price": "549",
+          "price": "299",
           "priceCurrency": "INR",
           "priceSpecification": { "@type": "UnitPriceSpecification", "billingDuration": "P1M" }
         },
         {
           "@type": "Offer",
           "name": "Premium Plan",
-          "price": "749",
+          "price": "499",
           "priceCurrency": "INR",
           "priceSpecification": { "@type": "UnitPriceSpecification", "billingDuration": "P1M" }
         }
@@ -630,8 +630,16 @@ nav.scrolled{background:rgba(253,250,245,.94);backdrop-filter:blur(22px);
   padding:4px 16px;border-radius:99px;letter-spacing:.04em;white-space:nowrap;
   box-shadow:0 3px 10px rgba(168,131,42,.35)}
 .p-tier{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-l);margin-bottom:.9rem}
-.p-setup{font-size:13px;color:var(--ink-f);margin-bottom:4px}
-.p-setup strong{font-size:15px;color:var(--ink-m);font-family:var(--fd)}
+/* Setup fee strikethrough animation */
+.p-setup{font-size:13px;color:var(--ink-f);margin-bottom:6px;min-height:22px}
+.p-setup-lbl{margin-right:4px}
+.p-setup-amt{position:relative;display:inline-block;font-weight:600;color:var(--ink-m);font-size:14px;font-family:var(--fd)}
+.p-setup-amt::after{content:'';position:absolute;top:50%;left:-2px;right:-2px;height:2px;background:var(--gold-b);border-radius:2px;transform:scaleX(0);transform-origin:left;transition:transform .55s cubic-bezier(.4,0,.2,1) .9s}
+.pc.in .p-setup-amt::after{transform:scaleX(1)}
+.p-setup-free{display:inline-block;font-size:11px;font-weight:700;color:#4ADE80;letter-spacing:.02em;margin-left:7px;opacity:0;transform:translateY(3px);transition:opacity .35s ease 1.5s,transform .35s ease 1.5s}
+.pc.in .p-setup-free{opacity:1;transform:translateY(0)}
+/* Trial badge */
+.trial-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.2);color:#4ADE80;font-size:10.5px;font-weight:700;letter-spacing:.04em;padding:3px 9px;border-radius:99px;margin-bottom:10px;text-transform:uppercase}
 .p-amt{font-family:var(--fd);font-size:54px;font-weight:500;color:var(--ink);line-height:1;margin-bottom:2px}
 .p-amt sup{font-size:22px;font-weight:400;vertical-align:super}
 .p-per{font-size:13px;color:var(--ink-l);margin-bottom:1.7rem}
@@ -865,7 +873,7 @@ footer{background:var(--ink);border-top:1px solid rgba(255,255,255,.05);padding:
         <div class="step-n">01</div>
         <div class="step-ico"><i class="ti ti-forms" aria-hidden="true"></i></div>
         <h3 class="step-title">Enroll on Primo</h3>
-        <p class="step-desc">Fill your shop details, pick your reward rule — buy 11 get 1 free, buy 9 get 1, your call — choose a plan and pay once to activate.</p>
+        <p class="step-desc">Fill your shop details, pick your reward rule — buy 11 get 1 free, buy 9 get 1, your call — choose a plan and start your 30-day free trial. No payment today.</p>
         <div class="step-arr" aria-hidden="true"><i class="ti ti-chevron-right"></i></div>
       </div>
       <div class="step">
@@ -994,14 +1002,15 @@ footer{background:var(--ink);border-top:1px solid rgba(255,255,255,.05);padding:
   <div class="container">
     <div style="text-align:center;margin-bottom:3.5rem">
       <div class="sec-ey rv">Simple pricing</div>
-      <h2 class="sec-t display rv" style="max-width:100%;margin:0 auto .75rem">One-time setup.<br><em style="font-style:italic">Month-to-month.</em></h2>
-      <p class="rv" style="font-size:15px;color:var(--ink-l);max-width:400px;margin:0 auto">No annual contracts. Pay setup once, cancel monthly any time. Fair, transparent pricing for local businesses.</p>
+      <h2 class="sec-t display rv" style="max-width:100%;margin:0 auto .75rem">Start free.<br><em style="font-style:italic">Pay only when you love it.</em></h2>
+      <p class="rv" style="font-size:15px;color:var(--ink-l);max-width:440px;margin:0 auto">30-day free trial on every plan. No setup fee. No annual contracts. Cancel any time.</p>
     </div>
     <div class="pgrid">
       <div class="pc rv">
         <div class="p-tier">Starter</div>
-        <div class="p-setup">One-time setup: <strong>₹1,499</strong></div>
-        <div class="p-amt"><sup>₹</sup>349</div><div class="p-per">per month</div>
+        <div class="trial-badge"><i class="ti ti-gift" aria-hidden="true"></i> 30 days free</div>
+        <div class="p-setup"><span class="p-setup-lbl">Setup:</span><span class="p-setup-amt">₹1,499</span><span class="p-setup-free">Free ✓</span></div>
+        <div class="p-amt"><sup>₹</sup>199</div><div class="p-per">per month after trial</div>
         <div class="p-div"></div>
         <ul class="p-feats">
           <li><i class="ti ti-check"></i> 1 shop location</li>
@@ -1019,8 +1028,9 @@ footer{background:var(--ink);border-top:1px solid rgba(255,255,255,.05);padding:
       <div class="pc pop rv" style="transition-delay:.1s">
         <div class="pop-tag">⭐ Most Popular</div>
         <div class="p-tier">Pro</div>
-        <div class="p-setup">One-time setup: <strong>₹2,499</strong></div>
-        <div class="p-amt"><sup>₹</sup>549</div><div class="p-per">per month</div>
+        <div class="trial-badge"><i class="ti ti-gift" aria-hidden="true"></i> 30 days free</div>
+        <div class="p-setup"><span class="p-setup-lbl">Setup:</span><span class="p-setup-amt">₹2,499</span><span class="p-setup-free">Free ✓</span></div>
+        <div class="p-amt"><sup>₹</sup>299</div><div class="p-per">per month after trial</div>
         <div class="p-div"></div>
         <ul class="p-feats">
           <li><i class="ti ti-check"></i> 1 shop location</li>
@@ -1037,8 +1047,9 @@ footer{background:var(--ink);border-top:1px solid rgba(255,255,255,.05);padding:
       </div>
       <div class="pc rv" style="transition-delay:.2s">
         <div class="p-tier">Premium</div>
-        <div class="p-setup">One-time setup: <strong>₹3,999</strong></div>
-        <div class="p-amt"><sup>₹</sup>749</div><div class="p-per">per month</div>
+        <div class="trial-badge"><i class="ti ti-gift" aria-hidden="true"></i> 30 days free</div>
+        <div class="p-setup"><span class="p-setup-lbl">Setup:</span><span class="p-setup-amt">₹3,999</span><span class="p-setup-free">Free ✓</span></div>
+        <div class="p-amt"><sup>₹</sup>499</div><div class="p-per">per month after trial</div>
         <div class="p-div"></div>
         <ul class="p-feats">
           <li><i class="ti ti-check"></i> Up to 3 locations</li>
@@ -1118,9 +1129,9 @@ footer{background:var(--ink);border-top:1px solid rgba(255,255,255,.05);padding:
           <div class="fg">
             <label class="fl">Choose Your Plan</label>
             <div class="plan-sel">
-              <div class="plan-opt" data-plan="starter" data-amount="149900"><div class="po-nm">Starter</div><div class="po-pr">₹1,499 + ₹349/mo</div></div>
-              <div class="plan-opt sel" data-plan="pro" data-amount="249900"><div class="po-nm">Pro ⭐</div><div class="po-pr">₹2,499 + ₹549/mo</div></div>
-              <div class="plan-opt" data-plan="premium" data-amount="399900"><div class="po-nm">Premium</div><div class="po-pr">₹3,999 + ₹749/mo</div></div>
+              <div class="plan-opt" data-plan="starter" data-amount="0"><div class="po-nm">Starter</div><div class="po-pr">₹199/mo after trial</div></div>
+              <div class="plan-opt sel" data-plan="pro" data-amount="0"><div class="po-nm">Pro ⭐</div><div class="po-pr">₹299/mo after trial</div></div>
+              <div class="plan-opt" data-plan="premium" data-amount="0"><div class="po-nm">Premium</div><div class="po-pr">₹499/mo after trial</div></div>
             </div>
           </div>
           <!-- DPDP 2023 / GDPR Consent — required before form submission -->
@@ -1133,17 +1144,17 @@ footer{background:var(--ink);border-top:1px solid rgba(255,255,255,.05);padding:
               I understand my data is protected under India's DPDP Act 2023.
             </label>
           </div>
-          <button class="rzp-btn" id="enrollBtn" type="button"><i class="ti ti-lock" aria-hidden="true"></i> Pay Setup Fee &amp; Activate My Shop</button>
-          <div class="form-note">Secure payment via Razorpay &nbsp;·&nbsp; By enrolling you agree to our <a href="/terms">Terms</a> &amp; <a href="/privacy">Privacy Policy</a></div>
+          <button class="rzp-btn" id="enrollBtn" type="button"><i class="ti ti-rocket" aria-hidden="true"></i> Start My Free Trial</button>
+          <div class="form-note">30-day free trial, no credit card required &nbsp;·&nbsp; By enrolling you agree to our <a href="/terms">Terms</a> &amp; <a href="/privacy">Privacy Policy</a></div>
         </div>
         <!-- Enrollment success state — shown after payment pending -->
         <div class="form-card enroll-success" id="enrollSuccess" aria-live="polite">
           <div class="es-ico">🎉</div>
-          <div class="es-title">You're almost live!</div>
+          <div class="es-title">Your free trial starts now!</div>
           <div class="es-body">
-            Your enrollment is confirmed and payment is processing.<br>
-            We're setting up your shop — you'll receive your unique loyalty link and setup guide at your email within a few minutes.<br><br>
-            <strong style="color:var(--gold-b)">Do not refresh this page.</strong>
+            Your shop details are saved and your 30-day trial is being set up.<br>
+            You'll receive your unique loyalty link and login credentials at your email within a few minutes.<br><br>
+            <strong style="color:var(--gold-b)">No payment needed today.</strong>
           </div>
           <div class="es-ref" id="enrollRef">REF-XXXXXX</div>
         </div>
@@ -1585,7 +1596,7 @@ function showToast(title, msg, type = 'info', duration = 6000) {
    Shop activation MUST happen server-side only, triggered by verified
    Razorpay webhook signature — never by a client payment_id string.
 ══════════════════════════════════════════════════════════════╗ */
-let sPlan = 'pro', sAmt = 249900;
+let sPlan = 'pro', sAmt = 0; // sAmt = setup fee paise; 0 = waived. Structure preserved for future reinstatement.
 
 function sanitize(str) {
   if (typeof str !== 'string') return '';
@@ -1631,14 +1642,12 @@ async function handleEnroll() {
   }
   consentRow?.classList.remove('consent-err');
 
-  // Step 3: Show loading state
+  // Step 3: Save enrollment record
   const btn = document.getElementById('enrollBtn');
   const origHTML = btn.innerHTML;
   btn.innerHTML = '<i class="ti ti-loader-2 ti-spin" aria-hidden="true"></i> Saving your details...';
   btn.disabled = true;
 
-  // Step 4: Create enrollment record (anon INSERT to shop_enrollments is safe — no sensitive data written)
-  let enrollId = null;
   try {
     const formData = {
       owner_name:  sanitize(document.getElementById('fName').value.trim()),
@@ -1648,87 +1657,37 @@ async function handleEnroll() {
       city:        sanitize(document.getElementById('fCity').value.trim()),
       plan:        sPlan,
       slug:        slugify(document.getElementById('fShop').value.trim()),
-      status:      'pending_payment',
+      status:      'trial_pending',
       created_at:  new Date().toISOString(),
+      // setup_fee_paise: sAmt — preserved in structure for future; currently 0
     };
-    const enrollment = await apiCall('shop_enrollments', 'POST', formData);
-    enrollId = enrollment?.[0]?.id || enrollment?.id || null;
-  } catch (err) {
-    console.error('Enrollment save failed:', err);
-    // Enrollment save fail is non-blocking — Razorpay notes carry the data as backup
-    showToast('Note', 'Could not pre-save enrollment. Continuing to payment.', 'info', 3000);
-  }
 
-  // Step 5: Open Razorpay checkout
-  btn.innerHTML = '<i class="ti ti-lock" aria-hidden="true"></i> Opening payment...';
-  const rzpScript = document.createElement('script');
-  rzpScript.src = 'https://checkout.razorpay.com/v1/checkout.js';
-  rzpScript.onload = () => {
-    const rzp = new Razorpay({
-      key: PRIMO_CONFIG.RAZORPAY_KEY,
-      amount: sAmt,
-      currency: 'INR',
-      name: 'Primo Rewards',
-      description: `Shop Setup — ${sPlan}`,
-      image: 'https://primorewards.in/logo.png',
-      prefill: {
-        name:    document.getElementById('fName').value,
-        email:   document.getElementById('fEmail').value,
-        contact: document.getElementById('fPhone').value,
-      },
-      notes: {
-        enroll_id: enrollId,
-        shop_name: document.getElementById('fShop').value,
-        plan:      sPlan,
-      },
-      theme: { color: '#C9A84C' },
-      handler: async (response) => {
-        // ⚠ AUDIT CVE-7 FIX:
-        // DO NOT call provisionShop() here.
-        // DO NOT write status:'active' to Supabase from the client.
-        // ONLY record that payment was received on the enrollment row.
-        // The Razorpay webhook Edge Function (razorpay-webhook/index.ts)
-        // verifies the payment signature and activates the shop server-side.
-        try {
-          if (enrollId) {
-            await apiCall(`shop_enrollments?id=eq.${enrollId}`, 'PATCH', {
-              razorpay_payment_id: response.razorpay_payment_id,
-              status: 'payment_received',
-            });
-          }
-        } catch(e) { console.warn('Could not update enrollment:', e); }
-        showEnrollmentSuccess(response.razorpay_payment_id);
-      },
-      modal: {
-        ondismiss: () => {
-          btn.innerHTML = origHTML;
-          btn.disabled = false;
-          showToast('Payment cancelled', 'Your enrollment details are saved. Complete payment anytime.', 'info');
-        }
-      }
-    });
-    rzp.open();
-  };
-  rzpScript.onerror = () => {
-    showToast('Payment error', 'Could not load payment gateway. Check your connection and try again.', 'error');
-    btn.innerHTML = origHTML; btn.disabled = false;
-  };
-  document.body.appendChild(rzpScript);
+    const enrollment = await apiCall('shop_enrollments', 'POST', formData);
+    const enrollId = enrollment?.[0]?.id || enrollment?.id || null;
+
+    // TODO: When razorpay-webhook + create-subscription EFs are deployed,
+    // replace this block with: open Razorpay subscription checkout using
+    // the subscription_id from create-subscription EF. The mandate collects
+    // autopay consent without charging now (trial_period=30 on the plan).
+
+    showEnrollmentSuccess(enrollId);
+
+  } catch(err) {
+    console.error('Enrollment failed:', err);
+    showToast('Something went wrong', 'Could not save your details. Please try again.', 'error');
+    btn.innerHTML = origHTML;
+    btn.disabled = false;
+  }
 }
 
-function showEnrollmentSuccess(refId) {
-  // Hide the form card, show the success card
+function showEnrollmentSuccess(enrollId) {
   const formCard = document.querySelector('.form-card:not(.enroll-success)');
   const successCard = document.getElementById('enrollSuccess');
   const refEl = document.getElementById('enrollRef');
   if (formCard) formCard.style.display = 'none';
-  if (refEl) refEl.textContent = 'REF-' + (refId || 'PENDING').slice(-8).toUpperCase();
+  if (refEl) refEl.textContent = 'REF-' + (enrollId || 'PENDING').toString().slice(-8).toUpperCase();
   if (successCard) successCard.classList.add('show');
-  showToast(
-    "You're in the queue!",
-    "Check your email — your shop link arrives within a few minutes.",
-    'success', 8000
-  );
+  showToast("You're in!", "Check your email — your shop link arrives within a few minutes.", 'success', 8000);
 }
 
 /* ╔══════════════════════════════════════════════════════════════
