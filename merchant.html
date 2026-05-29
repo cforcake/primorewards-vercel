@@ -289,7 +289,28 @@ async function loadDash(){
 
 function buildCustMap(){
   const buy=shop.reward_rule?.buy||11;custMap={};
-  customers.forEach(c=>{const cid=c.id;const cr=allReds.filter(r=>r.customer_id===cid).sort((a,b)=>new Date(a.redeemed_at)-new Date(b.redeemed_at));const cy=cr.length+1;const cs=allStamps.filter(s=>s.customer_id===cid);const cys=cs.filter(s=>s.cycle_number===cy);const la=cs[0]?.stamped_at||c.enrolled_at;custMap[cid]={reds:cr,allSt:cs,cySt:cys,cycle:cy,last:la,full:cys.length>=buy}});
+  customers.forEach(c=>{
+    const cid=c.id;
+    if(c.stamps_in_cycle!=null){
+      // Secure mode: server already computed everything — use it directly
+      const sic=c.stamps_in_cycle;
+      custMap[cid]={
+        reds:[], allSt:[],
+        cySt:Array(sic).fill(null),   // array of correct length — .length is all renderCustList needs
+        cycle:c.current_cycle||1,
+        last:c.last_redeemed_at||c.enrolled_at,
+        full:c.reward_ready||false
+      };
+    }else{
+      // Dev fallback: compute from raw stamp/redemption arrays
+      const cr=allReds.filter(r=>r.customer_id===cid).sort((a,b)=>new Date(a.redeemed_at)-new Date(b.redeemed_at));
+      const cy=cr.length+1;
+      const cs=allStamps.filter(s=>s.customer_id===cid);
+      const cys=cs.filter(s=>s.cycle_number===cy);
+      const la=cs[0]?.stamped_at||c.enrolled_at;
+      custMap[cid]={reds:cr,allSt:cs,cySt:cys,cycle:cy,last:la,full:cys.length>=buy};
+    }
+  });
 }
 
 /* ══ RENDER ══ */
