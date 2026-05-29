@@ -928,7 +928,18 @@ async function fetchShopCustomers(shopId) {
   }
   listEl.innerHTML = '<div class="sd-fetch-state">Loading customers\u2026</div>';
   try {
-    const data = await sbEdge('admin-customers', { shop_id: shopId });
+    // Direct fetch — do NOT use sbEdge() here; sbEdge triggers doSignOut() on 401
+    const res = await fetch(PRIMO_CONFIG.EDGE_BASE+'/admin-customers', {
+      method: 'POST',
+      headers: {
+        'Content-Type':  'application/json',
+        'Authorization': 'Bearer '+PRIMO_CONFIG.SUPABASE_ANON_KEY,
+        ...(ADMIN_TOKEN ? {'X-Admin-Token': ADMIN_TOKEN} : {}),
+      },
+      body: JSON.stringify({ shop_id: shopId }),
+    });
+    const data = await res.json().catch(()=>({}));
+    if (!res.ok) throw new Error(data.error||'HTTP '+res.status);
     shopCustomersCache[shopId] = data;
     renderShopCustomers(data);
     if (csvBtn) csvBtn.disabled = false;
