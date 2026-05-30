@@ -94,7 +94,48 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
 /* Dev */
 .bday-ico{font-size:13px;color:var(--gold);vertical-align:middle}
 .err-ico i{font-size:52px;color:var(--ink-l)}
-@media(max-width:380px){.stats-row{gap:.3rem;padding:.6rem .6rem .3rem}.stat-val{font-size:22px}.stat-lbl{font-size:8.5px}.cust-toolbar{padding:.6rem .6rem .3rem}.cust-list{padding:0 .6rem 5rem}.search-inp{font-size:13px;padding:9px 10px 9px 30px}.add-btn{padding:9px 10px;font-size:11px}.cust-card{padding:.7rem .7rem}.cust-nm{font-size:13px}.s-btn,.r-btn{padding:6px 8px;font-size:10.5px}.mc{width:19px;height:19px}.mc-c::after{font-size:6.5px}.mini-grid{gap:3px}.modal-sheet{padding:0 .9rem calc(1.25rem + var(--safe-b))}.wa-wrap{padding:.6rem .6rem 5rem}.tpl-pill{padding:7px 11px;font-size:11px}}
+/* ══ STARTER PLAN GATES ══ */
+/* Stamp QR FOMO card */
+.sqr-plan-gate{padding:.5rem .75rem 6rem;max-width:460px;margin:0 auto;width:100%;display:none}
+.pgc-card{background:var(--white);border-radius:20px;overflow:hidden;box-shadow:0 6px 28px rgba(26,16,7,.12)}
+.pgc-preview{background:linear-gradient(160deg,#1A1007 0%,#2E1808 100%);padding:2rem 1rem 1.75rem;display:flex;flex-direction:column;align-items:center;gap:.75rem;position:relative}
+.pgc-badge{background:linear-gradient(135deg,var(--gold-b),var(--gold));color:#fff;border-radius:99px;padding:5px 15px;font-size:10.5px;font-weight:800;letter-spacing:.08em;position:relative;z-index:1}
+.pgc-mock-wrap{position:relative;width:164px;height:164px;z-index:1}
+.pgc-mock-svg{position:absolute;inset:0;width:100%;height:100%}
+.pgc-mock-qr{position:absolute;top:22px;left:22px;width:120px;height:120px;background:rgba(255,255,255,.07);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:42px;color:rgba(255,255,255,.18);filter:blur(1px)}
+.pgc-lock-wrap{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.3rem;background:rgba(10,5,0,.45);border-radius:50%;margin:20px}
+.pgc-lock-ico{font-size:38px;color:#fff;filter:drop-shadow(0 2px 8px rgba(0,0,0,.5))}
+.pgc-lock-sub{font-size:11px;color:rgba(255,255,255,.5);font-family:var(--fd);letter-spacing:.04em}
+.pgc-body{padding:1.25rem 1.15rem 1.3rem}
+.pgc-title{font-family:var(--fd);font-size:22px;font-weight:500;color:var(--ink);margin-bottom:.3rem}
+.pgc-sub{font-size:13px;color:var(--ink-l);line-height:1.65;margin-bottom:.95rem}
+.pgc-feats{background:var(--cream);border-radius:12px;padding:.75rem .9rem;margin-bottom:1.1rem;display:flex;flex-direction:column;gap:.45rem}
+.pgc-feat{display:flex;align-items:flex-start;gap:.55rem;font-size:13px;color:var(--ink-m);line-height:1.4}
+.pgc-feat i{font-size:15px;color:var(--em);flex-shrink:0;margin-top:1px}
+.pgc-cta{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;border-radius:13px;background:linear-gradient(135deg,var(--gold-b),var(--gold));color:#fff;font-size:14.5px;font-weight:700;box-shadow:0 5px 20px rgba(168,131,42,.4);border:none;cursor:pointer;margin-bottom:.5rem;transition:box-shadow .2s}
+.pgc-cta:active{box-shadow:0 2px 10px rgba(168,131,42,.3)}
+.pgc-note{font-size:11px;color:var(--ink-f);text-align:center;line-height:1.5}
+/* WA plan gate */
+.wa-plan-gate{display:none;flex-direction:column;align-items:center;text-align:center;gap:.8rem;padding:1.75rem .9rem 5rem}
+.wpg-ico{width:72px;height:72px;border-radius:50%;background:rgba(37,211,102,.1);border:2px solid rgba(37,211,102,.2);display:flex;align-items:center;justify-content:center;font-size:30px;color:var(--wa-d)}
+.wpg-title{font-family:var(--fd);font-size:21px;font-weight:500;color:var(--ink)}
+.wpg-sub{font-size:13px;color:var(--ink-l);line-height:1.65;max-width:290px}
+.wpg-feats{background:var(--white);border-radius:14px;padding:.9rem 1rem;box-shadow:0 2px 10px rgba(26,16,7,.06);width:100%;max-width:320px;display:flex;flex-direction:column;gap:.5rem;text-align:left}
+.wpg-feat{display:flex;align-items:center;gap:.6rem;font-size:13px;color:var(--ink-m)}
+.wpg-feat i{font-size:15px;color:var(--wa-d);flex-shrink:0}
+.wpg-cta{width:100%;max-width:320px;display:flex;align-items:center;justify-content:center;gap:8px;padding:13px;border-radius:13px;background:linear-gradient(135deg,var(--gold-b),var(--gold));color:#fff;font-size:14px;font-weight:700;box-shadow:0 4px 18px rgba(168,131,42,.38);border:none;cursor:pointer}
+/* Customer limit banner */
+.cust-limit-banner{display:none;align-items:center;gap:.55rem;border-radius:11px;padding:.55rem .85rem;margin:.3rem .75rem .1rem;font-size:12px;line-height:1.45;border:1px solid}
+.cust-limit-banner.warn{display:flex;background:#FFF3E0;border-color:#F57C00;color:#E65100}
+.cust-limit-banner.full{display:flex;background:#FEE2E2;border-color:#DC3545;color:#991B1B;font-weight:600}
+.cust-limit-banner i{font-size:15px;flex-shrink:0}
+.clb-upgrade{font-weight:700;cursor:pointer;text-decoration:underline;margin-left:3px}
+/* Reward rule lock */
+.rule-lock{display:none;border-radius:12px;padding:.8rem 1rem;background:var(--cream-d);border:1.5px dashed rgba(168,131,42,.35)}
+.rule-lock-val{font-family:var(--fd);font-size:22px;font-weight:500;color:var(--ink);margin-bottom:.25rem;display:flex;align-items:center;gap:.6rem}
+.rule-lock-val i{font-size:16px;color:var(--ink-f)}
+.rule-lock-note{font-size:12px;color:var(--ink-l);line-height:1.55}
+.stat-val{font-size:22px}.stat-lbl{font-size:8.5px}.cust-toolbar{padding:.6rem .6rem .3rem}.cust-list{padding:0 .6rem 5rem}.search-inp{font-size:13px;padding:9px 10px 9px 30px}.add-btn{padding:9px 10px;font-size:11px}.cust-card{padding:.7rem .7rem}.cust-nm{font-size:13px}.s-btn,.r-btn{padding:6px 8px;font-size:10.5px}.mc{width:19px;height:19px}.mc-c::after{font-size:6.5px}.mini-grid{gap:3px}.modal-sheet{padding:0 .9rem calc(1.25rem + var(--safe-b))}.wa-wrap{padding:.6rem .6rem 5rem}.tpl-pill{padding:7px 11px;font-size:11px}}
 /* ══ STAMP QR TAB ══ */
 .sqr-wrap{padding:.7rem .75rem 6rem;max-width:460px;margin:0 auto;width:100%}
 .sqr-info{display:flex;align-items:flex-start;gap:.55rem;background:rgba(27,94,66,.07);border:1px solid rgba(27,94,66,.18);border-radius:11px;padding:.65rem .85rem;font-size:12.5px;color:var(--em);font-weight:500;margin-bottom:1rem;line-height:1.5}
@@ -175,8 +216,23 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
       <button id="tbn-btn" onclick="switchToSettings()" style="display:none;flex-shrink:0;font-size:12px;font-weight:700;padding:5px 12px;border-radius:8px;border:none;cursor:pointer;white-space:nowrap;background:rgba(255,255,255,.15);color:inherit"></button>
     </div>
   </div>
-  <div id="t-cust" class="tab-content active"><div class="cust-toolbar"><div class="search-wrap"><i class="ti ti-search search-ico"></i><input id="searchInp" class="search-inp" type="search" placeholder="Search by name…" autocomplete="off"></div><button class="add-btn" id="addCustBtn"><i class="ti ti-user-plus"></i>Add</button></div><div class="cust-list" id="custList"><div class="cust-empty"><div class="cust-empty-ico"><i class="ti ti-coin"></i></div>Loading…</div></div></div>
-  <div id="t-wa" class="tab-content"><div class="wa-wrap"><div class="tpl-scroll" id="tplScroll"><button class="tpl-pill sel" data-tpl="progress" onclick="selTpl(this)"><i class="ti ti-chart-bar"></i>Stamp Update</button><button class="tpl-pill" data-tpl="ready" onclick="selTpl(this)"><i class="ti ti-gift"></i>Reward Ready</button><button class="tpl-pill" data-tpl="birthday" onclick="selTpl(this)"><i class="ti ti-cake"></i>Birthday</button></div><div class="tpl-preview" id="tplPreview"><div class="tpl-preview-lbl">Message Preview</div><div class="tpl-preview-txt" id="tplPreviewTxt"></div></div><div class="wa-banner" id="waBanner" style="display:none"><div class="wa-banner-ico">📱</div><div class="wa-banner-txt" id="waBannerTxt"></div></div><div class="wa-sec">Customers with WhatsApp</div><div id="waList"><div class="wa-empty">Loading…</div></div></div></div>
+  <div id="t-cust" class="tab-content active"><div class="cust-toolbar"><div class="search-wrap"><i class="ti ti-search search-ico"></i><input id="searchInp" class="search-inp" type="search" placeholder="Search by name…" autocomplete="off"></div><button class="add-btn" id="addCustBtn"><i class="ti ti-user-plus"></i>Add</button></div><div class="cust-limit-banner" id="custLimitBanner"></div><div class="cust-list" id="custList"><div class="cust-empty"><div class="cust-empty-ico"><i class="ti ti-coin"></i></div>Loading…</div></div></div>
+  <div id="t-wa" class="tab-content">
+    <div class="wa-plan-gate" id="waPlanGate">
+      <div class="wpg-ico"><i class="ti ti-brand-whatsapp"></i></div>
+      <div class="wpg-title">WhatsApp Alerts</div>
+      <div class="wpg-sub">Send personalised WhatsApp messages to customers when they're close to a reward or ready to redeem.</div>
+      <div class="wpg-feats">
+        <div class="wpg-feat"><i class="ti ti-chart-bar"></i>Stamp progress updates</div>
+        <div class="wpg-feat"><i class="ti ti-gift"></i>Reward ready notifications</div>
+        <div class="wpg-feat"><i class="ti ti-cake"></i>Birthday messages</div>
+        <div class="wpg-feat"><i class="ti ti-rocket"></i>Re-engagement nudges</div>
+      </div>
+      <button class="wpg-cta" onclick="switchToSettings()"><i class="ti ti-arrow-up-circle"></i>Upgrade to Pro — ₹299/mo</button>
+      <div style="font-size:11px;color:var(--ink-f)">Cancel anytime · Charged only after trial ends</div>
+    </div>
+    <div class="wa-wrap" id="waWrap"><div class="tpl-scroll" id="tplScroll"><button class="tpl-pill sel" data-tpl="progress" onclick="selTpl(this)"><i class="ti ti-chart-bar"></i>Stamp Update</button><button class="tpl-pill" data-tpl="ready" onclick="selTpl(this)"><i class="ti ti-gift"></i>Reward Ready</button><button class="tpl-pill" data-tpl="birthday" onclick="selTpl(this)"><i class="ti ti-cake"></i>Birthday</button></div><div class="tpl-preview" id="tplPreview"><div class="tpl-preview-lbl">Message Preview</div><div class="tpl-preview-txt" id="tplPreviewTxt"></div></div><div class="wa-banner" id="waBanner" style="display:none"><div class="wa-banner-ico">📱</div><div class="wa-banner-txt" id="waBannerTxt"></div></div><div class="wa-sec">Customers with WhatsApp</div><div id="waList"><div class="wa-empty">Loading…</div></div></div>
+  </div>
   <div id="t-set" class="tab-content"><div class="settings-wrap">
 
     <!-- Billing Card -->
@@ -204,7 +260,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
       </div>
     </div>
 
-    <div class="settings-card"><div class="settings-h">Loyalty Programme</div><div class="sf-row"><div><label class="sf-l" for="sfProduct">Product Name</label><input id="sfProduct" class="sf-i" type="text" placeholder="e.g. cake"></div><div class="emoji-field"><label class="sf-l">Product Icon</label><input type="hidden" id="sfEmoji"><button type="button" class="emoji-trigger" id="emojiTrigger" aria-haspopup="listbox" aria-expanded="false" onclick="toggleEmojiPicker(event)"><span class="et-left"><span class="et-emoji" id="emojiDisplay">🎂</span><span class="et-lbl">Choose icon</span></span><i class="ti ti-chevron-down" aria-hidden="true"></i></button><div class="emoji-picker" id="emojiPicker" role="listbox" aria-label="Product icon picker"></div></div></div><div class="sf-g"><label class="sf-l">Reward Rule</label><div class="sf-rule-row"><div><label class="sf-l" for="sfBuy">Buy</label><input id="sfBuy" class="sf-i" type="number" min="1" max="50"></div><div class="sf-rule-sep">→</div><div><label class="sf-l" for="sfGet">Free</label><input id="sfGet" class="sf-i" type="number" min="1" max="10"></div></div></div><button class="save-btn" id="saveSetBtn"><i class="ti ti-device-floppy"></i><span id="saveSetTxt">Save Changes</span></button><div class="settings-note">Changes apply immediately on all customer-facing cards.</div></div><div class="settings-card"><div class="settings-h">Change Password</div><div class="sf-g"><label class="sf-l" for="sfNewPwd">New Password</label><input id="sfNewPwd" class="sf-i" type="password" placeholder="At least 6 characters"></div><div class="sf-g"><label class="sf-l" for="sfNewPwdC">Confirm</label><input id="sfNewPwdC" class="sf-i" type="password" placeholder="Repeat new password"></div><div class="lf-err" id="pwdErr"></div><button class="save-btn" id="savePwdBtn" style="background:linear-gradient(135deg,#5a8f7b,var(--em))"><i class="ti ti-lock"></i><span id="savePwdTxt">Update Password</span></button></div></div></div>
+    <div class="settings-card"><div class="settings-h">Loyalty Programme</div><div class="sf-row"><div><label class="sf-l" for="sfProduct">Product Name</label><input id="sfProduct" class="sf-i" type="text" placeholder="e.g. cake"></div><div class="emoji-field"><label class="sf-l">Product Icon</label><input type="hidden" id="sfEmoji"><button type="button" class="emoji-trigger" id="emojiTrigger" aria-haspopup="listbox" aria-expanded="false" onclick="toggleEmojiPicker(event)"><span class="et-left"><span class="et-emoji" id="emojiDisplay">🎂</span><span class="et-lbl">Choose icon</span></span><i class="ti ti-chevron-down" aria-hidden="true"></i></button><div class="emoji-picker" id="emojiPicker" role="listbox" aria-label="Product icon picker"></div></div></div><div class="sf-g"><label class="sf-l">Reward Rule</label><div class="sf-rule-row" id="sfRuleRow"><div><label class="sf-l" for="sfBuy">Buy</label><input id="sfBuy" class="sf-i" type="number" min="1" max="50"></div><div class="sf-rule-sep">→</div><div><label class="sf-l" for="sfGet">Free</label><input id="sfGet" class="sf-i" type="number" min="1" max="10"></div></div><div class="rule-lock" id="ruleLock"><div class="rule-lock-val"><i class="ti ti-lock"></i>Buy 10 → Get 1 Free</div><div class="rule-lock-note">Starter plan includes a standard reward rule. <span class="clb-upgrade" onclick="switchToSettings()">Upgrade to Pro</span> to customise your loyalty programme.</div></div></div><button class="save-btn" id="saveSetBtn"><i class="ti ti-device-floppy"></i><span id="saveSetTxt">Save Changes</span></button><div class="settings-note" id="settingsNote">Changes apply immediately on all customer-facing cards.</div></div><div class="settings-card"><div class="settings-h">Change Password</div><div class="sf-g"><label class="sf-l" for="sfNewPwd">New Password</label><input id="sfNewPwd" class="sf-i" type="password" placeholder="At least 6 characters"></div><div class="sf-g"><label class="sf-l" for="sfNewPwdC">Confirm</label><input id="sfNewPwdC" class="sf-i" type="password" placeholder="Repeat new password"></div><div class="lf-err" id="pwdErr"></div><button class="save-btn" id="savePwdBtn" style="background:linear-gradient(135deg,#5a8f7b,var(--em))"><i class="ti ti-lock"></i><span id="savePwdTxt">Update Password</span></button></div></div></div>
   <div id="t-qr" class="tab-content"><div class="qr-wrap">
     <div class="settings-card" style="margin-bottom:.7rem">
       <div class="settings-h">✦ Branded QR Card</div>
@@ -249,6 +305,38 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
 </div>
 
   <div id="t-stamp" class="tab-content"><div class="sqr-wrap">
+    <!-- Starter plan FOMO gate — shown immediately, no loading state -->
+    <div class="sqr-plan-gate" id="sqr-plan-gate">
+      <div class="pgc-card">
+        <div class="pgc-preview">
+          <div class="pgc-badge">✦ PRO &amp; PREMIUM FEATURE</div>
+          <div class="pgc-mock-wrap">
+            <svg class="pgc-mock-svg" viewBox="0 0 164 164" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="82" cy="82" r="74" fill="none" stroke="rgba(201,168,76,.2)" stroke-width="6"/>
+              <circle cx="82" cy="82" r="74" fill="none" stroke="rgba(201,168,76,.55)" stroke-width="6"
+                stroke-dasharray="465" stroke-dashoffset="130" stroke-linecap="round" transform="rotate(-90 82 82)"/>
+            </svg>
+            <div class="pgc-mock-qr"><i class="ti ti-qrcode"></i></div>
+            <div class="pgc-lock-wrap">
+              <i class="ti ti-lock pgc-lock-ico"></i>
+              <div class="pgc-lock-sub">●●●●●●●●●●</div>
+            </div>
+          </div>
+        </div>
+        <div class="pgc-body">
+          <div class="pgc-title">Instant QR Stamping</div>
+          <div class="pgc-sub">Let customers earn stamps by scanning a code on your screen — no typing, no friction, no missed stamps.</div>
+          <div class="pgc-feats">
+            <div class="pgc-feat"><i class="ti ti-refresh"></i>Rotating 30-second QR codes — tamper-proof</div>
+            <div class="pgc-feat"><i class="ti ti-bell"></i>Live notification every time a customer scans</div>
+            <div class="pgc-feat"><i class="ti ti-bolt"></i>Zero friction — customer just point &amp; scan</div>
+            <div class="pgc-feat"><i class="ti ti-shield-check"></i>One stamp per code, per customer, guaranteed</div>
+          </div>
+          <button class="pgc-cta" onclick="switchToSettings()"><i class="ti ti-arrow-up-circle"></i>Upgrade to Pro — ₹299/mo</button>
+          <div class="pgc-note">Cancel anytime · No charge until trial ends · Instant activation</div>
+        </div>
+      </div>
+    </div>
     <div class="sqr-info"><i class="ti ti-info-circle"></i>Show this screen to your customer — they scan with their phone to earn a stamp instantly. No typing needed.</div>
     <div id="sqr-loading" class="sqr-state"><div class="sqr-spinner"></div><p>Generating stamp QR…</p></div>
     <div id="sqr-error" class="sqr-state" style="display:none"><i class="ti ti-alert-triangle" style="font-size:38px;color:var(--ink-l)"></i><p id="sqr-err-msg" style="max-width:280px"></p><button class="sqr-retry-btn" onclick="retryStampQR()"><i class="ti ti-refresh"></i> Retry</button></div>
@@ -400,7 +488,7 @@ async function handleLogin(){
       shop=safeShop;
       loginAttempts.count=0;
     }
-    await loadDash();renderDash();showScreen('s-dash');
+    await loadDash();renderDash();applyPlanGates();showScreen('s-dash');
     if(!secure())document.getElementById('secBanner').classList.add('show');
     // Start background QR scan feed (notifications appear on any tab for Pro/Premium)
     if(['pro','premium'].includes(shop?.plan)) startQRFeedPoller();
@@ -649,7 +737,7 @@ async function doStamp(cid){
       console.warn('[PRIMO] ⚠ INSECURE: Direct stamp INSERT');
       await sb('/stamps',{method:'POST',body:{customer_id:cid,shop_id:shop.id,cycle_number:cm.cycle}});
     }
-    toast(`✦ Stamped for ${c.first_name}!`);await loadDash();renderDash();
+    toast(`✦ Stamped for ${c.first_name}!`);await loadDash();renderDash();applyPlanGates();
   }catch(e){console.error(e);const msg=e.message||'';toast(msg.toLowerCase().includes('reward')?'🎁 Reward ready — tap Redeem first.':msg.toLowerCase().includes('session')?'Session expired — please log in again.':'⚠ Stamp failed. Try again.');btn.disabled=false;btn.classList.remove('confirming');btn.innerHTML='<i class="ti ti-stamp"></i>Stamp'}
 }
 
@@ -660,7 +748,7 @@ async function confirmRedeem(){if(!redeemTarget)return;const cid=redeemTarget,c=
   try{
     if(secure()){await edge('merchant-api',{action:'redeem',customer_id:cid})}
     else{console.warn('[PRIMO] ⚠ INSECURE: Direct redeem INSERT');await sb('/redemptions',{method:'POST',body:{customer_id:cid,shop_id:shop.id,cycle_number:cm.cycle}})}
-    toast(`✦ Redeemed for ${c.first_name}! Card reset to cycle ${cm.cycle+1}.`);justRedeemed.add(cid);setTimeout(()=>{justRedeemed.delete(cid);renderCustList()},6e3);closeRedeem();await loadDash();renderDash();
+    toast(`✦ Redeemed for ${c.first_name}! Card reset to cycle ${cm.cycle+1}.`);justRedeemed.add(cid);setTimeout(()=>{justRedeemed.delete(cid);renderCustList()},6e3);closeRedeem();await loadDash();renderDash();applyPlanGates();
   }catch(e){console.error(e);toast('⚠ Redeem failed.')}finally{btn.disabled=false;txt.textContent='Confirm Redeem'}}
 
 /* ══ ADD CUSTOMER ══ */
@@ -668,6 +756,8 @@ function openAdd(){['addName','addMobile','addBday'].forEach(i=>{document.getEle
 function closeAdd(){document.getElementById('addModal').classList.remove('open')}
 async function confirmAdd(){
   const nameEl=document.getElementById('addName'),mobEl=document.getElementById('addMobile'),bdEl=document.getElementById('addBday'),errEl=document.getElementById('addErr'),btn=document.getElementById('addConfirm'),txt=document.getElementById('addConfirmTxt');errEl.textContent='';nameEl.classList.remove('err');mobEl.classList.remove('err');
+  // Starter plan: hard cap at 200 customers
+  if(isStarter()&&customers.length>=STARTER_MAX_CUSTS){errEl.innerHTML='⚠ Starter plan limit reached (200 customers). <span style="font-weight:700;cursor:pointer;text-decoration:underline" onclick="closeAdd();switchToSettings()">Upgrade to Pro</span> for unlimited customers.';return;}
   const name=nameEl.value.trim().replace(/[<>"'&]/g,'').substring(0,60),rawMob=mobEl.value.replace(/\D/g,''),bday=bdEl.value||null;
   if(!name||name.length<2){nameEl.classList.add('err');errEl.textContent='⚠ Enter a valid name (min 2 chars).';return}
   if(rawMob.length<4){mobEl.classList.add('err');errEl.textContent='⚠ Enter at least the last 4 digits.';return}
@@ -681,7 +771,7 @@ async function confirmAdd(){
       const body={shop_id:shop.id,first_name:name,phone_last4:p4};if(fullPhone)body.full_phone=fullPhone;if(bday)body.birthday=bday;
       await sb('/customers',{method:'POST',body});
     }
-    toast(`✦ ${name} enrolled!`);closeAdd();await loadDash();renderDash();
+    toast(`✦ ${name} enrolled!`);closeAdd();await loadDash();renderDash();applyPlanGates();
   }catch(e){console.error(e);errEl.textContent='⚠ Enrolment failed.'}finally{btn.disabled=false;txt.textContent='Enrol Customer'}}
 
 /* ══ EDIT CUSTOMER ══ */
@@ -892,7 +982,11 @@ async function initiateBilling(){
   }
 }
 
-async function saveSets(){const btn=document.getElementById('saveSetBtn'),txt=document.getElementById('saveSetTxt'),prod=document.getElementById('sfProduct').value.trim().substring(0,40),emo=document.getElementById('sfEmoji').value.trim().substring(0,4),buy=parseInt(document.getElementById('sfBuy').value,10)||11,get=parseInt(document.getElementById('sfGet').value,10)||1;if(buy<1||buy>50||get<1||get>10){toast('⚠ Invalid values.');return}btn.disabled=true;txt.textContent='Saving…';
+async function saveSets(){const btn=document.getElementById('saveSetBtn'),txt=document.getElementById('saveSetTxt'),prod=document.getElementById('sfProduct').value.trim().substring(0,40),emo=document.getElementById('sfEmoji').value.trim().substring(0,4);
+  // Starter plan: always enforce Buy 10 Get 1 Free regardless of input
+  let buy=isStarter()?10:parseInt(document.getElementById('sfBuy').value,10)||11;
+  let get=isStarter()?1:parseInt(document.getElementById('sfGet').value,10)||1;
+  if(!isStarter()&&(buy<1||buy>50||get<1||get>10)){toast('⚠ Invalid values.');return}btn.disabled=true;txt.textContent='Saving…';
   try{
     if(secure()){const res=await edge('merchant-api',{action:'save_settings',product_name:prod||shop.product_name,product_emoji:emo||shop.product_emoji,reward_rule:{buy,get}});if(res.shop)shop=res.shop}
     else{const u=await sb(`/shops?id=eq.${shop.id}`,{method:'PATCH',prefer:'return=representation',body:{product_name:prod||shop.product_name,product_emoji:emo||shop.product_emoji,reward_rule:{buy,get}}});if(u?.length)shop={...shop,...u[0]}}
@@ -1034,11 +1128,9 @@ function tickSQR() {
 
 function startStampQR() {
   if (!merchantToken || !shop) { showSQRError('Session expired — please log in again.'); return; }
-  // Plan gate: Pro and Premium only
-  if (!['pro','premium'].includes(shop?.plan)) {
-    showSQRError('QR Stamping is a Pro & Premium feature.\nUpgrade in Settings → Billing to unlock it.');
-    return;
-  }
+  // Starter plan: show FOMO gate immediately — no loading state, no API call
+  if (isStarter()) { showSQRPlanGate(); return; }
+  hideSQRPlanGate();
   showSQRLoading();
   sqrState.inited = false;
   fetchStampToken();
@@ -1135,11 +1227,84 @@ function stopQRFeedPoller() {
   if (sqrFeedTimer) { clearInterval(sqrFeedTimer); sqrFeedTimer = null; }
 }
 
+/* ══ STARTER PLAN LIMITS ══ */
+const STARTER_MAX_CUSTS = 200;
+function isStarter() { return shop?.plan === 'starter'; }
+
+function applyPlanGates() {
+  if (!shop) return;
+  const starter = isStarter();
+
+  // Reward rule: lock to Buy 10 → Get 1 Free for starter
+  const ruleRow  = document.getElementById('sfRuleRow');
+  const ruleLock = document.getElementById('ruleLock');
+  const noteEl   = document.getElementById('settingsNote');
+  if (ruleRow)  ruleRow.style.display  = starter ? 'none'  : 'grid';
+  if (ruleLock) ruleLock.style.display = starter ? 'block' : 'none';
+  if (starter && noteEl) noteEl.textContent = 'Product name and icon apply immediately on all customer-facing cards.';
+
+  // Force Buy=10, Get=1 into the hidden inputs so saveSets() picks them up
+  if (starter) {
+    const buyEl = document.getElementById('sfBuy');
+    const getEl = document.getElementById('sfGet');
+    if (buyEl) buyEl.value = 10;
+    if (getEl) getEl.value = 1;
+  }
+
+  // Customer limit banner
+  updateCustLimitBanner();
+}
+
+function updateCustLimitBanner() {
+  const banner = document.getElementById('custLimitBanner');
+  if (!banner || !isStarter()) { if (banner) banner.className = 'cust-limit-banner'; return; }
+  const n = customers.length;
+  if (n >= STARTER_MAX_CUSTS) {
+    banner.className = 'cust-limit-banner full';
+    banner.innerHTML = `<i class="ti ti-users-group"></i>${n}/${STARTER_MAX_CUSTS} customers — limit reached. <span class="clb-upgrade" onclick="switchToSettings()">Upgrade to Pro</span> for unlimited.`;
+    // Disable add button
+    const ab = document.getElementById('addCustBtn');
+    if (ab) { ab.style.opacity = '.45'; ab.style.pointerEvents = 'none'; ab.title = 'Upgrade to add more customers'; }
+  } else if (n >= 150) {
+    banner.className = 'cust-limit-banner warn';
+    banner.innerHTML = `<i class="ti ti-alert-triangle"></i>${n}/${STARTER_MAX_CUSTS} customers on Starter. <span class="clb-upgrade" onclick="switchToSettings()">Upgrade to Pro</span> for unlimited.`;
+    const ab = document.getElementById('addCustBtn');
+    if (ab) { ab.style.opacity = ''; ab.style.pointerEvents = ''; ab.title = ''; }
+  } else {
+    banner.className = 'cust-limit-banner';
+    const ab = document.getElementById('addCustBtn');
+    if (ab) { ab.style.opacity = ''; ab.style.pointerEvents = ''; ab.title = ''; }
+  }
+}
+
+// Stamp QR tab plan gate — shown instantly, no API call
+function showSQRPlanGate() {
+  document.getElementById('sqr-plan-gate').style.display = 'block';
+  document.querySelector('#t-stamp .sqr-info').style.display = 'none';
+  document.getElementById('sqr-loading').style.display = 'none';
+  document.getElementById('sqr-error').style.display = 'none';
+  document.getElementById('sqr-main').style.display = 'none';
+}
+function hideSQRPlanGate() {
+  document.getElementById('sqr-plan-gate').style.display = 'none';
+  document.querySelector('#t-stamp .sqr-info').style.display = 'flex';
+}
+
+// WA tab plan gate
+function showWAPlanGate() {
+  document.getElementById('waPlanGate').style.display = 'flex';
+  document.getElementById('waWrap').style.display = 'none';
+}
+function hideWAPlanGate() {
+  document.getElementById('waPlanGate').style.display = 'none';
+  document.getElementById('waWrap').style.display = 'block';
+}
+
 /* ══ WIRE ══ */
 function wire(){
   document.getElementById('loginBtn').addEventListener('click',handleLogin);document.getElementById('inSlug').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('inPwd').focus()});document.getElementById('inPwd').addEventListener('keydown',e=>{if(e.key==='Enter')handleLogin()});
   document.getElementById('profileMenuBtn').addEventListener('click',openMenu);document.getElementById('menuSheet').addEventListener('click',e=>{if(e.target.id==='menuSheet')closeMenu()});document.getElementById('sheetRefresh').addEventListener('click',doRefresh);document.getElementById('sheetSignOut').addEventListener('click',signOut);
-  document.querySelectorAll('.tab-btn').forEach(b=>b.addEventListener('click',()=>{const prev=document.querySelector('.tab-btn.active')?.dataset?.tab;document.querySelectorAll('.tab-btn').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));b.classList.add('active');document.getElementById(b.dataset.tab).classList.add('active');if(b.dataset.tab==='t-qr'&&shop)renderQR();if(b.dataset.tab==='t-wa'&&shop)renderWA();if(b.dataset.tab==='t-stamp'){sqrOnStampTab=true;clearSQRBadge();startStampQR();startQRFeedPoller();}if(prev==='t-stamp'&&b.dataset.tab!=='t-stamp'){sqrOnStampTab=false;stopStampQR();stopQRFeedPoller();}}));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.addEventListener('click',()=>{const prev=document.querySelector('.tab-btn.active')?.dataset?.tab;document.querySelectorAll('.tab-btn').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));b.classList.add('active');document.getElementById(b.dataset.tab).classList.add('active');if(b.dataset.tab==='t-qr'&&shop)renderQR();if(b.dataset.tab==='t-wa'&&shop){if(isStarter())showWAPlanGate();else{hideWAPlanGate();renderWA();}}if(b.dataset.tab==='t-stamp'){sqrOnStampTab=true;clearSQRBadge();startStampQR();if(!isStarter())startQRFeedPoller();}if(prev==='t-stamp'&&b.dataset.tab!=='t-stamp'){sqrOnStampTab=false;stopStampQR();stopQRFeedPoller();}}));
   document.getElementById('searchInp').addEventListener('input',e=>{searchQ=e.target.value;renderCustList()});
   document.getElementById('addCustBtn').addEventListener('click',openAdd);document.getElementById('addConfirm').addEventListener('click',confirmAdd);document.getElementById('addCancel').addEventListener('click',closeAdd);document.getElementById('addModal').addEventListener('click',e=>{if(e.target.id==='addModal')closeAdd()});
   document.getElementById('addMobile').addEventListener('input',function(){const d=this.value.replace(/\D/g,'');this.value=d;const badge=document.getElementById('addDerived'),b4=document.getElementById('addDerived4');if(d.length>=4){badge.style.display='inline-flex';b4.textContent=d.slice(-4)}else{badge.style.display='none'}});
