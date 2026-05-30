@@ -33,6 +33,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
+<script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,500;0,600;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,500;0,600;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap" rel="stylesheet"></noscript>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" integrity="sha256-MrRtG5dV4x5ysLo+J4JoXaEPmP+7B+eTSiVzNqiNPc=" crossorigin="anonymous">
@@ -841,39 +842,69 @@ async function handleEnroll(){
   let valid=true;fields.forEach(f=>{const el=document.getElementById(f.id);if(!el)return;el.classList.remove('field-error');if(!f.validate(el.value)){el.classList.add('field-error');el.setAttribute('aria-invalid','true');valid=false;}else el.setAttribute('aria-invalid','false');});
   if(!valid){document.querySelector('.field-error')?.focus();showToast('Please check your details','Fill in all required fields before continuing.','error');return;}
   const consent=document.getElementById('fConsent'),consentRow=document.getElementById('consentRow');
-  if(!consent?.checked){consentRow?.classList.add('consent-err');showToast('Consent required','Please read and accept our Privacy Policy and Terms to continue.','error');return;}
+  if(!consent?.checked){consentRow?.classList.add('consent-err');showToast('Consent required','Please accept our Privacy Policy and Terms to continue.','error');return;}
   consentRow?.classList.remove('consent-err');
-  const btn=document.getElementById('enrollBtn');const origHTML=btn.innerHTML;btn.innerHTML='<i class="ti ti-loader-2" style="animation:spin .8s linear infinite" aria-hidden="true"></i> Saving your details...';btn.disabled=true;
-  let enrollId=null;
+  const btn=document.getElementById('enrollBtn');
+  btn.innerHTML='<i class="ti ti-loader-2" style="animation:spin .8s linear infinite"></i> Setting up your shop\u2026';btn.disabled=true;
+  const ownerName=sanitize(document.getElementById('fName').value.trim());
+  const ownerEmail=sanitize(document.getElementById('fEmail').value.trim());
+  const ownerPhone=sanitize(document.getElementById('fPhone').value.trim());
+  const shopName=sanitize(document.getElementById('fShop').value.trim());
+  const city=sanitize(document.getElementById('fCity').value.trim());
+  let enrollResult;
   try{
-    const formData={
-      owner_name:sanitize(document.getElementById('fName').value.trim()),
-      owner_email:sanitize(document.getElementById('fEmail').value.trim()),
-      owner_phone:sanitize(document.getElementById('fPhone').value.trim()),
-      shop_name:sanitize(document.getElementById('fShop').value.trim()),
-      city:sanitize(document.getElementById('fCity').value.trim()),
-      plan:sPlan,
-      slug:slugify(document.getElementById('fShop').value.trim()),
-      status:'trial_pending',   // fixed: was 'pending_payment' (old flow)
-      amount_paise:sAmt,
-      honeypot:document.getElementById('fHoneypot')?.value||'',
-      // Coupon fields — null when no coupon applied
-      coupon_code:             activeCoupon?.code||null,
-      trial_extended_days:     activeCoupon?.extra_trial_days||0,
-      sub_discount_months:     activeCoupon?.sub_duration_months||0,
-      sub_discount_value:      activeCoupon?.sub_discount_value||0,
-      sub_discount_type:       activeCoupon?.sub_discount_type||null,
-      setup_discount_paise:    activeCoupon?.setup_discount_paise||0,
-      original_setup_paise:    sAmt,
-    };
-    const enrollment=await apiCall('shop_enrollments','POST',formData);
-    enrollId=enrollment?.[0]?.id||enrollment?.id||null;
-  }catch(err){console.error('Enrollment save failed:',err);showToast('Note','Could not pre-save enrollment. Continuing to payment.','info',3000);}
-  // TODO: When create-subscription + razorpay-webhook EFs are deployed,
-  // replace this block with Razorpay subscription checkout (trial_period=30).
-  showEnrollmentSuccess(enrollId);
+    const res=await fetch(`${PRIMO_CONFIG.SUPABASE_URL}/functions/v1/enroll-subscribe`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','apikey':PRIMO_CONFIG.SUPABASE_ANON_KEY},
+      body:JSON.stringify({
+        owner_name:ownerName,owner_email:ownerEmail,owner_phone:ownerPhone,
+        shop_name:shopName,city,plan:sPlan,amount_paise:sAmt,
+        honeypot:document.getElementById('fHoneypot')?.value||'',
+        coupon_code:activeCoupon?.code||null,
+        trial_extended_days:activeCoupon?.extra_trial_days||0,
+        sub_discount_months:activeCoupon?.sub_duration_months||0,
+        sub_discount_value:activeCoupon?.sub_discount_value||0,
+        sub_discount_type:activeCoupon?.sub_discount_type||null,
+        setup_discount_paise:activeCoupon?.setup_discount_paise||0,
+        original_setup_paise:sAmt,
+      }),
+    });
+    enrollResult=await res.json();
+    if(!res.ok||!enrollResult.subscription_id) throw new Error(enrollResult.error||'Setup failed');
+  }catch(err){
+    console.error('[enroll] enroll-subscribe failed:',err);
+    showToast('Setup failed',err.message||'Please try again in a moment.','error');
+    btn.innerHTML='<i class="ti ti-rocket"></i> Start My Free Trial';btn.disabled=false;return;
+  }
+  btn.innerHTML='<i class="ti ti-loader-2" style="animation:spin .8s linear infinite"></i> Opening payment setup\u2026';
+  const planLabels={starter:'Starter \u2014 \u20b9199/mo',pro:'Pro \u2014 \u20b9299/mo',premium:'Premium \u2014 \u20b9499/mo'};
+  const rzp=new Razorpay({
+    key:PRIMO_CONFIG.RAZORPAY_KEY,
+    subscription_id:enrollResult.subscription_id,
+    name:'Primo Rewards',
+    description:`${planLabels[sPlan]||sPlan} \u00b7 30-day free trial`,
+    handler:function(response){showEnrollmentSuccess(enrollResult.slug,true);},
+    modal:{ondismiss:function(){showEnrollmentSuccess(enrollResult.slug,false);}},
+    prefill:{name:ownerName,email:ownerEmail,contact:ownerPhone},
+    theme:{color:'#C9A84C'},
+    notes:{shop_id:enrollResult.shop_id,slug:enrollResult.slug},
+  });
+  rzp.open();
+  btn.innerHTML='<i class="ti ti-rocket"></i> Start My Free Trial';btn.disabled=false;
 }
-function showEnrollmentSuccess(refId){const formCard=document.querySelector('.form-card:not(.enroll-success)');const successCard=document.getElementById('enrollSuccess');const refEl=document.getElementById('enrollRef');if(formCard)formCard.style.display='none';if(refEl)refEl.textContent='REF-'+(refId||'PENDING').slice(-8).toUpperCase();if(successCard)successCard.classList.add('show');showToast("You're in!","Check your email — your shop link arrives within a few minutes.",'success',8000);}
+function showEnrollmentSuccess(slug,mandateComplete){
+  const formCard=document.querySelector('.form-card:not(.enroll-success)');
+  const successCard=document.getElementById('enrollSuccess');
+  const refEl=document.getElementById('enrollRef');
+  if(formCard)formCard.style.display='none';
+  if(refEl)refEl.textContent=slug?slug.toUpperCase():'YOUR SHOP';
+  if(successCard)successCard.classList.add('show');
+  if(mandateComplete){
+    showToast("You're all set! \U0001F389","Shop going live — check your email for login details.",'success',10000);
+  }else{
+    showToast("Almost there!","Check your email for login details. Complete billing in your dashboard to go live.",'info',10000);
+  }
+}
 const PRIMO_CONFIG={SUPABASE_URL:'https://plewiwrexjszcqqjwiks.supabase.co',SUPABASE_ANON_KEY:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBsZXdpd3JleGpzemNxcWp3aWtzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3MDkxOTgsImV4cCI6MjA5NTI4NTE5OH0.UhQcVdZZw74X-HBrGVto35dyZ_V67WfkjGFepRzNlMQ',RAZORPAY_KEY:'rzp_live_SvFdTi0JN5EMlI'};
 async function apiCall(endpoint,method='GET',body=null){const headers={'Content-Type':'application/json','apikey':PRIMO_CONFIG.SUPABASE_ANON_KEY,'Authorization':'Bearer '+PRIMO_CONFIG.SUPABASE_ANON_KEY,'Prefer':method==='POST'?'return=representation':'return=minimal'};const url=`${PRIMO_CONFIG.SUPABASE_URL}/rest/v1/${endpoint}`;const res=await fetch(url,{method,headers,body:body?JSON.stringify(body):null});if(!res.ok){const errText=await res.text();throw new Error(`Supabase ${method} ${endpoint} \u2192 ${res.status}: ${errText}`);}const text=await res.text();return text?JSON.parse(text):null;}
 function slugify(str){return(str||'').toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');}
