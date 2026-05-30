@@ -455,6 +455,30 @@ function setQRVariant(v){
   lb.style.color=v==='light'?'#fff':'var(--gold)';
   db.style.background=v==='dark'?'linear-gradient(135deg,#C9A84C,#A8832A)':'transparent';
   db.style.color=v==='dark'?'#fff':'var(--gold)';
+  // Generate dark QR now that its card is visible
+  if(v==='dark'&&shop)genQRInto('qr-gen-dark',false);
+}
+function withQR(cb){
+  if(typeof QRCode!=='undefined'){cb();return;}
+  if(!document.getElementById('_qrjs')){
+    const s=document.createElement('script');s.id='_qrjs';
+    s.src='https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';
+    s.onload=()=>cb();
+    s.onerror=()=>console.error('[QR] library load failed');
+    document.head.appendChild(s);
+  }else{setTimeout(()=>withQR(cb),300);}
+}
+function genQRInto(targetId,isLight){
+  if(!shop)return;
+  const url=`https://primorewards.in/${shop.slug}-reward`;
+  withQR(()=>{
+    const dest=document.getElementById(targetId);if(!dest)return;
+    dest.innerHTML='';
+    try{new QRCode(dest,{text:url,width:160,height:160,
+      colorDark:'#1A1007',colorLight:isLight?'#FFFFFF':'#F5EDD8',
+      correctLevel:QRCode.CorrectLevel.H});
+    }catch(e){console.error('[QR] gen error:',e);}
+  });
 }
 function renderQR(){
   if(!shop)return;
@@ -466,34 +490,12 @@ function renderQR(){
     document.getElementById(`qrShopName${v}`).textContent=shop.shop_name;
     document.getElementById(`qrRule${v}`).textContent=rule;
   });
-  const genQR=(targetId,isLight)=>{
-    const dest=document.getElementById(targetId);if(!dest)return;
-    if(typeof QRCode==='undefined'){setTimeout(()=>genQR(targetId,isLight),600);return;}
-    const tmp=document.createElement('div');
-    tmp.style.cssText='position:fixed;top:-9999px;left:-9999px;width:160px';
-    document.body.appendChild(tmp);
-    try{new QRCode(tmp,{text:url,width:160,height:160,
-      colorDark:'#1A1007',colorLight:isLight?'#FFFFFF':'#F5EDD8',
-      correctLevel:QRCode.CorrectLevel.H});}
-    catch(e){document.body.removeChild(tmp);return;}
-    setTimeout(()=>{
-      const el=tmp.querySelector('canvas')||tmp.querySelector('img');
-      dest.innerHTML='';
-      if(el){
-        // cloneNode on canvas copies the element but NOT its pixels — use toDataURL instead
-        const img=document.createElement('img');
-        img.src=el.tagName==='CANVAS'?el.toDataURL():el.src;
-        img.width=160;img.height=160;img.style.cssText='display:block;border-radius:3px';
-        dest.appendChild(img);
-      }
-      document.body.removeChild(tmp);
-    },150);
-  };
-  genQR('qr-gen-light',true);genQR('qr-gen-dark',false);
+  // Only generate into VISIBLE card (light is visible by default)
+  genQRInto('qr-gen-light',true);
+  if(qrVariant==='dark')genQRInto('qr-gen-dark',false);
 }
 function roundRectPath(ctx,x,y,w,h,r){
-  ctx.beginPath();
-  ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);
+  ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);
   ctx.arcTo(x+w,y,x+w,y+r,r);ctx.lineTo(x+w,y+h-r);
   ctx.arcTo(x+w,y+h,x+w-r,y+h,r);ctx.lineTo(x+r,y+h);
   ctx.arcTo(x,y+h,x,y+h-r,r);ctx.lineTo(x,y+r);
@@ -501,30 +503,37 @@ function roundRectPath(ctx,x,y,w,h,r){
 }
 async function downloadQRCard(){
   if(!shop){toast('\u26a0 Shop not loaded.');return;}
-  if(typeof QRCode==='undefined'){toast('\u26a0 QR library not ready \u2014 please refresh.');return;}
   const isLight=qrVariant==='light';
   const url=`https://primorewards.in/${shop.slug}-reward`;
-  // Generate QR off-screen into a tmp div, extract canvas, convert to Image
-  const qrImg = await new Promise((resolve,reject)=>{
-    const tmp=document.createElement('div');
-    tmp.style.cssText='position:fixed;top:-9999px;left:-9999px;width:240px';
-    document.body.appendChild(tmp);
-    try{new QRCode(tmp,{text:url,width:240,height:240,
+  // Ensure library loaded
+  await new Promise(res=>{
+    if(typeof QRCode!=='undefined'){res();return;}
+    const s=document.createElement('script');
+    s.src='https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';
+    s.onload=res;s.onerror=()=>{toast('\u26a0 QR library failed to load.');res();};
+    document.head.appendChild(s);
+  });
+  if(typeof QRCode==='undefined'){return;}
+  // Get QR image from visible card OR regenerate
+  const srcId=isLight?'qr-gen-light':'qr-gen-dark';
+  let srcEl=document.getElementById(srcId);
+  let qrEl=srcEl&&(srcEl.querySelector('img')||srcEl.querySelector('canvas'));
+  if(!qrEl){
+    // Generate fresh into the visible card
+    srcEl.innerHTML='';
+    try{new QRCode(srcEl,{text:url,width:240,height:240,
       colorDark:'#1A1007',colorLight:isLight?'#FFFFFF':'#F5EDD8',
       correctLevel:QRCode.CorrectLevel.H});}
-    catch(e){document.body.removeChild(tmp);reject(e);return;}
-    setTimeout(()=>{
-      const el=tmp.querySelector('canvas')||tmp.querySelector('img');
-      document.body.removeChild(tmp);
-      if(!el){reject(new Error('No QR element'));return;}
-      if(el.tagName==='CANVAS'){
-        const img=new Image();img.src=el.toDataURL();img.onload=()=>resolve(img);
-      } else {
-        const img=new Image();img.src=el.src;img.onload=()=>resolve(img);
-      }
-    },200);
-  }).catch(e=>{console.error('QR gen:',e);toast('\u26a0 Could not generate QR \u2014 please try again.');return null;});
-  if(!qrImg)return;
+    catch(e){toast('\u26a0 QR generation failed.');return;}
+    await new Promise(res=>setTimeout(res,250));
+    qrEl=srcEl.querySelector('img')||srcEl.querySelector('canvas');
+  }
+  if(!qrEl){toast('\u26a0 QR not ready \u2014 please try again.');return;}
+  // Convert to Image for canvas
+  const qrImg=new Image();
+  qrImg.src=qrEl.tagName==='CANVAS'?qrEl.toDataURL():qrEl.src;
+  await new Promise(res=>{qrImg.onload=res;qrImg.onerror=res;});
+  // Build high-res card
   const W=600,H=680,R=28;
   const cv=document.createElement('canvas');cv.width=W;cv.height=H;
   const c=cv.getContext('2d');
@@ -538,15 +547,15 @@ async function downloadQRCard(){
   const qrPad=14,qrSize=240,qrBgY=hH+24;
   c.fillStyle=isLight?'#FFFFFF':'#F5EDD8';
   roundRectPath(c,(W-qrSize)/2-qrPad,qrBgY,qrSize+qrPad*2,qrSize+qrPad*2,12);c.fill();
-  c.drawImage(qrImg,(W-qrSize)/2,qrBgY+qrPad,qrSize,qrSize);
+  try{c.drawImage(qrImg,(W-qrSize)/2,qrBgY+qrPad,qrSize,qrSize);}catch(e){console.warn('draw:',e);}
   const nameY=qrBgY+qrSize+qrPad*2+44;
   c.fillStyle=isLight?'#1A1007':'#EDD97A';
   c.font='bold 34px Helvetica,Arial,sans-serif';c.textAlign='center';c.textBaseline='alphabetic';
   let nm=shop.shop_name;
   while(c.measureText(nm).width>W-80&&nm.length>4)nm=nm.slice(0,-1)+'\u2026';
   c.fillText(nm,W/2,nameY);
-  const buy=shop.reward_rule?.buy||11,emoji=shop.product_emoji||'\uD83C\uDF81';
-  const rule=`Buy ${buy}  \u2726  Get 1 Free ${emoji}`;
+  const buy=shop.reward_rule?.buy||11,emoji2=shop.product_emoji||'\uD83C\uDF81';
+  const rule=`Buy ${buy}  \u2726  Get 1 Free ${emoji2}`;
   c.font='bold 17px Helvetica,Arial,sans-serif';
   const rW=c.measureText(rule).width+48,rX=(W-rW)/2,rY=nameY+18;
   c.fillStyle=isLight?'rgba(201,168,76,.12)':'rgba(237,217,122,.1)';
@@ -574,7 +583,6 @@ async function downloadQRCard(){
   a.href=cv2.toDataURL('image/png',1.0);a.click();
   toast('\u2726 QR card downloaded!');
 }
-
 /* ══ STAMP (CVE-4 fix) ══ */
 const stTimers={};
 async function doStamp(cid){
