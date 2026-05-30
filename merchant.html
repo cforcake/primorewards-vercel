@@ -479,7 +479,13 @@ function renderQR(){
     setTimeout(()=>{
       const el=tmp.querySelector('canvas')||tmp.querySelector('img');
       dest.innerHTML='';
-      if(el){const c=el.cloneNode(true);c.style.display='block';dest.appendChild(c);}
+      if(el){
+        // cloneNode on canvas copies the element but NOT its pixels — use toDataURL instead
+        const img=document.createElement('img');
+        img.src=el.tagName==='CANVAS'?el.toDataURL():el.src;
+        img.width=160;img.height=160;img.style.cssText='display:block;border-radius:3px';
+        dest.appendChild(img);
+      }
       document.body.removeChild(tmp);
     },150);
   };
