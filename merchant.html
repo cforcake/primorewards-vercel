@@ -96,25 +96,25 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
 .err-ico i{font-size:52px;color:var(--ink-l)}
 /* ══ STARTER PLAN GATES ══ */
 /* Stamp QR FOMO card */
-.sqr-plan-gate{padding:.5rem .75rem 6rem;max-width:460px;margin:0 auto;width:100%;display:none}
+.sqr-plan-gate{padding:.35rem .75rem .75rem;max-width:460px;margin:0 auto;width:100%;display:none}
 .pgc-card{background:var(--white);border-radius:20px;overflow:hidden;box-shadow:0 6px 28px rgba(26,16,7,.12)}
-.pgc-preview{background:linear-gradient(160deg,#1A1007 0%,#2E1808 100%);padding:2rem 1rem 1.75rem;display:flex;flex-direction:column;align-items:center;gap:.75rem;position:relative}
-.pgc-badge{background:linear-gradient(135deg,var(--gold-b),var(--gold));color:#fff;border-radius:99px;padding:5px 15px;font-size:10.5px;font-weight:800;letter-spacing:.08em;position:relative;z-index:1}
-.pgc-mock-wrap{position:relative;width:164px;height:164px;z-index:1}
+.pgc-preview{background:linear-gradient(160deg,#1A1007 0%,#2E1808 100%);padding:1rem 1rem 1.1rem;display:flex;flex-direction:column;align-items:center;gap:.5rem;position:relative}
+.pgc-badge{background:linear-gradient(135deg,var(--gold-b),var(--gold));color:#fff;border-radius:99px;padding:4px 13px;font-size:10px;font-weight:800;letter-spacing:.08em;position:relative;z-index:1}
+.pgc-mock-wrap{position:relative;width:118px;height:118px;z-index:1}
 .pgc-mock-svg{position:absolute;inset:0;width:100%;height:100%}
-.pgc-mock-qr{position:absolute;top:22px;left:22px;width:120px;height:120px;background:rgba(255,255,255,.07);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:42px;color:rgba(255,255,255,.18);filter:blur(1px)}
-.pgc-lock-wrap{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.3rem;background:rgba(10,5,0,.45);border-radius:50%;margin:20px}
-.pgc-lock-ico{font-size:38px;color:#fff;filter:drop-shadow(0 2px 8px rgba(0,0,0,.5))}
-.pgc-lock-sub{font-size:11px;color:rgba(255,255,255,.5);font-family:var(--fd);letter-spacing:.04em}
-.pgc-body{padding:1.25rem 1.15rem 1.3rem}
-.pgc-title{font-family:var(--fd);font-size:22px;font-weight:500;color:var(--ink);margin-bottom:.3rem}
-.pgc-sub{font-size:13px;color:var(--ink-l);line-height:1.65;margin-bottom:.95rem}
-.pgc-feats{background:var(--cream);border-radius:12px;padding:.75rem .9rem;margin-bottom:1.1rem;display:flex;flex-direction:column;gap:.45rem}
-.pgc-feat{display:flex;align-items:flex-start;gap:.55rem;font-size:13px;color:var(--ink-m);line-height:1.4}
-.pgc-feat i{font-size:15px;color:var(--em);flex-shrink:0;margin-top:1px}
-.pgc-cta{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;border-radius:13px;background:linear-gradient(135deg,var(--gold-b),var(--gold));color:#fff;font-size:14.5px;font-weight:700;box-shadow:0 5px 20px rgba(168,131,42,.4);border:none;cursor:pointer;margin-bottom:.5rem;transition:box-shadow .2s}
-.pgc-cta:active{box-shadow:0 2px 10px rgba(168,131,42,.3)}
-.pgc-note{font-size:11px;color:var(--ink-f);text-align:center;line-height:1.5}
+.pgc-mock-qr{position:absolute;top:16px;left:16px;width:86px;height:86px;background:rgba(255,255,255,.07);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:30px;color:rgba(255,255,255,.18);filter:blur(1px)}
+.pgc-lock-wrap{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.2rem;background:rgba(10,5,0,.45);border-radius:50%;margin:15px}
+.pgc-lock-ico{font-size:30px;color:#fff;filter:drop-shadow(0 2px 8px rgba(0,0,0,.5))}
+.pgc-lock-sub{font-size:10px;color:rgba(255,255,255,.5);font-family:var(--fd);letter-spacing:.04em}
+.pgc-body{padding:.85rem 1rem .9rem}
+.pgc-title{font-family:var(--fd);font-size:19px;font-weight:500;color:var(--ink);margin-bottom:.15rem}
+.pgc-sub{font-size:12.5px;color:var(--ink-l);line-height:1.55;margin-bottom:.65rem}
+.pgc-feats{background:var(--cream);border-radius:11px;padding:.55rem .8rem;margin-bottom:.75rem;display:flex;flex-direction:column;gap:.3rem}
+.pgc-feat{display:flex;align-items:flex-start;gap:.55rem;font-size:12.5px;color:var(--ink-m);line-height:1.35}
+.pgc-feat i{font-size:14px;color:var(--em);flex-shrink:0;margin-top:1px}
+.pgc-cta{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:11px;border-radius:12px;background:linear-gradient(135deg,var(--gold-b),var(--gold));color:#fff;font-size:13.5px;font-weight:700;box-shadow:0 4px 16px rgba(168,131,42,.38);border:none;cursor:pointer;margin-bottom:.35rem;transition:box-shadow .2s}
+.pgc-cta:active{box-shadow:0 2px 8px rgba(168,131,42,.28)}
+.pgc-note{font-size:10.5px;color:var(--ink-f);text-align:center;line-height:1.45}
 /* WA plan gate */
 .wa-plan-gate{display:none;flex-direction:column;align-items:center;text-align:center;gap:.8rem;padding:1.75rem .9rem 5rem}
 .wpg-ico{width:72px;height:72px;border-radius:50%;background:rgba(37,211,102,.1);border:2px solid rgba(37,211,102,.2);display:flex;align-items:center;justify-content:center;font-size:30px;color:var(--wa-d)}
@@ -311,10 +311,10 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
         <div class="pgc-preview">
           <div class="pgc-badge">✦ PRO &amp; PREMIUM FEATURE</div>
           <div class="pgc-mock-wrap">
-            <svg class="pgc-mock-svg" viewBox="0 0 164 164" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="82" cy="82" r="74" fill="none" stroke="rgba(201,168,76,.2)" stroke-width="6"/>
-              <circle cx="82" cy="82" r="74" fill="none" stroke="rgba(201,168,76,.55)" stroke-width="6"
-                stroke-dasharray="465" stroke-dashoffset="130" stroke-linecap="round" transform="rotate(-90 82 82)"/>
+            <svg class="pgc-mock-svg" viewBox="0 0 118 118" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="59" cy="59" r="53" fill="none" stroke="rgba(201,168,76,.2)" stroke-width="5"/>
+              <circle cx="59" cy="59" r="53" fill="none" stroke="rgba(201,168,76,.55)" stroke-width="5"
+                stroke-dasharray="333" stroke-dashoffset="93" stroke-linecap="round" transform="rotate(-90 59 59)"/>
             </svg>
             <div class="pgc-mock-qr"><i class="ti ti-qrcode"></i></div>
             <div class="pgc-lock-wrap">
@@ -325,12 +325,11 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
         </div>
         <div class="pgc-body">
           <div class="pgc-title">Instant QR Stamping</div>
-          <div class="pgc-sub">Let customers earn stamps by scanning a code on your screen — no typing, no friction, no missed stamps.</div>
+          <div class="pgc-sub">Let customers earn stamps by scanning a code on your screen — no typing, no friction.</div>
           <div class="pgc-feats">
-            <div class="pgc-feat"><i class="ti ti-refresh"></i>Rotating 30-second QR codes — tamper-proof</div>
+            <div class="pgc-feat"><i class="ti ti-refresh"></i>Rotating 30-second codes — fraud-proof</div>
             <div class="pgc-feat"><i class="ti ti-bell"></i>Live notification every time a customer scans</div>
             <div class="pgc-feat"><i class="ti ti-bolt"></i>Zero friction — customer just point &amp; scan</div>
-            <div class="pgc-feat"><i class="ti ti-shield-check"></i>One stamp per code, per customer, guaranteed</div>
           </div>
           <button class="pgc-cta" onclick="switchToSettings()"><i class="ti ti-arrow-up-circle"></i>Upgrade to Pro — ₹299/mo</button>
           <div class="pgc-note">Cancel anytime · No charge until trial ends · Instant activation</div>
@@ -1304,7 +1303,7 @@ function hideWAPlanGate() {
 function wire(){
   document.getElementById('loginBtn').addEventListener('click',handleLogin);document.getElementById('inSlug').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('inPwd').focus()});document.getElementById('inPwd').addEventListener('keydown',e=>{if(e.key==='Enter')handleLogin()});
   document.getElementById('profileMenuBtn').addEventListener('click',openMenu);document.getElementById('menuSheet').addEventListener('click',e=>{if(e.target.id==='menuSheet')closeMenu()});document.getElementById('sheetRefresh').addEventListener('click',doRefresh);document.getElementById('sheetSignOut').addEventListener('click',signOut);
-  document.querySelectorAll('.tab-btn').forEach(b=>b.addEventListener('click',()=>{const prev=document.querySelector('.tab-btn.active')?.dataset?.tab;document.querySelectorAll('.tab-btn').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));b.classList.add('active');document.getElementById(b.dataset.tab).classList.add('active');if(b.dataset.tab==='t-qr'&&shop)renderQR();if(b.dataset.tab==='t-wa'&&shop){if(isStarter())showWAPlanGate();else{hideWAPlanGate();renderWA();}}if(b.dataset.tab==='t-stamp'){sqrOnStampTab=true;clearSQRBadge();startStampQR();if(!isStarter())startQRFeedPoller();}if(prev==='t-stamp'&&b.dataset.tab!=='t-stamp'){sqrOnStampTab=false;stopStampQR();stopQRFeedPoller();}}));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.addEventListener('click',()=>{const prev=document.querySelector('.tab-btn.active')?.dataset?.tab;document.querySelectorAll('.tab-btn').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));b.classList.add('active');document.getElementById(b.dataset.tab).classList.add('active');if(b.dataset.tab==='t-qr'&&shop)renderQR();if(b.dataset.tab==='t-wa'&&shop){if(isStarter())showWAPlanGate();else{hideWAPlanGate();renderWA();}}if(b.dataset.tab==='t-stamp'){sqrOnStampTab=true;clearSQRBadge();window.scrollTo({top:0,behavior:'instant'});startStampQR();if(!isStarter())startQRFeedPoller();}if(prev==='t-stamp'&&b.dataset.tab!=='t-stamp'){sqrOnStampTab=false;stopStampQR();stopQRFeedPoller();}}));
   document.getElementById('searchInp').addEventListener('input',e=>{searchQ=e.target.value;renderCustList()});
   document.getElementById('addCustBtn').addEventListener('click',openAdd);document.getElementById('addConfirm').addEventListener('click',confirmAdd);document.getElementById('addCancel').addEventListener('click',closeAdd);document.getElementById('addModal').addEventListener('click',e=>{if(e.target.id==='addModal')closeAdd()});
   document.getElementById('addMobile').addEventListener('input',function(){const d=this.value.replace(/\D/g,'');this.value=d;const badge=document.getElementById('addDerived'),b4=document.getElementById('addDerived4');if(d.length>=4){badge.style.display='inline-flex';b4.textContent=d.slice(-4)}else{badge.style.display='none'}});
