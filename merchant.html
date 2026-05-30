@@ -17,7 +17,7 @@
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap"></noscript>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" crossorigin="anonymous">
-<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23C9A84C'/><text x='50%25' y='62%25' font-size='18' text-anchor='middle' fill='white'>&#9819;</text></svg>">
 <style>
 :root{--cream:#FDFAF5;--cream-d:#F5EEE3;--beige:#EDE3D4;--beige-m:#D9CBBA;--gold:#A8832A;--gold-b:#C9A84C;--gold-p:#FDF4E3;--gold-br:#D4B86A;--em:#1B5E42;--em-l:#2D8A5E;--wa:#25D366;--wa-d:#128C7E;--ink:#1A1007;--ink-m:#4A3A25;--ink-l:#7A6A52;--ink-f:#A89880;--white:#FFFFFF;--fd:'Cormorant Garamond',Georgia,serif;--fb:'DM Sans',sans-serif;--eo:cubic-bezier(.16,1,.3,1);--eb:cubic-bezier(.34,1.56,.64,1);--es:cubic-bezier(.34,1.4,.64,1);--safe-b:env(safe-area-inset-bottom,0px)}
@@ -460,24 +460,30 @@ function renderQR(){
   if(!shop)return;
   const url=`https://primorewards.in/${shop.slug}-reward`;
   document.getElementById('qrUrl').textContent=url;
-  const buy=shop.reward_rule?.buy||11,emoji=shop.product_emoji||'🎁';
+  const buy=shop.reward_rule?.buy||11,emoji=shop.product_emoji||'\uD83C\uDF81';
   const rule=`Buy ${buy} \u2726 Get 1 Free ${emoji}`;
   ['Light','Dark'].forEach(v=>{
     document.getElementById(`qrShopName${v}`).textContent=shop.shop_name;
     document.getElementById(`qrRule${v}`).textContent=rule;
   });
-  const makeQR=(id,isLight)=>{
-    const el=document.getElementById(id);if(!el)return;
-    el.innerHTML='';
-    const cv=document.createElement('canvas');
-    el.appendChild(cv);
-    if(typeof QRCode!=='undefined'&&QRCode.toCanvas){
-      QRCode.toCanvas(cv,url,{width:160,errorCorrectionLevel:'H',
-        color:{dark:'#1A1007',light:isLight?'#FFFFFF':'#F5EDD8'}
-      }).catch(e=>console.error('QR render:',e));
-    }else{setTimeout(()=>makeQR(id,isLight),500);}
+  const genQR=(targetId,isLight)=>{
+    const dest=document.getElementById(targetId);if(!dest)return;
+    if(typeof QRCode==='undefined'){setTimeout(()=>genQR(targetId,isLight),600);return;}
+    const tmp=document.createElement('div');
+    tmp.style.cssText='position:fixed;top:-9999px;left:-9999px;width:160px';
+    document.body.appendChild(tmp);
+    try{new QRCode(tmp,{text:url,width:160,height:160,
+      colorDark:'#1A1007',colorLight:isLight?'#FFFFFF':'#F5EDD8',
+      correctLevel:QRCode.CorrectLevel.H});}
+    catch(e){document.body.removeChild(tmp);return;}
+    setTimeout(()=>{
+      const el=tmp.querySelector('canvas')||tmp.querySelector('img');
+      dest.innerHTML='';
+      if(el){const c=el.cloneNode(true);c.style.display='block';dest.appendChild(c);}
+      document.body.removeChild(tmp);
+    },150);
   };
-  makeQR('qr-gen-light',true);makeQR('qr-gen-dark',false);
+  genQR('qr-gen-light',true);genQR('qr-gen-dark',false);
 }
 function roundRectPath(ctx,x,y,w,h,r){
   ctx.beginPath();
@@ -489,17 +495,30 @@ function roundRectPath(ctx,x,y,w,h,r){
 }
 async function downloadQRCard(){
   if(!shop){toast('\u26a0 Shop not loaded.');return;}
-  if(typeof QRCode==='undefined'||!QRCode.toDataURL){toast('\u26a0 QR library not ready \u2014 please refresh and try again.');return;}
+  if(typeof QRCode==='undefined'){toast('\u26a0 QR library not ready \u2014 please refresh.');return;}
   const isLight=qrVariant==='light';
   const url=`https://primorewards.in/${shop.slug}-reward`;
-  // Generate QR fresh — no DOM dependency
-  let qrDataUrl;
-  try{
-    qrDataUrl=await QRCode.toDataURL(url,{width:240,margin:1,errorCorrectionLevel:'H',
-      color:{dark:'#1A1007',light:isLight?'#FFFFFF':'#F5EDD8'}});
-  }catch(e){console.error('QR generate:',e);toast('\u26a0 Could not generate QR \u2014 please try again.');return;}
-  const qrImg=new Image();qrImg.src=qrDataUrl;
-  await new Promise(res=>qrImg.onload=res);
+  // Generate QR off-screen into a tmp div, extract canvas, convert to Image
+  const qrImg = await new Promise((resolve,reject)=>{
+    const tmp=document.createElement('div');
+    tmp.style.cssText='position:fixed;top:-9999px;left:-9999px;width:240px';
+    document.body.appendChild(tmp);
+    try{new QRCode(tmp,{text:url,width:240,height:240,
+      colorDark:'#1A1007',colorLight:isLight?'#FFFFFF':'#F5EDD8',
+      correctLevel:QRCode.CorrectLevel.H});}
+    catch(e){document.body.removeChild(tmp);reject(e);return;}
+    setTimeout(()=>{
+      const el=tmp.querySelector('canvas')||tmp.querySelector('img');
+      document.body.removeChild(tmp);
+      if(!el){reject(new Error('No QR element'));return;}
+      if(el.tagName==='CANVAS'){
+        const img=new Image();img.src=el.toDataURL();img.onload=()=>resolve(img);
+      } else {
+        const img=new Image();img.src=el.src;img.onload=()=>resolve(img);
+      }
+    },200);
+  }).catch(e=>{console.error('QR gen:',e);toast('\u26a0 Could not generate QR \u2014 please try again.');return null;});
+  if(!qrImg)return;
   const W=600,H=680,R=28;
   const cv=document.createElement('canvas');cv.width=W;cv.height=H;
   const c=cv.getContext('2d');
