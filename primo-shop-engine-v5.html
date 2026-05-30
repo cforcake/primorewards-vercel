@@ -9,7 +9,7 @@
 <meta name="description" content="Your digital loyalty card. Earn gold medallion stamps on every visit and unlock free rewards.">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-<meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()">
+<meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=(self)">
 <!-- CVE-11: CSP — tightened per audit. Remove 'unsafe-inline' after scripts move to external .js files -->
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com https://cdn.jsdelivr.net 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; connect-src 'self' https://*.supabase.co; img-src 'self' data: https:; object-src 'none'; base-uri 'self'; form-action 'self'">
 
@@ -694,6 +694,46 @@ body::after {
   font-size: 11.5px; color: rgba(255,255,255,.45);
   margin-top: .75rem; display: flex; align-items: center; justify-content: center; gap: 5px;
 }
+/* ══ QR SCANNER ══ */
+.scan-qr-sec{padding:.9rem .9rem .1rem}
+.scan-qr-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;padding:16px 24px;border-radius:16px;background:linear-gradient(135deg,var(--em-l),var(--em));color:#fff;font-size:15px;font-weight:700;box-shadow:0 5px 22px rgba(27,94,66,.35);border:none;cursor:pointer;min-height:56px;letter-spacing:.01em;transition:box-shadow .2s,transform .15s}
+.scan-qr-btn i{font-size:22px}
+.scan-qr-btn:active{box-shadow:0 2px 10px rgba(27,94,66,.3);transform:translateY(1px)}
+.scan-qr-hint{font-size:12px;color:var(--ink-l);text-align:center;margin-top:.4rem;padding:0 .5rem .6rem}
+.qrs-overlay{position:fixed;inset:0;z-index:500;background:var(--ink);display:none;flex-direction:column}
+.qrs-header{display:flex;align-items:center;gap:.65rem;padding:.85rem 1rem;border-bottom:1px solid rgba(255,255,255,.1);flex-shrink:0}
+.qrs-close-btn{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.1);border:none;color:#fff;font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.qrs-close-btn:active{background:rgba(255,255,255,.2)}
+.qrs-title{font-family:var(--fd);font-size:18px;font-weight:500;color:#fff;flex:1}
+.qrs-body{flex:1;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.qrs-video-wrap{flex:1;position:relative;background:#000;display:none}
+.qrs-video-wrap video{width:100%;height:100%;object-fit:cover;display:block}
+.qrs-frame{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.qrs-frame-box{width:220px;height:220px;position:relative}
+.qrs-frame-corner-tl,.qrs-frame-corner-tr,.qrs-frame-corner-bl,.qrs-frame-corner-br{position:absolute;width:42px;height:42px;border-color:rgba(201,168,76,.9);border-style:solid}
+.qrs-frame-corner-tl{top:0;left:0;border-width:3.5px 0 0 3.5px;border-radius:5px 0 0 0}
+.qrs-frame-corner-tr{top:0;right:0;border-width:3.5px 3.5px 0 0;border-radius:0 5px 0 0}
+.qrs-frame-corner-bl{bottom:0;left:0;border-width:0 0 3.5px 3.5px;border-radius:0 0 0 5px}
+.qrs-frame-corner-br{bottom:0;right:0;border-width:0 3.5px 3.5px 0;border-radius:0 0 5px 0}
+.qrs-scan-line{position:absolute;left:0;right:0;height:2px;top:0;background:linear-gradient(90deg,transparent,rgba(201,168,76,.85),transparent);animation:qrScanLine 2s ease-in-out infinite}
+@keyframes qrScanLine{0%{top:4px;opacity:0}8%{opacity:1}92%{opacity:1}100%{top:216px;opacity:0}}
+.qrs-hint-bar{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.6);padding:.5rem .9rem;text-align:center;font-size:12px;color:rgba(255,255,255,.68);backdrop-filter:blur(4px)}
+.qrs-no-camera{flex:1;display:none;flex-direction:column;align-items:center;justify-content:center;gap:.85rem;padding:2rem;text-align:center;color:rgba(255,255,255,.78)}
+.qrs-no-camera-ico{font-size:48px;opacity:.55}
+.qrs-no-camera p{font-size:13.5px;line-height:1.65;max-width:280px}
+.qrs-state{flex:1;display:none;flex-direction:column;align-items:center;justify-content:center;gap:1rem;padding:2rem;text-align:center;color:#fff}
+.qrs-spinner{width:44px;height:44px;border-radius:50%;border:3.5px solid rgba(255,255,255,.15);border-top-color:var(--gold-b);animation:spin .7s linear infinite}
+.qrs-state-ico{font-size:52px}
+.qrs-state-title{font-family:var(--fd);font-size:22px;font-weight:500}
+.qrs-state-msg{font-size:14px;color:rgba(255,255,255,.7);line-height:1.65;max-width:290px}
+.qrs-state-row{display:flex;gap:.5rem;margin-top:.4rem;flex-wrap:wrap;justify-content:center}
+.qrs-state-btn{display:flex;align-items:center;gap:7px;padding:12px 22px;border-radius:99px;font-size:13.5px;font-weight:600;cursor:pointer;border:none}
+.qrs-btn-gold{background:linear-gradient(135deg,var(--gold-b),var(--gold));color:#fff;box-shadow:0 3px 12px rgba(168,131,42,.4)}
+.qrs-btn-ghost{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.18)}
+.qrs-foot{padding:.85rem 1rem;background:rgba(0,0,0,.3);flex-shrink:0;border-top:1px solid rgba(255,255,255,.08)}
+.qrs-file-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-radius:12px;border:1.5px solid rgba(201,168,76,.35);background:transparent;color:var(--gold-br);font-size:13px;font-weight:600;cursor:pointer}
+.qrs-file-btn:active{background:rgba(201,168,76,.1)}
+#qrsFileInput{display:none}
 </style>
 </head>
 <body>
@@ -837,6 +877,15 @@ body::after {
         <!-- Interior rendered by JS -->
       </div>
 
+      <!-- Scan QR & Earn stamp -->
+      <div class="scan-qr-sec" id="scanQrSec">
+        <button class="scan-qr-btn" id="scanQrBtn" onclick="openQRScanner()" aria-label="Scan QR code to earn a stamp">
+          <i class="ti ti-scan" aria-hidden="true"></i>
+          Scan QR &amp; Earn a Stamp
+        </button>
+        <div class="scan-qr-hint">Point your camera at the QR on the merchant's screen</div>
+      </div>
+
       <!-- Redeem banner -->
       <div class="rd-banner" id="redeemBanner" role="region" aria-label="Reward ready to redeem">
         <div class="rd-left">
@@ -921,6 +970,62 @@ body::after {
     </div>
   </nav>
 
+</div>
+
+<!-- ══════════ QR STAMP SCANNER OVERLAY ══════════ -->
+<div class="qrs-overlay" id="qrsOverlay" role="dialog" aria-modal="true" aria-label="Scan QR to earn stamp">
+  <div class="qrs-header">
+    <button class="qrs-close-btn" onclick="closeQRScanner()" aria-label="Close scanner"><i class="ti ti-x"></i></button>
+    <div class="qrs-title">Scan Merchant's QR Code</div>
+  </div>
+  <div class="qrs-body">
+    <!-- Live camera view -->
+    <div class="qrs-video-wrap" id="qrsVideoWrap">
+      <video id="qrsVideo" autoplay playsinline muted></video>
+      <div class="qrs-frame" aria-hidden="true">
+        <div class="qrs-frame-box">
+          <div class="qrs-frame-corner-tl"></div><div class="qrs-frame-corner-tr"></div>
+          <div class="qrs-frame-corner-bl"></div><div class="qrs-frame-corner-br"></div>
+          <div class="qrs-scan-line"></div>
+        </div>
+      </div>
+      <div class="qrs-hint-bar">Point camera at the QR code on the merchant's screen</div>
+    </div>
+    <!-- No camera / BarcodeDetector unavailable -->
+    <div class="qrs-no-camera" id="qrsNoCamera">
+      <div class="qrs-no-camera-ico"><i class="ti ti-camera-off"></i></div>
+      <p>Camera unavailable. Use the button below to select a photo of the QR code, or ask staff to stamp manually.</p>
+    </div>
+    <!-- Processing -->
+    <div class="qrs-state" id="qrsProcessing">
+      <div class="qrs-spinner"></div>
+      <div class="qrs-state-title">Verifying…</div>
+      <div class="qrs-state-msg">Adding your stamp — just a moment</div>
+    </div>
+    <!-- Success -->
+    <div class="qrs-state" id="qrsSuccess">
+      <div class="qrs-state-ico">✦</div>
+      <div class="qrs-state-title">Stamp Added!</div>
+      <div class="qrs-state-msg" id="qrsSuccessMsg"></div>
+      <div class="qrs-state-row">
+        <button class="qrs-state-btn qrs-btn-ghost" onclick="closeAndRefresh()"><i class="ti ti-arrow-left"></i> Back to Card</button>
+      </div>
+    </div>
+    <!-- Failure -->
+    <div class="qrs-state" id="qrsFail">
+      <div class="qrs-state-ico" style="color:#e74c3c"><i class="ti ti-alert-circle"></i></div>
+      <div class="qrs-state-title">Scan Failed</div>
+      <div class="qrs-state-msg" id="qrsFailMsg"></div>
+      <div class="qrs-state-row">
+        <button class="qrs-state-btn qrs-btn-gold" onclick="retryScan()"><i class="ti ti-refresh"></i> Try Again</button>
+        <button class="qrs-state-btn qrs-btn-ghost" onclick="closeQRScanner()">Close</button>
+      </div>
+    </div>
+  </div>
+  <div class="qrs-foot">
+    <input type="file" id="qrsFileInput" accept="image/*" capture="environment">
+    <button class="qrs-file-btn" onclick="document.getElementById('qrsFileInput').click()"><i class="ti ti-photo"></i> Use Photo Instead</button>
+  </div>
 </div>
 
 <!-- ══════════ QR CODE MODAL ══════════ -->
@@ -1725,6 +1830,156 @@ function signOut() {
 }
 
 /* ── 16. WIRE EVENTS ── */
+/* ══════════════════════════════════════════════════════
+   QR STAMP SCANNER
+   ──────────────────────────────────────────────────────
+   Primary:  BarcodeDetector + getUserMedia (Chrome 88+, Safari 17+)
+   Fallback: File input (user captures/selects photo, decoded via BarcodeDetector)
+   If BarcodeDetector is unavailable: friendly message
+══════════════════════════════════════════════════════ */
+let qrsCameraStream = null;
+let qrsDetector     = null;
+let qrsScanActive   = false;
+let qrsProcessing   = false;
+
+function openQRScanner() {
+  if (!customer || !shop) { toast('Please sign in first'); return; }
+  // Reset to initial camera state
+  _qrsShowState('video');
+  document.getElementById('qrsOverlay').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+  _qrsStartCamera();
+}
+
+function closeQRScanner() {
+  qrsScanActive = false;
+  _qrsStopCamera();
+  document.getElementById('qrsOverlay').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+function closeAndRefresh() {
+  closeQRScanner();
+  // Reload card data so stamps count is fresh
+  loadCardData().then(renderCard).catch(() => {});
+}
+
+async function _qrsStartCamera() {
+  const hasBD = 'BarcodeDetector' in window;
+  if (!hasBD) { _qrsShowState('nocam'); return; }
+  try {
+    qrsDetector = new BarcodeDetector({ formats: ['qr_code'] });
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } }
+    });
+    qrsCameraStream = stream;
+    const vid = document.getElementById('qrsVideo');
+    vid.srcObject = stream;
+    await vid.play();
+    qrsScanActive = true;
+    _qrsScanLoop();
+  } catch (e) {
+    console.warn('[qrs] camera:', e.name, e.message);
+    _qrsShowState('nocam');
+  }
+}
+
+async function _qrsScanLoop() {
+  if (!qrsScanActive || !qrsDetector) return;
+  const vid = document.getElementById('qrsVideo');
+  if (vid && vid.readyState >= 2) {
+    try {
+      const codes = await qrsDetector.detect(vid);
+      for (const c of codes) {
+        if (c.rawValue?.startsWith('PRIMO:')) {
+          qrsScanActive = false;
+          await _qrsProcess(c.rawValue);
+          return;
+        }
+      }
+    } catch { /* keep scanning */ }
+  }
+  if (qrsScanActive) requestAnimationFrame(_qrsScanLoop);
+}
+
+function _qrsStopCamera() {
+  qrsScanActive = false;
+  if (qrsCameraStream) { qrsCameraStream.getTracks().forEach(t => t.stop()); qrsCameraStream = null; }
+  const vid = document.getElementById('qrsVideo');
+  if (vid) vid.srcObject = null;
+}
+
+async function qrsHandleFile(e) {
+  const file = e.target.files?.[0];
+  if (!file) return;
+  e.target.value = '';
+  if (!('BarcodeDetector' in window)) {
+    _qrsShowFail('QR scanning not supported in this browser. Please use Chrome or Safari 17+.');
+    return;
+  }
+  _qrsShowState('processing');
+  try {
+    const bitmap  = await createImageBitmap(file);
+    const det     = new BarcodeDetector({ formats: ['qr_code'] });
+    const codes   = await det.detect(bitmap);
+    const primo   = codes.find(c => c.rawValue?.startsWith('PRIMO:'));
+    if (!primo) { _qrsShowFail('No Primo QR code found in the photo. Please try again.'); return; }
+    await _qrsProcess(primo.rawValue);
+  } catch { _qrsShowFail('Could not read the photo. Please try a clearer image.'); }
+}
+
+async function _qrsProcess(text) {
+  // Format: PRIMO:[slug]:[token]
+  const parts = text.split(':');
+  if (parts.length !== 3 || parts[0] !== 'PRIMO' || !parts[1] || !parts[2]) {
+    _qrsShowFail('Invalid QR code. Please scan a Primo Rewards merchant QR.');
+    return;
+  }
+  const [, shop_slug, token] = parts;
+  // Slug safety check
+  if (shop && shop.slug && shop.slug !== shop_slug) {
+    _qrsShowFail(`This QR belongs to a different shop. Please scan a QR from ${shop.shop_name}.`);
+    return;
+  }
+  _qrsStopCamera();
+  _qrsShowState('processing');
+  qrsProcessing = true;
+  try {
+    const res  = await fetch(`${PRIMO_CONFIG.FUNCTIONS_URL}/validate-stamp-qr`, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ shop_slug, token, customer_id: customer.id }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Could not verify stamp');
+    // Show success
+    const { stamps_in_cycle = 0, stamps_needed = 10, reward_ready = false } = data;
+    const left = stamps_needed - stamps_in_cycle;
+    document.getElementById('qrsSuccessMsg').textContent = reward_ready
+      ? `🎁 Reward ready! You've completed your card — show staff to claim.`
+      : `You now have ${stamps_in_cycle} of ${stamps_needed} stamps. ${left} more for a free ${shop?.product_name || 'item'}!`;
+    _qrsShowState('success');
+    // Refresh card data in background
+    loadCardData().then(renderCard).catch(() => {});
+  } catch (e) {
+    _qrsShowFail(e.message || 'Stamp failed. Please try again.');
+  } finally {
+    qrsProcessing = false;
+  }
+}
+
+function retryScan() { _qrsShowState('video'); _qrsStartCamera(); }
+function _qrsShowFail(msg) { document.getElementById('qrsFailMsg').textContent = msg; _qrsShowState('fail'); }
+
+function _qrsShowState(state) {
+  // state: 'video' | 'nocam' | 'processing' | 'success' | 'fail'
+  document.getElementById('qrsVideoWrap').style.display   = state === 'video'      ? 'block' : 'none';
+  document.getElementById('qrsNoCamera').style.display    = state === 'nocam'      ? 'flex'  : 'none';
+  document.getElementById('qrsProcessing').style.display  = state === 'processing' ? 'flex'  : 'none';
+  document.getElementById('qrsSuccess').style.display     = state === 'success'    ? 'flex'  : 'none';
+  document.getElementById('qrsFail').style.display        = state === 'fail'       ? 'flex'  : 'none';
+}
+
 function wireEvents() {
   // Login
   document.getElementById('loginBtn').addEventListener('click', handleLogin);
@@ -1749,6 +2004,10 @@ function wireEvents() {
 
   // Share section buttons
   document.getElementById('downloadCardBtn').addEventListener('click', downloadCard);
+  // QR stamp file input
+  document.getElementById('qrsFileInput').addEventListener('change', qrsHandleFile);
+  // Close scanner overlay on backdrop tap (no backdrop here, but escape key)
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeQRScanner(); });
   document.getElementById('whatsappBtn').addEventListener('click', shareWhatsApp);
   document.getElementById('copyStatusBtn').addEventListener('click', copyStatus);
   document.getElementById('qrCodeBtn').addEventListener('click', showQR);

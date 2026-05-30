@@ -95,6 +95,29 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
 .bday-ico{font-size:13px;color:var(--gold);vertical-align:middle}
 .err-ico i{font-size:52px;color:var(--ink-l)}
 @media(max-width:380px){.stats-row{gap:.3rem;padding:.6rem .6rem .3rem}.stat-val{font-size:22px}.stat-lbl{font-size:8.5px}.cust-toolbar{padding:.6rem .6rem .3rem}.cust-list{padding:0 .6rem 5rem}.search-inp{font-size:13px;padding:9px 10px 9px 30px}.add-btn{padding:9px 10px;font-size:11px}.cust-card{padding:.7rem .7rem}.cust-nm{font-size:13px}.s-btn,.r-btn{padding:6px 8px;font-size:10.5px}.mc{width:19px;height:19px}.mc-c::after{font-size:6.5px}.mini-grid{gap:3px}.modal-sheet{padding:0 .9rem calc(1.25rem + var(--safe-b))}.wa-wrap{padding:.6rem .6rem 5rem}.tpl-pill{padding:7px 11px;font-size:11px}}
+/* ══ STAMP QR TAB ══ */
+.sqr-wrap{padding:.7rem .75rem 6rem;max-width:460px;margin:0 auto;width:100%}
+.sqr-info{display:flex;align-items:flex-start;gap:.55rem;background:rgba(27,94,66,.07);border:1px solid rgba(27,94,66,.18);border-radius:11px;padding:.65rem .85rem;font-size:12.5px;color:var(--em);font-weight:500;margin-bottom:1rem;line-height:1.5}
+.sqr-info i{font-size:17px;flex-shrink:0;margin-top:1px}
+.sqr-state{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.75rem;padding:3rem 1rem;color:var(--ink-l);font-size:14px;text-align:center;line-height:1.6}
+.sqr-spinner{width:36px;height:36px;border-radius:50%;border:3px solid var(--beige);border-top-color:var(--gold-b);animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sqr-retry-btn{display:flex;align-items:center;gap:6px;padding:10px 20px;border-radius:99px;border:1.5px solid var(--gold-br);background:transparent;color:var(--gold);font-size:13px;font-weight:600;cursor:pointer}
+.sqr-card{background:var(--white);border-radius:20px;padding:1.4rem 1rem 1.2rem;box-shadow:0 4px 22px rgba(26,16,7,.08);text-align:center;margin-bottom:.8rem}
+.sqr-card-title{font-family:var(--fd);font-size:20px;font-weight:500;color:var(--ink);margin-bottom:.2rem}
+.sqr-card-sub{font-size:12px;color:var(--ink-l);margin-bottom:1.3rem}
+.sqr-ring-container{position:relative;width:260px;height:260px;margin:0 auto 1.5rem}
+.sqr-ring-svg{position:absolute;inset:0;width:100%;height:100%}
+.sqr-ring-inner{position:absolute;top:20px;left:20px;right:20px;bottom:20px;display:flex;align-items:center;justify-content:center;background:var(--white);border-radius:10px;overflow:hidden;box-shadow:0 2px 10px rgba(26,16,7,.06)}
+.sqr-secs-badge{position:absolute;bottom:-16px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--cream);border-radius:99px;padding:5px 14px;font-family:var(--fd);font-size:19px;font-weight:600;display:flex;align-items:baseline;gap:2px;box-shadow:0 3px 12px rgba(26,16,7,.28);white-space:nowrap;line-height:1.2}
+.sqr-secs-badge .sqr-s-unit{font-size:11px;font-weight:500;opacity:.65}
+.sqr-token-row{display:flex;align-items:center;justify-content:center;gap:3px;font-size:12px;font-family:monospace;color:var(--ink-m);background:var(--cream);border-radius:9px;padding:.45rem .8rem;margin-bottom:.65rem;flex-wrap:wrap;word-break:break-all}
+.sqr-t-sep{color:var(--ink-f);opacity:.45;margin:0 1px}
+.sqr-t-val{font-weight:700;color:var(--em);letter-spacing:.04em}
+.sqr-hint-row{display:flex;align-items:center;justify-content:center;gap:5px;font-size:11.5px;color:var(--ink-l);line-height:1.5;text-align:center;flex-wrap:wrap}
+.sqr-hint-row i{font-size:13px;flex-shrink:0}
+@keyframes sqrPulse{0%,100%{opacity:1}40%{opacity:.3}80%{opacity:.9}}
+.sqr-refreshing .sqr-ring-inner{animation:sqrPulse .55s ease-in-out 2}
 </style>
 </head>
 <body>
@@ -128,6 +151,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
     <button class="tab-btn wa-tab" data-tab="t-wa"><i class="ti ti-brand-whatsapp"></i>WhatsApp</button>
     <button class="tab-btn" data-tab="t-set"><i class="ti ti-settings"></i>Settings</button>
     <button class="tab-btn" data-tab="t-qr"><i class="ti ti-qrcode"></i>QR &amp; CSV</button>
+    <button class="tab-btn" data-tab="t-stamp"><i class="ti ti-scan"></i>Stamp QR</button>
   </div>
   <!-- Trial countdown banner — shown on all tabs during trial period -->
   <div id="trialBanner" style="display:none;margin:.5rem .9rem .1rem;border-radius:12px;padding:.65rem .9rem;border:1px solid;transition:background .3s,border-color .3s" role="status">
@@ -211,6 +235,32 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
     <div class="export-card"><div class="export-ico"><i class="ti ti-table-export"></i></div><div class="export-info"><strong>Export Customers</strong><p>All data as CSV.</p></div><button class="export-btn" id="csvBtn"><i class="ti ti-download"></i>CSV</button></div>
   </div></div>
 </div>
+
+  <div id="t-stamp" class="tab-content"><div class="sqr-wrap">
+    <div class="sqr-info"><i class="ti ti-info-circle"></i>Show this screen to your customer — they scan with their phone to earn a stamp instantly. No typing needed.</div>
+    <div id="sqr-loading" class="sqr-state"><div class="sqr-spinner"></div><p>Generating stamp QR…</p></div>
+    <div id="sqr-error" class="sqr-state" style="display:none"><i class="ti ti-alert-triangle" style="font-size:38px;color:var(--ink-l)"></i><p id="sqr-err-msg" style="max-width:280px"></p><button class="sqr-retry-btn" onclick="retryStampQR()"><i class="ti ti-refresh"></i> Retry</button></div>
+    <div id="sqr-main" style="display:none">
+      <div class="sqr-card">
+        <div class="sqr-card-title">✦ Live Stamp QR</div>
+        <div class="sqr-card-sub">Rotating every 30 seconds · Single-use per customer</div>
+        <div class="sqr-ring-container" id="sqrRingContainer">
+          <svg class="sqr-ring-svg" viewBox="0 0 260 260" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="130" cy="130" r="118" fill="none" stroke="var(--beige-m)" stroke-width="7"/>
+            <circle id="sqrArc" cx="130" cy="130" r="118" fill="none"
+              stroke="var(--em)" stroke-width="7"
+              stroke-dasharray="741.42" stroke-dashoffset="0"
+              stroke-linecap="round"
+              transform="rotate(-90 130 130)"/>
+          </svg>
+          <div class="sqr-ring-inner"><div id="sqr-canvas"></div></div>
+          <div class="sqr-secs-badge"><span id="sqrSecs">30</span><span class="sqr-s-unit">s</span></div>
+        </div>
+        <div class="sqr-token-row"><span>PRIMO</span><span class="sqr-t-sep">:</span><span id="sqrSlugDisplay">─</span><span class="sqr-t-sep">:</span><span class="sqr-t-val" id="sqrTokenDisplay">──────────</span></div>
+        <div class="sqr-hint-row"><i class="ti ti-shield-check"></i>One stamp per QR code per customer</div>
+      </div>
+    </div>
+  </div></div>
 
 <!-- MENU SHEET -->
 <div id="menuSheet" class="sheet-overlay"><div class="sheet"><div class="sheet-pull"></div><div class="sheet-top"><div class="sheet-coin">♛</div><div><div class="sheet-sn" id="sheetSN">Shop</div><div class="sheet-sc" id="sheetSC">—</div></div></div><div class="sheet-items"><button class="sheet-item" id="sheetRefresh"><div class="si-ico gold"><i class="ti ti-refresh"></i></div><div class="si-info"><strong>Refresh Data</strong><p>Sync latest stamps &amp; customers</p></div></button><button class="sheet-item" id="sheetSignOut"><div class="si-ico red"><i class="ti ti-logout"></i></div><div class="si-info"><strong>Sign Out</strong><p>Return to login</p></div></button></div></div></div>
@@ -899,11 +949,93 @@ document.addEventListener('click',function(ev){
   }
 });
 
+/* ══ STAMP QR ══ */
+const SQR_CIRC = 2 * Math.PI * 118; // circumference ≈ 741.42 for r=118
+let sqrState = { token: null, secsRemaining: 30, intervalId: null, busy: false, inited: false };
+
+async function fetchStampToken() {
+  if (!merchantToken || !shop || sqrState.busy) return;
+  sqrState.busy = true;
+  try {
+    const res = await fetch(`${PRIMO_CONFIG.EDGE_BASE}/get-stamp-token`, {
+      method: 'GET',
+      headers: { 'Authorization': `Bearer ${merchantToken}` },
+    });
+    if (res.status === 401) { merchantToken = null; signOut(); return; }
+    if (!res.ok) { const e = await res.json().catch(() => ({})); throw new Error(e.error || `HTTP ${res.status}`); }
+    const data = await res.json();
+    const changed = data.token !== sqrState.token;
+    sqrState.token = data.token;
+    sqrState.secsRemaining = data.seconds_remaining;
+    showSQRMain();
+    updateSQRArc();
+    if (changed) genStampQR(data.token, data.slug || shop?.slug || '');
+  } catch (e) {
+    console.error('[sqr]', e);
+    if (!sqrState.inited) showSQRError(e.message);
+  } finally {
+    sqrState.busy = false;
+  }
+}
+
+function genStampQR(token, slug) {
+  const text = `PRIMO:${slug}:${token}`;
+  const el = document.getElementById('sqr-canvas');
+  if (!el) return;
+  el.innerHTML = '';
+  try {
+    new QRCode(el, { text, width: 218, height: 218, colorDark: '#1A1007', colorLight: '#FFFFFF', correctLevel: QRCode.CorrectLevel.M });
+    sqrState.inited = true;
+  } catch (e) { console.error('[sqr] gen:', e); }
+  const slugEl = document.getElementById('sqrSlugDisplay');
+  const tokEl  = document.getElementById('sqrTokenDisplay');
+  if (slugEl) slugEl.textContent = slug;
+  if (tokEl)  tokEl.textContent  = token;
+  // Brief pulse on token change
+  const rc = document.getElementById('sqrRingContainer');
+  if (rc) { rc.classList.add('sqr-refreshing'); setTimeout(() => rc.classList.remove('sqr-refreshing'), 1200); }
+}
+
+function updateSQRArc() {
+  const secs = Math.max(0, sqrState.secsRemaining);
+  const secsEl = document.getElementById('sqrSecs');
+  const arc    = document.getElementById('sqrArc');
+  if (secsEl) secsEl.textContent = secs;
+  if (!arc) return;
+  arc.style.strokeDashoffset = (1 - secs / 30) * SQR_CIRC;
+  arc.style.stroke = secs > 20 ? 'var(--em)' : secs > 8 ? 'var(--gold-b)' : '#e74c3c';
+}
+
+function tickSQR() {
+  if (sqrState.secsRemaining > 0) {
+    sqrState.secsRemaining--;
+    updateSQRArc();
+    // Prefetch at 2s remaining so new QR is ready before window expires
+    if (sqrState.secsRemaining <= 2 && !sqrState.busy) fetchStampToken();
+  } else if (!sqrState.busy) {
+    fetchStampToken();
+  }
+}
+
+function startStampQR() {
+  if (!merchantToken || !shop) { showSQRError('Session expired — please log in again.'); return; }
+  showSQRLoading();
+  sqrState.inited = false;
+  fetchStampToken();
+  if (sqrState.intervalId) clearInterval(sqrState.intervalId);
+  sqrState.intervalId = setInterval(tickSQR, 1000);
+}
+function stopStampQR()   { if (sqrState.intervalId) { clearInterval(sqrState.intervalId); sqrState.intervalId = null; } }
+function retryStampQR()  { showSQRLoading(); sqrState.inited = false; fetchStampToken(); }
+function showSQRLoading(){ document.getElementById('sqr-loading').style.display='flex'; document.getElementById('sqr-error').style.display='none'; document.getElementById('sqr-main').style.display='none'; }
+function showSQRError(m) { document.getElementById('sqr-loading').style.display='none'; document.getElementById('sqr-error').style.display='flex'; document.getElementById('sqr-main').style.display='none'; const el=document.getElementById('sqr-err-msg'); if(el) el.textContent=m||'Could not load QR code'; }
+function showSQRMain()   { document.getElementById('sqr-loading').style.display='none'; document.getElementById('sqr-error').style.display='none'; document.getElementById('sqr-main').style.display='block'; }
+
 /* ══ WIRE ══ */
 function wire(){
   document.getElementById('loginBtn').addEventListener('click',handleLogin);document.getElementById('inSlug').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('inPwd').focus()});document.getElementById('inPwd').addEventListener('keydown',e=>{if(e.key==='Enter')handleLogin()});
   document.getElementById('profileMenuBtn').addEventListener('click',openMenu);document.getElementById('menuSheet').addEventListener('click',e=>{if(e.target.id==='menuSheet')closeMenu()});document.getElementById('sheetRefresh').addEventListener('click',doRefresh);document.getElementById('sheetSignOut').addEventListener('click',signOut);
-  document.querySelectorAll('.tab-btn').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.tab-btn').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));b.classList.add('active');document.getElementById(b.dataset.tab).classList.add('active');if(b.dataset.tab==='t-qr'&&shop)renderQR();if(b.dataset.tab==='t-wa'&&shop)renderWA()}));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.addEventListener('click',()=>{const prev=document.querySelector('.tab-btn.active')?.dataset?.tab;document.querySelectorAll('.tab-btn').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));b.classList.add('active');document.getElementById(b.dataset.tab).classList.add('active');if(b.dataset.tab==='t-qr'&&shop)renderQR();if(b.dataset.tab==='t-wa'&&shop)renderWA();if(b.dataset.tab==='t-stamp')startStampQR();if(prev==='t-stamp'&&b.dataset.tab!=='t-stamp')stopStampQR()}));
   document.getElementById('searchInp').addEventListener('input',e=>{searchQ=e.target.value;renderCustList()});
   document.getElementById('addCustBtn').addEventListener('click',openAdd);document.getElementById('addConfirm').addEventListener('click',confirmAdd);document.getElementById('addCancel').addEventListener('click',closeAdd);document.getElementById('addModal').addEventListener('click',e=>{if(e.target.id==='addModal')closeAdd()});
   document.getElementById('addMobile').addEventListener('input',function(){const d=this.value.replace(/\D/g,'');this.value=d;const badge=document.getElementById('addDerived'),b4=document.getElementById('addDerived4');if(d.length>=4){badge.style.display='inline-flex';b4.textContent=d.slice(-4)}else{badge.style.display='none'}});
