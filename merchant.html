@@ -568,7 +568,22 @@ function updateTrialBanner(){
   banner.style.borderRadius='13px';
   banner.style.padding='.75rem 1rem';
 
-  if(ss==='pending_mandate'){
+  // Halted — mandate was cancelled or payment failed
+  if(ss==='halted'){
+    Object.assign(banner.style,{background:'linear-gradient(135deg,#FEF2F2,#FFF0F0)',
+      borderColor:'#DC3545',color:'#7F1D1D',
+      animation:'urgentPulse 2s ease-in-out infinite',
+      boxShadow:'0 3px 16px rgba(220,53,69,.2)'});
+    title.style.cssText='font-size:14px;font-weight:800;margin-bottom:3px;color:#7F1D1D';
+    title.textContent='\u26a0\ufe0f Your autopay mandate was cancelled or payment failed';
+    sub.style.cssText='font-size:12px;color:#991B1B;font-weight:600';
+    sub.textContent='Please re-authorise your mandate to keep your shop running';
+    Object.assign(btn.style,{display:'inline-block',fontSize:'12.5px',fontWeight:'800',
+      padding:'7px 16px',borderRadius:'9px',border:'none',cursor:'pointer',
+      background:'#DC3545',color:'#fff',whiteSpace:'nowrap'});
+    btn.textContent='Fix now \u2192';
+    btn.onclick=()=>switchToSettings();
+  } else if(ss==='pending_mandate'){
     // Vivid violet — cool, unmissable, action-needed
     Object.assign(banner.style,{background:'linear-gradient(135deg,#F5F3FF,#EDE9FE)',
       borderColor:'#7C3AED',color:'#4C1D95',
