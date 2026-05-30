@@ -797,6 +797,7 @@ const TOAST_ICONS={success:'ti-circle-check',error:'ti-alert-circle',info:'ti-in
 function showToast(title,msg,type='info',duration=6000){const wrap=document.getElementById('toastWrap');if(!wrap)return;const t=document.createElement('div');t.className=`p-toast t-${type}`;t.innerHTML=`<i class="ti ${TOAST_ICONS[type]} p-toast-ico" aria-hidden="true"></i><div class="p-toast-body"><div class="p-toast-title">${title}</div>${msg?`<div class="p-toast-msg">${msg}</div>`:''}</div><button class="p-toast-close" aria-label="Dismiss" onclick="this.closest('.p-toast').remove()"><i class="ti ti-x" aria-hidden="true"></i></button>`;wrap.appendChild(t);requestAnimationFrame(()=>requestAnimationFrame(()=>t.classList.add('show')));if(duration>0)setTimeout(()=>{t.classList.add('hiding');setTimeout(()=>t.remove(),320);},duration);}
 let sPlan='pro',sAmt=0;// setup fee paise — 0=waived; structure kept for future reinstatement
 let activeCoupon=null; // holds validated coupon response from validate-coupon EF
+function sanitize(str){if(typeof str!=='string')return'';return str.replace(/[<>&"'\/]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&#x27;','/':'&#x2F;'}[c]));}
 
 async function applyCoupon(){
   const code=document.getElementById('fCoupon').value.trim().toUpperCase();
@@ -900,7 +901,7 @@ function showEnrollmentSuccess(slug,mandateComplete){
   if(refEl)refEl.textContent=slug?slug.toUpperCase():'YOUR SHOP';
   if(successCard)successCard.classList.add('show');
   if(mandateComplete){
-    showToast("You're all set! \U0001F389","Shop going live — check your email for login details.",'success',10000);
+    showToast("You're all set! \uD83C\uDF89","Shop going live \u2014 check your email for login details.",'success',10000);
   }else{
     showToast("Almost there!","Check your email for login details. Complete billing in your dashboard to go live.",'info',10000);
   }
