@@ -118,6 +118,18 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
 .sqr-hint-row i{font-size:13px;flex-shrink:0}
 @keyframes sqrPulse{0%,100%{opacity:1}40%{opacity:.3}80%{opacity:.9}}
 .sqr-refreshing .sqr-ring-inner{animation:sqrPulse .55s ease-in-out 2}
+/* ══ QR NOTIFICATIONS ══ */
+.sqr-tab-badge{position:absolute;top:3px;right:10px;min-width:16px;height:16px;border-radius:99px;background:#e74c3c;color:#fff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 4px;line-height:1;animation:badgePop .25s var(--eb) both}
+@keyframes badgePop{from{transform:scale(0)}to{transform:scale(1)}}
+.tab-btn{position:relative}
+.sqr-notif-stack{position:fixed;top:58px;left:50%;transform:translateX(-50%);z-index:9500;display:flex;flex-direction:column;gap:.4rem;align-items:center;width:calc(100% - 1.5rem);max-width:400px;pointer-events:none}
+.sqr-notif{background:var(--ink);color:var(--cream);border-radius:14px;padding:.7rem 1rem;box-shadow:0 6px 28px rgba(26,16,7,.35);display:flex;align-items:center;gap:.75rem;pointer-events:auto;animation:notifIn .3s var(--eb) both;border-left:3px solid var(--em)}
+@keyframes notifIn{from{opacity:0;transform:translateY(-12px) scale(.95)}to{opacity:1;transform:none}}
+.sqr-notif.out{animation:notifOut .25s ease forwards}
+@keyframes notifOut{to{opacity:0;transform:translateY(-8px) scale(.93);max-height:0;margin:0;padding:0}}
+.sqr-notif-ico{width:32px;height:32px;border-radius:50%;flex-shrink:0;background:radial-gradient(circle at 38% 32%,#EDD97A,#C9A84C 42%,#A8832A 72%,#7A5C18);display:flex;align-items:center;justify-content:center;font-size:13px;color:rgba(255,255,255,.75);font-family:var(--fd)}
+.sqr-notif-body{flex:1;min-width:0}.sqr-notif-name{font-size:13px;font-weight:600;color:var(--cream);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.sqr-notif-detail{font-size:11px;color:rgba(253,250,245,.6);margin-top:1px}
+.sqr-notif-close{background:transparent;border:none;color:rgba(253,250,245,.4);font-size:16px;cursor:pointer;padding:2px;flex-shrink:0;line-height:1}
 </style>
 </head>
 <body>
@@ -151,7 +163,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
     <button class="tab-btn wa-tab" data-tab="t-wa"><i class="ti ti-brand-whatsapp"></i>WhatsApp</button>
     <button class="tab-btn" data-tab="t-set"><i class="ti ti-settings"></i>Settings</button>
     <button class="tab-btn" data-tab="t-qr"><i class="ti ti-qrcode"></i>QR &amp; CSV</button>
-    <button class="tab-btn" data-tab="t-stamp"><i class="ti ti-scan"></i>Stamp QR</button>
+    <button class="tab-btn" data-tab="t-stamp"><i class="ti ti-scan"></i>Stamp QR<span class="sqr-tab-badge" id="sqrTabBadge" style="display:none">0</span></button>
   </div>
   <!-- Trial countdown banner — shown on all tabs during trial period -->
   <div id="trialBanner" style="display:none;margin:.5rem .9rem .1rem;border-radius:12px;padding:.65rem .9rem;border:1px solid;transition:background .3s,border-color .3s" role="status">
@@ -277,6 +289,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
 <!-- WHATSAPP PREVIEW -->
 <div id="waPreviewModal" class="modal-overlay"><div class="modal-sheet"><div class="modal-pull"></div><div class="modal-h">Send via WhatsApp</div><div class="modal-sub">Review the message before sending.</div><div class="wa-preview-card"><div class="wa-preview-lbl">Message</div><div class="wa-preview-msg" id="waPreviewMsg">—</div><div class="wa-preview-to" id="waPreviewTo">To: —</div></div><div class="modal-actions"><button class="modal-cancel" id="waPreviewCancel">Cancel</button><button class="modal-confirm wa-c" id="waPreviewSend"><i class="ti ti-brand-whatsapp"></i> <span>Open WhatsApp</span></button></div></div></div>
 
+<div class="sqr-notif-stack" id="sqrNotifStack"></div>
 <div id="toast" role="status" aria-live="polite"></div>
 
 <script>
@@ -389,6 +402,8 @@ async function handleLogin(){
     }
     await loadDash();renderDash();showScreen('s-dash');
     if(!secure())document.getElementById('secBanner').classList.add('show');
+    // Start background QR scan feed (notifications appear on any tab for Pro/Premium)
+    if(['pro','premium'].includes(shop?.plan)) startQRFeedPoller();
   }catch(e){
     console.error(e);
     if(e.message.includes('401')||e.message.includes('Invalid')){pEl.classList.add('err');errEl.textContent='⚠ Incorrect password.';pEl.value='';recordFailedLogin();}
@@ -1019,6 +1034,11 @@ function tickSQR() {
 
 function startStampQR() {
   if (!merchantToken || !shop) { showSQRError('Session expired — please log in again.'); return; }
+  // Plan gate: Pro and Premium only
+  if (!['pro','premium'].includes(shop?.plan)) {
+    showSQRError('QR Stamping is a Pro & Premium feature.\nUpgrade in Settings → Billing to unlock it.');
+    return;
+  }
   showSQRLoading();
   sqrState.inited = false;
   fetchStampToken();
@@ -1031,11 +1051,95 @@ function showSQRLoading(){ document.getElementById('sqr-loading').style.display=
 function showSQRError(m) { document.getElementById('sqr-loading').style.display='none'; document.getElementById('sqr-error').style.display='flex'; document.getElementById('sqr-main').style.display='none'; const el=document.getElementById('sqr-err-msg'); if(el) el.textContent=m||'Could not load QR code'; }
 function showSQRMain()   { document.getElementById('sqr-loading').style.display='none'; document.getElementById('sqr-error').style.display='none'; document.getElementById('sqr-main').style.display='block'; }
 
+/* ══ QR FEED POLLER + NOTIFICATIONS ══ */
+let sqrFeedTimer   = null;
+let sqrLastSince   = null; // ISO timestamp — only fetch scans newer than this
+let sqrBadgeCount  = 0;
+let sqrOnStampTab  = false;
+
+async function pollQRFeed() {
+  if (!merchantToken || !shop) return;
+  try {
+    const url = `${PRIMO_CONFIG.EDGE_BASE}/get-qr-feed${sqrLastSince ? `?since=${encodeURIComponent(sqrLastSince)}` : ''}`;
+    const res = await fetch(url, { headers: { 'Authorization': `Bearer ${merchantToken}` } });
+    if (res.status === 401) { merchantToken = null; signOut(); return; }
+    if (!res.ok) return;
+    const { scans } = await res.json();
+    if (!scans?.length) return;
+    // On very first poll absorb silently (avoid flooding with historical scans)
+    const firstPoll = !sqrLastSince || sqrLastSince === new Date(Date.now() - 5000).toISOString().slice(0,20);
+    // Update cursor to latest scan timestamp
+    sqrLastSince = scans[0].scanned_at;
+    if (!firstPoll) scans.forEach(scan => showStampNotif(scan));
+  } catch (e) { console.warn('[sqr-feed]', e); }
+}
+
+function showStampNotif(scan) {
+  const cm  = custMap[scan.customer_id] || {};
+  const buy = shop?.reward_rule?.buy || 11;
+  const cnt = cm.cySt?.length ?? '?';
+  const detail = typeof cnt === 'number'
+    ? `${cnt}/${buy} stamps · just now`
+    : 'QR stamp · just now';
+
+  const el = document.createElement('div');
+  el.className = 'sqr-notif';
+  el.innerHTML = `
+    <div class="sqr-notif-ico">♛</div>
+    <div class="sqr-notif-body">
+      <div class="sqr-notif-name">${san(scan.first_name)} ••••${san(scan.phone_last4)}</div>
+      <div class="sqr-notif-detail">✦ Stamp earned via QR · ${detail}</div>
+    </div>
+    <button class="sqr-notif-close" onclick="dismissNotif(this.parentElement)" aria-label="Dismiss">×</button>`;
+
+  const stack = document.getElementById('sqrNotifStack');
+  if (!stack) return;
+  stack.prepend(el);
+
+  // Badge: only increment when merchant isn't on Stamp QR tab
+  if (!sqrOnStampTab) {
+    sqrBadgeCount++;
+    const badge = document.getElementById('sqrTabBadge');
+    if (badge) { badge.textContent = sqrBadgeCount; badge.style.display = 'flex'; }
+  }
+
+  // Auto-dismiss after 6s
+  setTimeout(() => dismissNotif(el), 6000);
+
+  // Cap stack at 5 visible
+  const all = stack.querySelectorAll('.sqr-notif');
+  if (all.length > 5) all[all.length - 1].remove();
+}
+
+function dismissNotif(el) {
+  if (!el || el.classList.contains('out')) return;
+  el.classList.add('out');
+  setTimeout(() => el.remove(), 260);
+}
+
+function clearSQRBadge() {
+  sqrBadgeCount = 0;
+  const badge = document.getElementById('sqrTabBadge');
+  if (badge) badge.style.display = 'none';
+}
+
+function startQRFeedPoller() {
+  // Reset cursor on tab open so we catch any scans since last visit
+  if (!sqrLastSince) sqrLastSince = new Date(Date.now() - 5000).toISOString();
+  if (sqrFeedTimer) clearInterval(sqrFeedTimer);
+  pollQRFeed(); // immediate first hit
+  sqrFeedTimer = setInterval(pollQRFeed, 3000);
+}
+
+function stopQRFeedPoller() {
+  if (sqrFeedTimer) { clearInterval(sqrFeedTimer); sqrFeedTimer = null; }
+}
+
 /* ══ WIRE ══ */
 function wire(){
   document.getElementById('loginBtn').addEventListener('click',handleLogin);document.getElementById('inSlug').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('inPwd').focus()});document.getElementById('inPwd').addEventListener('keydown',e=>{if(e.key==='Enter')handleLogin()});
   document.getElementById('profileMenuBtn').addEventListener('click',openMenu);document.getElementById('menuSheet').addEventListener('click',e=>{if(e.target.id==='menuSheet')closeMenu()});document.getElementById('sheetRefresh').addEventListener('click',doRefresh);document.getElementById('sheetSignOut').addEventListener('click',signOut);
-  document.querySelectorAll('.tab-btn').forEach(b=>b.addEventListener('click',()=>{const prev=document.querySelector('.tab-btn.active')?.dataset?.tab;document.querySelectorAll('.tab-btn').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));b.classList.add('active');document.getElementById(b.dataset.tab).classList.add('active');if(b.dataset.tab==='t-qr'&&shop)renderQR();if(b.dataset.tab==='t-wa'&&shop)renderWA();if(b.dataset.tab==='t-stamp')startStampQR();if(prev==='t-stamp'&&b.dataset.tab!=='t-stamp')stopStampQR()}));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.addEventListener('click',()=>{const prev=document.querySelector('.tab-btn.active')?.dataset?.tab;document.querySelectorAll('.tab-btn').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));b.classList.add('active');document.getElementById(b.dataset.tab).classList.add('active');if(b.dataset.tab==='t-qr'&&shop)renderQR();if(b.dataset.tab==='t-wa'&&shop)renderWA();if(b.dataset.tab==='t-stamp'){sqrOnStampTab=true;clearSQRBadge();startStampQR();startQRFeedPoller();}if(prev==='t-stamp'&&b.dataset.tab!=='t-stamp'){sqrOnStampTab=false;stopStampQR();stopQRFeedPoller();}}));
   document.getElementById('searchInp').addEventListener('input',e=>{searchQ=e.target.value;renderCustList()});
   document.getElementById('addCustBtn').addEventListener('click',openAdd);document.getElementById('addConfirm').addEventListener('click',confirmAdd);document.getElementById('addCancel').addEventListener('click',closeAdd);document.getElementById('addModal').addEventListener('click',e=>{if(e.target.id==='addModal')closeAdd()});
   document.getElementById('addMobile').addEventListener('input',function(){const d=this.value.replace(/\D/g,'');this.value=d;const badge=document.getElementById('addDerived'),b4=document.getElementById('addDerived4');if(d.length>=4){badge.style.display='inline-flex';b4.textContent=d.slice(-4)}else{badge.style.display='none'}});
