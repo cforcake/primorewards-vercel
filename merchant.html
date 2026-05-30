@@ -159,6 +159,16 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
 .sqr-hint-row i{font-size:13px;flex-shrink:0}
 @keyframes sqrPulse{0%,100%{opacity:1}40%{opacity:.3}80%{opacity:.9}}
 .sqr-refreshing .sqr-ring-inner{animation:sqrPulse .55s ease-in-out 2}
+/* ══ STAMP QR FULL-SCREEN OVERLAY ══ */
+.sqro{position:fixed;inset:0;z-index:400;background:var(--cream-d);display:none;flex-direction:column;overflow:hidden}
+.sqro.open{display:flex;animation:screenIn .32s var(--eo) both}
+.sqro-hdr{display:flex;align-items:center;gap:.65rem;padding:.75rem 1rem;background:var(--ink);border-bottom:1px solid rgba(201,168,76,.16);flex-shrink:0;position:relative}
+.sqro-hdr::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),var(--gold-b),var(--gold))}
+.sqro-back{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.1);border:none;color:var(--cream);font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.sqro-back:active{background:rgba(255,255,255,.2)}
+.sqro-title{font-family:var(--fd);font-size:17px;font-weight:500;color:var(--cream);flex:1}
+.sqro-chip{font-size:9px;font-weight:700;letter-spacing:.07em;padding:3px 10px;border-radius:99px;background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.3);color:var(--gold-b)}
+.sqro-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;display:flex;flex-direction:column}
 /* ══ QR NOTIFICATIONS ══ */
 .sqr-tab-badge{position:absolute;top:3px;right:10px;min-width:16px;height:16px;border-radius:99px;background:#e74c3c;color:#fff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 4px;line-height:1;animation:badgePop .25s var(--eb) both}
 @keyframes badgePop{from{transform:scale(0)}to{transform:scale(1)}}
@@ -304,17 +314,28 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
   </div></div>
 </div>
 
-  <div id="t-stamp" class="tab-content"><div class="sqr-wrap">
-    <!-- Starter plan FOMO gate — shown immediately, no loading state -->
+  <div id="t-stamp" class="tab-content"></div><!-- content lifted into sqrOverlay -->
+
+</div><!-- /s-dash -->
+
+<!-- ══ STAMP QR FULL-SCREEN OVERLAY ══ -->
+<div class="sqro" id="sqrOverlay" role="dialog" aria-modal="true" aria-label="Stamp QR">
+  <div class="sqro-hdr">
+    <button class="sqro-back" onclick="closeSQROverlay()" aria-label="Back"><i class="ti ti-arrow-left"></i></button>
+    <div class="sqro-title">Stamp QR</div>
+    <div class="sqro-chip" id="sqroChip">PRO</div>
+  </div>
+  <div class="sqro-body">
+    <!-- Starter plan FOMO gate -->
     <div class="sqr-plan-gate" id="sqr-plan-gate">
       <div class="pgc-card">
         <div class="pgc-preview">
           <div class="pgc-badge">✦ PRO &amp; PREMIUM FEATURE</div>
           <div class="pgc-mock-wrap">
-            <svg class="pgc-mock-svg" viewBox="0 0 118 118" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="59" cy="59" r="53" fill="none" stroke="rgba(201,168,76,.2)" stroke-width="5"/>
-              <circle cx="59" cy="59" r="53" fill="none" stroke="rgba(201,168,76,.55)" stroke-width="5"
-                stroke-dasharray="333" stroke-dashoffset="93" stroke-linecap="round" transform="rotate(-90 59 59)"/>
+            <svg class="pgc-mock-svg" viewBox="0 0 164 164" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="82" cy="82" r="74" fill="none" stroke="rgba(201,168,76,.2)" stroke-width="6"/>
+              <circle cx="82" cy="82" r="74" fill="none" stroke="rgba(201,168,76,.55)" stroke-width="6"
+                stroke-dasharray="465" stroke-dashoffset="130" stroke-linecap="round" transform="rotate(-90 82 82)"/>
             </svg>
             <div class="pgc-mock-qr"><i class="ti ti-qrcode"></i></div>
             <div class="pgc-lock-wrap">
@@ -325,41 +346,46 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
         </div>
         <div class="pgc-body">
           <div class="pgc-title">Instant QR Stamping</div>
-          <div class="pgc-sub">Let customers earn stamps by scanning a code on your screen — no typing, no friction.</div>
+          <div class="pgc-sub">Let customers earn stamps by scanning a code on your screen — no typing, no friction, no missed stamps.</div>
           <div class="pgc-feats">
-            <div class="pgc-feat"><i class="ti ti-refresh"></i>Rotating 30-second codes — fraud-proof</div>
+            <div class="pgc-feat"><i class="ti ti-refresh"></i>Rotating 30-second QR codes — tamper-proof</div>
             <div class="pgc-feat"><i class="ti ti-bell"></i>Live notification every time a customer scans</div>
             <div class="pgc-feat"><i class="ti ti-bolt"></i>Zero friction — customer just point &amp; scan</div>
+            <div class="pgc-feat"><i class="ti ti-shield-check"></i>One stamp per code, per customer, guaranteed</div>
           </div>
-          <button class="pgc-cta" onclick="switchToSettings()"><i class="ti ti-arrow-up-circle"></i>Upgrade to Pro — ₹299/mo</button>
+          <button class="pgc-cta" onclick="closeSQROverlay();switchToSettings()"><i class="ti ti-arrow-up-circle"></i>Upgrade to Pro — ₹299/mo</button>
           <div class="pgc-note">Cancel anytime · No charge until trial ends · Instant activation</div>
         </div>
       </div>
     </div>
-    <div class="sqr-info"><i class="ti ti-info-circle"></i>Show this screen to your customer — they scan with their phone to earn a stamp instantly. No typing needed.</div>
-    <div id="sqr-loading" class="sqr-state"><div class="sqr-spinner"></div><p>Generating stamp QR…</p></div>
-    <div id="sqr-error" class="sqr-state" style="display:none"><i class="ti ti-alert-triangle" style="font-size:38px;color:var(--ink-l)"></i><p id="sqr-err-msg" style="max-width:280px"></p><button class="sqr-retry-btn" onclick="retryStampQR()"><i class="ti ti-refresh"></i> Retry</button></div>
-    <div id="sqr-main" style="display:none">
-      <div class="sqr-card">
-        <div class="sqr-card-title">✦ Live Stamp QR</div>
-        <div class="sqr-card-sub">Rotating every 30 seconds · Single-use per customer</div>
-        <div class="sqr-ring-container" id="sqrRingContainer">
-          <svg class="sqr-ring-svg" viewBox="0 0 260 260" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="130" cy="130" r="118" fill="none" stroke="var(--beige-m)" stroke-width="7"/>
-            <circle id="sqrArc" cx="130" cy="130" r="118" fill="none"
-              stroke="var(--em)" stroke-width="7"
-              stroke-dasharray="741.42" stroke-dashoffset="0"
-              stroke-linecap="round"
-              transform="rotate(-90 130 130)"/>
-          </svg>
-          <div class="sqr-ring-inner"><div id="sqr-canvas"></div></div>
-          <div class="sqr-secs-badge"><span id="sqrSecs">30</span><span class="sqr-s-unit">s</span></div>
+    <!-- Loading / error / main QR states -->
+    <div class="sqr-wrap" style="flex:1;display:flex;flex-direction:column">
+      <div class="sqr-info" id="sqrInfoBanner"><i class="ti ti-info-circle"></i>Show this screen to your customer — they scan with their phone to earn a stamp instantly. No typing needed.</div>
+      <div id="sqr-loading" class="sqr-state"><div class="sqr-spinner"></div><p>Generating stamp QR…</p></div>
+      <div id="sqr-error" class="sqr-state" style="display:none"><i class="ti ti-alert-triangle" style="font-size:38px;color:var(--ink-l)"></i><p id="sqr-err-msg" style="max-width:280px"></p><button class="sqr-retry-btn" onclick="retryStampQR()"><i class="ti ti-refresh"></i> Retry</button></div>
+      <div id="sqr-main" style="display:none">
+        <div class="sqr-card">
+          <div class="sqr-card-title">✦ Live Stamp QR</div>
+          <div class="sqr-card-sub">Rotating every 30 seconds · Single-use per customer</div>
+          <div class="sqr-ring-container" id="sqrRingContainer">
+            <svg class="sqr-ring-svg" viewBox="0 0 260 260" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="130" cy="130" r="118" fill="none" stroke="var(--beige-m)" stroke-width="7"/>
+              <circle id="sqrArc" cx="130" cy="130" r="118" fill="none"
+                stroke="var(--em)" stroke-width="7"
+                stroke-dasharray="741.42" stroke-dashoffset="0"
+                stroke-linecap="round"
+                transform="rotate(-90 130 130)"/>
+            </svg>
+            <div class="sqr-ring-inner"><div id="sqr-canvas"></div></div>
+            <div class="sqr-secs-badge"><span id="sqrSecs">30</span><span class="sqr-s-unit">s</span></div>
+          </div>
+          <div class="sqr-token-row"><span>PRIMO</span><span class="sqr-t-sep">:</span><span id="sqrSlugDisplay">─</span><span class="sqr-t-sep">:</span><span class="sqr-t-val" id="sqrTokenDisplay">──────────</span></div>
+          <div class="sqr-hint-row"><i class="ti ti-shield-check"></i>One stamp per QR code per customer</div>
         </div>
-        <div class="sqr-token-row"><span>PRIMO</span><span class="sqr-t-sep">:</span><span id="sqrSlugDisplay">─</span><span class="sqr-t-sep">:</span><span class="sqr-t-val" id="sqrTokenDisplay">──────────</span></div>
-        <div class="sqr-hint-row"><i class="ti ti-shield-check"></i>One stamp per QR code per customer</div>
       </div>
     </div>
-  </div></div>
+  </div>
+</div>
 
 <!-- MENU SHEET -->
 <div id="menuSheet" class="sheet-overlay"><div class="sheet"><div class="sheet-pull"></div><div class="sheet-top"><div class="sheet-coin">♛</div><div><div class="sheet-sn" id="sheetSN">Shop</div><div class="sheet-sc" id="sheetSC">—</div></div></div><div class="sheet-items"><button class="sheet-item" id="sheetRefresh"><div class="si-ico gold"><i class="ti ti-refresh"></i></div><div class="si-info"><strong>Refresh Data</strong><p>Sync latest stamps &amp; customers</p></div></button><button class="sheet-item" id="sheetSignOut"><div class="si-ico red"><i class="ti ti-logout"></i></div><div class="si-info"><strong>Sign Out</strong><p>Return to login</p></div></button></div></div></div>
@@ -1276,17 +1302,45 @@ function updateCustLimitBanner() {
   }
 }
 
+// Stamp QR overlay — full-screen, no scrolling competition
+let sqrPrevTab = 't-cust';
+
+function openSQROverlay() {
+  sqrOnStampTab = true;
+  clearSQRBadge();
+  // Update plan chip in header
+  const chip = document.getElementById('sqroChip');
+  if (chip) { chip.textContent = (shop?.plan || 'pro').toUpperCase(); chip.style.display = isStarter() ? 'none' : 'flex'; }
+  document.getElementById('sqrOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  startStampQR();
+  if (!isStarter()) startQRFeedPoller();
+}
+
+function closeSQROverlay() {
+  sqrOnStampTab = false;
+  stopStampQR();
+  stopQRFeedPoller();
+  document.getElementById('sqrOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+  // Restore the previously active tab visual without triggering its load
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === sqrPrevTab));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.toggle('active', c.id === sqrPrevTab));
+}
+
 // Stamp QR tab plan gate — shown instantly, no API call
 function showSQRPlanGate() {
   document.getElementById('sqr-plan-gate').style.display = 'block';
-  document.querySelector('#t-stamp .sqr-info').style.display = 'none';
+  const info = document.getElementById('sqrInfoBanner');
+  if (info) info.style.display = 'none';
   document.getElementById('sqr-loading').style.display = 'none';
   document.getElementById('sqr-error').style.display = 'none';
   document.getElementById('sqr-main').style.display = 'none';
 }
 function hideSQRPlanGate() {
   document.getElementById('sqr-plan-gate').style.display = 'none';
-  document.querySelector('#t-stamp .sqr-info').style.display = 'flex';
+  const info = document.getElementById('sqrInfoBanner');
+  if (info) info.style.display = 'flex';
 }
 
 // WA tab plan gate
@@ -1303,7 +1357,8 @@ function hideWAPlanGate() {
 function wire(){
   document.getElementById('loginBtn').addEventListener('click',handleLogin);document.getElementById('inSlug').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('inPwd').focus()});document.getElementById('inPwd').addEventListener('keydown',e=>{if(e.key==='Enter')handleLogin()});
   document.getElementById('profileMenuBtn').addEventListener('click',openMenu);document.getElementById('menuSheet').addEventListener('click',e=>{if(e.target.id==='menuSheet')closeMenu()});document.getElementById('sheetRefresh').addEventListener('click',doRefresh);document.getElementById('sheetSignOut').addEventListener('click',signOut);
-  document.querySelectorAll('.tab-btn').forEach(b=>b.addEventListener('click',()=>{const prev=document.querySelector('.tab-btn.active')?.dataset?.tab;document.querySelectorAll('.tab-btn').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));b.classList.add('active');document.getElementById(b.dataset.tab).classList.add('active');if(b.dataset.tab==='t-qr'&&shop)renderQR();if(b.dataset.tab==='t-wa'&&shop){if(isStarter())showWAPlanGate();else{hideWAPlanGate();renderWA();}}if(b.dataset.tab==='t-stamp'){sqrOnStampTab=true;clearSQRBadge();window.scrollTo({top:0,behavior:'instant'});startStampQR();if(!isStarter())startQRFeedPoller();}if(prev==='t-stamp'&&b.dataset.tab!=='t-stamp'){sqrOnStampTab=false;stopStampQR();stopQRFeedPoller();}}));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.addEventListener('click',()=>{const prev=document.querySelector('.tab-btn.active')?.dataset?.tab;if(b.dataset.tab==='t-stamp'){sqrPrevTab=prev||'t-cust';openSQROverlay();return;}if(prev==='t-stamp')closeSQROverlay();document.querySelectorAll('.tab-btn').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));b.classList.add('active');document.getElementById(b.dataset.tab).classList.add('active');if(b.dataset.tab==='t-qr'&&shop)renderQR();if(b.dataset.tab==='t-wa'&&shop){if(isStarter())showWAPlanGate();else{hideWAPlanGate();renderWA();}}}));
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(document.getElementById('sqrOverlay')?.classList.contains('open'))closeSQROverlay();}});
   document.getElementById('searchInp').addEventListener('input',e=>{searchQ=e.target.value;renderCustList()});
   document.getElementById('addCustBtn').addEventListener('click',openAdd);document.getElementById('addConfirm').addEventListener('click',confirmAdd);document.getElementById('addCancel').addEventListener('click',closeAdd);document.getElementById('addModal').addEventListener('click',e=>{if(e.target.id==='addModal')closeAdd()});
   document.getElementById('addMobile').addEventListener('input',function(){const d=this.value.replace(/\D/g,'');this.value=d;const badge=document.getElementById('addDerived'),b4=document.getElementById('addDerived4');if(d.length>=4){badge.style.display='inline-flex';b4.textContent=d.slice(-4)}else{badge.style.display='none'}});
