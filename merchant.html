@@ -167,7 +167,47 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
     </div>
 
     <div class="settings-card"><div class="settings-h">Loyalty Programme</div><div class="sf-row"><div><label class="sf-l" for="sfProduct">Product Name</label><input id="sfProduct" class="sf-i" type="text" placeholder="e.g. cake"></div><div class="emoji-field"><label class="sf-l">Product Icon</label><input type="hidden" id="sfEmoji"><button type="button" class="emoji-trigger" id="emojiTrigger" aria-haspopup="listbox" aria-expanded="false" onclick="toggleEmojiPicker(event)"><span class="et-left"><span class="et-emoji" id="emojiDisplay">🎂</span><span class="et-lbl">Choose icon</span></span><i class="ti ti-chevron-down" aria-hidden="true"></i></button><div class="emoji-picker" id="emojiPicker" role="listbox" aria-label="Product icon picker"></div></div></div><div class="sf-g"><label class="sf-l">Reward Rule</label><div class="sf-rule-row"><div><label class="sf-l" for="sfBuy">Buy</label><input id="sfBuy" class="sf-i" type="number" min="1" max="50"></div><div class="sf-rule-sep">→</div><div><label class="sf-l" for="sfGet">Free</label><input id="sfGet" class="sf-i" type="number" min="1" max="10"></div></div></div><button class="save-btn" id="saveSetBtn"><i class="ti ti-device-floppy"></i><span id="saveSetTxt">Save Changes</span></button><div class="settings-note">Changes apply immediately on all customer-facing cards.</div></div><div class="settings-card"><div class="settings-h">Change Password</div><div class="sf-g"><label class="sf-l" for="sfNewPwd">New Password</label><input id="sfNewPwd" class="sf-i" type="password" placeholder="At least 6 characters"></div><div class="sf-g"><label class="sf-l" for="sfNewPwdC">Confirm</label><input id="sfNewPwdC" class="sf-i" type="password" placeholder="Repeat new password"></div><div class="lf-err" id="pwdErr"></div><button class="save-btn" id="savePwdBtn" style="background:linear-gradient(135deg,#5a8f7b,var(--em))"><i class="ti ti-lock"></i><span id="savePwdTxt">Update Password</span></button></div></div></div>
-  <div id="t-qr" class="tab-content"><div class="qr-wrap"><div class="qr-card"><div class="qr-title">Customer Loyalty Link</div><div class="qr-sub">Display at your counter — customers scan to join instantly.</div><div id="qr-canvas-wrap"><div style="width:180px;height:180px;display:flex;align-items:center;justify-content:center;color:var(--ink-f);font-size:12px">Generating…</div></div><div class="qr-url" id="qrUrl">—</div><div class="qr-actions"><button class="qr-btn outline" id="copyLinkBtn"><i class="ti ti-copy"></i>Copy</button><button class="qr-btn gold" id="shareLinkBtn"><i class="ti ti-share"></i>Share</button></div></div><div class="export-card"><div class="export-ico"><i class="ti ti-table-export"></i></div><div class="export-info"><strong>Export Customers</strong><p>All data as CSV.</p></div><button class="export-btn" id="csvBtn"><i class="ti ti-download"></i>CSV</button></div></div></div>
+  <div id="t-qr" class="tab-content"><div class="qr-wrap">
+    <div class="settings-card" style="margin-bottom:.7rem">
+      <div class="settings-h">✦ Branded QR Card</div>
+      <p style="font-size:13px;color:var(--ink-l);line-height:1.6;margin:0 0 1rem">Display at your counter. Customers scan to open their digital loyalty card and check their stamp progress.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.4rem;margin-bottom:1rem">
+        <button id="qrVariantLight" onclick="setQRVariant('light')" style="padding:9px 0;border-radius:10px;border:1.5px solid #C9A84C;background:linear-gradient(135deg,#C9A84C,#A8832A);color:#fff;font-size:13px;font-weight:700;cursor:pointer">&#9728; Light card</button>
+        <button id="qrVariantDark" onclick="setQRVariant('dark')" style="padding:9px 0;border-radius:10px;border:1.5px solid #C9A84C;background:transparent;color:var(--gold);font-size:13px;font-weight:700;cursor:pointer">&#9679; Dark card</button>
+      </div>
+      <div style="display:flex;justify-content:center;margin-bottom:1rem">
+        <div id="qr-card-light" style="width:216px;border-radius:18px;overflow:hidden;border:2.5px solid #C9A84C;box-shadow:0 4px 18px rgba(168,131,42,.16)">
+          <div style="background:linear-gradient(135deg,#1A1007,#2D1A08);padding:13px;text-align:center"><div style="font-size:11px;font-weight:700;color:#EDD97A;letter-spacing:.1em">✦ PRIMO REWARDS</div></div>
+          <div style="background:#FFFDF5;padding:14px 14px 8px;display:flex;flex-direction:column;align-items:center"><div id="qr-gen-light" style="border-radius:8px;padding:7px;background:#fff;border:1.5px solid rgba(201,168,76,.25)"></div></div>
+          <div style="background:#FFFDF5;padding:4px 12px 14px;text-align:center">
+            <div id="qrShopNameLight" style="font-size:14px;font-weight:700;color:#1A1007;margin-bottom:4px">—</div>
+            <div id="qrRuleLight" style="display:inline-block;font-size:10px;font-weight:700;color:#92400E;background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.25);border-radius:99px;padding:3px 10px;margin-bottom:9px">—</div>
+            <div style="height:1px;background:linear-gradient(90deg,transparent,rgba(201,168,76,.4),transparent);margin-bottom:9px"></div>
+            <div style="font-size:10px;color:#5C4A2A;font-style:italic;line-height:1.5">Turn Every Purchase Into a Return Visit.</div>
+          </div>
+          <div style="background:linear-gradient(135deg,#1A1007,#0D0804);padding:7px;text-align:center"><div style="font-size:8.5px;font-weight:700;color:rgba(237,217,122,.6);letter-spacing:.12em">PRIMOREWARDS.IN</div></div>
+        </div>
+        <div id="qr-card-dark" style="display:none;width:216px;border-radius:18px;overflow:hidden;border:2.5px solid #EDD97A;box-shadow:0 4px 18px rgba(0,0,0,.28)">
+          <div style="background:linear-gradient(135deg,#1A1007,#2D1A08);padding:13px;text-align:center"><div style="font-size:11px;font-weight:700;color:#EDD97A;letter-spacing:.1em">✦ PRIMO REWARDS</div></div>
+          <div style="background:#1A1007;padding:14px 14px 8px;display:flex;flex-direction:column;align-items:center"><div id="qr-gen-dark" style="border-radius:8px;padding:7px;background:#F5EDD8;border:1.5px solid rgba(237,217,122,.2)"></div></div>
+          <div style="background:#1A1007;padding:4px 12px 14px;text-align:center">
+            <div id="qrShopNameDark" style="font-size:14px;font-weight:700;color:#EDD97A;margin-bottom:4px">—</div>
+            <div id="qrRuleDark" style="display:inline-block;font-size:10px;font-weight:700;color:#EDD97A;background:rgba(237,217,122,.1);border:1px solid rgba(237,217,122,.2);border-radius:99px;padding:3px 10px;margin-bottom:9px">—</div>
+            <div style="height:1px;background:linear-gradient(90deg,transparent,rgba(237,217,122,.25),transparent);margin-bottom:9px"></div>
+            <div style="font-size:10px;color:rgba(237,217,122,.75);font-style:italic;line-height:1.5">Turn Every Purchase Into a Return Visit.</div>
+          </div>
+          <div style="background:#0D0804;padding:7px;text-align:center"><div style="font-size:8.5px;font-weight:700;color:rgba(237,217,122,.45);letter-spacing:.12em">PRIMOREWARDS.IN</div></div>
+        </div>
+      </div>
+      <div class="qr-url" id="qrUrl">—</div>
+      <div class="qr-actions">
+        <button class="qr-btn outline" id="copyLinkBtn"><i class="ti ti-copy"></i>Copy</button>
+        <button class="qr-btn gold" id="downloadQRBtn"><i class="ti ti-download"></i>Download PNG</button>
+        <button class="qr-btn outline" id="shareLinkBtn"><i class="ti ti-share"></i>Share</button>
+      </div>
+    </div>
+    <div class="export-card"><div class="export-ico"><i class="ti ti-table-export"></i></div><div class="export-info"><strong>Export Customers</strong><p>All data as CSV.</p></div><button class="export-btn" id="csvBtn"><i class="ti ti-download"></i>CSV</button></div>
+  </div></div>
 </div>
 
 <!-- MENU SHEET -->
@@ -205,6 +245,7 @@ const PRIMO_CONFIG = {
 /* ══ STATE ══ */
 let shop=null,customers=[],allStamps=[],allReds=[],custMap={},searchQ='',redeemTarget=null,selTplKey='progress';
 let merchantToken=null; // JWT from Edge Function auth — stored in memory only (never sessionStorage)
+let qrVariant='light'; // QR card design variant
 const justRedeemed=new Set();
 const loginAttempts={count:0,lastAt:0,cooldownUntil:0}; // CVE-9 fix: client-side brute force cooldown
 let waPendingCid=null; // customer ID for WA preview
@@ -405,7 +446,109 @@ function confirmSendWA(){
 
 function renderWA(){const buy=shop.reward_rule?.buy||11,wp=customers.filter(c=>c.full_phone),np=customers.filter(c=>!c.full_phone);const banner=document.getElementById('waBanner'),btxt=document.getElementById('waBannerTxt');if(np.length){banner.style.display='flex';btxt.innerHTML=`<strong>${np.length}</strong> customer${np.length>1?'s':''} missing phone. Edit their card to add.`}else{banner.style.display='none'}const list=document.getElementById('waList');if(!wp.length){list.innerHTML='<div class="wa-empty">No customers have a phone number yet.<br>Edit a customer card to add one.</div>';return}list.innerHTML=wp.map(c=>{const cm=custMap[c.id]||{cySt:[],full:false},cnt=cm.cySt.length,full=cm.full,ini=(c.first_name||'?')[0].toUpperCase(),bdt=isBdayToday(c.birthday);return`<div class="wa-row"><div class="wa-av">${ini}</div><div class="wa-info"><div class="wa-nm">${san(c.first_name)}${bdt?' <i class="ti ti-cake bday-ico" aria-label="Birthday today"></i>':''}</div><div class="wa-st">${full?'<i class="ti ti-gift"></i> Reward ready!':`${cnt}/${buy} stamps`}</div></div><button class="wa-send" onclick="openWAPreview('${c.id}')"><i class="ti ti-brand-whatsapp"></i>Send</button></div>`}).join('')}
 
-function renderQR(){const url=`https://primorewards.in/${shop.slug}-reward`;document.getElementById('qrUrl').textContent=url;const w=document.getElementById('qr-canvas-wrap');w.innerHTML='';if(typeof QRCode!=='undefined'){new QRCode(w,{text:url,width:180,height:180,colorDark:'#1A1007',colorLight:'#FFFFFF',correctLevel:QRCode.CorrectLevel.H})}else{setTimeout(renderQR,800)}}
+function setQRVariant(v){
+  qrVariant=v;
+  document.getElementById('qr-card-light').style.display=v==='light'?'block':'none';
+  document.getElementById('qr-card-dark').style.display=v==='dark'?'block':'none';
+  const lb=document.getElementById('qrVariantLight'),db=document.getElementById('qrVariantDark');
+  lb.style.background=v==='light'?'linear-gradient(135deg,#C9A84C,#A8832A)':'transparent';
+  lb.style.color=v==='light'?'#fff':'var(--gold)';
+  db.style.background=v==='dark'?'linear-gradient(135deg,#C9A84C,#A8832A)':'transparent';
+  db.style.color=v==='dark'?'#fff':'var(--gold)';
+}
+function renderQR(){
+  if(!shop)return;
+  const url=`https://primorewards.in/${shop.slug}-reward`;
+  document.getElementById('qrUrl').textContent=url;
+  const buy=shop.reward_rule?.buy||11,emoji=shop.product_emoji||'🎁';
+  const rule=`Buy ${buy} \u2726 Get 1 Free ${emoji}`;
+  ['Light','Dark'].forEach(v=>{
+    document.getElementById(`qrShopName${v}`).textContent=shop.shop_name;
+    document.getElementById(`qrRule${v}`).textContent=rule;
+  });
+  const makeQR=(id,light)=>{
+    const el=document.getElementById(id);if(!el)return;el.innerHTML='';
+    if(typeof QRCode!=='undefined'){
+      new QRCode(el,{text:url,width:160,height:160,colorDark:'#1A1007',colorLight:light?'#FFFFFF':'#F5EDD8',correctLevel:QRCode.CorrectLevel.H});
+    }else{setTimeout(()=>makeQR(id,light),800);}
+  };
+  makeQR('qr-gen-light',true);makeQR('qr-gen-dark',false);
+}
+function roundRectPath(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);
+  ctx.arcTo(x+w,y,x+w,y+r,r);ctx.lineTo(x+w,y+h-r);
+  ctx.arcTo(x+w,y+h,x+w-r,y+h,r);ctx.lineTo(x+r,y+h);
+  ctx.arcTo(x,y+h,x,y+h-r,r);ctx.lineTo(x,y+r);
+  ctx.arcTo(x,y,x+r,y,r);ctx.closePath();
+}
+function downloadQRCard(){
+  if(!shop){toast('\u26a0 Shop not loaded.');return;}
+  const isLight=qrVariant==='light';
+  const qrEl=document.getElementById(isLight?'qr-gen-light':'qr-gen-dark');
+  const qrImg=qrEl&&(qrEl.querySelector('img')||qrEl.querySelector('canvas'));
+  if(!qrImg){toast('\u26a0 QR still loading \u2014 try again in a moment.');return;}
+  const W=600,H=680,R=28;
+  const cv=document.createElement('canvas');cv.width=W;cv.height=H;
+  const c=cv.getContext('2d');
+  // Clip entire card to rounded shape
+  roundRectPath(c,0,0,W,H,R);c.clip();
+  // Background
+  c.fillStyle=isLight?'#FFFDF5':'#1A1007';c.fillRect(0,0,W,H);
+  // Header
+  const hH=90;
+  const hg=c.createLinearGradient(0,0,W,hH);hg.addColorStop(0,'#1A1007');hg.addColorStop(1,'#2D1A08');
+  c.fillStyle=hg;c.fillRect(0,0,W,hH);
+  c.fillStyle='#EDD97A';c.font='bold 22px Helvetica,Arial,sans-serif';
+  c.textAlign='center';c.textBaseline='middle';
+  c.fillText('\u2726 PRIMO REWARDS',W/2,hH/2);
+  // QR image
+  const qrPad=14,qrSize=240,qrBgY=hH+24;
+  c.fillStyle=isLight?'#FFFFFF':'#F5EDD8';
+  roundRectPath(c,(W-qrSize)/2-qrPad,qrBgY,qrSize+qrPad*2,qrSize+qrPad*2,12);c.fill();
+  try{c.drawImage(qrImg,(W-qrSize)/2,qrBgY+qrPad,qrSize,qrSize);}catch(e){console.warn('QR draw error',e);}
+  // Shop name
+  const nameY=qrBgY+qrSize+qrPad*2+44;
+  c.fillStyle=isLight?'#1A1007':'#EDD97A';
+  c.font='bold 34px Helvetica,Arial,sans-serif';c.textAlign='center';c.textBaseline='alphabetic';
+  let nm=shop.shop_name;
+  while(c.measureText(nm).width>W-80&&nm.length>4)nm=nm.slice(0,-1)+'\u2026';
+  c.fillText(nm,W/2,nameY);
+  // Rule pill
+  const buy=shop.reward_rule?.buy||11,emoji=shop.product_emoji||'\uD83C\uDF81';
+  const rule=`Buy ${buy}  \u2726  Get 1 Free ${emoji}`;
+  c.font='bold 17px Helvetica,Arial,sans-serif';
+  const rW=c.measureText(rule).width+48,rX=(W-rW)/2,rY=nameY+18;
+  c.fillStyle=isLight?'rgba(201,168,76,.12)':'rgba(237,217,122,.1)';
+  roundRectPath(c,rX,rY,rW,36,18);c.fill();
+  c.strokeStyle=isLight?'rgba(201,168,76,.4)':'rgba(237,217,122,.3)';c.lineWidth=1;c.stroke();
+  c.fillStyle=isLight?'#92400E':'#EDD97A';c.textBaseline='middle';c.fillText(rule,W/2,rY+18);
+  // Divider
+  const divY=rY+56;
+  const dg=c.createLinearGradient(60,0,W-60,0);
+  dg.addColorStop(0,'transparent');dg.addColorStop(.5,isLight?'rgba(201,168,76,.4)':'rgba(237,217,122,.3)');dg.addColorStop(1,'transparent');
+  c.strokeStyle=dg;c.lineWidth=1;c.beginPath();c.moveTo(60,divY);c.lineTo(W-60,divY);c.stroke();
+  // Tagline
+  c.fillStyle=isLight?'#5C4A2A':'rgba(237,217,122,.75)';
+  c.font='italic 18px Helvetica,Arial,sans-serif';c.textBaseline='middle';
+  c.fillText('Turn Every Purchase Into a Return Visit.',W/2,divY+30);
+  // Footer
+  const fH=62,fY=H-fH;
+  const fg=c.createLinearGradient(0,fY,W,H);fg.addColorStop(0,'#1A1007');fg.addColorStop(1,'#0D0804');
+  c.fillStyle=fg;c.fillRect(0,fY,W,fH);
+  c.fillStyle='rgba(237,217,122,.6)';c.font='bold 12px Helvetica,Arial,sans-serif';
+  c.textBaseline='middle';c.textAlign='center';c.fillText('PRIMOREWARDS.IN',W/2,fY+fH/2);
+  // Border ring on fresh canvas (outside clip)
+  const cv2=document.createElement('canvas');cv2.width=W;cv2.height=H;
+  const c2=cv2.getContext('2d');c2.drawImage(cv,0,0);
+  c2.strokeStyle=isLight?'#C9A84C':'#EDD97A';c2.lineWidth=6;
+  roundRectPath(c2,3,3,W-6,H-6,26);c2.stroke();
+  // Download
+  const a=document.createElement('a');
+  a.download=`${shop.slug}-loyalty-qr-${qrVariant}.png`;
+  a.href=cv2.toDataURL('image/png',1.0);a.click();
+  toast('\u2726 QR card downloaded!');
+}
 
 /* ══ STAMP (CVE-4 fix) ══ */
 const stTimers={};
@@ -751,7 +894,9 @@ function wire(){
   document.getElementById('waPreviewSend').addEventListener('click',confirmSendWA);document.getElementById('waPreviewCancel').addEventListener('click',closeWAPreview);document.getElementById('waPreviewModal').addEventListener('click',e=>{if(e.target.id==='waPreviewModal')closeWAPreview()});
   document.getElementById('saveSetBtn').addEventListener('click',saveSets);document.getElementById('savePwdBtn').addEventListener('click',changePwd);
   document.getElementById('copyLinkBtn').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(`https://primorewards.in/${shop?.slug}-reward`);toast('✦ Link copied!')}catch{toast('⚠ Copy failed.')}});
-  document.getElementById('shareLinkBtn').addEventListener('click',handleShare);document.getElementById('csvBtn').addEventListener('click',exportCSV);
+  document.getElementById('shareLinkBtn').addEventListener('click',handleShare);
+  document.getElementById('csvBtn').addEventListener('click',exportCSV);
+  document.getElementById('downloadQRBtn').addEventListener('click',downloadQRCard);
 }
 
 document.addEventListener('DOMContentLoaded',()=>{wire();showScreen('s-login');});
