@@ -128,6 +128,17 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
         </div>
       </div>
       <div class="lf-note">Restricted to registered Primo merchants.</div>
+      <!-- FORGOT PASSWORD -->
+      <div style="text-align:center;margin-top:.6rem">
+        <button id="forgotPwdToggle" onclick="toggleForgotPwd()" style="background:none;border:none;color:var(--ink-f);font-size:12px;cursor:pointer;font-family:var(--fb);text-decoration:underline;padding:0">Forgot your password?</button>
+      </div>
+      <div id="forgotPwdPanel" style="display:none;margin-top:.65rem;background:#EFF6FF;border:1.5px solid #BFDBFE;border-radius:13px;padding:14px 14px 12px">
+        <div style="font-size:12.5px;font-weight:700;color:#1E40AF;margin-bottom:4px">&#128275; Reset your password</div>
+        <div style="font-size:12px;color:#3B82F6;margin-bottom:10px;line-height:1.5">Enter your registered email — we'll send a new temporary password.</div>
+        <input id="forgotEmail" type="email" class="lf-i" placeholder="your@email.com" style="margin-bottom:8px;font-size:14px">
+        <button id="forgotSubmitBtn" onclick="handleForgotPassword()" class="lf-btn" style="margin-bottom:0;min-height:40px;font-size:14px"><span id="forgotSubmitTxt">Send new password</span></button>
+        <div id="forgotMsg" style="font-size:12px;text-align:center;margin-top:8px;line-height:1.45;min-height:16px"></div>
+      </div>
     </div>
     <div class="login-primo"><span>Powered by</span><span class="lp-brand">Primo<span>★</span></span><span>Rewards</span></div>
   </div>
@@ -437,7 +448,72 @@ async function handleReactivate(){
   }
 }
 
-/* ══ DATA LOAD ══ */
+/* ══ FORGOT PASSWORD ══
+   Collapsible panel on the login screen. Sends { email } to
+   merchant-reset-password EF which generates a new temp password
+   and emails it. Always returns ok regardless of whether email
+   exists (prevents enumeration). Panel hides when user re-types
+   their slug/password (handled in wire()).                        */
+function toggleForgotPwd(){
+  const panel=document.getElementById('forgotPwdPanel');
+  const isOpen=panel.style.display!=='none';
+  panel.style.display=isOpen?'none':'block';
+  const msg=document.getElementById('forgotMsg');
+  if(msg)msg.textContent='';
+  if(!isOpen)setTimeout(()=>document.getElementById('forgotEmail')?.focus(),80);
+}
+
+async function handleForgotPassword(){
+  const emailEl=document.getElementById('forgotEmail');
+  const btn=document.getElementById('forgotSubmitBtn'),txt=document.getElementById('forgotSubmitTxt');
+  const msg=document.getElementById('forgotMsg');
+  const email=(emailEl?.value||'').trim().toLowerCase();
+  msg.textContent='';
+  if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+    msg.style.color='#c0392b';msg.textContent='⚠ Enter a valid email address.';return;
+  }
+  btn.disabled=true;txt.textContent='Sending…';
+  try{
+    await fetch(`${PRIMO_CONFIG.EDGE_BASE}/merchant-reset-password`,{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email}),
+    });
+    // Always show success — EF never reveals whether email was found
+    msg.style.color='#065F46';
+    msg.textContent='✓ If this email is registered, a new password is on its way. Check your inbox (and spam).';
+    if(emailEl)emailEl.value='';
+  }catch(e){
+    msg.style.color='#c0392b';msg.textContent='⚠ Could not send — please try again.';
+  }finally{btn.disabled=false;txt.textContent='Send new password';}
+}
+
+/* ══ SYNC BILLING STATUS ══
+   "Already completed? Verify now" button in the billing tab.
+   Calls sync-billing-status EF which fetches the live Razorpay
+   subscription status and applies any missed webhook updates.
+   Shows result as a toast + refreshes the billing card.          */
+async function syncBillingStatus(){
+  const btn=document.getElementById('syncBillingBtn');
+  const origTxt=btn?.textContent||'';
+  if(btn){btn.disabled=true;btn.textContent='Checking with Razorpay…';}
+  try{
+    const res=await edge('sync-billing-status',{});
+    if(res.updated){
+      // Refresh full dashboard data so billing card + trial banner reflect new status
+      shop.status=res.shop_status||shop.status;
+      shop.subscription_status=res.subscription_status||shop.subscription_status;
+      await loadDash();renderDash();
+      toast('✦ '+res.message);
+    }else{
+      toast(res.message||'No change — please complete the mandate and try again.',4000);
+      if(btn){btn.disabled=false;btn.textContent=origTxt;}
+    }
+  }catch(e){
+    console.error('[syncBillingStatus]',e);
+    toast('⚠ Could not verify right now — try again in a moment.');
+    if(btn){btn.disabled=false;btn.textContent=origTxt;}
+  }
+}
 async function loadDash(){
   if(secure()){
     // Production: single authenticated Edge Function call returns all data
@@ -750,7 +826,12 @@ function renderBillingCard(){
       </a>
       <p style="font-size:12px;color:#6D28D9;text-align:center;margin:8px 0 0;font-weight:500">
         One-time setup · Charged only after trial ends · Cancel anytime
-      </p>`;
+      </p>
+      <div style="text-align:center;margin-top:10px">
+        <button id="syncBillingBtn" onclick="syncBillingStatus()" style="background:none;border:1.5px solid rgba(124,58,237,.3);color:#6D28D9;font-size:12px;padding:7px 14px;border-radius:9px;cursor:pointer;font-family:var(--fb);font-weight:600">
+          🔄 Already completed? Verify now
+        </button>
+      </div>`;
     } else {
       cta.innerHTML=`<button onclick="initiateBilling()" id="bl-initiate-btn"
         style="width:100%;padding:13px;border-radius:12px;margin-top:4px;
@@ -981,8 +1062,11 @@ document.addEventListener('click',function(ev){
 /* ══ WIRE ══ */
 function wire(){
   document.getElementById('loginBtn').addEventListener('click',handleLogin);document.getElementById('inSlug').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('inPwd').focus()});document.getElementById('inPwd').addEventListener('keydown',e=>{if(e.key==='Enter')handleLogin()});
-  // Hide reactivation panel when user changes slug or password
-  ['inSlug','inPwd'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{const rxp=document.getElementById('reactivationPanel');if(rxp)rxp.style.display='none';}));
+  // Hide reactivation panel AND forgot-password panel when user re-types
+  ['inSlug','inPwd'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{
+    const rxp=document.getElementById('reactivationPanel');if(rxp)rxp.style.display='none';
+    const fp=document.getElementById('forgotPwdPanel');if(fp)fp.style.display='none';
+  }));
   document.getElementById('profileMenuBtn').addEventListener('click',openMenu);document.getElementById('menuSheet').addEventListener('click',e=>{if(e.target.id==='menuSheet')closeMenu()});document.getElementById('sheetRefresh').addEventListener('click',doRefresh);document.getElementById('sheetSignOut').addEventListener('click',signOut);
   document.querySelectorAll('.tab-btn').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.tab-btn').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));b.classList.add('active');document.getElementById(b.dataset.tab).classList.add('active');if(b.dataset.tab==='t-qr'&&shop)renderQR();if(b.dataset.tab==='t-wa'&&shop)renderWA()}));
   document.getElementById('searchInp').addEventListener('input',e=>{searchQ=e.target.value;renderCustList()});
