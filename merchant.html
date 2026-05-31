@@ -94,145 +94,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
 /* Dev */
 .bday-ico{font-size:13px;color:var(--gold);vertical-align:middle}
 .err-ico i{font-size:52px;color:var(--ink-l)}
-/* ══ ANALYTICS TAB ══ */
-.an-wrap{padding:.6rem .75rem 6rem;max-width:480px;margin:0 auto;width:100%}
-.an-top-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem}
-.an-title{font-family:var(--fd);font-size:19px;font-weight:500;color:var(--ink)}
-.an-pills{display:flex;background:#E8E2D6;border-radius:9px;padding:2px;gap:1px}
-.an-pill{font-size:10.5px;font-weight:700;color:#8B7355;padding:5px 10px;border-radius:7px;cursor:pointer;border:none;background:transparent}
-.an-pill.sel{background:var(--white);color:var(--ink);box-shadow:0 1px 5px rgba(26,16,7,.12)}
-.an-kpi-row{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:.75rem}
-.an-kpi{background:var(--white);border-radius:14px;padding:13px 13px 11px;box-shadow:0 2px 12px rgba(26,16,7,.07)}
-.an-kpi-val{font-size:28px;font-weight:700;color:var(--ink);font-family:var(--fd);line-height:1}
-.an-kpi-lbl{font-size:10.5px;color:var(--ink-l);margin-top:4px;font-weight:500;line-height:1.3}
-.an-kpi-chg{font-size:10px;margin-top:6px;font-weight:700;display:flex;align-items:center;gap:3px}
-.an-up{color:var(--em)}.an-dn{color:#c0392b}.an-neu{color:var(--ink-l)}
-.an-card{background:var(--white);border-radius:14px;padding:13px 13px 12px;box-shadow:0 2px 12px rgba(26,16,7,.07);margin-bottom:.75rem}
-.an-card-title{font-size:10.5px;font-weight:700;color:var(--ink-m);letter-spacing:.07em;text-transform:uppercase;margin-bottom:12px}
-.an-bars{display:flex;align-items:flex-end;gap:2px;height:72px}
-.an-bar{flex:1;border-radius:3px 3px 0 0;min-height:3px}
-.an-bar.hi{background:linear-gradient(180deg,var(--gold-b),var(--gold))}
-.an-bar.lo{background:var(--beige-m)}
-.an-bar.em{background:linear-gradient(180deg,#2E8B57,var(--em))}
-.an-bar-axis{display:flex;justify-content:space-between;margin-top:4px}
-.an-bar-lbl{font-size:8px;color:var(--ink-f)}
-.an-pipeline{display:flex;gap:8px}
-.an-pipe{flex:1;text-align:center}
-.an-pipe-track{height:8px;border-radius:99px;background:var(--beige-m);overflow:hidden;margin-bottom:5px}
-.an-pipe-fill{height:100%;border-radius:99px}
-.an-pipe-val{font-size:20px;font-weight:700;color:var(--ink);font-family:var(--fd);line-height:1}
-.an-pipe-lbl{font-size:8.5px;color:var(--ink-l);font-weight:500;line-height:1.4;margin-top:2px}
-.an-pipe-lbl.ready{color:#c0392b;font-weight:700}
-.an-sec-title{font-size:10.5px;font-weight:700;color:var(--ink-m);letter-spacing:.07em;text-transform:uppercase;margin:.1rem 0 .55rem}
-.an-attn{border-radius:14px;overflow:hidden;box-shadow:0 2px 12px rgba(26,16,7,.08);margin-bottom:.65rem}
-.an-attn-hdr{padding:11px 13px;display:flex;align-items:center;justify-content:space-between}
-.an-attn-hdr-l{display:flex;align-items:center;gap:9px}
-.an-attn-ico{font-size:20px}
-.an-attn-title{font-size:12.5px;font-weight:700;color:#FFFDF5;line-height:1.2}
-.an-attn-sub{font-size:10px;color:rgba(253,250,245,.55);margin-top:2px}
-.an-attn-n{font-size:20px;font-weight:700;color:#FFFDF5;font-family:var(--fd);background:rgba(255,255,255,.14);border-radius:9px;padding:5px 12px;min-width:36px;text-align:center;line-height:1}
-.an-attn-body{background:var(--white);padding:9px 13px 11px;display:flex;align-items:center;justify-content:space-between;gap:10px}
-.an-attn-names{font-size:11.5px;color:var(--ink-m);line-height:1.85;flex:1}
-.an-attn-empty{font-size:12px;color:var(--ink-f);text-align:center;padding:.5rem 0;flex:1}
-.an-wa-btn{display:flex;align-items:center;gap:5px;padding:9px 13px;border-radius:10px;background:#25D366;color:#fff;font-size:11.5px;font-weight:700;border:none;cursor:pointer;box-shadow:0 3px 10px rgba(37,211,102,.32);white-space:nowrap;flex-shrink:0}
-.an-cust-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--beige)}
-.an-cust-row:last-child{border:none}
-.an-cust-rank{font-size:14px;font-weight:700;color:var(--gold-b);font-family:var(--fd);width:18px;flex-shrink:0;text-align:center}
-.an-cust-av{width:34px;height:34px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:15px;font-weight:700;background:linear-gradient(135deg,var(--beige),var(--beige-m));color:var(--ink-m)}
-.an-cust-info{flex:1;min-width:0}
-.an-cust-nm{font-size:12.5px;font-weight:600;color:var(--ink)}
-.an-cust-sub{font-size:10px;color:var(--ink-l);margin-top:2px}
-.an-cust-right{text-align:right;flex-shrink:0}
-.an-cust-val{font-size:16px;font-weight:700;color:var(--ink);font-family:var(--fd);line-height:1}
-.an-cust-lbl{font-size:9px;color:var(--ink-l);margin-top:1px}
-.an-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4rem 1rem;gap:.75rem;color:var(--ink-l);font-size:13px;text-align:center;line-height:1.65}
-/* ══ STARTER PLAN GATES ══ */
-/* Stamp QR FOMO card */
-.sqr-plan-gate{padding:.35rem .75rem .75rem;max-width:460px;margin:0 auto;width:100%;display:none}
-.pgc-card{background:var(--white);border-radius:20px;overflow:hidden;box-shadow:0 6px 28px rgba(26,16,7,.12)}
-.pgc-preview{background:linear-gradient(160deg,#1A1007 0%,#2E1808 100%);padding:1rem 1rem 1.1rem;display:flex;flex-direction:column;align-items:center;gap:.5rem;position:relative}
-.pgc-badge{background:linear-gradient(135deg,var(--gold-b),var(--gold));color:#fff;border-radius:99px;padding:4px 13px;font-size:10px;font-weight:800;letter-spacing:.08em;position:relative;z-index:1}
-.pgc-mock-wrap{position:relative;width:118px;height:118px;z-index:1}
-.pgc-mock-svg{position:absolute;inset:0;width:100%;height:100%}
-.pgc-mock-qr{position:absolute;top:16px;left:16px;width:86px;height:86px;background:rgba(255,255,255,.07);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:30px;color:rgba(255,255,255,.18);filter:blur(1px)}
-.pgc-lock-wrap{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.2rem;background:rgba(10,5,0,.45);border-radius:50%;margin:15px}
-.pgc-lock-ico{font-size:30px;color:#fff;filter:drop-shadow(0 2px 8px rgba(0,0,0,.5))}
-.pgc-lock-sub{font-size:10px;color:rgba(255,255,255,.5);font-family:var(--fd);letter-spacing:.04em}
-.pgc-body{padding:.85rem 1rem .9rem}
-.pgc-title{font-family:var(--fd);font-size:19px;font-weight:500;color:var(--ink);margin-bottom:.15rem}
-.pgc-sub{font-size:12.5px;color:var(--ink-l);line-height:1.55;margin-bottom:.65rem}
-.pgc-feats{background:var(--cream);border-radius:11px;padding:.55rem .8rem;margin-bottom:.75rem;display:flex;flex-direction:column;gap:.3rem}
-.pgc-feat{display:flex;align-items:flex-start;gap:.55rem;font-size:12.5px;color:var(--ink-m);line-height:1.35}
-.pgc-feat i{font-size:14px;color:var(--em);flex-shrink:0;margin-top:1px}
-.pgc-cta{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:11px;border-radius:12px;background:linear-gradient(135deg,var(--gold-b),var(--gold));color:#fff;font-size:13.5px;font-weight:700;box-shadow:0 4px 16px rgba(168,131,42,.38);border:none;cursor:pointer;margin-bottom:.35rem;transition:box-shadow .2s}
-.pgc-cta:active{box-shadow:0 2px 8px rgba(168,131,42,.28)}
-.pgc-note{font-size:10.5px;color:var(--ink-f);text-align:center;line-height:1.45}
-/* WA plan gate */
-.wa-plan-gate{display:none;flex-direction:column;align-items:center;text-align:center;gap:.8rem;padding:1.75rem .9rem 5rem}
-.wpg-ico{width:72px;height:72px;border-radius:50%;background:rgba(37,211,102,.1);border:2px solid rgba(37,211,102,.2);display:flex;align-items:center;justify-content:center;font-size:30px;color:var(--wa-d)}
-.wpg-title{font-family:var(--fd);font-size:21px;font-weight:500;color:var(--ink)}
-.wpg-sub{font-size:13px;color:var(--ink-l);line-height:1.65;max-width:290px}
-.wpg-feats{background:var(--white);border-radius:14px;padding:.9rem 1rem;box-shadow:0 2px 10px rgba(26,16,7,.06);width:100%;max-width:320px;display:flex;flex-direction:column;gap:.5rem;text-align:left}
-.wpg-feat{display:flex;align-items:center;gap:.6rem;font-size:13px;color:var(--ink-m)}
-.wpg-feat i{font-size:15px;color:var(--wa-d);flex-shrink:0}
-.wpg-cta{width:100%;max-width:320px;display:flex;align-items:center;justify-content:center;gap:8px;padding:13px;border-radius:13px;background:linear-gradient(135deg,var(--gold-b),var(--gold));color:#fff;font-size:14px;font-weight:700;box-shadow:0 4px 18px rgba(168,131,42,.38);border:none;cursor:pointer}
-/* Customer limit banner */
-.cust-limit-banner{display:none;align-items:center;gap:.55rem;border-radius:11px;padding:.55rem .85rem;margin:.3rem .75rem .1rem;font-size:12px;line-height:1.45;border:1px solid}
-.cust-limit-banner.warn{display:flex;background:#FFF3E0;border-color:#F57C00;color:#E65100}
-.cust-limit-banner.full{display:flex;background:#FEE2E2;border-color:#DC3545;color:#991B1B;font-weight:600}
-.cust-limit-banner i{font-size:15px;flex-shrink:0}
-.clb-upgrade{font-weight:700;cursor:pointer;text-decoration:underline;margin-left:3px}
-/* Reward rule lock */
-.rule-lock{display:none;border-radius:12px;padding:.8rem 1rem;background:var(--cream-d);border:1.5px dashed rgba(168,131,42,.35)}
-.rule-lock-val{font-family:var(--fd);font-size:22px;font-weight:500;color:var(--ink);margin-bottom:.25rem;display:flex;align-items:center;gap:.6rem}
-.rule-lock-val i{font-size:16px;color:var(--ink-f)}
-.rule-lock-note{font-size:12px;color:var(--ink-l);line-height:1.55}
-.stat-val{font-size:22px}.stat-lbl{font-size:8.5px}.cust-toolbar{padding:.6rem .6rem .3rem}.cust-list{padding:0 .6rem 5rem}.search-inp{font-size:13px;padding:9px 10px 9px 30px}.add-btn{padding:9px 10px;font-size:11px}.cust-card{padding:.7rem .7rem}.cust-nm{font-size:13px}.s-btn,.r-btn{padding:6px 8px;font-size:10.5px}.mc{width:19px;height:19px}.mc-c::after{font-size:6.5px}.mini-grid{gap:3px}.modal-sheet{padding:0 .9rem calc(1.25rem + var(--safe-b))}.wa-wrap{padding:.6rem .6rem 5rem}.tpl-pill{padding:7px 11px;font-size:11px}}
-/* ══ STAMP QR TAB ══ */
-.sqr-wrap{padding:.7rem .75rem 6rem;max-width:460px;margin:0 auto;width:100%}
-.sqr-info{display:flex;align-items:flex-start;gap:.55rem;background:rgba(27,94,66,.07);border:1px solid rgba(27,94,66,.18);border-radius:11px;padding:.65rem .85rem;font-size:12.5px;color:var(--em);font-weight:500;margin-bottom:1rem;line-height:1.5}
-.sqr-info i{font-size:17px;flex-shrink:0;margin-top:1px}
-.sqr-state{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.75rem;padding:3rem 1rem;color:var(--ink-l);font-size:14px;text-align:center;line-height:1.6}
-.sqr-spinner{width:36px;height:36px;border-radius:50%;border:3px solid var(--beige);border-top-color:var(--gold-b);animation:spin .8s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.sqr-retry-btn{display:flex;align-items:center;gap:6px;padding:10px 20px;border-radius:99px;border:1.5px solid var(--gold-br);background:transparent;color:var(--gold);font-size:13px;font-weight:600;cursor:pointer}
-.sqr-card{background:var(--white);border-radius:20px;padding:1.4rem 1rem 1.2rem;box-shadow:0 4px 22px rgba(26,16,7,.08);text-align:center;margin-bottom:.8rem}
-.sqr-card-title{font-family:var(--fd);font-size:20px;font-weight:500;color:var(--ink);margin-bottom:.2rem}
-.sqr-card-sub{font-size:12px;color:var(--ink-l);margin-bottom:1.3rem}
-.sqr-ring-container{position:relative;width:260px;height:260px;margin:0 auto 1.5rem}
-.sqr-ring-svg{position:absolute;inset:0;width:100%;height:100%}
-.sqr-ring-inner{position:absolute;top:20px;left:20px;right:20px;bottom:20px;display:flex;align-items:center;justify-content:center;background:var(--white);border-radius:10px;overflow:hidden;box-shadow:0 2px 10px rgba(26,16,7,.06)}
-.sqr-secs-badge{position:absolute;bottom:-16px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--cream);border-radius:99px;padding:5px 14px;font-family:var(--fd);font-size:19px;font-weight:600;display:flex;align-items:baseline;gap:2px;box-shadow:0 3px 12px rgba(26,16,7,.28);white-space:nowrap;line-height:1.2}
-.sqr-secs-badge .sqr-s-unit{font-size:11px;font-weight:500;opacity:.65}
-.sqr-token-row{display:flex;align-items:center;justify-content:center;gap:3px;font-size:12px;font-family:monospace;color:var(--ink-m);background:var(--cream);border-radius:9px;padding:.45rem .8rem;margin-bottom:.65rem;flex-wrap:wrap;word-break:break-all}
-.sqr-t-sep{color:var(--ink-f);opacity:.45;margin:0 1px}
-.sqr-t-val{font-weight:700;color:var(--em);letter-spacing:.04em}
-.sqr-hint-row{display:flex;align-items:center;justify-content:center;gap:5px;font-size:11.5px;color:var(--ink-l);line-height:1.5;text-align:center;flex-wrap:wrap}
-.sqr-hint-row i{font-size:13px;flex-shrink:0}
-@keyframes sqrPulse{0%,100%{opacity:1}40%{opacity:.3}80%{opacity:.9}}
-.sqr-refreshing .sqr-ring-inner{animation:sqrPulse .55s ease-in-out 2}
-/* ══ STAMP QR FULL-SCREEN OVERLAY ══ */
-.sqro{position:fixed;inset:0;z-index:400;background:var(--cream-d);display:none;flex-direction:column;overflow:hidden}
-.sqro.open{display:flex;animation:screenIn .32s var(--eo) both}
-.sqro-hdr{display:flex;align-items:center;gap:.65rem;padding:.75rem 1rem;background:var(--ink);border-bottom:1px solid rgba(201,168,76,.16);flex-shrink:0;position:relative}
-.sqro-hdr::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),var(--gold-b),var(--gold))}
-.sqro-back{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.1);border:none;color:var(--cream);font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
-.sqro-back:active{background:rgba(255,255,255,.2)}
-.sqro-title{font-family:var(--fd);font-size:17px;font-weight:500;color:var(--cream);flex:1}
-.sqro-chip{font-size:9px;font-weight:700;letter-spacing:.07em;padding:3px 10px;border-radius:99px;background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.3);color:var(--gold-b)}
-.sqro-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;display:flex;flex-direction:column}
-/* ══ QR NOTIFICATIONS ══ */
-.sqr-tab-badge{position:absolute;top:3px;right:10px;min-width:16px;height:16px;border-radius:99px;background:#e74c3c;color:#fff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 4px;line-height:1;animation:badgePop .25s var(--eb) both}
-@keyframes badgePop{from{transform:scale(0)}to{transform:scale(1)}}
-.tab-btn{position:relative}
-.sqr-notif-stack{position:fixed;top:58px;left:50%;transform:translateX(-50%);z-index:9500;display:flex;flex-direction:column;gap:.4rem;align-items:center;width:calc(100% - 1.5rem);max-width:400px;pointer-events:none}
-.sqr-notif{background:var(--ink);color:var(--cream);border-radius:14px;padding:.7rem 1rem;box-shadow:0 6px 28px rgba(26,16,7,.35);display:flex;align-items:center;gap:.75rem;pointer-events:auto;animation:notifIn .3s var(--eb) both;border-left:3px solid var(--em)}
-@keyframes notifIn{from{opacity:0;transform:translateY(-12px) scale(.95)}to{opacity:1;transform:none}}
-.sqr-notif.out{animation:notifOut .25s ease forwards}
-@keyframes notifOut{to{opacity:0;transform:translateY(-8px) scale(.93);max-height:0;margin:0;padding:0}}
-.sqr-notif-ico{width:32px;height:32px;border-radius:50%;flex-shrink:0;background:radial-gradient(circle at 38% 32%,#EDD97A,#C9A84C 42%,#A8832A 72%,#7A5C18);display:flex;align-items:center;justify-content:center;font-size:13px;color:rgba(255,255,255,.75);font-family:var(--fd)}
-.sqr-notif-body{flex:1;min-width:0}.sqr-notif-name{font-size:13px;font-weight:600;color:var(--cream);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.sqr-notif-detail{font-size:11px;color:rgba(253,250,245,.6);margin-top:1px}
-.sqr-notif-close{background:transparent;border:none;color:rgba(253,250,245,.4);font-size:16px;cursor:pointer;padding:2px;flex-shrink:0;line-height:1}
+@media(max-width:380px){.stats-row{gap:.3rem;padding:.6rem .6rem .3rem}.stat-val{font-size:22px}.stat-lbl{font-size:8.5px}.cust-toolbar{padding:.6rem .6rem .3rem}.cust-list{padding:0 .6rem 5rem}.search-inp{font-size:13px;padding:9px 10px 9px 30px}.add-btn{padding:9px 10px;font-size:11px}.cust-card{padding:.7rem .7rem}.cust-nm{font-size:13px}.s-btn,.r-btn{padding:6px 8px;font-size:10.5px}.mc{width:19px;height:19px}.mc-c::after{font-size:6.5px}.mini-grid{gap:3px}.modal-sheet{padding:0 .9rem calc(1.25rem + var(--safe-b))}.wa-wrap{padding:.6rem .6rem 5rem}.tpl-pill{padding:7px 11px;font-size:11px}}
 </style>
 </head>
 <body>
@@ -251,6 +113,20 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
       <div class="lf-err" id="loginErr"></div>
       <button class="lf-btn" id="loginBtn"><i class="ti ti-arrow-right"></i><span id="loginBtnTxt">Access Dashboard</span></button>
       <div class="cooldown-notice" id="cooldownNotice" style="display:none"></div>
+      <!-- REACTIVATION PANEL — shown when trial expired / shop suspended -->
+      <div id="reactivationPanel" style="display:none;margin-top:1.1rem;border-radius:16px;overflow:hidden;border:1.5px solid #BE185D">
+        <div style="background:linear-gradient(135deg,#BE185D,#9D174D);padding:16px;text-align:center">
+          <div style="font-size:26px;margin-bottom:4px" id="rxpEmoji">⛔</div>
+          <div id="rxpTitle" style="font-size:15px;font-weight:800;color:#fff;margin-bottom:2px">Trial Expired</div>
+          <div id="rxpSub" style="font-size:12px;color:rgba(255,255,255,.8)">Complete billing to reactivate your shop</div>
+        </div>
+        <div style="background:#FFF5F7;padding:16px">
+          <p style="margin:0 0 14px;font-size:13px;color:#6B2142;line-height:1.6;text-align:center">Your shop is currently paused. Complete the Razorpay mandate to resume — your customer data is safe.</p>
+          <button id="reactivateBtn" onclick="handleReactivate()" style="width:100%;padding:13px;border-radius:12px;background:linear-gradient(135deg,#BE185D,#9D174D);color:#fff;font-weight:800;font-size:15px;border:none;cursor:pointer;box-shadow:0 4px 14px rgba(190,24,93,.4);letter-spacing:.01em"><span id="reactivateBtnTxt">⚡ Complete Billing Setup →</span></button>
+          <div id="rxpErr" style="font-size:12px;color:#BE185D;text-align:center;margin-top:10px;display:none"></div>
+          <p style="font-size:11.5px;color:#9D174D;text-align:center;margin:10px 0 0">Won't be charged until mandate is set up · <a href="mailto:support@primorewards.in" style="color:#BE185D;font-weight:600">Contact support</a></p>
+        </div>
+      </div>
       <div class="lf-note">Restricted to registered Primo merchants.</div>
     </div>
     <div class="login-primo"><span>Powered by</span><span class="lp-brand">Primo<span>★</span></span><span>Rewards</span></div>
@@ -264,12 +140,9 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
   <div class="tab-bar">
     <button class="tab-btn active" data-tab="t-cust"><i class="ti ti-users"></i>Customers</button>
     <button class="tab-btn wa-tab" data-tab="t-wa"><i class="ti ti-brand-whatsapp"></i>WhatsApp</button>
-    <button class="tab-btn" data-tab="t-analytics"><i class="ti ti-chart-bar"></i>Analytics</button>
     <button class="tab-btn" data-tab="t-set"><i class="ti ti-settings"></i>Settings</button>
     <button class="tab-btn" data-tab="t-qr"><i class="ti ti-qrcode"></i>QR &amp; CSV</button>
-    <button class="tab-btn" data-tab="t-stamp"><i class="ti ti-scan"></i>Stamp QR<span class="sqr-tab-badge" id="sqrTabBadge" style="display:none">0</span></button>
   </div>
-
   <!-- Trial countdown banner — shown on all tabs during trial period -->
   <div id="trialBanner" style="display:none;margin:.5rem .9rem .1rem;border-radius:12px;padding:.65rem .9rem;border:1px solid;transition:background .3s,border-color .3s" role="status">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:.75rem">
@@ -280,23 +153,8 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
       <button id="tbn-btn" onclick="switchToSettings()" style="display:none;flex-shrink:0;font-size:12px;font-weight:700;padding:5px 12px;border-radius:8px;border:none;cursor:pointer;white-space:nowrap;background:rgba(255,255,255,.15);color:inherit"></button>
     </div>
   </div>
-  <div id="t-cust" class="tab-content active"><div class="cust-toolbar"><div class="search-wrap"><i class="ti ti-search search-ico"></i><input id="searchInp" class="search-inp" type="search" placeholder="Search by name…" autocomplete="off"></div><button class="add-btn" id="addCustBtn"><i class="ti ti-user-plus"></i>Add</button></div><div class="cust-limit-banner" id="custLimitBanner"></div><div class="cust-list" id="custList"><div class="cust-empty"><div class="cust-empty-ico"><i class="ti ti-coin"></i></div>Loading…</div></div></div>
-  <div id="t-wa" class="tab-content">
-    <div class="wa-plan-gate" id="waPlanGate">
-      <div class="wpg-ico"><i class="ti ti-brand-whatsapp"></i></div>
-      <div class="wpg-title">WhatsApp Alerts</div>
-      <div class="wpg-sub">Send personalised WhatsApp messages to customers when they're close to a reward or ready to redeem.</div>
-      <div class="wpg-feats">
-        <div class="wpg-feat"><i class="ti ti-chart-bar"></i>Stamp progress updates</div>
-        <div class="wpg-feat"><i class="ti ti-gift"></i>Reward ready notifications</div>
-        <div class="wpg-feat"><i class="ti ti-cake"></i>Birthday messages</div>
-        <div class="wpg-feat"><i class="ti ti-rocket"></i>Re-engagement nudges</div>
-      </div>
-      <button class="wpg-cta" onclick="switchToSettings()"><i class="ti ti-arrow-up-circle"></i>Upgrade to Pro — ₹299/mo</button>
-      <div style="font-size:11px;color:var(--ink-f)">Cancel anytime · Charged only after trial ends</div>
-    </div>
-    <div class="wa-wrap" id="waWrap"><div class="tpl-scroll" id="tplScroll"><button class="tpl-pill sel" data-tpl="progress" onclick="selTpl(this)"><i class="ti ti-chart-bar"></i>Stamp Update</button><button class="tpl-pill" data-tpl="ready" onclick="selTpl(this)"><i class="ti ti-gift"></i>Reward Ready</button><button class="tpl-pill" data-tpl="birthday" onclick="selTpl(this)"><i class="ti ti-cake"></i>Birthday</button></div><div class="tpl-preview" id="tplPreview"><div class="tpl-preview-lbl">Message Preview</div><div class="tpl-preview-txt" id="tplPreviewTxt"></div></div><div class="wa-banner" id="waBanner" style="display:none"><div class="wa-banner-ico">📱</div><div class="wa-banner-txt" id="waBannerTxt"></div></div><div class="wa-sec">Customers with WhatsApp</div><div id="waList"><div class="wa-empty">Loading…</div></div></div>
-  </div>
+  <div id="t-cust" class="tab-content active"><div class="cust-toolbar"><div class="search-wrap"><i class="ti ti-search search-ico"></i><input id="searchInp" class="search-inp" type="search" placeholder="Search by name…" autocomplete="off"></div><button class="add-btn" id="addCustBtn"><i class="ti ti-user-plus"></i>Add</button></div><div class="cust-list" id="custList"><div class="cust-empty"><div class="cust-empty-ico"><i class="ti ti-coin"></i></div>Loading…</div></div></div>
+  <div id="t-wa" class="tab-content"><div class="wa-wrap"><div class="tpl-scroll" id="tplScroll"><button class="tpl-pill sel" data-tpl="progress" onclick="selTpl(this)"><i class="ti ti-chart-bar"></i>Stamp Update</button><button class="tpl-pill" data-tpl="ready" onclick="selTpl(this)"><i class="ti ti-gift"></i>Reward Ready</button><button class="tpl-pill" data-tpl="birthday" onclick="selTpl(this)"><i class="ti ti-cake"></i>Birthday</button></div><div class="tpl-preview" id="tplPreview"><div class="tpl-preview-lbl">Message Preview</div><div class="tpl-preview-txt" id="tplPreviewTxt"></div></div><div class="wa-banner" id="waBanner" style="display:none"><div class="wa-banner-ico">📱</div><div class="wa-banner-txt" id="waBannerTxt"></div></div><div class="wa-sec">Customers with WhatsApp</div><div id="waList"><div class="wa-empty">Loading…</div></div></div></div>
   <div id="t-set" class="tab-content"><div class="settings-wrap">
 
     <!-- Billing Card -->
@@ -324,7 +182,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
       </div>
     </div>
 
-    <div class="settings-card"><div class="settings-h">Loyalty Programme</div><div class="sf-row"><div><label class="sf-l" for="sfProduct">Product Name</label><input id="sfProduct" class="sf-i" type="text" placeholder="e.g. cake"></div><div class="emoji-field"><label class="sf-l">Product Icon</label><input type="hidden" id="sfEmoji"><button type="button" class="emoji-trigger" id="emojiTrigger" aria-haspopup="listbox" aria-expanded="false" onclick="toggleEmojiPicker(event)"><span class="et-left"><span class="et-emoji" id="emojiDisplay">🎂</span><span class="et-lbl">Choose icon</span></span><i class="ti ti-chevron-down" aria-hidden="true"></i></button><div class="emoji-picker" id="emojiPicker" role="listbox" aria-label="Product icon picker"></div></div></div><div class="sf-g"><label class="sf-l">Reward Rule</label><div class="sf-rule-row" id="sfRuleRow"><div><label class="sf-l" for="sfBuy">Buy</label><input id="sfBuy" class="sf-i" type="number" min="1" max="50"></div><div class="sf-rule-sep">→</div><div><label class="sf-l" for="sfGet">Free</label><input id="sfGet" class="sf-i" type="number" min="1" max="10"></div></div><div class="rule-lock" id="ruleLock"><div class="rule-lock-val"><i class="ti ti-lock"></i>Buy 10 → Get 1 Free</div><div class="rule-lock-note">Starter plan includes a standard reward rule. <span class="clb-upgrade" onclick="switchToSettings()">Upgrade to Pro</span> to customise your loyalty programme.</div></div></div><button class="save-btn" id="saveSetBtn"><i class="ti ti-device-floppy"></i><span id="saveSetTxt">Save Changes</span></button><div class="settings-note" id="settingsNote">Changes apply immediately on all customer-facing cards.</div></div><div class="settings-card"><div class="settings-h">Change Password</div><div class="sf-g"><label class="sf-l" for="sfNewPwd">New Password</label><input id="sfNewPwd" class="sf-i" type="password" placeholder="At least 6 characters"></div><div class="sf-g"><label class="sf-l" for="sfNewPwdC">Confirm</label><input id="sfNewPwdC" class="sf-i" type="password" placeholder="Repeat new password"></div><div class="lf-err" id="pwdErr"></div><button class="save-btn" id="savePwdBtn" style="background:linear-gradient(135deg,#5a8f7b,var(--em))"><i class="ti ti-lock"></i><span id="savePwdTxt">Update Password</span></button></div></div></div>
+    <div class="settings-card"><div class="settings-h">Loyalty Programme</div><div class="sf-row"><div><label class="sf-l" for="sfProduct">Product Name</label><input id="sfProduct" class="sf-i" type="text" placeholder="e.g. cake"></div><div class="emoji-field"><label class="sf-l">Product Icon</label><input type="hidden" id="sfEmoji"><button type="button" class="emoji-trigger" id="emojiTrigger" aria-haspopup="listbox" aria-expanded="false" onclick="toggleEmojiPicker(event)"><span class="et-left"><span class="et-emoji" id="emojiDisplay">🎂</span><span class="et-lbl">Choose icon</span></span><i class="ti ti-chevron-down" aria-hidden="true"></i></button><div class="emoji-picker" id="emojiPicker" role="listbox" aria-label="Product icon picker"></div></div></div><div class="sf-g"><label class="sf-l">Reward Rule</label><div class="sf-rule-row"><div><label class="sf-l" for="sfBuy">Buy</label><input id="sfBuy" class="sf-i" type="number" min="1" max="50"></div><div class="sf-rule-sep">→</div><div><label class="sf-l" for="sfGet">Free</label><input id="sfGet" class="sf-i" type="number" min="1" max="10"></div></div></div><button class="save-btn" id="saveSetBtn"><i class="ti ti-device-floppy"></i><span id="saveSetTxt">Save Changes</span></button><div class="settings-note">Changes apply immediately on all customer-facing cards.</div></div><div class="settings-card"><div class="settings-h">Change Password</div><div class="sf-g"><label class="sf-l" for="sfNewPwd">New Password</label><input id="sfNewPwd" class="sf-i" type="password" placeholder="At least 6 characters"></div><div class="sf-g"><label class="sf-l" for="sfNewPwdC">Confirm</label><input id="sfNewPwdC" class="sf-i" type="password" placeholder="Repeat new password"></div><div class="lf-err" id="pwdErr"></div><button class="save-btn" id="savePwdBtn" style="background:linear-gradient(135deg,#5a8f7b,var(--em))"><i class="ti ti-lock"></i><span id="savePwdTxt">Update Password</span></button></div></div></div>
   <div id="t-qr" class="tab-content"><div class="qr-wrap">
     <div class="settings-card" style="margin-bottom:.7rem">
       <div class="settings-h">✦ Branded QR Card</div>
@@ -368,168 +226,6 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
   </div></div>
 </div>
 
-  <div id="t-analytics" class="tab-content"></div><!-- content lifted into anOverlay -->
-
-  <div id="t-stamp" class="tab-content"></div><!-- content lifted into sqrOverlay -->
-
-<!-- ══ ANALYTICS FULL-SCREEN OVERLAY ══ -->
-<div class="sqro" id="anOverlay" role="dialog" aria-modal="true" aria-label="Analytics">
-  <div class="sqro-hdr">
-    <button class="sqro-back" onclick="closeAnOverlay()" aria-label="Back"><i class="ti ti-arrow-left"></i></button>
-    <div class="sqro-title">Analytics</div>
-    <div class="an-pills" style="flex-shrink:0">
-      <button class="an-pill" data-days="7"  onclick="setAnDays(7)">7d</button>
-      <button class="an-pill sel" data-days="30" onclick="setAnDays(30)">30d</button>
-      <button class="an-pill" data-days="90" onclick="setAnDays(90)">90d</button>
-    </div>
-  </div>
-  <div class="sqro-body">
-    <!-- Starter plan gate -->
-    <div class="an-plan-gate" id="anPlanGate" style="display:none">
-      <div class="pgc-card">
-        <div class="pgc-preview">
-          <div class="pgc-badge">✦ PRO &amp; PREMIUM FEATURE</div>
-          <div class="pgc-mock-wrap" style="opacity:.45;filter:blur(1px)">
-            <svg class="pgc-mock-svg" viewBox="0 0 164 164" xmlns="http://www.w3.org/2000/svg">
-              <rect x="22" y="60" width="30" height="60" rx="3" fill="rgba(201,168,76,.5)"/>
-              <rect x="62" y="40" width="30" height="80" rx="3" fill="rgba(201,168,76,.7)"/>
-              <rect x="102" y="20" width="30" height="100" rx="3" fill="rgba(201,168,76,.9)"/>
-            </svg>
-          </div>
-          <div class="pgc-lock-wrap"><i class="ti ti-lock pgc-lock-ico"></i><div class="pgc-lock-sub">●●●●●●●●●●</div></div>
-        </div>
-        <div class="pgc-body">
-          <div class="pgc-title">Analytics Dashboard</div>
-          <div class="pgc-sub">Understand your loyalty programme — who's close to a reward, who's gone quiet, and who your best customers are.</div>
-          <div class="pgc-feats">
-            <div class="pgc-feat"><i class="ti ti-chart-bar"></i>Stamps trend, KPIs and retention rate</div>
-            <div class="pgc-feat"><i class="ti ti-funnel"></i>Customer pipeline — see who's nearly there</div>
-            <div class="pgc-feat"><i class="ti ti-bell"></i>Needs Attention — nudge customers in 1 tap</div>
-            <div class="pgc-feat"><i class="ti ti-crown"></i>Top 5 loyal customers leaderboard</div>
-          </div>
-          <button class="pgc-cta" onclick="closeAnOverlay();switchToSettings()"><i class="ti ti-arrow-up-circle"></i>Upgrade to Pro — ₹299/mo</button>
-          <div class="pgc-note">Cancel anytime · No charge until trial ends · Instant activation</div>
-        </div>
-      </div>
-    </div>
-    <!-- Pro/Premium analytics content -->
-    <div class="an-wrap" id="anWrap" style="display:none">
-      <div id="anLoading" class="an-state"><div class="sqr-spinner"></div><div>Loading analytics…</div></div>
-      <div id="anError" class="an-state" style="display:none"><i class="ti ti-alert-circle" style="font-size:36px;color:var(--ink-f)"></i><div id="anErrorMsg">Could not load analytics</div><button class="sqr-retry-btn" onclick="loadAnalytics()"><i class="ti ti-refresh"></i> Retry</button></div>
-      <div id="anData" style="display:none">
-        <div class="an-kpi-row">
-          <div class="an-kpi"><div class="an-kpi-val" id="anKpiActive">—</div><div class="an-kpi-lbl">Active Customers</div><div class="an-kpi-chg" id="anKpiActiveDelta"></div></div>
-          <div class="an-kpi"><div class="an-kpi-val" id="anKpiStamps">—</div><div class="an-kpi-lbl">Stamps Issued</div><div class="an-kpi-chg" id="anKpiStampsDelta"></div></div>
-          <div class="an-kpi"><div class="an-kpi-val" id="anKpiRewards">—</div><div class="an-kpi-lbl">Rewards Given</div><div class="an-kpi-chg" id="anKpiRewardsDelta"></div></div>
-          <div class="an-kpi"><div class="an-kpi-val" id="anKpiRetention">—</div><div class="an-kpi-lbl">Retention Rate</div><div class="an-kpi-chg" id="anKpiRetentionDelta"></div></div>
-        </div>
-        <div class="an-card">
-          <div class="an-card-title" id="anChartTitle">Stamps — Last 30 Days</div>
-          <div class="an-bars" id="anBars"></div>
-          <div class="an-bar-axis" id="anBarAxis"></div>
-        </div>
-        <div class="an-card">
-          <div class="an-card-title">Customer Pipeline</div>
-          <div class="an-pipeline">
-            <div class="an-pipe"><div class="an-pipe-track"><div class="an-pipe-fill" id="anPipe1" style="background:var(--gold)"></div></div><div class="an-pipe-val" id="anPipeN1">—</div><div class="an-pipe-lbl">Just started<br>1–3 stamps</div></div>
-            <div class="an-pipe"><div class="an-pipe-track"><div class="an-pipe-fill" id="anPipe2" style="background:var(--gold-b)"></div></div><div class="an-pipe-val" id="anPipeN2">—</div><div class="an-pipe-lbl">Midway<br>4–7 stamps</div></div>
-            <div class="an-pipe"><div class="an-pipe-track"><div class="an-pipe-fill" id="anPipe3" style="background:var(--em)"></div></div><div class="an-pipe-val" id="anPipeN3">—</div><div class="an-pipe-lbl">Almost<br>there</div></div>
-            <div class="an-pipe"><div class="an-pipe-track"><div class="an-pipe-fill" id="anPipe4" style="background:#c0392b"></div></div><div class="an-pipe-val" id="anPipeN4">—</div><div class="an-pipe-lbl ready">Reward<br>ready 🎁</div></div>
-          </div>
-        </div>
-        <div class="an-sec-title">Needs Attention</div>
-        <div class="an-attn" id="anAttn1">
-          <div class="an-attn-hdr" style="background:var(--em)">
-            <div class="an-attn-hdr-l"><div class="an-attn-ico">🎁</div><div><div class="an-attn-title">1 stamp away from reward</div><div class="an-attn-sub">Send a nudge — they're almost there</div></div></div>
-            <div class="an-attn-n" id="anOneAwayN">0</div>
-          </div>
-          <div class="an-attn-body" id="anOneAwayBody"><div class="an-attn-empty">No customers here yet</div></div>
-        </div>
-        <div class="an-attn" id="anAttn2">
-          <div class="an-attn-hdr" style="background:#7A5C18">
-            <div class="an-attn-hdr-l"><div class="an-attn-ico">😴</div><div><div class="an-attn-title">Inactive 30+ days</div><div class="an-attn-sub">Re-engage before they forget you</div></div></div>
-            <div class="an-attn-n" id="anInactiveN">0</div>
-          </div>
-          <div class="an-attn-body" id="anInactiveBody"><div class="an-attn-empty">All customers are active 🎉</div></div>
-        </div>
-        <div class="an-card" style="margin-bottom:.75rem">
-          <div class="an-card-title">Top Loyal Customers</div>
-          <div id="anTopCusts"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ══ STAMP QR FULL-SCREEN OVERLAY ══ -->
-<div class="sqro" id="sqrOverlay" role="dialog" aria-modal="true" aria-label="Stamp QR">
-  <div class="sqro-hdr">
-    <button class="sqro-back" onclick="closeSQROverlay()" aria-label="Back"><i class="ti ti-arrow-left"></i></button>
-    <div class="sqro-title">Stamp QR</div>
-    <div class="sqro-chip" id="sqroChip">PRO</div>
-  </div>
-  <div class="sqro-body">
-    <!-- Starter plan FOMO gate -->
-    <div class="sqr-plan-gate" id="sqr-plan-gate">
-      <div class="pgc-card">
-        <div class="pgc-preview">
-          <div class="pgc-badge">✦ PRO &amp; PREMIUM FEATURE</div>
-          <div class="pgc-mock-wrap">
-            <svg class="pgc-mock-svg" viewBox="0 0 164 164" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="82" cy="82" r="74" fill="none" stroke="rgba(201,168,76,.2)" stroke-width="6"/>
-              <circle cx="82" cy="82" r="74" fill="none" stroke="rgba(201,168,76,.55)" stroke-width="6"
-                stroke-dasharray="465" stroke-dashoffset="130" stroke-linecap="round" transform="rotate(-90 82 82)"/>
-            </svg>
-            <div class="pgc-mock-qr"><i class="ti ti-qrcode"></i></div>
-            <div class="pgc-lock-wrap">
-              <i class="ti ti-lock pgc-lock-ico"></i>
-              <div class="pgc-lock-sub">●●●●●●●●●●</div>
-            </div>
-          </div>
-        </div>
-        <div class="pgc-body">
-          <div class="pgc-title">Instant QR Stamping</div>
-          <div class="pgc-sub">Let customers earn stamps by scanning a code on your screen — no typing, no friction, no missed stamps.</div>
-          <div class="pgc-feats">
-            <div class="pgc-feat"><i class="ti ti-refresh"></i>Rotating 30-second QR codes — tamper-proof</div>
-            <div class="pgc-feat"><i class="ti ti-bell"></i>Live notification every time a customer scans</div>
-            <div class="pgc-feat"><i class="ti ti-bolt"></i>Zero friction — customer just point &amp; scan</div>
-            <div class="pgc-feat"><i class="ti ti-shield-check"></i>One stamp per code, per customer, guaranteed</div>
-          </div>
-          <button class="pgc-cta" onclick="closeSQROverlay();switchToSettings()"><i class="ti ti-arrow-up-circle"></i>Upgrade to Pro — ₹299/mo</button>
-          <div class="pgc-note">Cancel anytime · No charge until trial ends · Instant activation</div>
-        </div>
-      </div>
-    </div>
-    <!-- Loading / error / main QR states -->
-    <div class="sqr-wrap" style="flex:1;display:flex;flex-direction:column">
-      <div class="sqr-info" id="sqrInfoBanner"><i class="ti ti-info-circle"></i>Show this screen to your customer — they scan with their phone to earn a stamp instantly. No typing needed.</div>
-      <div id="sqr-loading" class="sqr-state"><div class="sqr-spinner"></div><p>Generating stamp QR…</p></div>
-      <div id="sqr-error" class="sqr-state" style="display:none"><i class="ti ti-alert-triangle" style="font-size:38px;color:var(--ink-l)"></i><p id="sqr-err-msg" style="max-width:280px"></p><button class="sqr-retry-btn" onclick="retryStampQR()"><i class="ti ti-refresh"></i> Retry</button></div>
-      <div id="sqr-main" style="display:none">
-        <div class="sqr-card">
-          <div class="sqr-card-title">✦ Live Stamp QR</div>
-          <div class="sqr-card-sub">Rotating every 30 seconds · Single-use per customer</div>
-          <div class="sqr-ring-container" id="sqrRingContainer">
-            <svg class="sqr-ring-svg" viewBox="0 0 260 260" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="130" cy="130" r="118" fill="none" stroke="var(--beige-m)" stroke-width="7"/>
-              <circle id="sqrArc" cx="130" cy="130" r="118" fill="none"
-                stroke="var(--em)" stroke-width="7"
-                stroke-dasharray="741.42" stroke-dashoffset="0"
-                stroke-linecap="round"
-                transform="rotate(-90 130 130)"/>
-            </svg>
-            <div class="sqr-ring-inner"><div id="sqr-canvas"></div></div>
-            <div class="sqr-secs-badge"><span id="sqrSecs">30</span><span class="sqr-s-unit">s</span></div>
-          </div>
-          <div class="sqr-token-row"><span>PRIMO</span><span class="sqr-t-sep">:</span><span id="sqrSlugDisplay">─</span><span class="sqr-t-sep">:</span><span class="sqr-t-val" id="sqrTokenDisplay">──────────</span></div>
-          <div class="sqr-hint-row"><i class="ti ti-shield-check"></i>One stamp per QR code per customer</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
 <!-- MENU SHEET -->
 <div id="menuSheet" class="sheet-overlay"><div class="sheet"><div class="sheet-pull"></div><div class="sheet-top"><div class="sheet-coin">♛</div><div><div class="sheet-sn" id="sheetSN">Shop</div><div class="sheet-sc" id="sheetSC">—</div></div></div><div class="sheet-items"><button class="sheet-item" id="sheetRefresh"><div class="si-ico gold"><i class="ti ti-refresh"></i></div><div class="si-info"><strong>Refresh Data</strong><p>Sync latest stamps &amp; customers</p></div></button><button class="sheet-item" id="sheetSignOut"><div class="si-ico red"><i class="ti ti-logout"></i></div><div class="si-info"><strong>Sign Out</strong><p>Return to login</p></div></button></div></div></div>
 
@@ -545,7 +241,6 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
 <!-- WHATSAPP PREVIEW -->
 <div id="waPreviewModal" class="modal-overlay"><div class="modal-sheet"><div class="modal-pull"></div><div class="modal-h">Send via WhatsApp</div><div class="modal-sub">Review the message before sending.</div><div class="wa-preview-card"><div class="wa-preview-lbl">Message</div><div class="wa-preview-msg" id="waPreviewMsg">—</div><div class="wa-preview-to" id="waPreviewTo">To: —</div></div><div class="modal-actions"><button class="modal-cancel" id="waPreviewCancel">Cancel</button><button class="modal-confirm wa-c" id="waPreviewSend"><i class="ti ti-brand-whatsapp"></i> <span>Open WhatsApp</span></button></div></div></div>
 
-<div class="sqr-notif-stack" id="sqrNotifStack"></div>
 <div id="toast" role="status" aria-live="polite"></div>
 
 <script>
@@ -656,14 +351,25 @@ async function handleLogin(){
       shop=safeShop;
       loginAttempts.count=0;
     }
-    await loadDash();renderDash();applyPlanGates();showScreen('s-dash');
+    await loadDash();renderDash();showScreen('s-dash');
     if(!secure())document.getElementById('secBanner').classList.add('show');
-    // Start background QR scan feed (notifications appear on any tab for Pro/Premium)
-    if(['pro','premium'].includes(shop?.plan)) startQRFeedPoller();
   }catch(e){
     console.error(e);
-    if(e.message.includes('401')||e.message.includes('Invalid')){pEl.classList.add('err');errEl.textContent='⚠ Incorrect password.';pEl.value='';recordFailedLogin();}
-    else showError('network');
+    const emsg=e.message||'';
+    // Show reactivation panel for suspended / trial-expired shops (merchant-auth returns 403)
+    if(emsg.includes('Trial ended')||emsg.includes('suspended')){
+      const rxp=document.getElementById('reactivationPanel');
+      const isSuspended=emsg.includes('suspended');
+      document.getElementById('rxpEmoji').textContent=isSuspended?'🔒':'⛔';
+      document.getElementById('rxpTitle').textContent=isSuspended?'Shop Suspended':'Trial Expired';
+      document.getElementById('rxpSub').textContent=isSuspended?'Reactivate billing to restore access':'Your trial ended — complete billing to reactivate';
+      document.getElementById('rxpErr').style.display='none';
+      rxp.style.display='block';
+    }else if(emsg.includes('401')||emsg.includes('Invalid')){
+      pEl.classList.add('err');errEl.textContent='⚠ Incorrect password.';pEl.value='';recordFailedLogin();
+    }else{
+      showError('network');
+    }
   }finally{btn.disabled=false;txt.textContent='Access Dashboard'}
 }
 
@@ -676,6 +382,58 @@ function recordFailedLogin(){
     const secs=Math.ceil(wait/1000);
     const cdEl=document.getElementById('cooldownNotice');
     cdEl.textContent=`Too many failed attempts. Please wait ${secs} seconds.`;cdEl.style.display='block';
+  }
+}
+
+/* ══ REACTIVATE BILLING ══
+   Called from login screen when merchant's trial expired or shop is suspended.
+   POSTs slug + password to reactivate-billing EF which creates a new Razorpay
+   subscription and returns a mandate URL. When the merchant completes the mandate
+   the razorpay-webhook subscription.authenticated event flips status → active.   */
+async function handleReactivate(){
+  const slug=document.getElementById('inSlug').value.trim().toLowerCase().replace(/[^a-z0-9-]/g,'');
+  const pwd=document.getElementById('inPwd').value;
+  const btn=document.getElementById('reactivateBtn'),txt=document.getElementById('reactivateBtnTxt');
+  const errEl=document.getElementById('rxpErr');
+  errEl.style.display='none';
+
+  if(!slug||slug.length<2){errEl.textContent='⚠ Enter your shop slug above first.';errEl.style.display='block';return;}
+  if(!pwd){errEl.textContent='⚠ Enter your password above first.';errEl.style.display='block';return;}
+
+  btn.disabled=true;txt.textContent='Setting up billing…';
+
+  try{
+    const res=await fetch(`${PRIMO_CONFIG.EDGE_BASE}/reactivate-billing`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({slug,password:pwd}),
+    });
+    const data=await res.json().catch(()=>({error:'Unknown error'}));
+    if(!res.ok)throw new Error(data.error||`Error ${res.status}`);
+
+    // Open mandate URL in new tab
+    if(data.mandate_url)window.open(data.mandate_url,'_blank','noopener');
+
+    // Replace panel with success message
+    document.getElementById('reactivationPanel').innerHTML=`
+      <div style="background:linear-gradient(135deg,#065F46,#047857);padding:20px 16px;border-radius:14px;text-align:center">
+        <div style="font-size:28px;margin-bottom:8px">✅</div>
+        <div style="font-size:14px;font-weight:800;color:#fff;margin-bottom:6px">Billing link opened!</div>
+        <div style="font-size:12.5px;color:rgba(255,255,255,.85);line-height:1.65">
+          Complete the Razorpay mandate in the new tab.<br>
+          Once done, return here to log in — your shop will be active within minutes.
+        </div>
+      </div>`;
+  }catch(e){
+    const msg=e.message||'';
+    // Wrong credentials → update error inline, don't clear the panel
+    if(msg.includes('Invalid credentials')){
+      errEl.textContent='⚠ Incorrect password — please check and try again.';
+    }else{
+      errEl.textContent='⚠ '+(msg||'Could not initiate billing. Try again or contact support.');
+    }
+    errEl.style.display='block';
+    btn.disabled=false;txt.textContent='⚡ Complete Billing Setup →';
   }
 }
 
@@ -905,7 +663,7 @@ async function doStamp(cid){
       console.warn('[PRIMO] ⚠ INSECURE: Direct stamp INSERT');
       await sb('/stamps',{method:'POST',body:{customer_id:cid,shop_id:shop.id,cycle_number:cm.cycle}});
     }
-    toast(`✦ Stamped for ${c.first_name}!`);await loadDash();renderDash();applyPlanGates();
+    toast(`✦ Stamped for ${c.first_name}!`);await loadDash();renderDash();
   }catch(e){console.error(e);const msg=e.message||'';toast(msg.toLowerCase().includes('reward')?'🎁 Reward ready — tap Redeem first.':msg.toLowerCase().includes('session')?'Session expired — please log in again.':'⚠ Stamp failed. Try again.');btn.disabled=false;btn.classList.remove('confirming');btn.innerHTML='<i class="ti ti-stamp"></i>Stamp'}
 }
 
@@ -916,7 +674,7 @@ async function confirmRedeem(){if(!redeemTarget)return;const cid=redeemTarget,c=
   try{
     if(secure()){await edge('merchant-api',{action:'redeem',customer_id:cid})}
     else{console.warn('[PRIMO] ⚠ INSECURE: Direct redeem INSERT');await sb('/redemptions',{method:'POST',body:{customer_id:cid,shop_id:shop.id,cycle_number:cm.cycle}})}
-    toast(`✦ Redeemed for ${c.first_name}! Card reset to cycle ${cm.cycle+1}.`);justRedeemed.add(cid);setTimeout(()=>{justRedeemed.delete(cid);renderCustList()},6e3);closeRedeem();await loadDash();renderDash();applyPlanGates();
+    toast(`✦ Redeemed for ${c.first_name}! Card reset to cycle ${cm.cycle+1}.`);justRedeemed.add(cid);setTimeout(()=>{justRedeemed.delete(cid);renderCustList()},6e3);closeRedeem();await loadDash();renderDash();
   }catch(e){console.error(e);toast('⚠ Redeem failed.')}finally{btn.disabled=false;txt.textContent='Confirm Redeem'}}
 
 /* ══ ADD CUSTOMER ══ */
@@ -924,8 +682,6 @@ function openAdd(){['addName','addMobile','addBday'].forEach(i=>{document.getEle
 function closeAdd(){document.getElementById('addModal').classList.remove('open')}
 async function confirmAdd(){
   const nameEl=document.getElementById('addName'),mobEl=document.getElementById('addMobile'),bdEl=document.getElementById('addBday'),errEl=document.getElementById('addErr'),btn=document.getElementById('addConfirm'),txt=document.getElementById('addConfirmTxt');errEl.textContent='';nameEl.classList.remove('err');mobEl.classList.remove('err');
-  // Starter plan: hard cap at 200 customers
-  if(isStarter()&&customers.length>=STARTER_MAX_CUSTS){errEl.innerHTML='⚠ Starter plan limit reached (200 customers). <span style="font-weight:700;cursor:pointer;text-decoration:underline" onclick="closeAdd();switchToSettings()">Upgrade to Pro</span> for unlimited customers.';return;}
   const name=nameEl.value.trim().replace(/[<>"'&]/g,'').substring(0,60),rawMob=mobEl.value.replace(/\D/g,''),bday=bdEl.value||null;
   if(!name||name.length<2){nameEl.classList.add('err');errEl.textContent='⚠ Enter a valid name (min 2 chars).';return}
   if(rawMob.length<4){mobEl.classList.add('err');errEl.textContent='⚠ Enter at least the last 4 digits.';return}
@@ -939,7 +695,7 @@ async function confirmAdd(){
       const body={shop_id:shop.id,first_name:name,phone_last4:p4};if(fullPhone)body.full_phone=fullPhone;if(bday)body.birthday=bday;
       await sb('/customers',{method:'POST',body});
     }
-    toast(`✦ ${name} enrolled!`);closeAdd();await loadDash();renderDash();applyPlanGates();
+    toast(`✦ ${name} enrolled!`);closeAdd();await loadDash();renderDash();
   }catch(e){console.error(e);errEl.textContent='⚠ Enrolment failed.'}finally{btn.disabled=false;txt.textContent='Enrol Customer'}}
 
 /* ══ EDIT CUSTOMER ══ */
@@ -967,11 +723,11 @@ function renderBillingCard(){
   const plan=shop.subscription_plan||shop.plan||'pro';
   document.getElementById('bl-plan').textContent=(plan.charAt(0).toUpperCase()+plan.slice(1))+' · '+(PLAN_AMT[plan]||'');
   const statusMap={
-    none:            {text:'Not set up',            color:'#92623A', bg:'#FFF3E0'},
-    pending_mandate: {text:'⚡ Action required',    color:'#5B21B6', bg:'#EDE9FE'},
-    active:          {text:'✅ Billing active',     color:'#065F46', bg:'#D1FAE5'},
-    halted:          {text:'⚠️ Payment failed',     color:'#991B1B', bg:'#FEE2E2'},
-    cancelled:       {text:'⚠ Billing cancelled',  color:'#92400E', bg:'#FEF3C7'},
+    none:            {text:'Not set up',         color:'#92623A', bg:'#FFF3E0'},
+    pending_mandate: {text:'⚡ Action required',  color:'#5B21B6', bg:'#EDE9FE'},
+    active:          {text:'✅ Billing active',   color:'#065F46', bg:'#D1FAE5'},
+    halted:          {text:'⚠️ Payment failed',   color:'#991B1B', bg:'#FEE2E2'},
+    cancelled:       {text:'Cancelled',           color:'#6B7280', bg:'#F3F4F6'},
   };
   const st=statusMap[ss]||statusMap.none;
   document.getElementById('bl-status').innerHTML=`<span style="font-weight:700;font-size:12.5px;color:${st.color};background:${st.bg};padding:3px 11px;border-radius:99px;border:1.5px solid ${st.color}33">${st.text}</span>`;
@@ -981,9 +737,8 @@ function renderBillingCard(){
   if(shop.next_charge_at){nextRow.style.display='flex';document.getElementById('bl-next-date').textContent=fmtDt(shop.next_charge_at);}
   else nextRow.style.display='none';
   const cta=document.getElementById('bl-cta');
-  if(ss==='none'||ss==='pending_mandate'||ss==='cancelled'){
-    const inTrial = shop.trial_ends_at && new Date(shop.trial_ends_at) > new Date();
-    const hasUrl  = ss==='pending_mandate' && shop.mandate_url;
+  if(ss==='none'||ss==='pending_mandate'){
+    const hasUrl=ss==='pending_mandate'&&shop.mandate_url;
     cta.style.display='block';
     if(hasUrl){
       cta.innerHTML=`<a href="${shop.mandate_url}" target="_blank" rel="noopener"
@@ -997,18 +752,15 @@ function renderBillingCard(){
         One-time setup · Charged only after trial ends · Cancel anytime
       </p>`;
     } else {
-      const note = ss==='cancelled' && inTrial
-        ? `Trial active until ${fmtDt(shop.trial_ends_at)} · Set up billing to continue after that`
-        : 'Charged only after trial ends · Cancel anytime';
       cta.innerHTML=`<button onclick="initiateBilling()" id="bl-initiate-btn"
         style="width:100%;padding:13px;border-radius:12px;margin-top:4px;
         background:linear-gradient(135deg,#C9A84C,#A8832A);
         color:#fff;font-weight:800;font-size:15px;border:none;cursor:pointer;
         box-shadow:0 4px 14px rgba(168,131,42,.35);letter-spacing:.01em">
-        ✦ ${ss==='cancelled' ? 'Re-setup billing' : 'Set up billing now'}
+        ✦ Set up billing now
       </button>
       <p style="font-size:12px;color:var(--ink-l);text-align:center;margin:8px 0 0">
-        ${note}
+        Charged only after trial ends · Cancel anytime
       </p>`;
     }
   } else if(ss==='halted'&&shop.mandate_url){
@@ -1041,7 +793,7 @@ function updateTrialBanner(){
   const banner=document.getElementById('trialBanner');
   if(!banner||!shop) return;
   const ss=shop.subscription_status||'none';
-  if(ss==='active'){banner.style.display='none';return;}
+  if(ss==='active'||ss==='cancelled'){banner.style.display='none';return;}
   if(!shop.trial_ends_at&&ss==='none'){banner.style.display='none';return;}
 
   const now=Date.now();
@@ -1086,19 +838,6 @@ function updateTrialBanner(){
       background:'#7C3AED',color:'#fff',
       boxShadow:'0 3px 10px rgba(124,58,237,.45)',whiteSpace:'nowrap'});
     btn.textContent='Complete →';
-  } else if(ss==='cancelled'){
-    // Billing cancelled but still in trial — amber warning, calm but clear
-    Object.assign(banner.style,{background:'linear-gradient(135deg,#FFFBEB,#FEF3C7)',
-      borderColor:'#F59E0B',color:'#78350F',animation:'none',
-      boxShadow:'0 3px 12px rgba(245,158,11,.18)'});
-    title.style.cssText='font-size:14px;font-weight:800;margin-bottom:3px;color:#78350F';
-    title.textContent=days!=null&&days>=0?`⚠ Billing cancelled — ${days}d left in trial`:'⚠ Billing cancelled';
-    sub.style.cssText='font-size:12px;color:#92400E;font-weight:600';
-    sub.textContent='Set up billing before your trial ends — your shop is fully active until then';
-    Object.assign(btn.style,{display:'inline-block',fontSize:'12.5px',fontWeight:'800',
-      padding:'7px 16px',borderRadius:'9px',border:'none',cursor:'pointer',
-      background:'#F59E0B',color:'#fff',whiteSpace:'nowrap'});
-    btn.textContent='Re-setup →';
   } else if(diff!=null&&diff<=0){
     // Expired — cool crimson
     Object.assign(banner.style,{background:'linear-gradient(135deg,#FDF2F8,#FCE7F3)',
@@ -1167,11 +906,7 @@ async function initiateBilling(){
   }
 }
 
-async function saveSets(){const btn=document.getElementById('saveSetBtn'),txt=document.getElementById('saveSetTxt'),prod=document.getElementById('sfProduct').value.trim().substring(0,40),emo=document.getElementById('sfEmoji').value.trim().substring(0,4);
-  // Starter plan: always enforce Buy 10 Get 1 Free regardless of input
-  let buy=isStarter()?10:parseInt(document.getElementById('sfBuy').value,10)||11;
-  let get=isStarter()?1:parseInt(document.getElementById('sfGet').value,10)||1;
-  if(!isStarter()&&(buy<1||buy>50||get<1||get>10)){toast('⚠ Invalid values.');return}btn.disabled=true;txt.textContent='Saving…';
+async function saveSets(){const btn=document.getElementById('saveSetBtn'),txt=document.getElementById('saveSetTxt'),prod=document.getElementById('sfProduct').value.trim().substring(0,40),emo=document.getElementById('sfEmoji').value.trim().substring(0,4),buy=parseInt(document.getElementById('sfBuy').value,10)||11,get=parseInt(document.getElementById('sfGet').value,10)||1;if(buy<1||buy>50||get<1||get>10){toast('⚠ Invalid values.');return}btn.disabled=true;txt.textContent='Saving…';
   try{
     if(secure()){const res=await edge('merchant-api',{action:'save_settings',product_name:prod||shop.product_name,product_emoji:emo||shop.product_emoji,reward_rule:{buy,get}});if(res.shop)shop=res.shop}
     else{const u=await sb(`/shops?id=eq.${shop.id}`,{method:'PATCH',prefer:'return=representation',body:{product_name:prod||shop.product_name,product_emoji:emo||shop.product_emoji,reward_rule:{buy,get}}});if(u?.length)shop={...shop,...u[0]}}
@@ -1192,7 +927,7 @@ async function handleShare(){const url=`https://primorewards.in/${shop.slug}-rew
 function openMenu(){document.getElementById('menuSheet').classList.add('open')}
 function closeMenu(){document.getElementById('menuSheet').classList.remove('open')}
 async function doRefresh(){closeMenu();try{await loadDash();renderDash();toast('Refreshed ✓')}catch{toast('⚠ Failed.')}}
-function signOut(){closeMenu();shop=null;customers=[];allStamps=[];allReds=[];custMap={};merchantToken=null;document.getElementById('inSlug').value='';document.getElementById('inPwd').value='';document.getElementById('loginErr').textContent='';document.getElementById('secBanner').classList.remove('show');showScreen('s-login');toast('Signed out')}
+function signOut(){closeMenu();shop=null;customers=[];allStamps=[];allReds=[];custMap={};merchantToken=null;document.getElementById('inSlug').value='';document.getElementById('inPwd').value='';document.getElementById('loginErr').textContent='';document.getElementById('secBanner').classList.remove('show');const rxp=document.getElementById('reactivationPanel');if(rxp)rxp.style.display='none';showScreen('s-login');toast('Signed out')}
 
 /* ══ EMOJI PICKER ══ */
 const EMOJI_CATS=[
@@ -1243,442 +978,13 @@ document.addEventListener('click',function(ev){
   }
 });
 
-/* ══ STAMP QR ══ */
-const SQR_CIRC = 2 * Math.PI * 118; // circumference ≈ 741.42 for r=118
-let sqrState = { token: null, secsRemaining: 30, intervalId: null, busy: false, inited: false };
-
-async function fetchStampToken() {
-  if (!merchantToken || !shop || sqrState.busy) return;
-  sqrState.busy = true;
-  try {
-    const res = await fetch(`${PRIMO_CONFIG.EDGE_BASE}/get-stamp-token`, {
-      method: 'GET',
-      headers: { 'Authorization': `Bearer ${merchantToken}` },
-    });
-    if (res.status === 401) { merchantToken = null; signOut(); return; }
-    if (!res.ok) { const e = await res.json().catch(() => ({})); throw new Error(e.error || `HTTP ${res.status}`); }
-    const data = await res.json();
-    const changed = data.token !== sqrState.token;
-    sqrState.token = data.token;
-    sqrState.secsRemaining = data.seconds_remaining;
-    showSQRMain();
-    updateSQRArc();
-    if (changed) genStampQR(data.token, data.slug || shop?.slug || '');
-  } catch (e) {
-    console.error('[sqr]', e);
-    if (!sqrState.inited) showSQRError(e.message);
-  } finally {
-    sqrState.busy = false;
-  }
-}
-
-function genStampQR(token, slug) {
-  const text = `PRIMO:${slug}:${token}`;
-  const el = document.getElementById('sqr-canvas');
-  if (!el) return;
-  el.innerHTML = '';
-  try {
-    new QRCode(el, { text, width: 218, height: 218, colorDark: '#1A1007', colorLight: '#FFFFFF', correctLevel: QRCode.CorrectLevel.M });
-    sqrState.inited = true;
-  } catch (e) { console.error('[sqr] gen:', e); }
-  const slugEl = document.getElementById('sqrSlugDisplay');
-  const tokEl  = document.getElementById('sqrTokenDisplay');
-  if (slugEl) slugEl.textContent = slug;
-  if (tokEl)  tokEl.textContent  = token;
-  // Brief pulse on token change
-  const rc = document.getElementById('sqrRingContainer');
-  if (rc) { rc.classList.add('sqr-refreshing'); setTimeout(() => rc.classList.remove('sqr-refreshing'), 1200); }
-}
-
-function updateSQRArc() {
-  const secs = Math.max(0, sqrState.secsRemaining);
-  const secsEl = document.getElementById('sqrSecs');
-  const arc    = document.getElementById('sqrArc');
-  if (secsEl) secsEl.textContent = secs;
-  if (!arc) return;
-  arc.style.strokeDashoffset = (1 - secs / 30) * SQR_CIRC;
-  arc.style.stroke = secs > 20 ? 'var(--em)' : secs > 8 ? 'var(--gold-b)' : '#e74c3c';
-}
-
-function tickSQR() {
-  if (sqrState.secsRemaining > 0) {
-    sqrState.secsRemaining--;
-    updateSQRArc();
-    // Prefetch at 2s remaining so new QR is ready before window expires
-    if (sqrState.secsRemaining <= 2 && !sqrState.busy) fetchStampToken();
-  } else if (!sqrState.busy) {
-    fetchStampToken();
-  }
-}
-
-function startStampQR() {
-  if (!merchantToken || !shop) { showSQRError('Session expired — please log in again.'); return; }
-  // Starter plan: show FOMO gate immediately — no loading state, no API call
-  if (isStarter()) { showSQRPlanGate(); return; }
-  hideSQRPlanGate();
-  showSQRLoading();
-  sqrState.inited = false;
-  fetchStampToken();
-  if (sqrState.intervalId) clearInterval(sqrState.intervalId);
-  sqrState.intervalId = setInterval(tickSQR, 1000);
-}
-function stopStampQR()   { if (sqrState.intervalId) { clearInterval(sqrState.intervalId); sqrState.intervalId = null; } }
-function retryStampQR()  { showSQRLoading(); sqrState.inited = false; fetchStampToken(); }
-function showSQRLoading(){ document.getElementById('sqr-loading').style.display='flex'; document.getElementById('sqr-error').style.display='none'; document.getElementById('sqr-main').style.display='none'; }
-function showSQRError(m) { document.getElementById('sqr-loading').style.display='none'; document.getElementById('sqr-error').style.display='flex'; document.getElementById('sqr-main').style.display='none'; const el=document.getElementById('sqr-err-msg'); if(el) el.textContent=m||'Could not load QR code'; }
-function showSQRMain()   { document.getElementById('sqr-loading').style.display='none'; document.getElementById('sqr-error').style.display='none'; document.getElementById('sqr-main').style.display='block'; }
-
-/* ══ QR FEED POLLER + NOTIFICATIONS ══ */
-let sqrFeedTimer   = null;
-let sqrLastSince   = null; // ISO timestamp — only fetch scans newer than this
-let sqrBadgeCount  = 0;
-let sqrOnStampTab  = false;
-
-async function pollQRFeed() {
-  if (!merchantToken || !shop) return;
-  try {
-    const url = `${PRIMO_CONFIG.EDGE_BASE}/get-qr-feed${sqrLastSince ? `?since=${encodeURIComponent(sqrLastSince)}` : ''}`;
-    const res = await fetch(url, { headers: { 'Authorization': `Bearer ${merchantToken}` } });
-    if (res.status === 401) { merchantToken = null; signOut(); return; }
-    if (!res.ok) return;
-    const { scans } = await res.json();
-    if (!scans?.length) return;
-    // On very first poll absorb silently (avoid flooding with historical scans)
-    const firstPoll = !sqrLastSince || sqrLastSince === new Date(Date.now() - 5000).toISOString().slice(0,20);
-    // Update cursor to latest scan timestamp
-    sqrLastSince = scans[0].scanned_at;
-    if (!firstPoll) scans.forEach(scan => showStampNotif(scan));
-  } catch (e) { console.warn('[sqr-feed]', e); }
-}
-
-function showStampNotif(scan) {
-  const cm  = custMap[scan.customer_id] || {};
-  const buy = shop?.reward_rule?.buy || 11;
-  const cnt = cm.cySt?.length ?? '?';
-  const detail = typeof cnt === 'number'
-    ? `${cnt}/${buy} stamps · just now`
-    : 'QR stamp · just now';
-
-  const el = document.createElement('div');
-  el.className = 'sqr-notif';
-  el.innerHTML = `
-    <div class="sqr-notif-ico">♛</div>
-    <div class="sqr-notif-body">
-      <div class="sqr-notif-name">${san(scan.first_name)} ••••${san(scan.phone_last4)}</div>
-      <div class="sqr-notif-detail">✦ Stamp earned via QR · ${detail}</div>
-    </div>
-    <button class="sqr-notif-close" onclick="dismissNotif(this.parentElement)" aria-label="Dismiss">×</button>`;
-
-  const stack = document.getElementById('sqrNotifStack');
-  if (!stack) return;
-  stack.prepend(el);
-
-  // Badge: only increment when merchant isn't on Stamp QR tab
-  if (!sqrOnStampTab) {
-    sqrBadgeCount++;
-    const badge = document.getElementById('sqrTabBadge');
-    if (badge) { badge.textContent = sqrBadgeCount; badge.style.display = 'flex'; }
-  }
-
-  // Auto-dismiss after 6s
-  setTimeout(() => dismissNotif(el), 6000);
-
-  // Cap stack at 5 visible
-  const all = stack.querySelectorAll('.sqr-notif');
-  if (all.length > 5) all[all.length - 1].remove();
-}
-
-function dismissNotif(el) {
-  if (!el || el.classList.contains('out')) return;
-  el.classList.add('out');
-  setTimeout(() => el.remove(), 260);
-}
-
-function clearSQRBadge() {
-  sqrBadgeCount = 0;
-  const badge = document.getElementById('sqrTabBadge');
-  if (badge) badge.style.display = 'none';
-}
-
-function startQRFeedPoller() {
-  // Reset cursor on tab open so we catch any scans since last visit
-  if (!sqrLastSince) sqrLastSince = new Date(Date.now() - 5000).toISOString();
-  if (sqrFeedTimer) clearInterval(sqrFeedTimer);
-  pollQRFeed(); // immediate first hit
-  sqrFeedTimer = setInterval(pollQRFeed, 3000);
-}
-
-function stopQRFeedPoller() {
-  if (sqrFeedTimer) { clearInterval(sqrFeedTimer); sqrFeedTimer = null; }
-}
-
-/* ══ STARTER PLAN LIMITS ══ */
-const STARTER_MAX_CUSTS = 200;
-function isStarter() { return shop?.plan === 'starter'; }
-
-function applyPlanGates() {
-  if (!shop) return;
-  const starter = isStarter();
-
-  // Reward rule: lock to Buy 10 → Get 1 Free for starter
-  const ruleRow  = document.getElementById('sfRuleRow');
-  const ruleLock = document.getElementById('ruleLock');
-  const noteEl   = document.getElementById('settingsNote');
-  if (ruleRow)  ruleRow.style.display  = starter ? 'none'  : 'grid';
-  if (ruleLock) ruleLock.style.display = starter ? 'block' : 'none';
-  if (starter && noteEl) noteEl.textContent = 'Product name and icon apply immediately on all customer-facing cards.';
-
-  // Force Buy=10, Get=1 into the hidden inputs so saveSets() picks them up
-  if (starter) {
-    const buyEl = document.getElementById('sfBuy');
-    const getEl = document.getElementById('sfGet');
-    if (buyEl) buyEl.value = 10;
-    if (getEl) getEl.value = 1;
-  }
-
-  // Customer limit banner
-  updateCustLimitBanner();
-}
-
-function updateCustLimitBanner() {
-  const banner = document.getElementById('custLimitBanner');
-  if (!banner || !isStarter()) { if (banner) banner.className = 'cust-limit-banner'; return; }
-  const n = customers.length;
-  if (n >= STARTER_MAX_CUSTS) {
-    banner.className = 'cust-limit-banner full';
-    banner.innerHTML = `<i class="ti ti-users-group"></i>${n}/${STARTER_MAX_CUSTS} customers — limit reached. <span class="clb-upgrade" onclick="switchToSettings()">Upgrade to Pro</span> for unlimited.`;
-    // Disable add button
-    const ab = document.getElementById('addCustBtn');
-    if (ab) { ab.style.opacity = '.45'; ab.style.pointerEvents = 'none'; ab.title = 'Upgrade to add more customers'; }
-  } else if (n >= 150) {
-    banner.className = 'cust-limit-banner warn';
-    banner.innerHTML = `<i class="ti ti-alert-triangle"></i>${n}/${STARTER_MAX_CUSTS} customers on Starter. <span class="clb-upgrade" onclick="switchToSettings()">Upgrade to Pro</span> for unlimited.`;
-    const ab = document.getElementById('addCustBtn');
-    if (ab) { ab.style.opacity = ''; ab.style.pointerEvents = ''; ab.title = ''; }
-  } else {
-    banner.className = 'cust-limit-banner';
-    const ab = document.getElementById('addCustBtn');
-    if (ab) { ab.style.opacity = ''; ab.style.pointerEvents = ''; ab.title = ''; }
-  }
-}
-
-// Stamp QR overlay — full-screen, no scrolling competition
-let sqrPrevTab = 't-cust';
-
-function openSQROverlay() {
-  sqrOnStampTab = true;
-  clearSQRBadge();
-  // Update plan chip in header
-  const chip = document.getElementById('sqroChip');
-  if (chip) { chip.textContent = (shop?.plan || 'pro').toUpperCase(); chip.style.display = isStarter() ? 'none' : 'flex'; }
-  document.getElementById('sqrOverlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
-  startStampQR();
-  if (!isStarter()) startQRFeedPoller();
-}
-
-function closeSQROverlay() {
-  sqrOnStampTab = false;
-  stopStampQR();
-  stopQRFeedPoller();
-  document.getElementById('sqrOverlay').classList.remove('open');
-  document.body.style.overflow = '';
-  // Restore the previously active tab visual without triggering its load
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === sqrPrevTab));
-  document.querySelectorAll('.tab-content').forEach(c => c.classList.toggle('active', c.id === sqrPrevTab));
-}
-
-// Stamp QR tab plan gate — shown instantly, no API call
-function showSQRPlanGate() {
-  document.getElementById('sqr-plan-gate').style.display = 'block';
-  const info = document.getElementById('sqrInfoBanner');
-  if (info) info.style.display = 'none';
-  document.getElementById('sqr-loading').style.display = 'none';
-  document.getElementById('sqr-error').style.display = 'none';
-  document.getElementById('sqr-main').style.display = 'none';
-}
-function hideSQRPlanGate() {
-  document.getElementById('sqr-plan-gate').style.display = 'none';
-  const info = document.getElementById('sqrInfoBanner');
-  if (info) info.style.display = 'flex';
-}
-
-// WA tab plan gate
-function showWAPlanGate() {
-  document.getElementById('waPlanGate').style.display = 'flex';
-  document.getElementById('waWrap').style.display = 'none';
-}
-function hideWAPlanGate() {
-  document.getElementById('waPlanGate').style.display = 'none';
-  document.getElementById('waWrap').style.display = 'block';
-}
-
-/* ══ ANALYTICS ══ */
-let anDays = 30;
-let anData = null;
-
-function setAnDays(d) {
-  anDays = d;
-  document.querySelectorAll('.an-pill').forEach(p => p.classList.toggle('sel', Number(p.dataset.days) === d));
-  loadAnalytics();
-}
-
-async function loadAnalytics() {
-  if (!merchantToken || !shop) return;
-  if (isStarter()) { showAnGate(); return; }
-  showAnLoading();
-  try {
-    const res = await fetch(`${PRIMO_CONFIG.EDGE_BASE}/get-analytics?days=${anDays}`, {
-      headers: { 'Authorization': `Bearer ${merchantToken}` },
-    });
-    if (res.status === 401) { merchantToken = null; signOut(); return; }
-    if (!res.ok) { const e = await res.json().catch(() => ({})); throw new Error(e.error || `HTTP ${res.status}`); }
-    anData = await res.json();
-    renderAnalytics(anData);
-  } catch (e) {
-    console.error('[analytics]', e);
-    showAnError(e.message);
-  }
-}
-
-function showAnGate()    { document.getElementById('anPlanGate').style.display='block'; document.getElementById('anWrap').style.display='none'; }
-function showAnLoading() { document.getElementById('anPlanGate').style.display='none'; document.getElementById('anWrap').style.display='block'; document.getElementById('anLoading').style.display='flex'; document.getElementById('anError').style.display='none'; document.getElementById('anData').style.display='none'; }
-function showAnError(m)  { document.getElementById('anLoading').style.display='none'; document.getElementById('anError').style.display='flex'; document.getElementById('anErrorMsg').textContent=m||'Could not load analytics'; }
-function showAnData()    { document.getElementById('anLoading').style.display='none'; document.getElementById('anError').style.display='none'; document.getElementById('anData').style.display='block'; }
-
-function renderAnalytics(d) {
-  showAnData();
-  const { kpis, chart, pipeline, needs_attention, top_customers } = d;
-
-  // KPIs
-  const kv = (id, val) => { const el=document.getElementById(id); if(el) el.textContent=val; };
-  const kc = (id, delta, suffix='', pct=false) => {
-    const el=document.getElementById(id); if(!el) return;
-    if(delta===null||delta===undefined){el.textContent='';return;}
-    const cls=delta>0?'an-up':delta<0?'an-dn':'an-neu';
-    const arrow=delta>0?'↑':delta<0?'↓':'–';
-    const val=pct?`${Math.abs(delta)}%`:Math.abs(delta);
-    el.innerHTML=`<span class="${cls}">${arrow} ${val}${suffix} vs prior period</span>`;
-  };
-  kv('anKpiActive', kpis.active_customers);
-  kv('anKpiStamps', kpis.stamps_issued);
-  kv('anKpiRewards', kpis.rewards_given);
-  kv('anKpiRetention', `${kpis.retention_rate}%`);
-  kc('anKpiActiveDelta', kpis.active_delta, ' customers');
-  kc('anKpiStampsDelta', kpis.stamps_delta_pct, '%', true);
-  kc('anKpiRewardsDelta', kpis.rewards_delta, ' rewards');
-  kc('anKpiRetentionDelta', kpis.retention_delta, '%', true);
-
-  // Chart
-  const chartTitle = document.getElementById('anChartTitle');
-  if(chartTitle) chartTitle.textContent = `Stamps — Last ${anDays} Days`;
-  const maxVal = Math.max(...chart.map(c=>c.count), 1);
-  const barsEl = document.getElementById('anBars');
-  if(barsEl) barsEl.innerHTML = chart.map((c,i)=>{
-    const h = Math.max(3, Math.round(c.count/maxVal*100));
-    const isToday = i === chart.length-1;
-    const cls = isToday ? 'em' : c.count >= maxVal*0.7 ? 'hi' : 'lo';
-    return `<div class="an-bar ${cls}" style="height:${h}%" title="${c.date}: ${c.count}"></div>`;
-  }).join('');
-  // Axis labels
-  const axisEl = document.getElementById('anBarAxis');
-  if(axisEl && chart.length) {
-    const fmt = d => { const dt=new Date(d+'T00:00:00'); return `${dt.toLocaleString('default',{month:'short'})} ${dt.getDate()}`; };
-    const mid = Math.floor(chart.length/2);
-    axisEl.innerHTML = `<span class="an-bar-lbl">${fmt(chart[0].date)}</span><span class="an-bar-lbl">${fmt(chart[mid].date)}</span><span class="an-bar-lbl">Today</span>`;
-  }
-
-  // Pipeline
-  const pTotal = pipeline.just_started + pipeline.midway + pipeline.almost_there + pipeline.reward_ready || 1;
-  const setPipe = (n, i, val) => {
-    const el=document.getElementById(`anPipe${i}`); if(el) el.style.width=`${Math.round(val/pTotal*100)}%`;
-    const nel=document.getElementById(`anPipeN${i}`); if(nel) nel.textContent=val;
-  };
-  setPipe(1,1,pipeline.just_started); setPipe(2,2,pipeline.midway);
-  setPipe(3,3,pipeline.almost_there); setPipe(4,4,pipeline.reward_ready);
-
-  // Needs attention: 1 away
-  document.getElementById('anOneAwayN').textContent = needs_attention.one_away_count;
-  const oneAwayBody = document.getElementById('anOneAwayBody');
-  if(oneAwayBody) {
-    if(needs_attention.one_away.length === 0) {
-      oneAwayBody.innerHTML = '<div class="an-attn-empty">No customers here yet</div>';
-    } else {
-      const names = needs_attention.one_away.slice(0,3).map(c=>`${san(c.first_name)} ••••${san(c.phone_last4)}`).join('<br>');
-      const extra = needs_attention.one_away_count > 3 ? `<br>+${needs_attention.one_away_count-3} more` : '';
-      const waCustIds = needs_attention.one_away.map(c=>c.customer_id);
-      oneAwayBody.innerHTML = `<div class="an-attn-names">${names}${extra}</div><button class="an-wa-btn" onclick="anSendWA(${JSON.stringify(waCustIds)},'ready')">📲 Send WA</button>`;
-    }
-  }
-
-  // Needs attention: inactive
-  document.getElementById('anInactiveN').textContent = needs_attention.inactive_count;
-  const inactiveBody = document.getElementById('anInactiveBody');
-  if(inactiveBody) {
-    if(needs_attention.inactive.length === 0) {
-      inactiveBody.innerHTML = '<div class="an-attn-empty">All customers are active 🎉</div>';
-    } else {
-      const names = needs_attention.inactive.slice(0,3).map(c=>`${san(c.first_name)} ••••${san(c.phone_last4)}`).join('<br>');
-      const extra = needs_attention.inactive_count > 3 ? `<br>+${needs_attention.inactive_count-3} more` : '';
-      const waCustIds = needs_attention.inactive.map(c=>c.customer_id);
-      inactiveBody.innerHTML = `<div class="an-attn-names">${names}${extra}</div><button class="an-wa-btn" onclick="anSendWA(${JSON.stringify(waCustIds)},'progress')">📲 Send WA</button>`;
-    }
-  }
-
-  // Top customers
-  const topEl = document.getElementById('anTopCusts');
-  if(topEl) {
-    if(!top_customers.length) {
-      topEl.innerHTML = '<div class="an-state" style="padding:1rem 0">No stamps recorded yet</div>';
-    } else {
-      topEl.innerHTML = top_customers.map((c,i)=>`
-        <div class="an-cust-row">
-          <div class="an-cust-rank">#${i+1}</div>
-          <div class="an-cust-av">${san(c.first_name).charAt(0)}</div>
-          <div class="an-cust-info">
-            <div class="an-cust-nm">${san(c.first_name)} ••••${san(c.phone_last4)}</div>
-            <div class="an-cust-sub">${c.total_rewards} reward${c.total_rewards!==1?'s':''} earned</div>
-          </div>
-          <div class="an-cust-right">
-            <div class="an-cust-val">${c.total_stamps}</div>
-            <div class="an-cust-lbl">stamps</div>
-          </div>
-        </div>`).join('');
-    }
-  }
-}
-
-function anSendWA(custIds, tpl) {
-  // Switch to WA tab, pre-select those customers
-  document.querySelectorAll('.tab-btn').forEach(b=>{
-    if(b.dataset.tab==='t-wa'){ b.click(); }
-  });
-  toast('Opening WhatsApp for selected customers…');
-}
-
-/* ══ ANALYTICS OVERLAY ══ */
-let anPrevTab = 't-cust';
-
-function openAnOverlay() {
-  anPrevTab = document.querySelector('.tab-btn.active')?.dataset?.tab || 't-cust';
-  document.getElementById('anOverlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
-  loadAnalytics();
-}
-
-function closeAnOverlay() {
-  document.getElementById('anOverlay').classList.remove('open');
-  document.body.style.overflow = '';
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === anPrevTab));
-  document.querySelectorAll('.tab-content').forEach(c => c.classList.toggle('active', c.id === anPrevTab));
-}
-
 /* ══ WIRE ══ */
 function wire(){
   document.getElementById('loginBtn').addEventListener('click',handleLogin);document.getElementById('inSlug').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('inPwd').focus()});document.getElementById('inPwd').addEventListener('keydown',e=>{if(e.key==='Enter')handleLogin()});
+  // Hide reactivation panel when user changes slug or password
+  ['inSlug','inPwd'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{const rxp=document.getElementById('reactivationPanel');if(rxp)rxp.style.display='none';}));
   document.getElementById('profileMenuBtn').addEventListener('click',openMenu);document.getElementById('menuSheet').addEventListener('click',e=>{if(e.target.id==='menuSheet')closeMenu()});document.getElementById('sheetRefresh').addEventListener('click',doRefresh);document.getElementById('sheetSignOut').addEventListener('click',signOut);
-  document.querySelectorAll('.tab-btn').forEach(b=>b.addEventListener('click',()=>{const prev=document.querySelector('.tab-btn.active')?.dataset?.tab;if(b.dataset.tab==='t-stamp'){sqrPrevTab=prev||'t-cust';openSQROverlay();return;}if(b.dataset.tab==='t-analytics'){openAnOverlay();return;}if(prev==='t-stamp')closeSQROverlay();if(prev==='t-analytics')closeAnOverlay();document.querySelectorAll('.tab-btn').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));b.classList.add('active');document.getElementById(b.dataset.tab).classList.add('active');if(b.dataset.tab==='t-qr'&&shop)renderQR();if(b.dataset.tab==='t-wa'&&shop){if(isStarter())showWAPlanGate();else{hideWAPlanGate();renderWA();}}}));
-  document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(document.getElementById('sqrOverlay')?.classList.contains('open'))closeSQROverlay();else if(document.getElementById('anOverlay')?.classList.contains('open'))closeAnOverlay();}});
+  document.querySelectorAll('.tab-btn').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.tab-btn').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));b.classList.add('active');document.getElementById(b.dataset.tab).classList.add('active');if(b.dataset.tab==='t-qr'&&shop)renderQR();if(b.dataset.tab==='t-wa'&&shop)renderWA()}));
   document.getElementById('searchInp').addEventListener('input',e=>{searchQ=e.target.value;renderCustList()});
   document.getElementById('addCustBtn').addEventListener('click',openAdd);document.getElementById('addConfirm').addEventListener('click',confirmAdd);document.getElementById('addCancel').addEventListener('click',closeAdd);document.getElementById('addModal').addEventListener('click',e=>{if(e.target.id==='addModal')closeAdd()});
   document.getElementById('addMobile').addEventListener('input',function(){const d=this.value.replace(/\D/g,'');this.value=d;const badge=document.getElementById('addDerived'),b4=document.getElementById('addDerived4');if(d.length>=4){badge.style.display='inline-flex';b4.textContent=d.slice(-4)}else{badge.style.display='none'}});
