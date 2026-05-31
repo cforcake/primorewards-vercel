@@ -146,9 +146,6 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
 .an-cust-val{font-size:16px;font-weight:700;color:var(--ink);font-family:var(--fd);line-height:1}
 .an-cust-lbl{font-size:9px;color:var(--ink-l);margin-top:1px}
 .an-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4rem 1rem;gap:.75rem;color:var(--ink-l);font-size:13px;text-align:center;line-height:1.65}
-.billing-warn-banner{display:none;align-items:center;gap:.55rem;background:#FEF3C7;border-bottom:1.5px solid #F59E0B;padding:.65rem 1rem;font-size:12.5px;color:#92400E;font-weight:600;cursor:pointer}
-.billing-warn-banner.show{display:flex}
-.billing-warn-banner i{font-size:17px;flex-shrink:0}
 /* ══ STARTER PLAN GATES ══ */
 /* Stamp QR FOMO card */
 .sqr-plan-gate{padding:.35rem .75rem .75rem;max-width:460px;margin:0 auto;width:100%;display:none}
@@ -273,13 +270,6 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
     <button class="tab-btn" data-tab="t-stamp"><i class="ti ti-scan"></i>Stamp QR<span class="sqr-tab-badge" id="sqrTabBadge" style="display:none">0</span></button>
   </div>
 
-  <!-- Billing cancelled warning banner -->
-  <div class="billing-warn-banner" id="billingWarnBanner" onclick="switchToSettings()">
-    <i class="ti ti-alert-triangle"></i>
-    <span id="billingWarnTxt">Billing cancelled — set up billing before your trial ends</span>
-    <span style="margin-left:auto;font-size:14px">→</span>
-  </div>
-  </div>
   <!-- Trial countdown banner — shown on all tabs during trial period -->
   <div id="trialBanner" style="display:none;margin:.5rem .9rem .1rem;border-radius:12px;padding:.65rem .9rem;border:1px solid;transition:background .3s,border-color .3s" role="status">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:.75rem">
@@ -668,7 +658,7 @@ async function handleLogin(){
       shop=safeShop;
       loginAttempts.count=0;
     }
-    await loadDash();renderDash();applyPlanGates();updateBillingWarnBanner();showScreen('s-dash');
+    await loadDash();renderDash();applyPlanGates();showScreen('s-dash');
     if(!secure())document.getElementById('secBanner').classList.add('show');
     // Start background QR scan feed (notifications appear on any tab for Pro/Premium)
     if(['pro','premium'].includes(shop?.plan)) startQRFeedPoller();
@@ -1053,7 +1043,7 @@ function updateTrialBanner(){
   const banner=document.getElementById('trialBanner');
   if(!banner||!shop) return;
   const ss=shop.subscription_status||'none';
-  if(ss==='active'||ss==='cancelled'){banner.style.display='none';return;}
+  if(ss==='active'){banner.style.display='none';return;}
   if(!shop.trial_ends_at&&ss==='none'){banner.style.display='none';return;}
 
   const now=Date.now();
@@ -1098,6 +1088,19 @@ function updateTrialBanner(){
       background:'#7C3AED',color:'#fff',
       boxShadow:'0 3px 10px rgba(124,58,237,.45)',whiteSpace:'nowrap'});
     btn.textContent='Complete →';
+  } else if(ss==='cancelled'){
+    // Billing cancelled but still in trial — amber warning, calm but clear
+    Object.assign(banner.style,{background:'linear-gradient(135deg,#FFFBEB,#FEF3C7)',
+      borderColor:'#F59E0B',color:'#78350F',animation:'none',
+      boxShadow:'0 3px 12px rgba(245,158,11,.18)'});
+    title.style.cssText='font-size:14px;font-weight:800;margin-bottom:3px;color:#78350F';
+    title.textContent=days!=null&&days>=0?`⚠ Billing cancelled — ${days}d left in trial`:'⚠ Billing cancelled';
+    sub.style.cssText='font-size:12px;color:#92400E;font-weight:600';
+    sub.textContent='Set up billing before your trial ends — your shop is fully active until then';
+    Object.assign(btn.style,{display:'inline-block',fontSize:'12.5px',fontWeight:'800',
+      padding:'7px 16px',borderRadius:'9px',border:'none',cursor:'pointer',
+      background:'#F59E0B',color:'#fff',whiteSpace:'nowrap'});
+    btn.textContent='Re-setup →';
   } else if(diff!=null&&diff<=0){
     // Expired — cool crimson
     Object.assign(banner.style,{background:'linear-gradient(135deg,#FDF2F8,#FCE7F3)',
@@ -1653,24 +1656,6 @@ function anSendWA(custIds, tpl) {
     if(b.dataset.tab==='t-wa'){ b.click(); }
   });
   toast('Opening WhatsApp for selected customers…');
-}
-
-/* ══ BILLING WARNING BANNER ══ */
-function updateBillingWarnBanner() {
-  const banner = document.getElementById('billingWarnBanner');
-  if (!banner || !shop) return;
-  const ss = shop.subscription_status;
-  if (ss === 'cancelled') {
-    const inTrial = shop.trial_ends_at && new Date(shop.trial_ends_at) > new Date();
-    if (inTrial) {
-      const daysLeft = Math.ceil((new Date(shop.trial_ends_at).getTime() - Date.now()) / 86400000);
-      document.getElementById('billingWarnTxt').textContent =
-        `Billing cancelled — set up billing before trial ends (${daysLeft}d left)`;
-      banner.classList.add('show');
-    }
-  } else {
-    banner.classList.remove('show');
-  }
 }
 
 /* ══ WIRE ══ */
