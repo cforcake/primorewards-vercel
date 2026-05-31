@@ -1020,7 +1020,9 @@ function openShopDetail(shopId) {
     '<div class="dstats"><div class="dstat"><div class="dstat-v">'+cust+'</div><div class="dstat-l">Customers</div></div>'+
     '<div class="dstat"><div class="dstat-v">'+stmp+'</div><div class="dstat-l">Stamps</div></div>'+
     '<div class="dstat"><div class="dstat-v">'+redm+'</div><div class="dstat-l">Redeemed</div></div></div></div>'+
-    '<div class="d-actions">'+(waL?'<a class="da-btn da-wa" href="'+waL+'" target="_blank" rel="noopener">&#x1F4AC; WhatsApp</a>':'')+ab+'</div>';
+    '<div class="d-actions">'+(waL?'<a class="da-btn da-wa" href="'+waL+'" target="_blank" rel="noopener">&#x1F4AC; WhatsApp</a>':'')+
+    (s.razorpay_subscription_id?'<button class="da-btn" style="background:rgba(201,168,76,.1);color:var(--gold-b);border:1px solid rgba(201,168,76,.28);font-size:12.5px;flex:1" onclick="syncSubscription(\''+esc(s.id)+'\',this)">&#x1F504; Sync Razorpay</button>':'')+
+    ab+'</div>';
   openSheet('sheet-detail');
 }
 
@@ -1251,6 +1253,32 @@ async function cancelSubscription(shopId, shopName) {
   } catch(e) {
     showToast('Cancel failed — check Razorpay dashboard','red','✗');
     console.error('[cancelSubscription]', e);
+  }
+}
+
+/* ── Sync billing status from Razorpay ───────────────────────────────────
+   Calls admin-action sync_subscription → fetches live Razorpay status →
+   applies missed webhook updates (authenticated/active/halted/cancelled).
+   Used when a merchant completes mandate but webhook was missed.          */
+async function syncSubscription(shopId, btn) {
+  const origTxt = btn ? btn.textContent : '';
+  if(btn){ btn.disabled=true; btn.textContent='Syncing\u2026'; }
+  try {
+    const result = await sbEdge('admin-action', { action:'sync_subscription', shop_id:shopId });
+    const shop = STATE.shops.find(s=>s.id===shopId);
+    if(shop){
+      if(result.shop_status)         shop.status              = result.shop_status;
+      if(result.subscription_status) shop.subscription_status = result.subscription_status;
+    }
+    closeAllSheets();
+    renderDashboard();
+    const color = result.updated ? 'green' : 'amber';
+    const ico   = result.updated ? '\u2713' : '\u2139';
+    showToast(result.message || 'Synced from Razorpay', color, ico);
+  } catch(e) {
+    showToast('Sync failed \u2014 ' + e.message, 'red', '\u2715');
+    console.error('[syncSubscription]', e);
+    if(btn){ btn.disabled=false; btn.textContent=origTxt; }
   }
 }
 
