@@ -94,6 +94,61 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
 /* Dev */
 .bday-ico{font-size:13px;color:var(--gold);vertical-align:middle}
 .err-ico i{font-size:52px;color:var(--ink-l)}
+/* ══ ANALYTICS TAB ══ */
+.an-wrap{padding:.6rem .75rem 6rem;max-width:480px;margin:0 auto;width:100%}
+.an-top-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem}
+.an-title{font-family:var(--fd);font-size:19px;font-weight:500;color:var(--ink)}
+.an-pills{display:flex;background:#E8E2D6;border-radius:9px;padding:2px;gap:1px}
+.an-pill{font-size:10.5px;font-weight:700;color:#8B7355;padding:5px 10px;border-radius:7px;cursor:pointer;border:none;background:transparent}
+.an-pill.sel{background:var(--white);color:var(--ink);box-shadow:0 1px 5px rgba(26,16,7,.12)}
+.an-kpi-row{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:.75rem}
+.an-kpi{background:var(--white);border-radius:14px;padding:13px 13px 11px;box-shadow:0 2px 12px rgba(26,16,7,.07)}
+.an-kpi-val{font-size:28px;font-weight:700;color:var(--ink);font-family:var(--fd);line-height:1}
+.an-kpi-lbl{font-size:10.5px;color:var(--ink-l);margin-top:4px;font-weight:500;line-height:1.3}
+.an-kpi-chg{font-size:10px;margin-top:6px;font-weight:700;display:flex;align-items:center;gap:3px}
+.an-up{color:var(--em)}.an-dn{color:#c0392b}.an-neu{color:var(--ink-l)}
+.an-card{background:var(--white);border-radius:14px;padding:13px 13px 12px;box-shadow:0 2px 12px rgba(26,16,7,.07);margin-bottom:.75rem}
+.an-card-title{font-size:10.5px;font-weight:700;color:var(--ink-m);letter-spacing:.07em;text-transform:uppercase;margin-bottom:12px}
+.an-bars{display:flex;align-items:flex-end;gap:2px;height:72px}
+.an-bar{flex:1;border-radius:3px 3px 0 0;min-height:3px}
+.an-bar.hi{background:linear-gradient(180deg,var(--gold-b),var(--gold))}
+.an-bar.lo{background:var(--beige-m)}
+.an-bar.em{background:linear-gradient(180deg,#2E8B57,var(--em))}
+.an-bar-axis{display:flex;justify-content:space-between;margin-top:4px}
+.an-bar-lbl{font-size:8px;color:var(--ink-f)}
+.an-pipeline{display:flex;gap:8px}
+.an-pipe{flex:1;text-align:center}
+.an-pipe-track{height:8px;border-radius:99px;background:var(--beige-m);overflow:hidden;margin-bottom:5px}
+.an-pipe-fill{height:100%;border-radius:99px}
+.an-pipe-val{font-size:20px;font-weight:700;color:var(--ink);font-family:var(--fd);line-height:1}
+.an-pipe-lbl{font-size:8.5px;color:var(--ink-l);font-weight:500;line-height:1.4;margin-top:2px}
+.an-pipe-lbl.ready{color:#c0392b;font-weight:700}
+.an-sec-title{font-size:10.5px;font-weight:700;color:var(--ink-m);letter-spacing:.07em;text-transform:uppercase;margin:.1rem 0 .55rem}
+.an-attn{border-radius:14px;overflow:hidden;box-shadow:0 2px 12px rgba(26,16,7,.08);margin-bottom:.65rem}
+.an-attn-hdr{padding:11px 13px;display:flex;align-items:center;justify-content:space-between}
+.an-attn-hdr-l{display:flex;align-items:center;gap:9px}
+.an-attn-ico{font-size:20px}
+.an-attn-title{font-size:12.5px;font-weight:700;color:#FFFDF5;line-height:1.2}
+.an-attn-sub{font-size:10px;color:rgba(253,250,245,.55);margin-top:2px}
+.an-attn-n{font-size:20px;font-weight:700;color:#FFFDF5;font-family:var(--fd);background:rgba(255,255,255,.14);border-radius:9px;padding:5px 12px;min-width:36px;text-align:center;line-height:1}
+.an-attn-body{background:var(--white);padding:9px 13px 11px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.an-attn-names{font-size:11.5px;color:var(--ink-m);line-height:1.85;flex:1}
+.an-attn-empty{font-size:12px;color:var(--ink-f);text-align:center;padding:.5rem 0;flex:1}
+.an-wa-btn{display:flex;align-items:center;gap:5px;padding:9px 13px;border-radius:10px;background:#25D366;color:#fff;font-size:11.5px;font-weight:700;border:none;cursor:pointer;box-shadow:0 3px 10px rgba(37,211,102,.32);white-space:nowrap;flex-shrink:0}
+.an-cust-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--beige)}
+.an-cust-row:last-child{border:none}
+.an-cust-rank{font-size:14px;font-weight:700;color:var(--gold-b);font-family:var(--fd);width:18px;flex-shrink:0;text-align:center}
+.an-cust-av{width:34px;height:34px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:15px;font-weight:700;background:linear-gradient(135deg,var(--beige),var(--beige-m));color:var(--ink-m)}
+.an-cust-info{flex:1;min-width:0}
+.an-cust-nm{font-size:12.5px;font-weight:600;color:var(--ink)}
+.an-cust-sub{font-size:10px;color:var(--ink-l);margin-top:2px}
+.an-cust-right{text-align:right;flex-shrink:0}
+.an-cust-val{font-size:16px;font-weight:700;color:var(--ink);font-family:var(--fd);line-height:1}
+.an-cust-lbl{font-size:9px;color:var(--ink-l);margin-top:1px}
+.an-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4rem 1rem;gap:.75rem;color:var(--ink-l);font-size:13px;text-align:center;line-height:1.65}
+.billing-warn-banner{display:none;align-items:center;gap:.55rem;background:#FEF3C7;border-bottom:1.5px solid #F59E0B;padding:.65rem 1rem;font-size:12.5px;color:#92400E;font-weight:600;cursor:pointer}
+.billing-warn-banner.show{display:flex}
+.billing-warn-banner i{font-size:17px;flex-shrink:0}
 /* ══ STARTER PLAN GATES ══ */
 /* Stamp QR FOMO card */
 .sqr-plan-gate{padding:.35rem .75rem .75rem;max-width:460px;margin:0 auto;width:100%;display:none}
@@ -212,9 +267,18 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
   <div class="tab-bar">
     <button class="tab-btn active" data-tab="t-cust"><i class="ti ti-users"></i>Customers</button>
     <button class="tab-btn wa-tab" data-tab="t-wa"><i class="ti ti-brand-whatsapp"></i>WhatsApp</button>
+    <button class="tab-btn" data-tab="t-analytics"><i class="ti ti-chart-bar"></i>Analytics</button>
     <button class="tab-btn" data-tab="t-set"><i class="ti ti-settings"></i>Settings</button>
     <button class="tab-btn" data-tab="t-qr"><i class="ti ti-qrcode"></i>QR &amp; CSV</button>
     <button class="tab-btn" data-tab="t-stamp"><i class="ti ti-scan"></i>Stamp QR<span class="sqr-tab-badge" id="sqrTabBadge" style="display:none">0</span></button>
+  </div>
+
+  <!-- Billing cancelled warning banner -->
+  <div class="billing-warn-banner" id="billingWarnBanner" onclick="switchToSettings()">
+    <i class="ti ti-alert-triangle"></i>
+    <span id="billingWarnTxt">Billing cancelled — set up billing before your trial ends</span>
+    <span style="margin-left:auto;font-size:14px">→</span>
+  </div>
   </div>
   <!-- Trial countdown banner — shown on all tabs during trial period -->
   <div id="trialBanner" style="display:none;margin:.5rem .9rem .1rem;border-radius:12px;padding:.65rem .9rem;border:1px solid;transition:background .3s,border-color .3s" role="status">
@@ -314,9 +378,100 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
   </div></div>
 </div>
 
-  <div id="t-stamp" class="tab-content"></div><!-- content lifted into sqrOverlay -->
+  <div id="t-analytics" class="tab-content">
+    <!-- Starter plan gate -->
+    <div class="an-plan-gate" id="anPlanGate" style="display:none">
+      <div class="pgc-card">
+        <div class="pgc-preview">
+          <div class="pgc-badge">✦ PRO &amp; PREMIUM FEATURE</div>
+          <div class="pgc-mock-wrap" style="opacity:.45;filter:blur(1px)">
+            <svg class="pgc-mock-svg" viewBox="0 0 164 164" xmlns="http://www.w3.org/2000/svg">
+              <rect x="22" y="60" width="30" height="60" rx="3" fill="rgba(201,168,76,.5)"/>
+              <rect x="62" y="40" width="30" height="80" rx="3" fill="rgba(201,168,76,.7)"/>
+              <rect x="102" y="20" width="30" height="100" rx="3" fill="rgba(201,168,76,.9)"/>
+            </svg>
+          </div>
+          <div class="pgc-lock-wrap"><i class="ti ti-lock pgc-lock-ico"></i><div class="pgc-lock-sub">●●●●●●●●●●</div></div>
+        </div>
+        <div class="pgc-body">
+          <div class="pgc-title">Analytics Dashboard</div>
+          <div class="pgc-sub">Understand your loyalty programme — who's close to a reward, who's gone quiet, and who your best customers are.</div>
+          <div class="pgc-feats">
+            <div class="pgc-feat"><i class="ti ti-chart-bar"></i>Stamps trend, KPIs and retention rate</div>
+            <div class="pgc-feat"><i class="ti ti-funnel"></i>Customer pipeline — see who's nearly there</div>
+            <div class="pgc-feat"><i class="ti ti-bell"></i>Needs Attention — nudge customers in 1 tap</div>
+            <div class="pgc-feat"><i class="ti ti-crown"></i>Top 5 loyal customers leaderboard</div>
+          </div>
+          <button class="pgc-cta" onclick="switchToSettings()"><i class="ti ti-arrow-up-circle"></i>Upgrade to Pro — ₹299/mo</button>
+          <div class="pgc-note">Cancel anytime · No charge until trial ends · Instant activation</div>
+        </div>
+      </div>
+    </div>
+    <!-- Pro/Premium analytics UI -->
+    <div class="an-wrap" id="anWrap" style="display:none">
+      <div class="an-top-row">
+        <div class="an-title">Analytics</div>
+        <div class="an-pills">
+          <button class="an-pill" data-days="7"  onclick="setAnDays(7)">7d</button>
+          <button class="an-pill sel" data-days="30" onclick="setAnDays(30)">30d</button>
+          <button class="an-pill" data-days="90" onclick="setAnDays(90)">90d</button>
+        </div>
+      </div>
+      <!-- Loading state -->
+      <div id="anLoading" class="an-state"><div class="sqr-spinner"></div><div>Loading analytics…</div></div>
+      <!-- Error state -->
+      <div id="anError" class="an-state" style="display:none"><i class="ti ti-alert-circle" style="font-size:36px;color:var(--ink-f)"></i><div id="anErrorMsg">Could not load analytics</div><button class="sqr-retry-btn" onclick="loadAnalytics()"><i class="ti ti-refresh"></i> Retry</button></div>
+      <!-- Data -->
+      <div id="anData" style="display:none">
+        <!-- KPIs -->
+        <div class="an-kpi-row">
+          <div class="an-kpi"><div class="an-kpi-val" id="anKpiActive">—</div><div class="an-kpi-lbl">Active Customers</div><div class="an-kpi-chg" id="anKpiActiveDelta"></div></div>
+          <div class="an-kpi"><div class="an-kpi-val" id="anKpiStamps">—</div><div class="an-kpi-lbl">Stamps Issued</div><div class="an-kpi-chg" id="anKpiStampsDelta"></div></div>
+          <div class="an-kpi"><div class="an-kpi-val" id="anKpiRewards">—</div><div class="an-kpi-lbl">Rewards Given</div><div class="an-kpi-chg" id="anKpiRewardsDelta"></div></div>
+          <div class="an-kpi"><div class="an-kpi-val" id="anKpiRetention">—</div><div class="an-kpi-lbl">Retention Rate</div><div class="an-kpi-chg" id="anKpiRetentionDelta"></div></div>
+        </div>
+        <!-- Chart -->
+        <div class="an-card">
+          <div class="an-card-title" id="anChartTitle">Stamps — Last 30 Days</div>
+          <div class="an-bars" id="anBars"></div>
+          <div class="an-bar-axis" id="anBarAxis"></div>
+        </div>
+        <!-- Pipeline -->
+        <div class="an-card">
+          <div class="an-card-title">Customer Pipeline</div>
+          <div class="an-pipeline">
+            <div class="an-pipe"><div class="an-pipe-track"><div class="an-pipe-fill" id="anPipe1" style="background:var(--gold)"></div></div><div class="an-pipe-val" id="anPipeN1">—</div><div class="an-pipe-lbl">Just started<br>stamps 1–3</div></div>
+            <div class="an-pipe"><div class="an-pipe-track"><div class="an-pipe-fill" id="anPipe2" style="background:var(--gold-b)"></div></div><div class="an-pipe-val" id="anPipeN2">—</div><div class="an-pipe-lbl">Midway<br>4–7 stamps</div></div>
+            <div class="an-pipe"><div class="an-pipe-track"><div class="an-pipe-fill" id="anPipe3" style="background:var(--em)"></div></div><div class="an-pipe-val" id="anPipeN3">—</div><div class="an-pipe-lbl">Almost<br>there</div></div>
+            <div class="an-pipe"><div class="an-pipe-track"><div class="an-pipe-fill" id="anPipe4" style="background:#c0392b"></div></div><div class="an-pipe-val" id="anPipeN4">—</div><div class="an-pipe-lbl ready">Reward<br>ready 🎁</div></div>
+          </div>
+        </div>
+        <!-- Needs Attention -->
+        <div class="an-sec-title">Needs Attention</div>
+        <div class="an-attn" id="anAttn1">
+          <div class="an-attn-hdr" style="background:var(--em)">
+            <div class="an-attn-hdr-l"><div class="an-attn-ico">🎁</div><div><div class="an-attn-title">1 stamp away from reward</div><div class="an-attn-sub">Send a nudge — they're almost there</div></div></div>
+            <div class="an-attn-n" id="anOneAwayN">0</div>
+          </div>
+          <div class="an-attn-body" id="anOneAwayBody"><div class="an-attn-empty">No customers here yet</div></div>
+        </div>
+        <div class="an-attn" id="anAttn2">
+          <div class="an-attn-hdr" style="background:#7A5C18">
+            <div class="an-attn-hdr-l"><div class="an-attn-ico">😴</div><div><div class="an-attn-title">Inactive 30+ days</div><div class="an-attn-sub">Re-engage before they forget you</div></div></div>
+            <div class="an-attn-n" id="anInactiveN">0</div>
+          </div>
+          <div class="an-attn-body" id="anInactiveBody"><div class="an-attn-empty">All customers are active 🎉</div></div>
+        </div>
+        <!-- Top customers -->
+        <div class="an-card" style="margin-bottom:.75rem">
+          <div class="an-card-title">Top Loyal Customers</div>
+          <div id="anTopCusts"></div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-</div><!-- /s-dash -->
+  <div id="t-stamp" class="tab-content"></div><!-- content lifted into sqrOverlay -->
 
 <!-- ══ STAMP QR FULL-SCREEN OVERLAY ══ -->
 <div class="sqro" id="sqrOverlay" role="dialog" aria-modal="true" aria-label="Stamp QR">
@@ -513,7 +668,7 @@ async function handleLogin(){
       shop=safeShop;
       loginAttempts.count=0;
     }
-    await loadDash();renderDash();applyPlanGates();showScreen('s-dash');
+    await loadDash();renderDash();applyPlanGates();updateBillingWarnBanner();showScreen('s-dash');
     if(!secure())document.getElementById('secBanner').classList.add('show');
     // Start background QR scan feed (notifications appear on any tab for Pro/Premium)
     if(['pro','premium'].includes(shop?.plan)) startQRFeedPoller();
@@ -824,11 +979,11 @@ function renderBillingCard(){
   const plan=shop.subscription_plan||shop.plan||'pro';
   document.getElementById('bl-plan').textContent=(plan.charAt(0).toUpperCase()+plan.slice(1))+' · '+(PLAN_AMT[plan]||'');
   const statusMap={
-    none:            {text:'Not set up',         color:'#92623A', bg:'#FFF3E0'},
-    pending_mandate: {text:'⚡ Action required',  color:'#5B21B6', bg:'#EDE9FE'},
-    active:          {text:'✅ Billing active',   color:'#065F46', bg:'#D1FAE5'},
-    halted:          {text:'⚠️ Payment failed',   color:'#991B1B', bg:'#FEE2E2'},
-    cancelled:       {text:'Cancelled',           color:'#6B7280', bg:'#F3F4F6'},
+    none:            {text:'Not set up',            color:'#92623A', bg:'#FFF3E0'},
+    pending_mandate: {text:'⚡ Action required',    color:'#5B21B6', bg:'#EDE9FE'},
+    active:          {text:'✅ Billing active',     color:'#065F46', bg:'#D1FAE5'},
+    halted:          {text:'⚠️ Payment failed',     color:'#991B1B', bg:'#FEE2E2'},
+    cancelled:       {text:'⚠ Billing cancelled',  color:'#92400E', bg:'#FEF3C7'},
   };
   const st=statusMap[ss]||statusMap.none;
   document.getElementById('bl-status').innerHTML=`<span style="font-weight:700;font-size:12.5px;color:${st.color};background:${st.bg};padding:3px 11px;border-radius:99px;border:1.5px solid ${st.color}33">${st.text}</span>`;
@@ -838,8 +993,9 @@ function renderBillingCard(){
   if(shop.next_charge_at){nextRow.style.display='flex';document.getElementById('bl-next-date').textContent=fmtDt(shop.next_charge_at);}
   else nextRow.style.display='none';
   const cta=document.getElementById('bl-cta');
-  if(ss==='none'||ss==='pending_mandate'){
-    const hasUrl=ss==='pending_mandate'&&shop.mandate_url;
+  if(ss==='none'||ss==='pending_mandate'||ss==='cancelled'){
+    const inTrial = shop.trial_ends_at && new Date(shop.trial_ends_at) > new Date();
+    const hasUrl  = ss==='pending_mandate' && shop.mandate_url;
     cta.style.display='block';
     if(hasUrl){
       cta.innerHTML=`<a href="${shop.mandate_url}" target="_blank" rel="noopener"
@@ -853,16 +1009,20 @@ function renderBillingCard(){
         One-time setup · Charged only after trial ends · Cancel anytime
       </p>`;
     } else {
+      const note = ss==='cancelled' && inTrial
+        ? `Trial active until ${fmtDt(shop.trial_ends_at)} · Set up billing to continue after that`
+        : 'Charged only after trial ends · Cancel anytime';
       cta.innerHTML=`<button onclick="initiateBilling()" id="bl-initiate-btn"
         style="width:100%;padding:13px;border-radius:12px;margin-top:4px;
         background:linear-gradient(135deg,#C9A84C,#A8832A);
         color:#fff;font-weight:800;font-size:15px;border:none;cursor:pointer;
         box-shadow:0 4px 14px rgba(168,131,42,.35);letter-spacing:.01em">
-        ✦ Set up billing now
+        ✦ ${ss==='cancelled' ? 'Re-setup billing' : 'Set up billing now'}
       </button>
       <p style="font-size:12px;color:var(--ink-l);text-align:center;margin:8px 0 0">
-        Charged only after trial ends · Cancel anytime
+        ${note}
       </p>`;
+    }
     }
   } else if(ss==='halted'&&shop.mandate_url){
     cta.style.display='block';
@@ -1353,11 +1513,172 @@ function hideWAPlanGate() {
   document.getElementById('waWrap').style.display = 'block';
 }
 
+/* ══ ANALYTICS ══ */
+let anDays = 30;
+let anData = null;
+
+function setAnDays(d) {
+  anDays = d;
+  document.querySelectorAll('.an-pill').forEach(p => p.classList.toggle('sel', Number(p.dataset.days) === d));
+  loadAnalytics();
+}
+
+async function loadAnalytics() {
+  if (!merchantToken || !shop) return;
+  if (isStarter()) { showAnGate(); return; }
+  showAnLoading();
+  try {
+    const res = await fetch(`${PRIMO_CONFIG.EDGE_BASE}/get-analytics?days=${anDays}`, {
+      headers: { 'Authorization': `Bearer ${merchantToken}` },
+    });
+    if (res.status === 401) { merchantToken = null; signOut(); return; }
+    if (!res.ok) { const e = await res.json().catch(() => ({})); throw new Error(e.error || `HTTP ${res.status}`); }
+    anData = await res.json();
+    renderAnalytics(anData);
+  } catch (e) {
+    console.error('[analytics]', e);
+    showAnError(e.message);
+  }
+}
+
+function showAnGate()    { document.getElementById('anPlanGate').style.display='block'; document.getElementById('anWrap').style.display='none'; }
+function showAnLoading() { document.getElementById('anPlanGate').style.display='none'; document.getElementById('anWrap').style.display='block'; document.getElementById('anLoading').style.display='flex'; document.getElementById('anError').style.display='none'; document.getElementById('anData').style.display='none'; }
+function showAnError(m)  { document.getElementById('anLoading').style.display='none'; document.getElementById('anError').style.display='flex'; document.getElementById('anErrorMsg').textContent=m||'Could not load analytics'; }
+function showAnData()    { document.getElementById('anLoading').style.display='none'; document.getElementById('anError').style.display='none'; document.getElementById('anData').style.display='block'; }
+
+function renderAnalytics(d) {
+  showAnData();
+  const { kpis, chart, pipeline, needs_attention, top_customers } = d;
+
+  // KPIs
+  const kv = (id, val) => { const el=document.getElementById(id); if(el) el.textContent=val; };
+  const kc = (id, delta, suffix='', pct=false) => {
+    const el=document.getElementById(id); if(!el) return;
+    if(delta===null||delta===undefined){el.textContent='';return;}
+    const cls=delta>0?'an-up':delta<0?'an-dn':'an-neu';
+    const arrow=delta>0?'↑':delta<0?'↓':'–';
+    const val=pct?`${Math.abs(delta)}%`:Math.abs(delta);
+    el.innerHTML=`<span class="${cls}">${arrow} ${val}${suffix} vs prior period</span>`;
+  };
+  kv('anKpiActive', kpis.active_customers);
+  kv('anKpiStamps', kpis.stamps_issued);
+  kv('anKpiRewards', kpis.rewards_given);
+  kv('anKpiRetention', `${kpis.retention_rate}%`);
+  kc('anKpiActiveDelta', kpis.active_delta, ' customers');
+  kc('anKpiStampsDelta', kpis.stamps_delta_pct, '%', true);
+  kc('anKpiRewardsDelta', kpis.rewards_delta, ' rewards');
+  kc('anKpiRetentionDelta', kpis.retention_delta, '%', true);
+
+  // Chart
+  const chartTitle = document.getElementById('anChartTitle');
+  if(chartTitle) chartTitle.textContent = `Stamps — Last ${anDays} Days`;
+  const maxVal = Math.max(...chart.map(c=>c.count), 1);
+  const barsEl = document.getElementById('anBars');
+  if(barsEl) barsEl.innerHTML = chart.map((c,i)=>{
+    const h = Math.max(3, Math.round(c.count/maxVal*100));
+    const isToday = i === chart.length-1;
+    const cls = isToday ? 'em' : c.count >= maxVal*0.7 ? 'hi' : 'lo';
+    return `<div class="an-bar ${cls}" style="height:${h}%" title="${c.date}: ${c.count}"></div>`;
+  }).join('');
+  // Axis labels
+  const axisEl = document.getElementById('anBarAxis');
+  if(axisEl && chart.length) {
+    const fmt = d => { const dt=new Date(d+'T00:00:00'); return `${dt.toLocaleString('default',{month:'short'})} ${dt.getDate()}`; };
+    const mid = Math.floor(chart.length/2);
+    axisEl.innerHTML = `<span class="an-bar-lbl">${fmt(chart[0].date)}</span><span class="an-bar-lbl">${fmt(chart[mid].date)}</span><span class="an-bar-lbl">Today</span>`;
+  }
+
+  // Pipeline
+  const pTotal = pipeline.just_started + pipeline.midway + pipeline.almost_there + pipeline.reward_ready || 1;
+  const setPipe = (n, i, val) => {
+    const el=document.getElementById(`anPipe${i}`); if(el) el.style.width=`${Math.round(val/pTotal*100)}%`;
+    const nel=document.getElementById(`anPipeN${i}`); if(nel) nel.textContent=val;
+  };
+  setPipe(1,1,pipeline.just_started); setPipe(2,2,pipeline.midway);
+  setPipe(3,3,pipeline.almost_there); setPipe(4,4,pipeline.reward_ready);
+
+  // Needs attention: 1 away
+  document.getElementById('anOneAwayN').textContent = needs_attention.one_away_count;
+  const oneAwayBody = document.getElementById('anOneAwayBody');
+  if(oneAwayBody) {
+    if(needs_attention.one_away.length === 0) {
+      oneAwayBody.innerHTML = '<div class="an-attn-empty">No customers here yet</div>';
+    } else {
+      const names = needs_attention.one_away.slice(0,3).map(c=>`${san(c.first_name)} ••••${san(c.phone_last4)}`).join('<br>');
+      const extra = needs_attention.one_away_count > 3 ? `<br>+${needs_attention.one_away_count-3} more` : '';
+      const waCustIds = needs_attention.one_away.map(c=>c.customer_id);
+      oneAwayBody.innerHTML = `<div class="an-attn-names">${names}${extra}</div><button class="an-wa-btn" onclick="anSendWA(${JSON.stringify(waCustIds)},'ready')">📲 Send WA</button>`;
+    }
+  }
+
+  // Needs attention: inactive
+  document.getElementById('anInactiveN').textContent = needs_attention.inactive_count;
+  const inactiveBody = document.getElementById('anInactiveBody');
+  if(inactiveBody) {
+    if(needs_attention.inactive.length === 0) {
+      inactiveBody.innerHTML = '<div class="an-attn-empty">All customers are active 🎉</div>';
+    } else {
+      const names = needs_attention.inactive.slice(0,3).map(c=>`${san(c.first_name)} ••••${san(c.phone_last4)}`).join('<br>');
+      const extra = needs_attention.inactive_count > 3 ? `<br>+${needs_attention.inactive_count-3} more` : '';
+      const waCustIds = needs_attention.inactive.map(c=>c.customer_id);
+      inactiveBody.innerHTML = `<div class="an-attn-names">${names}${extra}</div><button class="an-wa-btn" onclick="anSendWA(${JSON.stringify(waCustIds)},'progress')">📲 Send WA</button>`;
+    }
+  }
+
+  // Top customers
+  const topEl = document.getElementById('anTopCusts');
+  if(topEl) {
+    if(!top_customers.length) {
+      topEl.innerHTML = '<div class="an-state" style="padding:1rem 0">No stamps recorded yet</div>';
+    } else {
+      topEl.innerHTML = top_customers.map((c,i)=>`
+        <div class="an-cust-row">
+          <div class="an-cust-rank">#${i+1}</div>
+          <div class="an-cust-av">${san(c.first_name).charAt(0)}</div>
+          <div class="an-cust-info">
+            <div class="an-cust-nm">${san(c.first_name)} ••••${san(c.phone_last4)}</div>
+            <div class="an-cust-sub">${c.total_rewards} reward${c.total_rewards!==1?'s':''} earned</div>
+          </div>
+          <div class="an-cust-right">
+            <div class="an-cust-val">${c.total_stamps}</div>
+            <div class="an-cust-lbl">stamps</div>
+          </div>
+        </div>`).join('');
+    }
+  }
+}
+
+function anSendWA(custIds, tpl) {
+  // Switch to WA tab, pre-select those customers
+  document.querySelectorAll('.tab-btn').forEach(b=>{
+    if(b.dataset.tab==='t-wa'){ b.click(); }
+  });
+  toast('Opening WhatsApp for selected customers…');
+}
+
+/* ══ BILLING WARNING BANNER ══ */
+function updateBillingWarnBanner() {
+  const banner = document.getElementById('billingWarnBanner');
+  if (!banner || !shop) return;
+  const ss = shop.subscription_status;
+  if (ss === 'cancelled') {
+    const inTrial = shop.trial_ends_at && new Date(shop.trial_ends_at) > new Date();
+    if (inTrial) {
+      const daysLeft = Math.ceil((new Date(shop.trial_ends_at).getTime() - Date.now()) / 86400000);
+      document.getElementById('billingWarnTxt').textContent =
+        `Billing cancelled — set up billing before trial ends (${daysLeft}d left)`;
+      banner.classList.add('show');
+    }
+  } else {
+    banner.classList.remove('show');
+  }
+}
+
 /* ══ WIRE ══ */
 function wire(){
   document.getElementById('loginBtn').addEventListener('click',handleLogin);document.getElementById('inSlug').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('inPwd').focus()});document.getElementById('inPwd').addEventListener('keydown',e=>{if(e.key==='Enter')handleLogin()});
   document.getElementById('profileMenuBtn').addEventListener('click',openMenu);document.getElementById('menuSheet').addEventListener('click',e=>{if(e.target.id==='menuSheet')closeMenu()});document.getElementById('sheetRefresh').addEventListener('click',doRefresh);document.getElementById('sheetSignOut').addEventListener('click',signOut);
-  document.querySelectorAll('.tab-btn').forEach(b=>b.addEventListener('click',()=>{const prev=document.querySelector('.tab-btn.active')?.dataset?.tab;if(b.dataset.tab==='t-stamp'){sqrPrevTab=prev||'t-cust';openSQROverlay();return;}if(prev==='t-stamp')closeSQROverlay();document.querySelectorAll('.tab-btn').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));b.classList.add('active');document.getElementById(b.dataset.tab).classList.add('active');if(b.dataset.tab==='t-qr'&&shop)renderQR();if(b.dataset.tab==='t-wa'&&shop){if(isStarter())showWAPlanGate();else{hideWAPlanGate();renderWA();}}}));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.addEventListener('click',()=>{const prev=document.querySelector('.tab-btn.active')?.dataset?.tab;if(b.dataset.tab==='t-stamp'){sqrPrevTab=prev||'t-cust';openSQROverlay();return;}if(prev==='t-stamp')closeSQROverlay();document.querySelectorAll('.tab-btn').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));b.classList.add('active');document.getElementById(b.dataset.tab).classList.add('active');if(b.dataset.tab==='t-qr'&&shop)renderQR();if(b.dataset.tab==='t-wa'&&shop){if(isStarter())showWAPlanGate();else{hideWAPlanGate();renderWA();}}if(b.dataset.tab==='t-analytics'&&shop)loadAnalytics()}));
   document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(document.getElementById('sqrOverlay')?.classList.contains('open'))closeSQROverlay();}});
   document.getElementById('searchInp').addEventListener('input',e=>{searchQ=e.target.value;renderCustList()});
   document.getElementById('addCustBtn').addEventListener('click',openAdd);document.getElementById('addConfirm').addEventListener('click',confirmAdd);document.getElementById('addCancel').addEventListener('click',closeAdd);document.getElementById('addModal').addEventListener('click',e=>{if(e.target.id==='addModal')closeAdd()});
