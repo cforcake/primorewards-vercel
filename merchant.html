@@ -368,7 +368,22 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
   </div></div>
 </div>
 
-  <div id="t-analytics" class="tab-content">
+  <div id="t-analytics" class="tab-content"></div><!-- content lifted into anOverlay -->
+
+  <div id="t-stamp" class="tab-content"></div><!-- content lifted into sqrOverlay -->
+
+<!-- ══ ANALYTICS FULL-SCREEN OVERLAY ══ -->
+<div class="sqro" id="anOverlay" role="dialog" aria-modal="true" aria-label="Analytics">
+  <div class="sqro-hdr">
+    <button class="sqro-back" onclick="closeAnOverlay()" aria-label="Back"><i class="ti ti-arrow-left"></i></button>
+    <div class="sqro-title">Analytics</div>
+    <div class="an-pills" style="flex-shrink:0">
+      <button class="an-pill" data-days="7"  onclick="setAnDays(7)">7d</button>
+      <button class="an-pill sel" data-days="30" onclick="setAnDays(30)">30d</button>
+      <button class="an-pill" data-days="90" onclick="setAnDays(90)">90d</button>
+    </div>
+  </div>
+  <div class="sqro-body">
     <!-- Starter plan gate -->
     <div class="an-plan-gate" id="anPlanGate" style="display:none">
       <div class="pgc-card">
@@ -392,51 +407,36 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
             <div class="pgc-feat"><i class="ti ti-bell"></i>Needs Attention — nudge customers in 1 tap</div>
             <div class="pgc-feat"><i class="ti ti-crown"></i>Top 5 loyal customers leaderboard</div>
           </div>
-          <button class="pgc-cta" onclick="switchToSettings()"><i class="ti ti-arrow-up-circle"></i>Upgrade to Pro — ₹299/mo</button>
+          <button class="pgc-cta" onclick="closeAnOverlay();switchToSettings()"><i class="ti ti-arrow-up-circle"></i>Upgrade to Pro — ₹299/mo</button>
           <div class="pgc-note">Cancel anytime · No charge until trial ends · Instant activation</div>
         </div>
       </div>
     </div>
-    <!-- Pro/Premium analytics UI -->
+    <!-- Pro/Premium analytics content -->
     <div class="an-wrap" id="anWrap" style="display:none">
-      <div class="an-top-row">
-        <div class="an-title">Analytics</div>
-        <div class="an-pills">
-          <button class="an-pill" data-days="7"  onclick="setAnDays(7)">7d</button>
-          <button class="an-pill sel" data-days="30" onclick="setAnDays(30)">30d</button>
-          <button class="an-pill" data-days="90" onclick="setAnDays(90)">90d</button>
-        </div>
-      </div>
-      <!-- Loading state -->
       <div id="anLoading" class="an-state"><div class="sqr-spinner"></div><div>Loading analytics…</div></div>
-      <!-- Error state -->
       <div id="anError" class="an-state" style="display:none"><i class="ti ti-alert-circle" style="font-size:36px;color:var(--ink-f)"></i><div id="anErrorMsg">Could not load analytics</div><button class="sqr-retry-btn" onclick="loadAnalytics()"><i class="ti ti-refresh"></i> Retry</button></div>
-      <!-- Data -->
       <div id="anData" style="display:none">
-        <!-- KPIs -->
         <div class="an-kpi-row">
           <div class="an-kpi"><div class="an-kpi-val" id="anKpiActive">—</div><div class="an-kpi-lbl">Active Customers</div><div class="an-kpi-chg" id="anKpiActiveDelta"></div></div>
           <div class="an-kpi"><div class="an-kpi-val" id="anKpiStamps">—</div><div class="an-kpi-lbl">Stamps Issued</div><div class="an-kpi-chg" id="anKpiStampsDelta"></div></div>
           <div class="an-kpi"><div class="an-kpi-val" id="anKpiRewards">—</div><div class="an-kpi-lbl">Rewards Given</div><div class="an-kpi-chg" id="anKpiRewardsDelta"></div></div>
           <div class="an-kpi"><div class="an-kpi-val" id="anKpiRetention">—</div><div class="an-kpi-lbl">Retention Rate</div><div class="an-kpi-chg" id="anKpiRetentionDelta"></div></div>
         </div>
-        <!-- Chart -->
         <div class="an-card">
           <div class="an-card-title" id="anChartTitle">Stamps — Last 30 Days</div>
           <div class="an-bars" id="anBars"></div>
           <div class="an-bar-axis" id="anBarAxis"></div>
         </div>
-        <!-- Pipeline -->
         <div class="an-card">
           <div class="an-card-title">Customer Pipeline</div>
           <div class="an-pipeline">
-            <div class="an-pipe"><div class="an-pipe-track"><div class="an-pipe-fill" id="anPipe1" style="background:var(--gold)"></div></div><div class="an-pipe-val" id="anPipeN1">—</div><div class="an-pipe-lbl">Just started<br>stamps 1–3</div></div>
+            <div class="an-pipe"><div class="an-pipe-track"><div class="an-pipe-fill" id="anPipe1" style="background:var(--gold)"></div></div><div class="an-pipe-val" id="anPipeN1">—</div><div class="an-pipe-lbl">Just started<br>1–3 stamps</div></div>
             <div class="an-pipe"><div class="an-pipe-track"><div class="an-pipe-fill" id="anPipe2" style="background:var(--gold-b)"></div></div><div class="an-pipe-val" id="anPipeN2">—</div><div class="an-pipe-lbl">Midway<br>4–7 stamps</div></div>
             <div class="an-pipe"><div class="an-pipe-track"><div class="an-pipe-fill" id="anPipe3" style="background:var(--em)"></div></div><div class="an-pipe-val" id="anPipeN3">—</div><div class="an-pipe-lbl">Almost<br>there</div></div>
             <div class="an-pipe"><div class="an-pipe-track"><div class="an-pipe-fill" id="anPipe4" style="background:#c0392b"></div></div><div class="an-pipe-val" id="anPipeN4">—</div><div class="an-pipe-lbl ready">Reward<br>ready 🎁</div></div>
           </div>
         </div>
-        <!-- Needs Attention -->
         <div class="an-sec-title">Needs Attention</div>
         <div class="an-attn" id="anAttn1">
           <div class="an-attn-hdr" style="background:var(--em)">
@@ -452,7 +452,6 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
           </div>
           <div class="an-attn-body" id="anInactiveBody"><div class="an-attn-empty">All customers are active 🎉</div></div>
         </div>
-        <!-- Top customers -->
         <div class="an-card" style="margin-bottom:.75rem">
           <div class="an-card-title">Top Loyal Customers</div>
           <div id="anTopCusts"></div>
@@ -460,8 +459,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
       </div>
     </div>
   </div>
-
-  <div id="t-stamp" class="tab-content"></div><!-- content lifted into sqrOverlay -->
+</div>
 
 <!-- ══ STAMP QR FULL-SCREEN OVERLAY ══ -->
 <div class="sqro" id="sqrOverlay" role="dialog" aria-modal="true" aria-label="Stamp QR">
@@ -1658,12 +1656,29 @@ function anSendWA(custIds, tpl) {
   toast('Opening WhatsApp for selected customers…');
 }
 
+/* ══ ANALYTICS OVERLAY ══ */
+let anPrevTab = 't-cust';
+
+function openAnOverlay() {
+  anPrevTab = document.querySelector('.tab-btn.active')?.dataset?.tab || 't-cust';
+  document.getElementById('anOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  loadAnalytics();
+}
+
+function closeAnOverlay() {
+  document.getElementById('anOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === anPrevTab));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.toggle('active', c.id === anPrevTab));
+}
+
 /* ══ WIRE ══ */
 function wire(){
   document.getElementById('loginBtn').addEventListener('click',handleLogin);document.getElementById('inSlug').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('inPwd').focus()});document.getElementById('inPwd').addEventListener('keydown',e=>{if(e.key==='Enter')handleLogin()});
   document.getElementById('profileMenuBtn').addEventListener('click',openMenu);document.getElementById('menuSheet').addEventListener('click',e=>{if(e.target.id==='menuSheet')closeMenu()});document.getElementById('sheetRefresh').addEventListener('click',doRefresh);document.getElementById('sheetSignOut').addEventListener('click',signOut);
-  document.querySelectorAll('.tab-btn').forEach(b=>b.addEventListener('click',()=>{const prev=document.querySelector('.tab-btn.active')?.dataset?.tab;if(b.dataset.tab==='t-stamp'){sqrPrevTab=prev||'t-cust';openSQROverlay();return;}if(prev==='t-stamp')closeSQROverlay();document.querySelectorAll('.tab-btn').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));b.classList.add('active');document.getElementById(b.dataset.tab).classList.add('active');if(b.dataset.tab==='t-qr'&&shop)renderQR();if(b.dataset.tab==='t-wa'&&shop){if(isStarter())showWAPlanGate();else{hideWAPlanGate();renderWA();}}if(b.dataset.tab==='t-analytics'&&shop)loadAnalytics()}));
-  document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(document.getElementById('sqrOverlay')?.classList.contains('open'))closeSQROverlay();}});
+  document.querySelectorAll('.tab-btn').forEach(b=>b.addEventListener('click',()=>{const prev=document.querySelector('.tab-btn.active')?.dataset?.tab;if(b.dataset.tab==='t-stamp'){sqrPrevTab=prev||'t-cust';openSQROverlay();return;}if(b.dataset.tab==='t-analytics'){openAnOverlay();return;}if(prev==='t-stamp')closeSQROverlay();if(prev==='t-analytics')closeAnOverlay();document.querySelectorAll('.tab-btn').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));b.classList.add('active');document.getElementById(b.dataset.tab).classList.add('active');if(b.dataset.tab==='t-qr'&&shop)renderQR();if(b.dataset.tab==='t-wa'&&shop){if(isStarter())showWAPlanGate();else{hideWAPlanGate();renderWA();}}}));
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(document.getElementById('sqrOverlay')?.classList.contains('open'))closeSQROverlay();else if(document.getElementById('anOverlay')?.classList.contains('open'))closeAnOverlay();}});
   document.getElementById('searchInp').addEventListener('input',e=>{searchQ=e.target.value;renderCustList()});
   document.getElementById('addCustBtn').addEventListener('click',openAdd);document.getElementById('addConfirm').addEventListener('click',confirmAdd);document.getElementById('addCancel').addEventListener('click',closeAdd);document.getElementById('addModal').addEventListener('click',e=>{if(e.target.id==='addModal')closeAdd()});
   document.getElementById('addMobile').addEventListener('input',function(){const d=this.value.replace(/\D/g,'');this.value=d;const badge=document.getElementById('addDerived'),b4=document.getElementById('addDerived4');if(d.length>=4){badge.style.display='inline-flex';b4.textContent=d.slice(-4)}else{badge.style.display='none'}});
