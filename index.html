@@ -730,6 +730,12 @@ footer{background:var(--ink);border-top:1px solid rgba(255,255,255,.05);padding:
             <label class="consent-label" for="fConsent">I agree to Primo Rewards collecting and processing my business data as described in the <a href="/privacy" target="_blank" rel="noopener">Privacy Policy</a> and accept the <a href="/terms" target="_blank" rel="noopener">Terms of Service</a>. I understand my data is protected under India's DPDP Act 2023.</label>
           </div>
           <button class="rzp-btn" id="enrollBtn" type="button"><i class="ti ti-rocket" aria-hidden="true"></i> Start My Free Trial</button>
+          <!-- ALREADY REGISTERED BANNER — shown when 409 already_active returned -->
+          <div id="enrollAlreadyMsg" style="display:none;margin-top:1rem;background:rgba(6,95,70,.18);border:1.5px solid rgba(74,222,128,.3);border-radius:14px;padding:14px 16px;text-align:center">
+            <div style="font-size:14px;font-weight:700;color:#4ADE80;margin-bottom:5px">&#10003; You&#39;re already registered!</div>
+            <div id="enrollAlreadySlug" style="font-size:13px;color:rgba(255,255,255,.75);margin-bottom:11px;line-height:1.55"></div>
+            <a href="https://primorewards.in/merchant" style="display:inline-block;background:linear-gradient(135deg,#C9A84C,#A8832A);color:#fff;font-weight:700;font-size:13.5px;text-decoration:none;padding:10px 24px;border-radius:10px;letter-spacing:.01em;box-shadow:0 4px 12px rgba(168,131,42,.35)">Log in to your shop &#8594;</a>
+          </div>
           <div class="form-note">30-day free trial, no credit card required &nbsp;&middot;&nbsp; By enrolling you agree to our <a href="/terms">Terms</a> &amp; <a href="/privacy">Privacy Policy</a></div>
         </div>
         <div class="form-card enroll-success" id="enrollSuccess" aria-live="polite">
@@ -763,6 +769,8 @@ function wireAllLinks(){
   document.getElementById('stampBtn').addEventListener('click',addStamp);
   document.getElementById('rdBtn').addEventListener('click',redeemReward);
   document.getElementById('enrollBtn').addEventListener('click',handleEnroll);
+  // Hide already-registered banner when merchant starts re-typing their email
+  document.getElementById('fEmail')?.addEventListener('input',()=>{const m=document.getElementById('enrollAlreadyMsg');if(m)m.style.display='none';});
   document.getElementById('menuBtn').addEventListener('click',openDrawer);
   document.getElementById('mClose').addEventListener('click',closeDrawer);
   document.getElementById('mOv').addEventListener('click',closeDrawer);
@@ -871,6 +879,18 @@ async function handleEnroll(){
       }),
     });
     enrollResult=await res.json();
+    // Already-active shop: show persistent login banner instead of generic error toast
+    if(!res.ok&&enrollResult.already_active){
+      const slug=enrollResult.slug||'';
+      const msg=document.getElementById('enrollAlreadyMsg');
+      const slugEl=document.getElementById('enrollAlreadySlug');
+      if(slugEl)slugEl.textContent=slug
+        ?`Your shop "${slug}" is already active. Log in to your dashboard to manage it.`
+        :`Your email is already registered with an active shop. Log in to your dashboard.`;
+      if(msg){msg.style.display='block';msg.scrollIntoView({behavior:'smooth',block:'nearest'});}
+      btn.innerHTML='<i class="ti ti-rocket" aria-hidden="true"></i> Start My Free Trial';btn.disabled=false;
+      return;
+    }
     if(!res.ok||!enrollResult.subscription_id) throw new Error(enrollResult.error||'Setup failed');
   }catch(err){
     console.error('[enroll] enroll-subscribe failed:',err);
