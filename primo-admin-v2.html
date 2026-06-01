@@ -783,7 +783,6 @@ async function loadDashboard(opts={}) {
     }
   }
 }
-}
 
 function setLoadSub(msg) { const e=document.getElementById('load-sub'); if(e) e.textContent=msg; }
 
@@ -1350,9 +1349,9 @@ async function reconcileAll(){
     if(btn){btn.disabled=false;btn.textContent='\uD83D\uDD0D';}
   }
 }
+/* ── Sync billing status from Razorpay ───────────────────────────────────
    Calls admin-action sync_subscription → fetches live Razorpay status →
-   applies missed webhook updates (authenticated/active/halted/cancelled).
-   Used when a merchant completes mandate but webhook was missed.          */
+   applies missed webhook updates (authenticated/active/halted/cancelled). */
 async function syncSubscription(shopId, btn) {
   const origTxt = btn ? btn.textContent : '';
   if(btn){ btn.disabled=true; btn.textContent='Syncing\u2026'; }
