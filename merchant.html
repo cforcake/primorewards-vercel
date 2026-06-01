@@ -514,6 +514,35 @@ async function syncBillingStatus(){
     if(btn){btn.disabled=false;btn.textContent=origTxt;}
   }
 }
+
+/* ── refreshAndOpenMandate ───────────────────────────────────────────────
+   Called only when shop.mandate_url is null and subscription is halted.
+   Fetches the live short_url from Razorpay via the refresh-mandate EF,
+   updates the local shop state, re-renders the billing card so the
+   normal halted UI (link + verify button) appears, then opens the URL.  */
+async function refreshAndOpenMandate(){
+  const btn=document.getElementById('refreshMandateBtn');
+  const txt=document.getElementById('refreshMandateTxt');
+  if(btn){btn.disabled=true;}
+  if(txt){txt.textContent='Fetching link…';}
+  try{
+    const res=await edge('refresh-mandate',{});
+    if(res.mandate_url){
+      shop.mandate_url=res.mandate_url;
+      renderBillingCard(); // re-render → now shows normal halted UI with link + verify
+      window.open(res.mandate_url,'_blank','noopener');
+    }else{
+      toast('⚠ Could not get payment link — please contact support@primorewards.in');
+      if(btn){btn.disabled=false;}
+      if(txt){txt.textContent='\uD83D\uDCB3 Get payment update link \u2192';}
+    }
+  }catch(e){
+    console.error('[refreshAndOpenMandate]',e);
+    toast('⚠ Could not reach billing — please try again in a moment.');
+    if(btn){btn.disabled=false;}
+    if(txt){txt.textContent='\uD83D\uDCB3 Get payment update link \u2192';}
+  }
+}
 async function loadDash(){
   if(secure()){
     // Production: single authenticated Edge Function call returns all data
@@ -844,15 +873,34 @@ function renderBillingCard(){
         Charged only after trial ends · Cancel anytime
       </p>`;
     }
-  } else if(ss==='halted'&&shop.mandate_url){
+  } else if(ss==='halted'){
     cta.style.display='block';
-    cta.innerHTML=`<a href="${shop.mandate_url}" target="_blank" rel="noopener"
-      style="display:block;text-align:center;padding:13px;border-radius:12px;margin-top:4px;
-      background:linear-gradient(135deg,#DC3545,#991B1B);color:#fff;
-      font-weight:800;font-size:15px;text-decoration:none;
-      box-shadow:0 4px 14px rgba(220,53,69,.4)">
-      ⚠️ Update payment method now →
-    </a>`;
+    if(shop.mandate_url){
+      cta.innerHTML=`<a href="${shop.mandate_url}" target="_blank" rel="noopener"
+        style="display:block;text-align:center;padding:13px;border-radius:12px;margin-top:4px;
+        background:linear-gradient(135deg,#DC3545,#991B1B);color:#fff;
+        font-weight:800;font-size:15px;text-decoration:none;
+        box-shadow:0 4px 14px rgba(220,53,69,.4)">
+        \uD83D\uDCB3 Update payment method \u2192
+      </a>
+      <p style="font-size:12px;color:#991B1B;text-align:center;margin:8px 0 4px;line-height:1.55;font-weight:500">
+        Update your card above \u2014 billing resumes automatically within 24 h.
+      </p>
+      <div style="text-align:center;margin-top:8px">
+        <button id="syncBillingBtn" onclick="syncBillingStatus()"
+          style="background:none;border:1.5px solid rgba(220,53,69,.3);color:#DC3545;font-size:12px;padding:7px 14px;border-radius:9px;cursor:pointer;font-family:var(--fb);font-weight:600">
+          \uD83D\uDD04 Already updated? Check status
+        </button>
+      </div>`;
+    }else{
+      // mandate_url missing \u2014 fetch fresh link from Razorpay
+      cta.innerHTML=`<button id="refreshMandateBtn" onclick="refreshAndOpenMandate()"
+        style="width:100%;padding:13px;border-radius:12px;border:none;cursor:pointer;
+        background:linear-gradient(135deg,#DC3545,#991B1B);color:#fff;
+        font-weight:800;font-size:15px;box-shadow:0 4px 14px rgba(220,53,69,.4)">
+        <span id="refreshMandateTxt">\uD83D\uDCB3 Get payment update link \u2192</span>
+      </button>`;
+    }
   } else if(ss==='active'&&shop.mandate_url){
     cta.style.display='block';
     cta.innerHTML=`<a href="${shop.mandate_url}" target="_blank" rel="noopener"
