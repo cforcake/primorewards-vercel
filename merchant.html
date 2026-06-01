@@ -353,7 +353,7 @@ async function handleLogin(){
       // DEV FALLBACK: Direct Supabase (insecure — password compared client-side)
       // ⚠ DO NOT use in production — admin_password exposed via anon SELECT
       console.warn('[PRIMO] ⚠ INSECURE: Direct login mode. Configure EDGE_BASE for production.');
-      const rows=await sb(`/shops?slug=eq.${encodeURIComponent(slug)}&select=id,shop_name,slug,city,plan,status,reward_rule,product_name,product_emoji,admin_password,subscription_status,subscription_plan,trial_ends_at,next_charge_at,mandate_url,razorpay_subscription_id&limit=1`);
+      const rows=await sb(`/shops?slug=eq.${encodeURIComponent(slug)}&select=id,shop_name,slug,city,plan,status,reward_rule,product_name,product_emoji,admin_password,subscription_status,subscription_plan,trial_ends_at,next_charge_at,mandate_url,razorpay_subscription_id,pending_plan_upgrade&limit=1`);
       if(!rows?.length){sEl.classList.add('err');errEl.textContent='⚠ Shop not found.';recordFailedLogin();return}
       const s=rows[0];
       if(s.status!=='active'){errEl.textContent='⚠ Shop not yet active.';recordFailedLogin();return}
@@ -585,6 +585,82 @@ function buildCustMap(){
       custMap[cid]={reds:cr,allSt:cs,cySt:cys,cycle:cy,last:la,full:cys.length>=buy};
     }
   });
+}
+
+/* ══ PLAN UPGRADE UI ══════════════════════════════════════════════════
+   showUpgradePicker()   — expands inline plan picker inside billing cta.
+   initiateUpgrade(plan) — calls upgrade-plan EF, opens mandate, updates state.
+   cancelPlanUpgrade()   — calls cancel-upgrade-plan EF, clears pending state. */
+
+const PLAN_PRICES={'starter':'\u20B9199/mo','pro':'\u20B9299/mo','premium':'\u20B9499/mo'};
+const PLAN_TIER_MAP={'starter':1,'pro':2,'premium':3};
+
+function showUpgradePicker(){
+  const cta=document.getElementById('billingCta');
+  if(!cta)return;
+  const cur=shop.subscription_plan||shop.plan||'starter';
+  const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
+  const row=(p,lbl='')=>{
+    if((PLAN_TIER_MAP[p]||0)<=(PLAN_TIER_MAP[cur]||0))return '';
+    return `<button onclick="initiateUpgrade('${p}')"
+      style="width:100%;padding:11px 14px;border-radius:11px;margin-bottom:7px;
+      border:1.5px solid rgba(124,58,237,.3);background:rgba(124,58,237,.06);
+      color:#4C1D95;font-size:13px;font-weight:700;cursor:pointer;
+      display:flex;align-items:center;justify-content:space-between;font-family:var(--fb)">
+      <span>${cap(p)}</span>
+      <span style="color:#7C3AED">${PLAN_PRICES[p]||''}${lbl?' \u00B7 '+lbl:''}</span>
+    </button>`;
+  };
+  cta.innerHTML=`<div style="background:#F5F3FF;border:1.5px solid rgba(124,58,237,.22);border-radius:13px;padding:14px">
+    <div style="font-size:13px;font-weight:700;color:#4C1D95;margin-bottom:3px">\u2B06 Upgrade your plan</div>
+    <div style="font-size:12px;color:#6D28D9;margin-bottom:11px">Starts next billing cycle \u00B7 no double-charge</div>
+    ${row('pro','Most Popular')}${row('premium','')}
+    <div id="upgradePickerMsg" style="font-size:12px;color:#c0392b;text-align:center;min-height:16px;margin-bottom:6px"></div>
+    <button onclick="renderBillingCard()"
+      style="width:100%;padding:8px;border-radius:9px;background:none;
+      border:1px solid rgba(124,58,237,.2);color:#7C3AED;font-size:12px;
+      font-weight:600;cursor:pointer;font-family:var(--fb)">Cancel</button>
+  </div>`;
+}
+
+async function initiateUpgrade(new_plan){
+  const msgEl=document.getElementById('upgradePickerMsg');
+  if(msgEl)msgEl.textContent='';
+  const allBtns=document.querySelectorAll('#billingCta button');
+  allBtns.forEach(b=>{b.disabled=true;});
+  try{
+    const res=await edge('upgrade-plan',{new_plan});
+    shop.pending_plan_upgrade={
+      new_plan,new_sub_id:res.new_sub_id,
+      effective_date:res.effective_date,
+      mandate_url:res.mandate_url,
+      initiated_at:new Date().toISOString(),
+    };
+    renderBillingCard();
+    if(res.mandate_url)window.open(res.mandate_url,'_blank','noopener');
+    toast('\u26A1 Upgrade initiated! Complete the mandate in the new tab.',5000);
+  }catch(e){
+    const msg=e.message||'Could not initiate upgrade \u2014 please try again.';
+    if(msgEl){msgEl.style.color='#c0392b';msgEl.textContent='\u26A0 '+msg;}
+    allBtns.forEach(b=>{b.disabled=false;});
+  }
+}
+
+async function cancelPlanUpgrade(){
+  const btn=document.getElementById('cancelUpgradeBtn');
+  const txt=document.getElementById('cancelUpgradeTxt');
+  if(btn)btn.disabled=true;
+  if(txt)txt.textContent='Cancelling\u2026';
+  try{
+    await edge('cancel-upgrade-plan',{});
+    shop.pending_plan_upgrade=null;
+    renderBillingCard();
+    toast('Upgrade cancelled \u2014 your current plan continues unchanged.');
+  }catch(e){
+    toast('\u26A0 Could not cancel \u2014 try again or contact support.');
+    if(btn)btn.disabled=false;
+    if(txt)txt.textContent='\u2715 Cancel upgrade';
+  }
 }
 
 /* ══ RENDER ══ */
@@ -901,20 +977,53 @@ function renderBillingCard(){
         <span id="refreshMandateTxt">\uD83D\uDCB3 Get payment update link \u2192</span>
       </button>`;
     }
-  } else if(ss==='active'&&shop.mandate_url){
-    cta.style.display='block';
-    cta.innerHTML=`<a href="${shop.mandate_url}" target="_blank" rel="noopener"
-      style="display:block;text-align:center;padding:10px;border-radius:11px;margin-top:4px;
-      border:1.5px solid rgba(201,168,76,.4);color:var(--gold);
-      font-weight:600;font-size:13.5px;text-decoration:none;background:rgba(201,168,76,.06)">
-      Update payment method →
-    </a>`;
   } else if(ss==='active'){
     cta.style.display='block';
-    cta.innerHTML=`<p style="text-align:center;font-size:13.5px;color:#065F46;font-weight:700;margin:8px 0 0;
-      background:#D1FAE5;padding:10px;border-radius:11px;border:1px solid #6EE7B7">
-      ✅ Billing active — you're all set
-    </p>`;
+    const ppu=shop.pending_plan_upgrade;
+
+    if(ppu&&ppu.new_plan&&ppu.effective_date){
+      // ── Pending plan upgrade ──────────────────────────────────────────────
+      const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
+      const effDate=new Date(ppu.effective_date).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
+      cta.innerHTML=`<div style="background:#F5F3FF;border:1.5px solid rgba(124,58,237,.25);border-radius:13px;padding:13px 14px">
+        <div style="font-size:13px;font-weight:700;color:#4C1D95;margin-bottom:3px">\u23F3 Upgrade to ${cap(ppu.new_plan)} in progress</div>
+        <div style="font-size:12px;color:#6D28D9;margin-bottom:11px">Effective ${effDate} \u00B7 Complete the mandate to confirm</div>
+        ${ppu.mandate_url
+          ? `<a href="${ppu.mandate_url}" target="_blank" rel="noopener"
+              style="display:block;text-align:center;padding:11px;border-radius:11px;margin-bottom:8px;
+              background:linear-gradient(135deg,#7C3AED,#6D28D9);color:#fff;font-weight:700;
+              font-size:14px;text-decoration:none;box-shadow:0 4px 12px rgba(124,58,237,.35)">
+              \u26A1 Open mandate link \u2192</a>`
+          : `<p style="font-size:12px;color:#6D28D9;text-align:center;margin:0 0 10px">Check your email for the mandate link.</p>`}
+        <button onclick="cancelPlanUpgrade()" id="cancelUpgradeBtn"
+          style="width:100%;padding:9px;border-radius:10px;background:none;
+          border:1px solid rgba(124,58,237,.25);color:#6D28D9;font-size:12.5px;
+          font-weight:600;cursor:pointer;font-family:var(--fb)">
+          <span id="cancelUpgradeTxt">\u2715 Cancel upgrade</span>
+        </button>
+      </div>`;
+    }else{
+      // ── Active, no pending upgrade ─────────────────────────────────────────
+      const currentPlan=shop.subscription_plan||shop.plan||'starter';
+      const canUpgrade=currentPlan!=='premium';
+      const mandateLink=shop.mandate_url
+        ? `<a href="${shop.mandate_url}" target="_blank" rel="noopener"
+            style="display:block;text-align:center;padding:10px;border-radius:11px;margin-top:8px;
+            border:1.5px solid rgba(201,168,76,.4);color:var(--gold);font-weight:600;
+            font-size:13.5px;text-decoration:none;background:rgba(201,168,76,.06)">
+            Update payment method \u2192</a>` : '';
+      cta.innerHTML=`<p style="text-align:center;font-size:13.5px;color:#065F46;font-weight:700;margin:8px 0 0;
+        background:#D1FAE5;padding:10px;border-radius:11px;border:1px solid #6EE7B7">
+        \u2705 Billing active \u2014 you\u2019re all set</p>
+        ${mandateLink}
+        ${canUpgrade
+          ? `<div style="text-align:center;margin-top:10px">
+              <button id="upgradePlanBtn" onclick="showUpgradePicker()"
+                style="background:none;border:1.5px solid rgba(201,168,76,.35);color:var(--gold-b);
+                font-size:12px;padding:7px 18px;border-radius:9px;cursor:pointer;
+                font-family:var(--fb);font-weight:600">\u2B06 Upgrade plan</button>
+            </div>` : ''}`;
+    }
   } else { cta.style.display='none'; }
 }
 
