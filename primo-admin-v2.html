@@ -351,6 +351,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
     <div class="dhdr-right">
       <div class="session-dot" title="Session active"></div>
       <button class="dhdr-btn" id="refresh-btn" onclick="doRefresh()" aria-label="Refresh">&#x21BA;</button>
+      <button class="dhdr-btn" id="reconcile-all-btn" onclick="reconcileAll()" title="Reconcile all payments from Razorpay" aria-label="Reconcile payments">&#x1F50D;</button>
       <button class="dhdr-btn" onclick="openActionSheet()" aria-label="Menu">&#x22EF;</button>
     </div>
   </div>
@@ -1065,6 +1066,7 @@ function openShopDetail(shopId) {
     '<div class="dstat"><div class="dstat-v">'+redm+'</div><div class="dstat-l">Redeemed</div></div></div></div>'+
     '<div class="d-actions">'+(waL?'<a class="da-btn da-wa" href="'+waL+'" target="_blank" rel="noopener">&#x1F4AC; WhatsApp</a>':'')+
     (s.razorpay_subscription_id?'<button class="da-btn" style="background:rgba(201,168,76,.1);color:var(--gold-b);border:1px solid rgba(201,168,76,.28);font-size:12.5px;flex:1" onclick="syncSubscription(\''+esc(s.id)+'\',this)">&#x1F504; Sync Razorpay</button>':'')+
+    (s.razorpay_subscription_id&&s.subscription_status==='active'?'<button class="da-btn" style="background:rgba(74,222,128,.08);color:#4ADE80;border:1px solid rgba(74,222,128,.2);font-size:12.5px;flex:1" onclick="reconcileShop(\''+esc(s.id)+'\',this)">&#x1F4B3; Reconcile</button>':'')+
     ab+'</div>';
   openSheet('sheet-detail');
 }
@@ -1299,7 +1301,55 @@ async function cancelSubscription(shopId, shopName) {
   }
 }
 
-/* ── Sync billing status from Razorpay ───────────────────────────────────
+/* ── reconcileShop: check one shop's Razorpay invoices vs payments table ──
+   Called from the shop detail sheet. Shows a toast with how many
+   missing payments were found and inserted + emails resent.              */
+async function reconcileShop(shopId, btn) {
+  const origTxt=btn?btn.textContent:'';
+  if(btn){btn.disabled=true;btn.textContent='Checking\u2026';}
+  try{
+    const result=await sbEdge('reconcile-payments',{shop_id:shopId});
+    if(result.payments_added>0){
+      showToast(`\u2714 ${result.payments_added} missing payment${result.payments_added>1?'s':''} added`,'green','\u2714');
+      await loadDashboard({page:1,showLoadScreen:false});renderDashboard();
+    }else{
+      showToast('No missing payments \u2014 all good','green','\u2713');
+    }
+  }catch(e){
+    showToast('Reconcile failed \u2014 '+e.message,'red','\u2715');
+    console.error('[reconcileShop]',e);
+  }finally{
+    if(btn){btn.disabled=false;btn.textContent=origTxt;}
+  }
+}
+
+/* ── reconcileAll: reconcile ALL active shops at once (dashboard header) ──
+   Shows a modal-style toast listing shops that had missing payments.     */
+async function reconcileAll(){
+  const btn=document.getElementById('reconcile-all-btn');
+  if(btn){btn.disabled=true;btn.textContent='\u23F3';}
+  try{
+    const result=await sbEdge('reconcile-payments',{});
+    const added=result.payments_added||0;
+    const shops=result.shops_checked||0;
+    if(added>0){
+      const names=(result.reconciled||[]).map(r=>r.shop_name).join(', ');
+      showToast(
+        `\u2714 ${added} payment${added>1?'s':''} reconciled across ${result.reconciled.length} shop${result.reconciled.length>1?'s':''}`,
+        'green','\u2714',8000
+      );
+      console.log('[reconcileAll] reconciled shops:',names);
+      await loadDashboard({page:1,showLoadScreen:false});renderDashboard();
+    }else{
+      showToast(`\u2713 ${shops} shops checked \u2014 all payments already recorded`,'green','\u2713');
+    }
+  }catch(e){
+    showToast('Reconcile all failed \u2014 '+e.message,'red','\u2715');
+    console.error('[reconcileAll]',e);
+  }finally{
+    if(btn){btn.disabled=false;btn.textContent='\uD83D\uDD0D';}
+  }
+}
    Calls admin-action sync_subscription → fetches live Razorpay status →
    applies missed webhook updates (authenticated/active/halted/cancelled).
    Used when a merchant completes mandate but webhook was missed.          */
