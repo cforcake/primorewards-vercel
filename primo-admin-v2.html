@@ -388,9 +388,9 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
     <div class="filter-bar">
       <div class="filter-search">
         <span class="fi-ico">&#x1F50D;</span>
-        <input class="filter-input" type="search" id="shop-search" placeholder="Name, city, owner&hellip;" oninput="renderShops()" autocomplete="off" aria-label="Search shops">
+        <input class="filter-input" type="search" id="shop-search" placeholder="Name, city, owner&hellip;" oninput="handleSearchInput()" autocomplete="off" aria-label="Search shops">
       </div>
-      <select class="filter-select" id="f-status" onchange="renderShops()" aria-label="Filter by status">
+      <select class="filter-select" id="f-status" onchange="reloadShops()" aria-label="Filter by status">
         <option value="">All status</option>
         <option value="active">Active</option>
         <option value="pending_payment">Pending</option>
@@ -404,6 +404,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
       </select>
     </div>
     <div class="shops-list" id="shops-list"></div>
+    <div id="shops-pagination" style="padding:0 .75rem .5rem"></div>
   </div>
 
   <div id="tab-funnel" class="tab-content" role="tabpanel">
@@ -600,7 +601,13 @@ let ADMIN_TOKEN = sessionStorage.getItem('primo_admin_token') || null;
 let ADMIN_ID    = sessionStorage.getItem('primo_admin_id')    || 'admin';
 
 /* STATE */
-let STATE = { shops:[], customers:{}, stamps:{}, redemptions:{}, payments:[], auditLog:[] };
+let STATE = {
+  shops: [], customers: {}, stamps: {}, redemptions: {},
+  payments: [], auditLog: [], enrollments: [],
+  // Pagination & stats (admin-data v21)
+  stats: { total:0, active:0, trial_pending:0, suspended:0, mrr:{starter:0,pro:0,premium:0} },
+  currentPage: 1, hasMore: false, totalCount: 0, shopSearchTimer: null,
+};
 let pendingAction = null;
 
 /* ================================================================
@@ -729,31 +736,52 @@ document.addEventListener('keydown', e=>{
 });
 
 /* ================================================================
-   DATA LOADING — via admin-data Edge Function.
-   Returns all shops + aggregates using service role key server-side.
+   DATA LOADING — admin-data v21: paginated, searchable, explicit cols.
+   opts: { page?, append?, showLoadScreen? }
+   When append=true, new shops are appended to STATE.shops (load-more).
+   Stats always reflect ALL shops (not just current page).
 ================================================================ */
-async function loadDashboard() {
-  setLoadSub('Authenticating\u2026');
-  showScreen('s-load');
+async function loadDashboard(opts={}) {
+  const { page=1, append=false, showLoadScreen=true } = opts;
+  if(showLoadScreen&&!append){ setLoadSub('Authenticating\u2026'); showScreen('s-load'); }
   try {
-    setLoadSub('Fetching shop data\u2026');
-    const data = await sbEdge('admin-data', {});
-    STATE.shops       = data.shops       || [];
-    STATE.customers   = data.customers   || {};
-    STATE.stamps      = data.stamps      || {};
-    STATE.redemptions = data.redemptions || {};
-    STATE.payments    = data.payments    || [];
-    STATE.auditLog    = data.audit_log   || [];
-    STATE.enrollments = data.enrollments || [];
-    renderDashboard();
-    showScreen('s-dash');
+    if(!append) setLoadSub('Fetching shop data\u2026');
+    const search        = document.getElementById('shop-search')?.value?.trim() || '';
+    const status_filter = document.getElementById('f-status')?.value || '';
+    const data = await sbEdge('admin-data', { page, per_page:100, search, status_filter });
+    if(append){
+      STATE.shops = [...STATE.shops, ...(data.shops || [])];
+      // Merge customer/stamp counts
+      Object.assign(STATE.customers,   data.customers   || {});
+      Object.assign(STATE.stamps,      data.stamps      || {});
+      Object.assign(STATE.redemptions, data.redemptions || {});
+    }else{
+      STATE.shops       = data.shops       || [];
+      STATE.customers   = data.customers   || {};
+      STATE.stamps      = data.stamps      || {};
+      STATE.redemptions = data.redemptions || {};
+      STATE.payments    = data.payments    || [];
+      STATE.auditLog    = data.audit_log   || [];
+      STATE.enrollments = data.enrollments || [];
+    }
+    STATE.stats       = data.stats       || STATE.stats;
+    STATE.currentPage = data.page        || page;
+    STATE.hasMore     = data.has_more    || false;
+    STATE.totalCount  = data.total_count || STATE.shops.length;
+    if(!append){ renderDashboard(); showScreen('s-dash'); }
+    else { renderShops(); }
   } catch(err) {
-    if (document.getElementById('s-login').classList.contains('active')) return;
-    document.getElementById('err-ico').textContent   = '\uD83D\uDD0C';
-    document.getElementById('err-title').textContent = 'Load Failed';
-    document.getElementById('err-msg').textContent   = err.message;
-    showScreen('s-err');
+    if(document.getElementById('s-login').classList.contains('active')) return;
+    if(!append){
+      document.getElementById('err-ico').textContent   = '\uD83D\uDD0C';
+      document.getElementById('err-title').textContent = 'Load Failed';
+      document.getElementById('err-msg').textContent   = err.message;
+      showScreen('s-err');
+    } else {
+      showToast('Load failed',err.message,'red','\u2715');
+    }
   }
+}
 }
 
 function setLoadSub(msg) { const e=document.getElementById('load-sub'); if(e) e.textContent=msg; }
@@ -770,46 +798,37 @@ async function doRefresh() {
    RENDER DASHBOARD
 ================================================================ */
 function renderDashboard() {
-  const shops    = STATE.shops;
-  const active   = shops.filter(s=>s.status==='active');
-  const pending  = shops.filter(s=>s.status==='pending_payment'||s.status==='trial_pending');
-  const susp     = shops.filter(s=>s.status==='suspended');
-  document.getElementById('stat-total').textContent     = shops.length;
-  document.getElementById('stat-active').textContent    = active.length;
-  document.getElementById('stat-pending').textContent   = pending.length;
-  document.getElementById('stat-suspended').textContent = susp.length;
-  document.getElementById('tab-shops-n').textContent    = shops.length;
+  // Use pre-computed stats from server (always global, not filtered by current page)
+  const st=STATE.stats||{};
+  document.getElementById('stat-total').textContent     = st.total     ?? STATE.shops.length;
+  document.getElementById('stat-active').textContent    = st.active    ?? 0;
+  document.getElementById('stat-pending').textContent   = st.trial_pending ?? 0;
+  document.getElementById('stat-suspended').textContent = st.suspended ?? 0;
+  document.getElementById('tab-shops-n').textContent    = STATE.totalCount || (st.total ?? STATE.shops.length);
   const enr = STATE.enrollments || [];
-  const dropoffs = enr.filter(e=>e.status==='pending_payment'||e.status==='trial_pending').length;
   const funnelBadge = document.getElementById('tab-funnel-n');
   if(funnelBadge) funnelBadge.textContent = enr.length;
-  const pc={starter:0,pro:0,premium:0};
-  active.forEach(s=>{if(PLAN_MRR[s.plan]) pc[s.plan]++;});
-  const mrr=pc.starter*199+pc.pro*299+pc.premium*499;
+  // MRR from server-computed plan breakdown
+  const mrr_b=st.mrr||{starter:0,pro:0,premium:0};
+  const mrr=(mrr_b.starter||0)*199+(mrr_b.pro||0)*299+(mrr_b.premium||0)*499;
   document.getElementById('mrr-total').textContent='\u20B9'+mrr.toLocaleString('en-IN');
-  document.getElementById('mrr-s').textContent=pc.starter;
-  document.getElementById('mrr-p').textContent=pc.pro;
-  document.getElementById('mrr-pm').textContent=pc.premium;
+  document.getElementById('mrr-s').textContent=mrr_b.starter||0;
+  document.getElementById('mrr-p').textContent=mrr_b.pro||0;
+  document.getElementById('mrr-pm').textContent=mrr_b.premium||0;
   renderShops(); renderActivity(); renderRevenue(); renderAuditLog(); renderFunnel();
 }
 
-/* SHOPS */
+/* SHOPS — search + status filter are server-side (via loadDashboard).
+   Plan filter stays client-side (no server round-trip needed; plans are few).
+   Pagination info + "Load more" button rendered in #shops-pagination.         */
 function renderShops() {
-  const q=document.getElementById('shop-search').value.trim().toLowerCase();
-  const sf=document.getElementById('f-status').value;
   const pf=document.getElementById('f-plan').value;
   let shops=STATE.shops;
-  if(q) shops=shops.filter(s=>
-    s.shop_name.toLowerCase().includes(q)||
-    (s.city||'').toLowerCase().includes(q)||
-    (s.owner_name||'').toLowerCase().includes(q)||
-    (s.slug||'').toLowerCase().includes(q)
-  );
-  if(sf) shops=shops.filter(s=>s.status===sf);
   if(pf) shops=shops.filter(s=>s.plan===pf);
   const list=document.getElementById('shops-list');
   if(!shops.length){
     list.innerHTML='<div class="empty-state"><div class="empty-ico">\uD83D\uDD0D</div><div class="empty-t">No shops found</div><div class="empty-s">Adjust search or filters.</div></div>';
+    const pg=document.getElementById('shops-pagination');if(pg)pg.innerHTML='';
     return;
   }
   const SL={active:'Active',pending_payment:'Pending',trial_pending:'Trial Pending',suspended:'Suspended'};
@@ -833,6 +852,31 @@ function renderShops() {
       '<div class="sc-stat"><div class="sc-sv">'+redm+'</div><div class="sc-sl">Redeemed</div></div></div>'+
       '<div class="sc-actions"><button class="sc-btn sc-btn-view" onclick="openShopDetail(\''+esc(s.id)+'\')">\uD83D\uDD0D View</button>'+ab+'</div></div>';
   }).join('');
+  // Pagination footer
+  const pg=document.getElementById('shops-pagination');
+  if(pg){
+    if(STATE.hasMore){
+      const remaining=Math.min(100,STATE.totalCount-STATE.shops.length);
+      pg.innerHTML='<div style="text-align:center;padding:.4rem .75rem 0;font-size:12px;color:var(--ink-f)">Showing '+STATE.shops.length+' of '+STATE.totalCount+' shops</div>'+
+        '<button class="sc-btn" id="loadMoreBtn" onclick="loadMoreShops()" style="width:100%;margin:.5rem 0 0">&#x2193; Load '+remaining+' more</button>';
+    }else if(STATE.totalCount>100){
+      pg.innerHTML='<div style="text-align:center;padding:.5rem;font-size:12px;color:var(--ink-f)">All '+STATE.totalCount+' shops loaded</div>';
+    }else{ pg.innerHTML=''; }
+  }
+}
+
+/* Search: debounce 350ms then server-fetch */
+function handleSearchInput(){
+  clearTimeout(STATE.shopSearchTimer);
+  STATE.shopSearchTimer=setTimeout(()=>loadDashboard({page:1,showLoadScreen:false}),350);
+}
+/* Status filter changed: immediate server re-fetch */
+function reloadShops(){ loadDashboard({page:1,showLoadScreen:false}); }
+/* Load more shops (append) */
+async function loadMoreShops(){
+  const btn=document.getElementById('loadMoreBtn');
+  if(btn){btn.disabled=true;btn.textContent='Loading…';}
+  await loadDashboard({page:STATE.currentPage+1,append:true,showLoadScreen:false});
 }
 
 /* ACTIVITY */
@@ -872,9 +916,8 @@ function renderActivity() {
 
 /* REVENUE */
 function renderRevenue() {
-  const active=STATE.shops.filter(s=>s.status==='active');
-  const pc={starter:0,pro:0,premium:0};
-  active.forEach(s=>{if(PLAN_MRR[s.plan]) pc[s.plan]++;});
+  const mrr_b=STATE.stats?.mrr||{starter:0,pro:0,premium:0};
+  const pc={starter:mrr_b.starter||0,pro:mrr_b.pro||0,premium:mrr_b.premium||0};
   const rev={starter:pc.starter*199,pro:pc.pro*299,premium:pc.premium*499};
   const mrr=rev.starter+rev.pro+rev.premium;
   const maxR=Math.max(...Object.values(rev),1);
