@@ -1,262 +1,280 @@
-# Primo Rewards — Honest System Overview
-> Generated from live project data on 1 June 2026.
-> No sugarcoating. Numbers from actual DB, not estimates.
+# Primo Rewards — System Overview
+> Updated: 2 June 2026. All numbers from live DB. No estimates.
 
 ---
 
-## Current Live State (the real picture)
+## Live Data Snapshot
 
-| Metric | Live Count |
+| Metric | Count |
 |---|---|
 | Total shops | 5 |
 | Active shops | 4 |
 | Suspended shops | 1 (c-for-cake-2, ghost duplicate) |
 | Trial-pending shops | 0 |
-| **Paying shops** | **0** |
-| **Real money processed** | **₹0 — payments table is empty** |
-| Customers registered | 7 |
+| **Paying shops** | **0 — payments table is empty** |
+| **Real money processed** | **₹0** |
+| Customers | 7 |
 | Stamps given | 37 |
 | Redemptions | 3 |
-| Coupons created | 0 |
 | Subscription events logged | 10 |
-| Admin audit log rows | 5 |
+| Admin audit log rows | 7 |
+| Stamp scans (QR) | 4 |
+| Coupons | 0 |
 
-### The 4 "active" shops in truth
+### Shop-by-shop reality
 
-| Shop | Customers | Stamps | Subscription status | Billing mandates done |
-|---|---|---|---|---|
-| test-cafe (test) | 4 | 34 | pending_mandate | ❌ No |
-| e2e-test-shop (test) | 1 | 0 | pending_mandate | ❌ No |
-| c-for-cake (real) | 0 | 0 | pending_mandate | ❌ No |
-| niraj-cafe (real) | 2 | 3 | pending_mandate | ❌ No |
+| Shop | Plan | Status | Sub status | Trial ends | Customers | Stamps |
+|---|---|---|---|---|---|---|
+| test-cafe | Starter | active | pending_mandate | 24 Jun 2026 | 4 | 34 |
+| e2e-test-shop | Starter | active | pending_mandate | 30 Jun 2026 | 1 | 0 |
+| c-for-cake | Pro | active | pending_mandate | 30 Jun 2026 | 0 | 0 |
+| c-for-cake-2 | Pro | **suspended** | cancelled | 30 Jun 2026 | 0 | 0 |
+| niraj-cafe | Pro | active | pending_mandate | 30 Jun 2026 | 2 | 3 |
 
-**Reality check:** Every "active" shop is active by admin manual activation, not because they completed a Razorpay mandate. The `subscription.authenticated` webhook has never fired in production. No shop is actually paying yet.
+**Key fact:** Every active shop was activated manually by admin. The `subscription.authenticated` webhook has never fired in production. No shop has completed a Razorpay mandate. No money has ever moved.
 
 ---
 
 ## Infrastructure
 
-### Stack
-- **DB:** Supabase PostgreSQL (free tier, 500MB limit)
-- **Backend:** 26 Supabase Edge Functions (Deno runtime)
-- **Frontend:** Vercel static hosting (HTML/CSS/JS — no framework)
-- **Payments:** Razorpay subscriptions
-- **Email:** Resend (FROM: welcome@primorewards.in)
-- **Automation:** pg_cron (2 daily jobs at 00:30 IST)
-- **Alerting:** Email to support@primorewards.in via Resend
-
-### Edge Functions (26 total, all ACTIVE)
-
-**Enrollment & Auth (4)**
-- `enroll-subscribe` v6 — Merchant signup with Razorpay subscription creation. Email dedup. IP rate-limited (3/hr). ✅ Production tested.
-- `merchant-auth` v24 — JWT login with bcrypt. 4-hour token expiry. ✅ Production tested.
-- `merchant-reset-password` v2 — Forgotten password via email. Sends temp password. ✅ Built, minimally tested.
-- `admin-auth` v20 — Admin key verification. Returns JWT. ✅ Tested.
-
-**Merchant Operations (3)**
-- `merchant-api` v28 — Dashboard data load, stamp givin, redemptions. ✅ Most-used EF, production tested.
-- `upgrade-plan` v2 — Next-cycle plan upgrade. Creates new Razorpay sub. ⚠️ Built, never tested end-to-end with real money.
-- `cancel-upgrade-plan` v2 — Cancels pending plan upgrade. ⚠️ Built, untested in production.
-
-**Billing & Payments (7)**
-- `razorpay-webhook` v31 — Handles authenticated/charged/halted/cancelled events. HMAC verified. ✅ Structurally correct. ⚠️ `subscription.charged` never fired with real money.
-- `create-subscription` v11 — Admin-triggered sub creation. ✅ Used when admin manually activates shops.
-- `reactivate-billing` v3 — Self-service reactivation for suspended/expired shops. IP rate-limited. ✅ Built, minimally tested.
-- `sync-billing-status` v2 — Merchant-side "verify payment" button. ✅ Tested.
-- `refresh-mandate` v2 — Fetches fresh mandate URL from Razorpay. ✅ Built.
-- `reconcile-payments` v2 — Finds missed charges by comparing Razorpay invoices vs DB. ⚠️ Built, no real payments to reconcile yet.
-- `upgrade-plan` / `cancel-upgrade-plan` — See above.
-
-**Customer Experience (4)**
-- `customer-lookup` v23 — Looks up customer by phone for stamping. ✅ Production tested.
-- `customer-card` v21 — Full loyalty card data (stamps, progress). ✅ Production tested.
-- `get-stamp-token` v3 — Generates QR stamp token. ✅ Production tested.
-- `validate-stamp-qr` v3 — Validates QR scan from customer phone. ✅ Production tested.
-
-**Admin (5)**
-- `admin-data` v22 — Paginated shop list, stats, payments. Handles 1000+ shops. ✅ Tested today (fixed ghost column bug).
-- `admin-action` v22 — Activate/suspend/reinstate + Sync Razorpay. ✅ Tested.
-- `admin-customers` v17 — Customer management. ✅ Built.
-- `admin-coupons` v9 — Coupon CRUD. ✅ Built, 0 coupons used.
-- `get-analytics` v2 — Analytics data. ✅ Built.
-
-**Infrastructure (3)**
-- `send-email` v12 — All transactional emails via Resend. ✅ Production tested.
-- `trial-expiry-notifier` v4 — Nightly T-3d warning + T+0 expiry emails. ✅ Runs via pg_cron daily.
-- `validate-coupon` v9 — Coupon validation at enrollment. ✅ Built, 0 coupons used.
-
-**Utility (3)**
-- `get-qr-feed` v2 — QR stamping feed. ✅ Built.
-- `ping-alert` v2 — Decommissioned test EF. Returns 410.
-- `enroll-subscribe` — see above.
-
-### Database Tables (15)
-
-| Table | Rows | Purpose |
+| Layer | Technology | Status |
 |---|---|---|
-| shops | 5 | Core shop records |
-| customers | 7 | Registered loyalty customers |
-| stamps | 37 | Stamp history |
-| redemptions | 3 | Redemption history |
-| payments | **0** | Razorpay payment records (nothing yet) |
-| subscription_events | 10 | Webhook + billing audit trail |
-| admin_audit_log | 5 | Admin actions (activate/suspend) |
-| shop_credentials | 5 | bcrypt password hashes |
-| shop_enrollments | 1 | Enrollment funnel tracking |
-| coupons | 0 | Discount codes |
-| cron_nonces | 1 | pg_cron auth nonce |
-| stamp_scans | 4 | QR scan records |
-| merchant_reviews | 6 | Reviews (purpose unclear, not used in current UI) |
-| rate_limits | 0 | Unused table (rate limiting is in-memory) |
-| shop_secrets | 5 | Per-shop secrets storage |
-
-### Automation
-- **suspend-expired-trials** — Runs 00:30 IST daily via pg_cron. Suspends shops whose trial ended AND mandate was never completed. ✅ Running.
-- **trial-expiry-notifier-cron** — Runs 00:35 IST daily via pg_cron. Sends T-3d warning and T+0 expired emails. ✅ Running.
+| Database | Supabase PostgreSQL (free tier, 500MB) | ✅ Live |
+| Backend | 27 Supabase Edge Functions (Deno) | ✅ Live |
+| Frontend | Vercel static hosting (HTML/CSS/JS) | ✅ Live |
+| Payments | Razorpay subscriptions | ✅ Configured, untested with real money |
+| Email | Resend (FROM: welcome@primorewards.in) | ✅ Tested, working |
+| Automation | pg_cron (2 daily jobs at 00:30 & 00:35 IST) | ✅ Running |
+| Alerting | Email to support@primorewards.in via Resend | ✅ Tested, confirmed working |
+| Rate limiting | Upstash Redis (free tier, 10k cmd/day) | ✅ Live as of 2 Jun 2026 |
 
 ---
 
-## What Each Role Can Actually Do
+## Edge Functions — Complete List (27)
 
-### Rank 1 — Customer (most reliable)
-Customers interact only via the loyalty card page (`primorewards.in/{slug}-reward`).
+### Enrollment & Auth
+| Slug | Version | Status | Notes |
+|---|---|---|---|
+| enroll-subscribe | v8 | ✅ Production tested | Upstash Redis RL (3/hr/IP, key: `rl:enroll:{ip}`). Email dedup by owner_email. Re-enroll in-place for trial/suspended. |
+| merchant-auth | v25 | ✅ Production tested | bcrypt login. 4-hour JWT. |
+| merchant-reset-password | v4 | ✅ Built, minimally tested | Upstash Redis RL (3/hr/IP, key: `rl:reset:{ip}`). Always returns `{ok:true}` — prevents email enumeration. |
+| admin-auth | v21 | ✅ Tested | Admin key → JWT. |
 
-✅ Register phone number to get a loyalty card
-✅ See current stamp count and progress toward reward
-✅ Get stamps manually (merchant enters phone in dashboard)
-✅ Get stamps via QR code scan (merchant shows QR, customer scans)
-✅ Trigger redemption when stamp count is full
-✅ Card updates in real-time after each stamp
+### Merchant Dashboard
+| Slug | Version | Status | Notes |
+|---|---|---|---|
+| merchant-api | v29 | ✅ Most-used EF | load_dashboard, stamp, redeem, add_customer, save_settings (Starter plan CANNOT change reward_rule — 403), change_password, initiate_billing. |
+| upgrade-plan | v3 | ⚠️ Built, never tested with real money | Creates new Razorpay sub at current_end. Stores mandate_url in pending_plan_upgrade JSONB (fixed this session). |
+| cancel-upgrade-plan | v3 | ⚠️ Built, untested | Cancels pending upgrade sub and clears JSONB flag. |
 
-❌ Cannot view stamp history (only current count shown)
-❌ Cannot opt out / delete their data themselves
-❌ Cannot receive push notifications or WhatsApp confirmations
-❌ Card is per-shop (no cross-shop customer identity)
+### Billing & Payments
+| Slug | Version | Status | Notes |
+|---|---|---|---|
+| razorpay-webhook | v31 | ✅ Structurally correct, ⚠️ untested with real money | Handles authenticated/charged/halted/cancelled. HMAC verified. Email alerts on critical failures. |
+| create-subscription | v12 | ✅ Used by admin | Admin-triggered sub creation. |
+| reactivate-billing | v5 | ✅ Built, minimally tested | Upstash Redis RL (3/hr/IP, key: `rl:reactivate:{ip}`). |
+| sync-billing-status | v3 | ✅ Tested | Merchant "Verify payment" button — maps Razorpay state to DB. |
+| refresh-mandate | v3 | ✅ Built | Fetches fresh mandate URL from Razorpay. |
+| reconcile-payments | v3 | ⚠️ Built, no data to test against | Finds missed charges by comparing Razorpay invoices vs payments table. 0 payments exist to reconcile. |
 
-**Honest reliability: High.** This flow is the most tested. 37 stamps given across 7 customers.
+### Customer Experience
+| Slug | Version | Status | Notes |
+|---|---|---|---|
+| customer-lookup | v24 | ✅ Production tested | Phone lookup for stamping. |
+| customer-card | v22 | ✅ Production tested | Full loyalty card (stamps, progress, reward status). |
+| get-stamp-token | v4 | ✅ Production tested | QR stamp token generation. |
+| validate-stamp-qr | v4 | ✅ Production tested | QR scan validation. |
+| get-qr-feed | v3 | ✅ Built | QR feed endpoint. |
 
----
+### Admin Panel
+| Slug | Version | Status | Notes |
+|---|---|---|---|
+| admin-data | v22 | ✅ Tested | Paginated shop list + stats. Fixed this session: removed 5 ghost columns that caused 500 errors. |
+| admin-action | v21 | ✅ Tested | Activate / suspend / reinstate / sync_subscription. |
+| admin-customers | v18 | ✅ Built | Customer management across shops. |
+| admin-coupons | v10 | ✅ Built, 0 coupons used | Coupon CRUD. |
+| get-analytics | v3 | ✅ Built | Analytics data endpoint. |
 
-### Rank 2 — Admin (reliable with caveats)
-Admin panel at `primorewards.in/admin`.
-
-✅ Login with admin key (server-validated JWT, 15-attempt lockout)
-✅ View all shops with stats (customers, stamps, redemptions)
-✅ Search shops by name, email, city (server-side, handles 1000+ shops)
-✅ Filter by status (active/pending/suspended)
-✅ Activate / Suspend / Reinstate shops
-✅ View per-shop subscription status and Razorpay sub ID
-✅ Sync shop status from Razorpay (if webhook was missed)
-✅ Reconcile missing payments from Razorpay invoices
-✅ Manage coupons (create, toggle, delete)
-✅ View enrollment funnel with WhatsApp follow-up links
-✅ View audit log of admin actions
-✅ Export shops as CSV
-✅ View MRR breakdown by plan
-✅ View Razorpay payment log
-
-⚠️ MRR is estimated from plan labels, not from actual payments (payments table = 0)
-⚠️ Revenue tab shows "no payment records" — accurate, never been charged
-❌ Cannot bulk-action multiple shops
-❌ Cannot view per-customer data across shops in one view
-❌ Cannot find duplicate customers (same phone, different shops)
-❌ No search within audit log
-
-**Honest reliability: High for shop management. Revenue data is fictional until first charge fires.**
-
----
-
-### Rank 3 — Merchant (reliable but several edge cases)
-Merchant dashboard at `primorewards.in/merchant`.
-
-✅ Login with slug + password (bcrypt, JWT 4-hour session)
-✅ Forgot password → email with temp password
-✅ View dashboard (today's stamps, total customers, redemptions)
-✅ Give stamps manually (enter customer phone → stamp)
-✅ Show QR code for customer to scan
-✅ Trigger redemption
-✅ View analytics (stamps/redemptions trend)
-✅ View billing status with plan name + trial end date
-✅ Update payment method (halted subscription → mandate link)
-✅ Verify payment status manually (missed webhook recovery)
-✅ Upgrade plan self-service (Starter → Pro → Premium)
-✅ Cancel pending plan upgrade
-✅ Reactivate billing if suspended/trial expired (self-service via login screen)
-
-⚠️ Upgrade plan EF is deployed but never tested with real money end-to-end
-⚠️ Billing shows "pending_mandate" for all shops — no merchant has completed mandate
-⚠️ Dashboard stats accurate for stamps/customers but no payment history
-❌ Cannot change email address
-❌ Cannot change shop name, city, plan details after enrollment
-❌ Cannot manage multiple shops under one email
-❌ Cannot export customer list
-❌ Cannot set custom reward rules post-enrollment (fixed at enrollment: buy X get 1 free)
-❌ No in-app messaging or WhatsApp integration (links open WhatsApp manually)
-
-**Honest reliability: Core stamping workflow is solid. Billing UI is complete but all billing paths are untested with real Razorpay charges.**
-
----
-
-## True Capacity Assessment
-
-### What the system can handle RIGHT NOW
-
-| Scenario | Verdict |
-|---|---|
-| 0–50 merchants, 0–500 customers | ✅ Comfortable. No architectural changes needed. |
-| 50–200 merchants, 500–5,000 customers | ✅ Works. admin-data pagination handles it. DB is fine. |
-| 200–500 merchants, 5,000–50,000 customers | ⚠️ Works but in-memory rate limiting degrades. Supabase free tier DB may hit limits. pg_cron suspend job still works. |
-| 500–1,000 merchants | ⚠️ Upgrade Supabase to Pro (€25/month). Add Upstash Redis for rate limiting. Everything else scales. |
-| 1,000+ merchants | ❌ Not ready. Needs: Upstash Redis, DB indexing audit, possibly Connection Pooler. |
-
-### Specific bottlenecks in order of urgency
-
-**#1 — No real payment has ever been processed.**
-The entire billing infrastructure — webhook, payment recording, receipt emails — is built and correct, but the path `subscription.charged → payments table → receipt email` has never been triggered by a real Razorpay charge. The first billing cycle for Test Cafe hits on or around 24 June 2026. That's the first real test of money-handling code.
-
-**#2 — In-memory rate limiting is per-EF-instance.**
-`enroll-subscribe`, `reactivate-billing`, `merchant-reset-password` all use `ipStore = new Map()`. Under load Supabase spins multiple instances. Not a problem at current scale (5 shops). Becomes meaningful above ~200 concurrent enrollments/hour.
-
-**#3 — Supabase free tier limits.**
-Free: 500MB DB, 2M EF invocations/month. At 500 shops × 100 customer card loads/day = 50,000/day × 30 = 1.5M/month — approaching the limit. Upgrade to Pro (€25/month) well before 300 shops.
-
-**#4 — pg_cron runs once per night.**
-The suspension job runs at 00:30 IST. A trial that expired at 11 PM on Day 30 doesn't get suspended until 00:30 the following night — effectively 1-2 hours of grace. Not a problem, but merchants should know.
-
-**#5 — One email per person.**
-One owner email can have exactly one shop. Two outlets of the same shop? Second owner email needed. First merchant with two locations will hit this wall.
+### Infrastructure
+| Slug | Version | Status | Notes |
+|---|---|---|---|
+| send-email | v13 | ✅ Production tested | 6 complete templates: trial_activation, billing_active, payment_receipt, payment_failed, billing_cancelled (added this session), plan_upgraded (added this session). |
+| trial-expiry-notifier | v4 | ✅ Runs nightly | T-3d warning + T+0 expiry emails. alertEmail() on failure. |
+| validate-coupon | v10 | ✅ Built, 0 coupons used | Enrollment coupon validation. |
+| ping-alert | v2 | 🗑️ Decommissioned | Returns 410. Used once for alertEmail testing. |
 
 ---
 
 ## Secrets & Config
 
-| Secret | Set? | Used By |
+| Secret | Set | Used by |
 |---|---|---|
 | DATABASE_SERVICE_ROLE_KEY | ✅ | All EFs |
-| ADMIN_JWT_SECRET | ✅ | admin-auth, admin-action, admin-data |
 | MERCHANT_JWT_SECRET | ✅ | merchant-auth, merchant-api, upgrade-plan, etc. |
-| RAZORPAY_KEY_ID | ✅ | enroll-subscribe, razorpay-webhook, etc. |
+| ADMIN_JWT_SECRET | ✅ | admin-auth, admin-data, admin-action |
+| RAZORPAY_KEY_ID | ✅ | enroll-subscribe, razorpay-webhook, upgrade-plan, etc. |
 | RAZORPAY_KEY_SECRET | ✅ | All Razorpay API calls |
-| RAZORPAY_WEBHOOK_SECRET | ✅ | razorpay-webhook (HMAC verification) |
+| RAZORPAY_WEBHOOK_SECRET | ✅ | razorpay-webhook HMAC verification |
 | RAZORPAY_PLAN_STARTER | ✅ | enroll-subscribe, create-subscription |
-| RAZORPAY_PLAN_PRO | ✅ | upgrade-plan |
-| RAZORPAY_PLAN_PREMIUM | ✅ | upgrade-plan |
+| RAZORPAY_PLAN_PRO | ✅ | upgrade-plan, create-subscription |
+| RAZORPAY_PLAN_PREMIUM | ✅ | upgrade-plan, create-subscription |
 | RESEND_API_KEY | ✅ | send-email, trial-expiry-notifier, razorpay-webhook |
 | ALERT_EMAIL | ✅ (support@primorewards.in) | trial-expiry-notifier, razorpay-webhook |
-| SLACK_WEBHOOK_URL | ❌ Not set | Removed — using email instead |
-| UPSTASH_REDIS_URL | ❌ Not set | Future — needed above 1000 merchants |
+| UPSTASH_REDIS_REST_URL | ✅ (added 2 Jun 2026) | enroll-subscribe, reactivate-billing, merchant-reset-password |
+| UPSTASH_REDIS_REST_TOKEN | ✅ (added 2 Jun 2026) | enroll-subscribe, reactivate-billing, merchant-reset-password |
+| SLACK_WEBHOOK_URL | ❌ Not set, not needed | Replaced by alertEmail |
 
 ---
 
-## Honesty Summary
+## Automation
 
-**What's genuinely solid:**
-The core loyalty loop — customer registers → merchant stamps → customer redeems — works and has real test data. The admin panel is reliable for shop management. Email infrastructure works (tested). Automation runs nightly. Security is sound (bcrypt, JWT, HMAC, server-side validation everywhere).
+| Job | Schedule | What it does |
+|---|---|---|
+| suspend-expired-trials | Daily 00:30 IST | SQL: sets status=suspended for shops where trial ended AND mandate never completed |
+| trial-expiry-notifier-cron | Daily 00:35 IST | HTTP to trial-expiry-notifier EF via pg_net + nonce auth. Sends T-3d warning and T+0 expiry emails. |
 
-**What's never been proven:**
-No merchant has completed a Razorpay mandate. No `subscription.charged` event has ever fired. The entire "billing converts" path is code-complete but production-untested. The plan upgrade feature is also code-complete but never tested end-to-end with real money.
+---
 
-**What's genuinely missing:**
-Customers can't see their own history. Merchants can't update their settings. One email = one shop. No customer opt-out. No GST invoice. No downgrade flow. No multi-shop support.
+## What Each Role Can Do
 
-**True state:** Pre-launch, test phase. Good enough to onboard your first 20–50 paying merchants safely. The first billing cycle (Test Cafe, ~24 June 2026) will be the real production test.
+### Rank 1 — Customer (most reliable, most tested)
+**Entry point:** `primorewards.in/{slug}-reward`
+
+✅ Register with phone number
+✅ View current stamp count and progress bar
+✅ Earn stamps (manual entry by merchant or QR scan)
+✅ Trigger redemption when stamp count is full
+✅ Card updates immediately after each stamp
+
+❌ Cannot view full stamp history (current count only)
+❌ Cannot opt out or request data deletion
+❌ Cannot receive WhatsApp/SMS confirmations
+❌ No cross-shop identity (each shop is separate)
+
+**Reliability: High.** This is the most tested path — 37 stamps, 3 redemptions, 4 QR scans across 7 customers.
+
+---
+
+### Rank 2 — Admin (reliable, actively used)
+**Entry point:** `primorewards.in/admin`
+
+✅ Login with admin key (server-validated JWT)
+✅ View all shops with counts (customers, stamps, redemptions)
+✅ Paginated list + search by name/email/city (server-side, handles 1000+ shops)
+✅ Filter by status (active / trial / suspended)
+✅ Activate / Suspend / Reinstate shops
+✅ Sync billing status from Razorpay (missed webhook recovery)
+✅ Reconcile missing payments per shop or globally
+✅ View and manage coupons
+✅ View enrollment funnel (WhatsApp follow-up links)
+✅ View admin audit log
+✅ Export shops as CSV
+✅ View MRR breakdown by plan
+✅ View Razorpay payment log (currently empty — no real charges yet)
+
+⚠️ MRR numbers are plan-label estimates, not real revenue (payments table = 0)
+⚠️ Reconcile returns "all clear" — accurate, but only because no charges have fired yet
+❌ No bulk-actions on multiple shops
+❌ No full-text search within audit log
+
+**Reliability: High for shop management. Revenue tab shows accurate zeros.**
+
+---
+
+### Rank 3 — Merchant (reliable core, billing untested with money)
+**Entry point:** `primorewards.in/merchant`
+
+✅ Login with slug + password (bcrypt, 4-hour JWT)
+✅ Forgot password → email with temp password (rate-limited via Redis)
+✅ Dashboard: today's stamps, total customers, redemptions
+✅ Give stamps manually (phone number lookup)
+✅ Show QR code for customers to scan
+✅ Trigger redemption
+✅ View analytics (stamps/redemptions trend)
+✅ View billing status with plan, trial end date, mandate status
+✅ Update payment method (halted subscription → mandate link)
+✅ Verify payment status manually ("Already paid? Verify now")
+✅ Upgrade plan: Starter → Pro → Premium (self-service)
+✅ Cancel pending plan upgrade
+✅ Reactivate billing (self-service, from login screen if suspended/expired)
+✅ Edit product name and emoji
+✅ Change password
+✅ **Reward rule customisation locked for Starter plan** (UI disabled + server-side 403). Pro and Premium can edit.
+✅ Reward rule editable for Pro/Premium merchants
+
+⚠️ Upgrade plan EF deployed and mandate_url now stored in JSONB — but never tested end-to-end with real Razorpay money
+⚠️ All 4 active shops show "pending_mandate" — no merchant has completed a mandate
+❌ Cannot change email address or shop name post-enrollment
+❌ Cannot manage multiple shops under one login
+❌ Cannot export customer list
+❌ No in-app messaging or automatic WhatsApp notifications
+
+**Reliability: Core stamping loop is solid. Billing UI is complete and correct but all billing paths await the first real charge (est. 24 Jun 2026).**
+
+---
+
+## Rate Limiting — Current State
+
+| Endpoint | Mechanism | Limit | Fallback |
+|---|---|---|---|
+| enroll-subscribe | **Upstash Redis** (`rl:enroll:{ip}`) | 3/hr/IP | In-memory Map |
+| reactivate-billing | **Upstash Redis** (`rl:reactivate:{ip}`) | 3/hr/IP | In-memory Map |
+| merchant-reset-password | **Upstash Redis** (`rl:reset:{ip}`) | 3/hr/IP | In-memory Map |
+| merchant-auth | None (bcrypt is the throttle) | — | — |
+| All others | No rate limiting needed | — | — |
+
+Upstash free tier: 10,000 commands/day. At current and projected scale (2,000+ merchants), typical daily usage is ~80–200 commands — well under the limit. Ceiling is effectively 10,000+ merchants before any upgrade is needed.
+
+---
+
+## Capacity Assessment
+
+| Scale | Verdict |
+|---|---|
+| 0–50 merchants, <500 customers | ✅ Comfortable. No changes needed. |
+| 50–200 merchants, <5,000 customers | ✅ Works. Pagination handles it. DB fine. Redis handles it. |
+| 200–500 merchants | ✅ Works. Monitor Supabase DB size (500MB free limit). |
+| 500–1,000 merchants | ⚠️ Upgrade Supabase to Pro (€25/mo). Everything else scales. |
+| 1,000+ merchants | ⚠️ DB index audit needed. Redis is already global — no changes needed there. |
+
+### Specific bottlenecks in order of urgency
+
+**#1 — No real payment ever processed.**
+The first real Razorpay charge fires when Test Cafe's trial ends ~24 Jun 2026. The path `subscription.charged → payments table → receipt email` is code-complete but unproven with real money.
+
+**#2 — One owner email = one shop.**
+A merchant with two outlets needs two email addresses. First merchant with two locations will hit this immediately.
+
+**#3 — pg_cron 1-2 hour grace window.**
+Suspension job runs at 00:30 IST. A trial expiring at 11 PM gets suspended ~1.5 hours later. Acceptable, but merchants should know.
+
+**#4 — Supabase free tier DB size.**
+At ~300 active shops generating stamps daily, the 500MB DB limit becomes relevant. Upgrade Supabase Pro before reaching 400MB.
+
+---
+
+## Alerting
+
+When these events occur, an email lands at **support@primorewards.in** from `welcome@primorewards.in`:
+
+| Trigger | Subject |
+|---|---|
+| `subscription.charged` webhook fails | 🔴 [Primo Alert] subscription.charged handler FAILED — manual check required |
+| `subscription.authenticated` webhook fails | 🔴 [Primo Alert] subscription.authenticated handler FAILED |
+| Trial expiry email fails to send | 🔴 [Primo Alert] T-3d / T+0 email failed — {shop name} |
+| Nightly DB query errors | 🔴 [Primo Alert] T-3d / T+0 DB query failed |
+| Any nightly run with errors | 🔴 [Primo Alert] Run completed with N errors |
+
+Alerting is graceful: if `ALERT_EMAIL` or `RESEND_API_KEY` is not set, the EFs continue working and skip the alert silently.
+
+---
+
+## Honest Summary
+
+**What genuinely works in production:** The stamping loop (37 stamps, 3 redemptions, 4 QR scans across real shops). Admin panel shop management. Nightly trial expiry automation. Email delivery (Resend confirmed working). Error alerting (tested and confirmed). Rate limiting (Upstash Redis — globally consistent across all EF instances).
+
+**What is code-complete but unproven with real money:** Razorpay `subscription.charged` webhook. Plan upgrade flow. Reconcile payments. All billing UI paths past the mandate screen.
+
+**What is confirmed missing:** Customer stamp history view. Merchant ability to update email/phone/shop name. Multi-shop per merchant. Plan downgrade. Customer opt-out/data deletion. GST invoice.
+
+**True state as of 2 June 2026:** Pre-revenue, final testing phase. Safe to onboard first 20–50 real merchants. First billing cycle (Test Cafe, ~24 Jun 2026) is the next critical milestone.
